@@ -1,0 +1,35 @@
+package LumberSystem
+
+    constant real    TEXTTAG_TEXTSIZE  = 0.024  //The size of the texttag text.
+    constant real    TEXTTAG_VELOCITY  = .03//Texttag's velocity.
+    constant real    TEXTTAG_ANGLE     = 90. //Texttag's angle.
+    constant real    TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
+    constant real    TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
+    
+    integer array killstore //If its greater than 5, the player gets a lumber, and its set to 0 again
+    
+    function getLumber ()
+        player p = GetOwningPlayer(GetKillingUnit())
+        if p != Player(5)
+            if killstore[GetPlayerId(p)] >= 4
+                SetPlayerState( p, PLAYER_STATE_RESOURCE_LUMBER, GetPlayerState(p, PLAYER_STATE_RESOURCE_LUMBER) + 1 )
+                killstore[GetPlayerId(p)] = 0
+                if ( GetLocalPlayer() == p )
+                    texttag t = CreateTextTag()
+                    SetTextTagText(t, "+1" , TEXTTAG_TEXTSIZE)
+                    SetTextTagPos( t, GetUnitX(GetKillingUnit())-20, GetUnitY(GetKillingUnit()), -30. )
+                    SetTextTagColor( t, 50, 205, 50, 255 )
+                    SetTextTagPermanent( t, false )
+                    SetTextTagVelocity(t, 0, TEXTTAG_VELOCITY)
+                    SetTextTagLifespan( t, TEXTTAG_LIFESPAN )
+                    SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
+                    SetTextTagVisibility( t, true )      
+            else
+                killstore[GetPlayerId(p)] ++
+
+    public function initLumberSystem()
+        trigger t = CreateTrigger()
+        TriggerRegisterPlayerUnitEvent( t, Player(6), EVENT_PLAYER_UNIT_DEATH, null )
+        TriggerAddAction( t, function getLumber )
+
+endpackage 

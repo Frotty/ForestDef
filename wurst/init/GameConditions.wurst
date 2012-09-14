@@ -1,0 +1,28 @@
+package GameConditions
+    import TimerUtils
+    
+    function victory()
+        print(" You win! " )
+        PauseGame( true )
+        
+    function lose()
+        print("Game over...! " )
+        PauseGame( true )
+        
+    function endGameTimer()
+        print("died")
+        timer t = CreateTimer()
+        t.start( 1., function lose )
+    
+    public function initConds()
+        timer t = getTimer()
+        t.start( 16.*60. + 20., function victory )
+        timerdialog td = CreateTimerDialog(t)        
+        TimerDialogSetTitle( td, "Until Victory: " )
+        TimerDialogDisplay( td, true )
+        print( "You have one minute to build up defenses....")
+        trigger tr = CreateTrigger()
+        TriggerRegisterUnitEvent( tr, gg_unit_h00E_0008 , EVENT_UNIT_DEATH )
+        TriggerAddAction( tr, function endGameTimer )
+    
+endpackage 

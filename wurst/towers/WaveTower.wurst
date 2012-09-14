@@ -1,0 +1,96 @@
+package WaveTower
+    import TimerUtils
+    import Knockback
+    import LinkedListModule
+    
+    int MISSILE_ID = 'h01M'
+    real MISSILE_SPEED = 1000. * 0.03125
+    real AREA_OF_EFFECT = 200.
+    int array tower_id
+    int array spell_id
+    real array missiledistae
+    real array missileAOE
+    
+    // Configure how the distance of the knockback is calculated:
+    function getKnockbackDistance(int unitlevel, int towerlevel) returns real
+        return (towerlevel*100. + 50)/(unitlevel)
+        
+    function getDamage(int level) returns real//towerlevel
+        return ((30. * level) + 25.)/6
+    
+    function isUnitTargetable(unit u) returns boolean
+        return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+
+    class Missile
+        use LinkedListModule
+        unit caster
+        unit missile
+        player p
+        int level
+        real angle
+        real dist = 0
+        real maxdist
+        
+        construct(unit ucaster,int level, real angl)
+            caster = ucaster
+            p = GetOwningPlayer(caster)
+            maxdist = 1000.
+            angle = angl
+            this.level = level
+            missile = CreateUnit(p, MISSILE_ID,caster.getX(), caster.getY(), angle)
+            
+        ondestroy
+            KillUnit(missile)
+        
+        function checkNearby()
+            real x = GetUnitX(missile)
+            real y = GetUnitY(missile)
+            group enumG = CreateGroup()
+            group units = CreateGroup()
+            GroupClear(enumG)
+            GroupEnumUnitsInRange(enumG, x, y, AREA_OF_EFFECT, null)
+            unit temp = FirstOfGroup(enumG)
+            while temp != null
+                temp = FirstOfGroup(enumG)
+                if not IsUnitInGroup(temp, units) and isUnitTargetable(temp) and IsUnitEnemy(temp, p)
+                    GroupAddUnit(units, temp)
+                    UnitDamageTarget(caster, temp, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+                    real ang = Atan2(GetUnitY(temp) - y, GetUnitX(temp) - x)
+                    Knockback knock = new Knockback(caster, temp, getKnockbackDistance(GetUnitLevel(temp),level), 1.5, angle)
+                GroupRemoveUnit(enumG, temp)
+            DestroyGroup(enumG)
+        
+    function move()
+        Missile root = Missile.getFirst()
+        while root != null
+            SetUnitX(root.missile, polarProjectionXD(GetUnitX(root.missile),MISSILE_SPEED,root.angle))
+            SetUnitY(root.missile, polarProjectionYD(GetUnitY(root.missile),MISSILE_SPEED,root.angle))
+            root.dist += MISSILE_SPEED
+            root.checkNearby()
+            
+            if root.dist >= root.maxdist
+                destroy(root)
+                Missile.getFirst()
+            root = root.next
+            
+            
+    function checkSpell()
+            unit u = GetTriggerUnit()
+            int i = 0
+            while tower_id[i] != 0
+                if GetSpellAbilityId() == spell_id[i]
+                    if GetUnitTypeId(u) == tower_id[i]
+                        Missile missile = new Missile(u,i,angleBetweenCoordsD(u.getX(), u.getY(),GetSpellTargetX(),GetSpellTargetY()))
+                i++
+    
+    public function initWaveTower()
+        trigger t = CreateTrigger()
+        TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_EFFECT)
+        TriggerAddAction(t,function checkSpell)
+        timer tim  = getTimer()
+        tim.startPeriodic(0.03125, function move)
+        //set constants
+        tower_id[0] = 'h01N'
+        spell_id[0] = 'A01A'
+
+endpackage

@@ -1,0 +1,17 @@
+package InstantRepair
+
+    function repair()
+        unit target = GetSpellTargetUnit()
+        if (GetSpellAbilityId() == 'A00D' )
+            if(GetUnitTypeId(GetSpellTargetUnit()) == 'h00E' )
+                SetUnitState(target,UNIT_STATE_LIFE,GetUnitState(target, ConvertUnitState(0)) +GetUnitState(target,ConvertUnitState(1)) * 0.1)
+            else
+                SetUnitState(target,UNIT_STATE_LIFE, GetUnitState(target, UNIT_STATE_MAX_LIFE))
+        //We will need a safety trigger, "This building is already on full health"
+        
+    public function initInstantRepair()
+        trigger instarep = CreateTrigger(  )
+        TriggerRegisterAnyUnitEventBJ( instarep, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+        TriggerAddAction( instarep, function repair )
+
+endpackage

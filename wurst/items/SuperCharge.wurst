@@ -1,0 +1,79 @@
+package SuperCharge
+    import LinkedListModule
+    import SharedBounty
+    import TimerUtils
+    
+    /* The item's ability is castable to any unit, but it does different things to different types of units.
+    -Not Effected (0) = Does not do anything, give back the charge to the item
+    -Attacker (1) = If it dies while having supercharge, Greatly increases the gold given to killing player (3* , 4*)
+    -Builder/Repairer (2) = + movement speed , repair gets more effective
+    -Tower (3) = +AttackSpeed, Instant Upgradeability
+    -Wall (4) = +Evansion, Instant Upgradeability
+    
+    Registration: unit_types[Unit_Type_Id] = type*/
+    int array unit_type
+    int ABILITY_ID = 'A01I'
+    real BUFF_LENGTH = 5.
+    
+    class Supercharged
+        use LinkedListModule
+        unit u
+        int unit_type
+        
+        construct (unit target, int utype)
+            u = target
+            unit_type = utype
+            
+    function onDeathCheck()
+        Supercharged s = Supercharged.getFirst()
+        while s != null
+            if s.u == GetTriggerUnit() and ( s.unit_type == 1)
+                    giveBounty(s.u, GetUnitLevel(s.u),GetOwningPlayer(GetKillingUnit()))
+                    giveBounty(s.u, GetUnitLevel(s.u),GetOwningPlayer(GetKillingUnit()))
+            s = s.next
+            
+    function typeCheckUpgrade()
+        Supercharged s = Supercharged.getFirst()
+        while s != null
+            if s.u == GetTriggerUnit() and ( s.unit_type == 3 or s.unit_type == 4)
+                    UnitSetUpgradeProgress( s.u, 100 )
+            s = s.next
+
+    function superRepairCheck()
+        if GetSpellAbilityId() == 'Ahrp'
+            Supercharged s = Supercharged.getFirst()
+            while s != null
+                if s.u == GetTriggerUnit() and s.unit_type == 2
+                    print("BOOOOOOOOOOOOOOOOOOO")
+                s = s.next
+            
+    function supercharge()
+        unit target = GetSpellTargetUnit()
+        if (GetSpellAbilityId() == ABILITY_ID )
+            int i = unit_type[GetUnitTypeId(target)]
+            if not i == 0
+                Supercharged s = new Supercharged(target,i)
+                timer t = getTimer()
+                t.start(5., function destroyCharge)
+                t.setData(s castTo int)
+                
+    function destroyCharge()
+        Supercharged s = GetExpiredTimer().getData() castTo Supercharged
+        destroy s
+            
+        
+    public function initSuperCharge()
+        trigger t = CreateTrigger(  )
+        TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+        TriggerAddAction( t, function supercharge )
+        trigger tt = CreateTrigger(  )
+        TriggerRegisterAnyUnitEventBJ( tt, EVENT_PLAYER_UNIT_UPGRADE_START )
+        TriggerAddAction( tt, function typeCheckUpgrade )
+        trigger ttt = CreateTrigger(  )
+        TriggerRegisterAnyUnitEventBJ( ttt, EVENT_PLAYER_UNIT_SPELL_CHANNEL )
+        TriggerAddAction( ttt, function superRepairCheck )
+        trigger tttt = CreateTrigger(  )
+        TriggerRegisterAnyUnitEventBJ( tttt, EVENT_PLAYER_UNIT_DEATH)
+        TriggerAddAction( tttt, function onDeathCheck )
+    
+endpackage 

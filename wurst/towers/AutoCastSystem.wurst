@@ -49,5 +49,10 @@ package AutoCastSystem // Towers cast an ability instead of direct attacking
         tower_id[6] = 'h01L'
         spell_string[6] = "acidbomb"
         spell_type[6] = 1
+        //Holy Towers
+        tower_id[7] = 'h01K'
+        spell_string[7] = "chainlightning"
+        spell_type[7] = 1
+        
         
 endpackage

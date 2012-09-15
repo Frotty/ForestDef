@@ -160,13 +160,14 @@ package UnitSpawnSystem
         bossSounds[3] = gg_snd_DuneWormDeath1
         bosses[5] = 'n007'
         bossSounds[5] = gg_snd_AbominationPissed5
+        bosses[7] = 'n00B'
         specials[2] = 'u00A'
         specials[4] = 'u00B'
         specials[6] = 'u00F'
         
         specialspawnsum[2] = 3
         specialspawnsum[4] = 1
-        specialspawnsum[6] = 3
+        specialspawnsum[6] = 8
         
         spawn_X[0] = 2549.
         spawn_X[1] = -500.

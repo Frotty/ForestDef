@@ -30,6 +30,7 @@ package WaveTower
         real angle
         real dist = 0
         real maxdist
+  	  group effected
         
         construct(unit ucaster,int level, real angl)
             caster = ucaster
@@ -59,7 +60,11 @@ package WaveTower
                     Knockback knock = new Knockback(caster, temp, getKnockbackDistance(GetUnitLevel(temp),level), 1.5, angle)
                 GroupRemoveUnit(enumG, temp)
             DestroyGroup(enumG)
-        
+            GroupAddGroup(units, effected)
+            DestroyGroup(units)
+
+    function karisFunc()
+    	print("insane")
     function move()
         Missile root = Missile.getFirst()
         while root != null

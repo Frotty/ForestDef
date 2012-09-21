@@ -92,7 +92,7 @@ package SharedBounty
         share_handicap[0] = 0
         share_handicap[1] = 0
         share_handicap[2] = 0
-        share_handicap[5] = 20
+        share_handicap[5] = 40
 
         
 endpackage 

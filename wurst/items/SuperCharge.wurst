@@ -13,38 +13,38 @@ package SuperCharge
 		construct (unit uu)
 			u = uu
 	
-    function charge()
-        unit target = GetSpellTargetUnit()
-        if (GetSpellAbilityId() == ITEM_ABILITY_ID )
-        	target.removeAbility(REPAIR_ID)
-        	target.addAbility(SUPERREPAIR_ID)
-        	DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getX(), target.getY()))
-        	int i = GetPlayerId(GetOwningPlayer(target))
-        	timer tim = getTimer()
-        	tim.start(15. ,  function swapBack)
+	function charge()
+		unit target = GetSpellTargetUnit()
+		if (GetSpellAbilityId() == ITEM_ABILITY_ID )
+			target.removeAbility(REPAIR_ID)
+			target.addAbility(SUPERREPAIR_ID)
+			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getX(), target.getY()))
+			int i = GetPlayerId(GetOwningPlayer(target))
+			timer tim = getTimer()
+			tim.start(15. ,  function swapBack)
 			Temp t = new Temp(target)
-        	tim.setData(t castTo int)
-        	timer tim2 = getTimer()
-        	tim2.start(.02 ,  function orderRepair)
-        	tim2.setData(t castTo int)
-        	
-    function orderRepair()
-        Temp root = GetExpiredTimer().getData() castTo Temp
-        unit u = root.u
-        IssueImmediateOrder( u, "repairon" )
-        
-    function swapBack()
-        Temp root = GetExpiredTimer().getData() castTo Temp
-        unit u = root.u
-        destroy root
-        u.removeAbility(SUPERREPAIR_ID)
-        u.addAbility(REPAIR_ID)
-        IssueImmediateOrder( u, "repairon" )
-        
-        
-    public function initSuperCharge()
-        trigger t = CreateTrigger( )
-        TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
-        TriggerAddAction( t, function charge )
+			tim.setData(t castTo int)
+			timer tim2 = getTimer()
+			tim2.start(.02 ,  function orderRepair)
+			tim2.setData(t castTo int)
+			
+	function orderRepair()
+		Temp root = GetExpiredTimer().getData() castTo Temp
+		unit u = root.u
+		IssueImmediateOrder( u, "repairon" )
+		
+	function swapBack()
+		Temp root = GetExpiredTimer().getData() castTo Temp
+		unit u = root.u
+		destroy root
+		u.removeAbility(SUPERREPAIR_ID)
+		u.addAbility(REPAIR_ID)
+		IssueImmediateOrder( u, "repairon" )
+		
+		
+	public function initSuperCharge()
+		trigger t = CreateTrigger( )
+		TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+		TriggerAddAction( t, function charge )
 
 endpackage

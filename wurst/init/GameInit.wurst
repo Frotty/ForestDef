@@ -1,0 +1,50 @@
+package GameInit
+	import UnitSpawnSystem
+	import PlayerData
+	import GameConditions
+	import TimerUtils
+	import SharedBounty
+	import LumberSystem
+	import Destroy
+	import SuperCharge
+	import RevivalSystem
+	import InstantRepair
+	import AssassinTower
+	import AutoCastSystem
+	//import HolyTower
+	import StompingTower
+	import TrooperTower
+	import WaveTower
+	import EntityManagement
+	
+	function start()
+		initLumberSystem()
+		initDestroy()
+		initSuperCharge()
+		initRevivalSystem()
+		initInstantRepair()
+		initAssassinTower()
+		initAutoCastSystem()
+		//initHolyTower()
+		initStompingTower()
+		initTrooperTower()
+		initWaveTower()
+		initPlayers()
+		initConds()
+		initSpawn()
+		initSharedBounty()
+		
+		GetExpiredTimer().release()
+		PlaySoundBJ(gg_snd_H01Uther03)
+		startEntityLoop()
+		print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
+		
+	function spawn()
+		startSpawn()
+		GetExpiredTimer().release()
+		
+	init
+		getTimer().start( 0.1, function start )
+		getTimer().start( 1, function spawn )
+
+endpackage

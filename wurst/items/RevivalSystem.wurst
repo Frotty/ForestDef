@@ -1,34 +1,34 @@
 package RevivalSystem
-    
-    boolean array isDead
-    real array deathX
-    real array deathY
-    
-    function registerDeath()
-        if GetUnitTypeId(GetDyingUnit()) == 'h00F'
-            isDead[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = true
-            deathX[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = GetUnitX(GetDyingUnit())
-            deathY[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = GetUnitY(GetDyingUnit())
-            
-    function reviveAll()
-        if GetItemTypeId(GetManipulatedItem()) == 'I007'
-            for int i=0 to 3
-                if isDead[i] == true
-                    unit u = CreateUnit(Player(i),'h00F', deathX[i] , deathY[i] , 90.)
-                    AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", u,"origin" )
-                    isDead[i] = false
-                    
-    public function initRevivalSystem()
-        isDead[0] = false
-        isDead[1] = false
-        isDead[2] = false
-        isDead[3] = false
-        trigger t = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_DEATH)
-        TriggerAddAction(t,function registerDeath)
-        
-        trigger t2 = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_USE_ITEM)
-        TriggerAddAction(t2,function reviveAll)
-        
+	
+	boolean array isDead
+	real array deathX
+	real array deathY
+	
+	function registerDeath()
+		if GetUnitTypeId(GetDyingUnit()) == 'h00F'
+			isDead[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = true
+			deathX[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = GetUnitX(GetDyingUnit())
+			deathY[GetPlayerId(GetOwningPlayer(GetDyingUnit()))] = GetUnitY(GetDyingUnit())
+			
+	function reviveAll()
+		if GetItemTypeId(GetManipulatedItem()) == 'I007'
+			for int i=0 to 3
+				if isDead[i] == true
+					unit u = CreateUnit(Player(i),'h00F', deathX[i] , deathY[i] , 90.)
+					AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", u,"origin" )
+					isDead[i] = false
+					
+	public function initRevivalSystem()
+		isDead[0] = false
+		isDead[1] = false
+		isDead[2] = false
+		isDead[3] = false
+		trigger t = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_DEATH)
+		TriggerAddAction(t,function registerDeath)
+		
+		trigger t2 = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_USE_ITEM)
+		TriggerAddAction(t2,function reviveAll)
+		
 endpackage 

@@ -1,0 +1,44 @@
+package Buff
+import public Entity
+import LinkedListModule
+
+public abstract class Buff
+	use LinkedListModule
+	UnitEntity victim
+
+	real duration
+	int abilId
+	boolean running = true
+	boolean done = false
+
+	construct(UnitEntity victim, real dur, int abilId)
+		this.victim = victim
+		this.abilId = abilId
+		duration = dur
+
+	function update()
+		debugPrint("running", 1)
+		if running
+			duration -= ANIMATION_PERIOD
+		if duration <= 0.
+			terminate()
+			
+	function terminate()
+		done = true
+		
+	ondestroy
+		victim.currentBuffs.remove(this)
+		boolean isLast = true
+		for bff in victim.currentBuffs
+			if bff.abilId == this.abilId
+				isLast = false
+				break
+		
+		if isLast
+			victim.actor.removeAbility(abilId)
+			
+	abstract function apply()
+
+	abstract function attackModifier()
+	
+	abstract function defenseModifier()

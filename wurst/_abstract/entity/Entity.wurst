@@ -1,0 +1,204 @@
+package Entity
+import LinkedListModule
+import Terrain
+import PhysicsConstants
+import Debug
+import Fx
+import Angle
+import EntityRegion
+import Buff
+import public LinkedList
+
+/** Base Entity Class  */
+public abstract class Entity
+	use LinkedListModule
+	
+	/** 3d vector position */
+	protected vec3 pos
+	/** 3d vector velocity */
+	protected vec3 vel
+	
+	/** radius */
+	real radius = 0.
+	/** speed factor (multiplies to added velocity) */
+	real speedFactor = 1.
+	
+	/** owning player */
+	player owner
+	
+	/** flag for being static */
+	boolean isStatic 	= false
+	/** sleeping or active? */
+	boolean active 		= true
+	/** for removing */
+	boolean done 		= false
+	/** even if the Entites pos.z might be > 0, it still can be below terrainZ */
+	boolean flying 		= false
+	
+	EntityRegion currentRegion
+
+	construct( vec3 pos, player owner )
+		this.pos = pos
+		this.vel = vec3(0,0,0)
+		this.owner = owner
+		currentRegion = getEntityRegion(pos)
+		
+		entityCount++
+
+	construct( vec3 pos, real radius, player owner )
+		this.pos = pos
+		this.vel = vec3(0,0,0)
+		this.owner = owner
+		this.radius = radius
+		currentRegion = getEntityRegion(pos)
+		
+		entityCount++
+		
+	construct( vec3 pos, vec3 vel, player owner )
+		this.pos = pos
+		this.vel = vel
+		this.owner = owner
+		currentRegion = getEntityRegion(pos)
+		
+		entityCount++
+		
+	construct( vec3 pos, vec3 vel, real radius, player owner )
+		this.pos = pos
+		this.vel = vel
+		this.owner = owner
+		this.radius = radius
+		currentRegion = getEntityRegion(pos)
+		
+		entityCount++
+		
+	function getPos() returns vec3
+		return pos
+		
+	function setPos( vec3 pos )
+		this.pos = pos
+		
+	function addPos( vec3 pos )
+		this.pos += pos
+		
+	function getVel() returns vec3
+		return vel
+		
+	function setVel( vec3 vel )
+		this.vel = vel
+	
+	function addVel( vec3 vel )
+		this.vel += vel
+		
+	function setTarget( vec3 tpos, real speed )
+		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
+		let tangle = angleBetweenCoords(pos.x, pos.y, tpos.x, tpos.y)
+		let e = getTerrainZ(tpos.x,tpos.y)
+		
+		if t < 1.
+			t = 1./speed
+		
+		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
+		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
+		
+	function terminate()
+		done = true
+		
+	/** This function is called every ANIMATION_PERIOD tick if the Entity is active */
+	abstract function update()
+	
+abstract public class UnitEntity extends Entity
+	static trigger dmgTrig = CreateTrigger()
+	static trigger deathTrig = CreateTrigger()
+	protected unit actor
+	
+	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
+	
+	construct( vec3 pos, unit actor )
+		super(pos, actor.getOwner())
+		this.actor = actor
+		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
+		deathTrig.registerUnitEvent(actor, EVENT_UNIT_DEATH)
+		unitEntityCount++
+		
+	construct( vec3 pos, real radius, unit actor )
+		super(pos, radius, actor.getOwner())
+		this.actor = actor
+		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
+		unitEntityCount++
+		
+	override function update()
+		pos = vec3(actor.getX(), actor.getY(), 0.)
+		
+	function setNewActor(unit u)
+		actor.remove()
+		actor = u
+		actor.setUserData(this castTo int)
+		
+	override function setPos(vec3 tpos)
+		pos = tpos
+		actor.setPos(tpos.x,tpos.y)
+		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
+		
+	function setXY(vec3 tpos)
+		pos = tpos
+		actor.setXY(tpos.x,tpos.y)
+		
+	static function onDamage()
+		let victimData = GetTriggerUnit().getUserData() castTo UnitEntity
+		let attackerData = GetAttacker().getUserData() castTo UnitEntity
+		for bff in victimData.currentBuffs
+			bff.defenseModifier()
+			
+		if attackerData != null
+			for bff in attackerData.currentBuffs
+				bff.attackModifier()
+			
+	static function onDeath()
+		let data = GetTriggerUnit().getUserData() castTo UnitEntity
+		data.terminate()
+		
+
+		
+init
+	UnitEntity.dmgTrig.addAction(function UnitEntity.onDamage)		
+	UnitEntity.deathTrig.addAction(function UnitEntity.onDeath)
+
+abstract public class FxEntity extends Entity
+	protected Fx fx
+	
+	construct( vec3 pos, real radius, player owner, angle xyAngle, string sfxpath )
+		super(pos, radius, owner)
+		fx = new Fx(pos, xyAngle, sfxpath)
+		
+	construct( vec3 pos, real radius, player owner, angle xyAngle )
+		super(pos, radius, owner)
+		fx = new Fx(pos, xyAngle)
+	
+	construct( vec3 pos, player owner, angle xyAngle )
+		super(pos, 0., owner)
+		fx = new Fx(pos, xyAngle)
+		
+	override function update()
+		pos += (vel*speedFactor)
+		fx.setPos(pos)
+		
+	function setFx(string sfxpath)
+		fx.setFx(sfxpath)
+		
+	function setPos()
+		fx.setPos(pos)
+		
+	override function setPos(vec3 tpos)
+		pos = tpos
+		fx.setPos(tpos.x,tpos.y)
+		
+	ondestroy
+		destroy fx
+
+
+
+
+
+	

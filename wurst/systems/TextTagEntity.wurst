@@ -1,0 +1,27 @@
+package TextTagEntity
+import Entity
+import Texttag
+import PhysicsConstants
+import public Colors
+
+public class TextTagEntity extends Entity
+	texttag tt
+	real dur
+	
+	construct(vec3 pos, vec2 vel, string text, int size, real duration,  colorA col )
+		super(pos,DUMMY_PLAYER)
+		dur = duration
+		tt = createTTEx(pos, vec2(0,0), text, size, duration, col)
+		this.vel = vel.toVec3()
+		
+	override function update()
+		vel += gravity
+		pos += vel
+		tt.setPos(pos)
+		dur -= ANIMATION_PERIOD
+		if dur <= 0
+			terminate()
+			
+	ondestroy
+		DestroyTextTag(tt)
+	

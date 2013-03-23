@@ -83,6 +83,7 @@ package SharedBounty
 					showBountyTextTag( amount.toInt(), victim, Player(i) )
 
 
+
 	public function initSharedBounty()
 		trigger t = CreateTrigger()
 		TriggerRegisterPlayerUnitEvent( t, Player(6), EVENT_PLAYER_UNIT_DEATH, null )
@@ -91,7 +92,7 @@ package SharedBounty
 		share_handicap[0] = 0
 		share_handicap[1] = 0
 		share_handicap[2] = 0
-		share_handicap[5] = 20
+		share_handicap[5] = 40
 
 		
 endpackage 

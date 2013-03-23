@@ -3,24 +3,27 @@ package AutoCastSystem // Towers cast an ability instead of direct attacking
     int array tower_id // "group" of the towers belong to this system
     int array spell_type // 0 - IssuePointOrder 1 - IssueTargetOrder 2 - IssueImmediateOrder
     
-    function castSpell()
+    function onAttack()
         int i = 0
         while tower_id[i] != 0
             if GetUnitTypeId(GetAttacker()) == tower_id[i]
-                if spell_type[i] == 0
-                    IssuePointOrder(GetAttacker(),spell_string[i],GetUnitX(GetTriggerUnit()),GetUnitY(GetTriggerUnit()))
-                else if spell_type[i] == 1
-                    IssueTargetOrder(GetAttacker(),spell_string[i],GetTriggerUnit())
-                else if spell_type[i] == 2
-                    IssueImmediateOrder(GetAttacker(),spell_string[i])
+                castSpell(GetAttacker(),i, GetTriggerUnit())
             i++
 
-
+	public function castSpell(unit caster, int i, unit u)
+		switch spell_type[i]
+	        case 0
+	            IssuePointOrder(caster,spell_string[i],u.getX(),u.getY())
+	        case 1
+	            IssueTargetOrder(caster,spell_string[i],u)
+	        case 2
+	            IssueImmediateOrder(caster,spell_string[i])
 
     public function initAutoCastSystem()   //AutoCastSystem
-        trigger t = CreateTrigger()
+     /*   trigger t = CreateTrigger()
         TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)
-        TriggerAddAction(t,function castSpell)
+        TriggerAddAction(t,function onAttack)
+        */
         //Lightning Towers
         tower_id[0] = 'h01B'
         spell_string[0] = "chainlightning"
@@ -53,6 +56,10 @@ package AutoCastSystem // Towers cast an ability instead of direct attacking
         tower_id[7] = 'h01K'
         spell_string[7] = "chainlightning"
         spell_type[7] = 1
+        //Artillery Towers
+        tower_id[8] = 'h01O'
+        spell_string[8] = "channel"
+        spell_type[8] = 0
         
         
 endpackage

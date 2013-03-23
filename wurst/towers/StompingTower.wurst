@@ -3,7 +3,7 @@ package StompingTower
     import Maths
     import TimerUtils
     import Terrain
-    real SPEED = 15.
+    real SPEED = 30.
     
     int array basetype
     int array dummytype
@@ -12,6 +12,7 @@ package StompingTower
         use LinkedListModule
         unit base  //tower (selects targets)
         unit dummy //tauren
+        real baseflyheight //starting flyheight
         real targetX
         real targetY
         boolean before //stomp
@@ -23,7 +24,8 @@ package StompingTower
             dummy = CreateUnit(GetOwningPlayer(base),dummytype[level],GetUnitX(base),GetUnitY(base),270.)
             UnitAddAbility( dummy, 'Amrf')
             UnitRemoveAbility(dummy, 'Amrf')
-            setdummyFlyHeight(190.)//-getTerrainZ(u.getX(), u.getY()))
+            baseflyheight = 190.
+            setdummyFlyHeight(baseflyheight)//-getTerrainZ(u.getX(), u.getY()))
             SetUnitX(dummy,GetUnitX(base))
             SetUnitY(dummy,GetUnitY(base))
 
@@ -35,12 +37,11 @@ package StompingTower
             tim = getTimer()
             tim.setData(this castTo int)
             tim.startPeriodic(0.03125,function attackJump)
-            print("timer set")
             SetUnitFacing(dummy, angleBetweenCoordsD(GetUnitX(base),GetUnitY(base),targetX,targetY))
             
         function setdummyFlyHeight(real height)
-            SetUnitFlyHeight(dummy, height-getTerrainZ(dummy.getX(),dummy.getY()),0.)
-            print(height.toString()+" - "+ getTerrainZ(dummy.getX(),dummy.getY()).toString()+" = "+(height-getTerrainZ(dummy.getX(),dummy.getY())).toString())
+            SetUnitFlyHeight(dummy, height,0.)
+            //SetUnitFlyHeight(dummy, height-getTerrainZ(dummy.getX(),dummy.getY()),0.)
         
         function turnBack()
             timer temptimer = getTimer()
@@ -64,14 +65,13 @@ package StompingTower
         real distancedummy = distanceBetweenCoords(GetUnitX(root.base),GetUnitY(root.base),GetUnitX(root.dummy),GetUnitY(root.dummy))
         real angle = angleBetweenCoordsD(GetUnitX(root.base),GetUnitY(root.base),root.targetX,root.targetY)
         if  distancetarget >= distancedummy
-            root.setdummyFlyHeight(getParabolaHeight(200.-getTerrainZ(GetUnitX(root.base),GetUnitY(root.base)),getTerrainZ(root.targetX,root.targetY),300.,distancetarget,distancedummy))
+            root.setdummyFlyHeight(getParabolaHeight(root.baseflyheight,0.,300.,distancetarget,distancedummy))
             SetUnitX(root.dummy,polarProjectionXD(GetUnitX(root.dummy),SPEED,angle))
             SetUnitY(root.dummy,polarProjectionYD(GetUnitY(root.dummy),SPEED,angle))
             if (not root.animbegun) and (distancetarget-distancedummy <= SPEED*22)
                 root.animbegun = true
                 SetUnitAnimation(root.dummy,"attack slam")
         else
-            print("ending jump")
             root.setdummyFlyHeight(0.)
             IssueImmediateOrder(root.dummy, "stomp")
    //         TerrainDeformCrater(GetUnitX(root.dummy),GetUnitY(root.dummy),160,50,20,false)
@@ -88,11 +88,11 @@ package StompingTower
         if distancebase >= distancedummy
             SetUnitX(root.dummy,polarProjectionXD(GetUnitX(root.dummy),SPEED,angle))
             SetUnitY(root.dummy,polarProjectionYD(GetUnitY(root.dummy),SPEED,angle))
-            root.setdummyFlyHeight(getParabolaHeight(getTerrainZ(root.targetX,root.targetY),200.-getTerrainZ(GetUnitX(root.base),GetUnitY(root.base)),200.,distancebase,distancedummy))
+            root.setdummyFlyHeight(getParabolaHeight(0.,root.baseflyheight,200.,distancebase,distancedummy))
         else
             SetUnitX(root.dummy,GetUnitX(root.base))
             SetUnitY(root.dummy,GetUnitY(root.base))
-            root.setdummyFlyHeight(200.)
+            root.setdummyFlyHeight(root.baseflyheight)
             PauseUnit(root.base,false)
             DestroyTimer(GetExpiredTimer())
 
@@ -112,7 +112,6 @@ package StompingTower
         while tower != null
             if GetAttacker() == tower.base
                 tower.registerTarget( GetTriggerUnit())
-                print("sent")
                 tower = tower.next
             else
                 tower = tower.next

@@ -83,7 +83,7 @@ package UnitSpawnSystem
             
             level -= 1
             special = false
-            print("Brace yourselves! Special wave is coming now!")
+            print("Here is something Special for you!")
             
         if boss
             PlaySoundBJ(bossSounds[wave])

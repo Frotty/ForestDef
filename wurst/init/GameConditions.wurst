@@ -1,6 +1,8 @@
 package GameConditions
     import TimerUtils
     
+    public unit TREASURE = gg_unit_h00E_0008
+    
     function victory()
         print(" You win! " )
         PauseGame( true )
@@ -22,7 +24,7 @@ package GameConditions
         TimerDialogDisplay( td, true )
         print( "You have one minute to build up defenses....")
         trigger tr = CreateTrigger()
-        TriggerRegisterUnitEvent( tr, gg_unit_h00E_0008 , EVENT_UNIT_DEATH )
+        TriggerRegisterUnitEvent( tr, TREASURE , EVENT_UNIT_DEATH )
         TriggerAddAction( tr, function endGameTimer )
     
 endpackage 

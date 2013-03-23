@@ -23,7 +23,6 @@ package AssassinTower
             dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
             SetUnitFlyHeight(dummy, 160., 0.)
             hitnumber = hitnumberstore[level]
-            print("mph")
 
         
         function registerTarget(unit u)
@@ -40,6 +39,8 @@ package AssassinTower
                 dummy.setY(base.getY())
                 SetUnitVertexColor(dummy, 255,255,255,255)
                 SetUnitFlyHeight(dummy,160.,0.)
+                SetUnitTimeScale( dummy, 1.)
+                SetUnitAnimation(dummy,"stand")
                 SetUnitFacing(dummy, angleBetweenCoordsD(base.getX(),base.getY(),target.getX(),target.getY()))
         
     function hit()

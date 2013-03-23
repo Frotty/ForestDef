@@ -22,7 +22,7 @@ package TrooperTower
                 SetUnitPropWindow(trooperData.loadUnit(i),0)
                 UnitAddAbility( trooperData.loadUnit(i) , 'Amrf')
                 UnitRemoveAbility( trooperData.loadUnit(i) , 'Amrf')
-                SetUnitFlyHeight(trooperData.loadUnit(i), 200.-getTerrainZ(GetUnitX(trooperData.loadUnit(i)),GetUnitY(trooperData.loadUnit(i))),0.)
+                SetUnitFlyHeight(trooperData.loadUnit(i), 160,0.)
                 SetUnitX(trooperData.loadUnit(i),polarProjectionXD(GetUnitX(base),DUMMY_DIST,angle))
                 SetUnitY(trooperData.loadUnit(i),polarProjectionYD(GetUnitY(base),DUMMY_DIST,angle))
             
@@ -30,12 +30,12 @@ package TrooperTower
             for int i = 0 to 2
                 IssueTargetOrder( trooperData.loadUnit(i),"attack",target)
         
-        function upgrade() // might wanna add some effect so they wont just "disssappear"
+       /* function upgrade() // might wanna add some effect so they wont just "disssappear"
             for int i = 0 to 2
                 ShowUnit(trooperData.loadUnit(i), false)
                 
             destroy this
-        
+        */
         ondestroy //This tower dies, or the troopers have to be removed.
             for int i = 0 to 2
                 SetUnitExploded(trooperData.loadUnit(i), true)
@@ -48,14 +48,14 @@ package TrooperTower
                 TrooperTower tower = new TrooperTower(GetTriggerUnit(),i)
             i++
             
-    function upgradeStart()
+    /*function upgradeStart()
         TrooperTower tower = TrooperTower.getFirst()
         while tower != null
             if GetTriggerUnit() == tower.base
                 tower.upgrade()
                 tower = tower.next
             else
-                tower = tower.next
+                tower = tower.next*/
     
     function towerDeath()
         TrooperTower tower = TrooperTower.getFirst()
@@ -69,9 +69,9 @@ package TrooperTower
         TriggerRegisterAnyUnitEventBJ(t1, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
         TriggerAddAction(t1, function upgradeFinish)
         
-        trigger t2 = CreateTrigger()
+      /*  trigger t2 = CreateTrigger()
         TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_UPGRADE_START)
-        TriggerAddAction(t2, function upgradeStart)
+        TriggerAddAction(t2, function upgradeStart)*/
         
         trigger t3 = CreateTrigger()
         TriggerRegisterAnyUnitEventBJ(t3, EVENT_PLAYER_UNIT_DEATH)

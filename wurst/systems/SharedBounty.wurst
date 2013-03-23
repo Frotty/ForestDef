@@ -38,11 +38,11 @@ package SharedBounty
         else if ( level == 7 )
             return GetRandomInt( 9, 12 )
         else if ( level == 8 )
-            return GetRandomInt( 10, 14)
+            return GetRandomInt( 15, 20)
         else if ( level == 9 )
-            return GetRandomInt( 11, 15 )
+            return GetRandomInt( 30, 35 )
         else if ( level == 10 )
-            return GetRandomInt( 13, 17 )
+            return GetRandomInt( 43, 47 )
         
         return 0
 

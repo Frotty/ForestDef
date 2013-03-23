@@ -1,58 +1,58 @@
 package AutoCastSystem // Towers cast an ability instead of direct attacking
-    string array spell_string //order string of the towers spell
-    int array tower_id // "group" of the towers belong to this system
-    int array spell_type // 0 - IssuePointOrder 1 - IssueTargetOrder 2 - IssueImmediateOrder
-    
-    function castSpell()
-        int i = 0
-        while tower_id[i] != 0
-            if GetUnitTypeId(GetAttacker()) == tower_id[i]
-                if spell_type[i] == 0
-                    IssuePointOrder(GetAttacker(),spell_string[i],GetUnitX(GetTriggerUnit()),GetUnitY(GetTriggerUnit()))
-                else if spell_type[i] == 1
-                    IssueTargetOrder(GetAttacker(),spell_string[i],GetTriggerUnit())
-                else if spell_type[i] == 2
-                    IssueImmediateOrder(GetAttacker(),spell_string[i])
-            i++
+	string array spell_string //order string of the towers spell
+	int array tower_id // "group" of the towers belong to this system
+	int array spell_type // 0 - IssuePointOrder 1 - IssueTargetOrder 2 - IssueImmediateOrder
+	
+	function castSpell()
+		int i = 0
+		while tower_id[i] != 0
+			if GetUnitTypeId(GetAttacker()) == tower_id[i]
+				if spell_type[i] == 0
+					IssuePointOrder(GetAttacker(),spell_string[i],GetUnitX(GetTriggerUnit()),GetUnitY(GetTriggerUnit()))
+				else if spell_type[i] == 1
+					IssueTargetOrder(GetAttacker(),spell_string[i],GetTriggerUnit())
+				else if spell_type[i] == 2
+					IssueImmediateOrder(GetAttacker(),spell_string[i])
+			i++
 
 
 
-    public function initAutoCastSystem()   //AutoCastSystem
-        trigger t = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)
-        TriggerAddAction(t,function castSpell)
-        //Lightning Towers
-        tower_id[0] = 'h01B'
-        spell_string[0] = "chainlightning"
-        spell_type[0] = 1
-        //Wildfire Towers
-        tower_id[1] = 'h01C'
-        spell_string[1] = "flamestrike"
-        spell_type[1] = 0
-        //Corruption Towers
-        tower_id[2] = 'h01D'
-        spell_string[2] = "lightningshield"
-        spell_type[2] = 1
-        //Venom Towers
-        tower_id[3] = 'h01I'
-        spell_string[3] = "shadowstrike"
-        spell_type[3] = 1
-        //GroundShaker Towers
-        tower_id[4] = 'h01J'
-        spell_string[4] = "earthquake"
-        spell_type[4] = 0
-        //Wave Towers
-        tower_id[5] = 'h01N'
-        spell_string[5] = "thunderbolt"
-        spell_type[5] = 1
-        //Toxic Towers
-        tower_id[6] = 'h01L'
-        spell_string[6] = "acidbomb"
-        spell_type[6] = 1
-        //Holy Towers
-        tower_id[7] = 'h01K'
-        spell_string[7] = "chainlightning"
-        spell_type[7] = 1
-        
-        
+	public function initAutoCastSystem()   //AutoCastSystem
+		trigger t = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)
+		TriggerAddAction(t,function castSpell)
+		//Lightning Towers
+		tower_id[0] = 'h01B'
+		spell_string[0] = "chainlightning"
+		spell_type[0] = 1
+		//Wildfire Towers
+		tower_id[1] = 'h01C'
+		spell_string[1] = "flamestrike"
+		spell_type[1] = 0
+		//Corruption Towers
+		tower_id[2] = 'h01D'
+		spell_string[2] = "lightningshield"
+		spell_type[2] = 1
+		//Venom Towers
+		tower_id[3] = 'h01I'
+		spell_string[3] = "shadowstrike"
+		spell_type[3] = 1
+		//GroundShaker Towers
+		tower_id[4] = 'h01J'
+		spell_string[4] = "earthquake"
+		spell_type[4] = 0
+		//Wave Towers
+		tower_id[5] = 'h01N'
+		spell_string[5] = "thunderbolt"
+		spell_type[5] = 1
+		//Toxic Towers
+		tower_id[6] = 'h01L'
+		spell_string[6] = "acidbomb"
+		spell_type[6] = 1
+		//Holy Towers
+		tower_id[7] = 'h01K'
+		spell_string[7] = "chainlightning"
+		spell_type[7] = 1
+		
+		
 endpackage

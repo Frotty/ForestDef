@@ -1,0 +1,7 @@
+package Debug
+	
+	public int entityCount 			= 0
+	public int unitEntityCount 		= 0
+	
+	
+endpackage

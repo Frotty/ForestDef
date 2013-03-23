@@ -1,0 +1,52 @@
+package PhysicsEntity
+import Entity
+import Terrain
+import PhysicsConstants
+import Debug
+
+//Module for Physical Simulation
+public module PhysicsModule
+	/** Affected by gravity */
+	boolean affectedByGravity = true
+	
+	real terrainZ = 0.
+	
+	// Physical factors
+	
+	// The higher the more slide. Should be < 1.
+	real friction = 0.9
+	// Defines the bounciness
+	real restitution = 0.5
+		
+		
+	// This function is called every ANIMATION_PERIOD tick if the Entity is active
+	function physicsUpdate(Entity e)
+		terrainZ = getTerrainZ(e.pos.x, e.pos.y)
+		if e.pos.z <= terrainZ + .2
+			onGround(e)
+		else
+			inAir(e)
+			
+		e.pos += (e.vel * e.speedFactor)
+		
+	// When the Entity is on or near the ground	
+	function onGround(Entity e)
+		// If the Entity is moving towards 
+		vec3 normal = getTerrainNormal(e.pos.x, e.pos.y, 2.)
+		// Is the Entity going away from the ground?
+		if e.vel.dot(normal) > 0 
+			return
+
+		vec3 pv = e.vel.project(normal)
+		pv *= (-1. - restitution)
+		if pv.z > 4.
+			e.vel += pv
+		else	
+			e.vel *= friction
+			
+		e.pos.z = terrainZ
+		
+	function inAir(Entity e)
+		if affectedByGravity
+			e.vel += gravity
+			

@@ -1,83 +1,85 @@
 package TrooperTower
-    import LinkedListModule
-    import Maths
-    import Terrain
-    import Table
-    
-    real DUMMY_DIST = 20.
-    int array base_id
-    int array dummy_id
+	import LinkedListModule
+	import Maths
+	import Terrain
+	import Table
+	
+	real DUMMY_DIST = 20.
+	int array base_id
+	int array dummy_id
 
-    public class TrooperTower
-        use LinkedListModule
-        unit base
-        unit trooper1 //NOOB CLASS DOESNOT ENABLES ARRAY VARIABLES :ogre_rage:
-        Table trooperData = new Table()
-        
-        construct (unit u, int level)
-            base = u
-            for int i = 0 to 2
-                real angle = i*120.
-                trooperData.saveUnit(i, CreateUnit(GetOwningPlayer(base),dummy_id[level], polarProjectionXD(GetUnitX(base),DUMMY_DIST,angle),polarProjectionYD(GetUnitY(base),DUMMY_DIST,angle), angle))
-                SetUnitPropWindow(trooperData.loadUnit(i),0)
-                UnitAddAbility( trooperData.loadUnit(i) , 'Amrf')
-                UnitRemoveAbility( trooperData.loadUnit(i) , 'Amrf')
-                SetUnitFlyHeight(trooperData.loadUnit(i), 200.-getTerrainZ(GetUnitX(trooperData.loadUnit(i)),GetUnitY(trooperData.loadUnit(i))),0.)
-                SetUnitX(trooperData.loadUnit(i),polarProjectionXD(GetUnitX(base),DUMMY_DIST,angle))
-                SetUnitY(trooperData.loadUnit(i),polarProjectionYD(GetUnitY(base),DUMMY_DIST,angle))
-            
-        function setTarget(unit target) //if the player want the troopers to attack a specific target
-            for int i = 0 to 2
-                IssueTargetOrder( trooperData.loadUnit(i),"attack",target)
-        
-        function upgrade() // might wanna add some effect so they wont just "disssappear"
-            for int i = 0 to 2
-                ShowUnit(trooperData.loadUnit(i), false)
-                
-            destroy this
-        
-        ondestroy //This tower dies, or the troopers have to be removed.
-            for int i = 0 to 2
-                SetUnitExploded(trooperData.loadUnit(i), true)
-                KillUnit(trooperData.loadUnit(i))
-        
-    function upgradeFinish()
-        int i = 0
-        while base_id[i] != 0
-            if base_id[i] == GetUnitTypeId(GetTriggerUnit())
-                TrooperTower tower = new TrooperTower(GetTriggerUnit(),i)
-            i++
-            
-    function upgradeStart()
-        TrooperTower tower = TrooperTower.getFirst()
-        while tower != null
-            if GetTriggerUnit() == tower.base
-                tower.upgrade()
-                tower = tower.next
-            else
-                tower = tower.next
-    
-    function towerDeath()
-        TrooperTower tower = TrooperTower.getFirst()
-        while tower != null
-            if GetDyingUnit() == tower.base
-                destroy tower
-            tower = tower.next
-                
-    public function initTrooperTower()
-        trigger t1 = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t1, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
-        TriggerAddAction(t1, function upgradeFinish)
-        
-        trigger t2 = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_UPGRADE_START)
-        TriggerAddAction(t2, function upgradeStart)
-        
-        trigger t3 = CreateTrigger()
-        TriggerRegisterAnyUnitEventBJ(t3, EVENT_PLAYER_UNIT_DEATH)
-        TriggerAddAction(t3, function towerDeath)
-    
-        base_id[0] = 'h01E'
-        dummy_id[0] = 'h01F'
+	public class TrooperTower
+		use LinkedListModule
+		unit base
+		unit trooper1 //NOOB CLASS DOESNOT ENABLES ARRAY VARIABLES :ogre_rage:
+		Table trooperData = new Table()
+		
+		construct (unit u, int level)
+			base = u
+			for int i = 0 to 2
+				angle tangle = angle(i*120.)
+				trooperData.saveUnit(i, CreateUnit(GetOwningPlayer(base),dummy_id[level]
+										, polarProjectionX(GetUnitX(base),DUMMY_DIST,tangle),
+										polarProjectionY(GetUnitY(base),DUMMY_DIST,tangle), tangle.degrees()))
+				SetUnitPropWindow(trooperData.loadUnit(i),0)
+				UnitAddAbility( trooperData.loadUnit(i) , 'Amrf')
+				UnitRemoveAbility( trooperData.loadUnit(i) , 'Amrf')
+				SetUnitFlyHeight(trooperData.loadUnit(i), 200.-getTerrainZ(GetUnitX(trooperData.loadUnit(i)),GetUnitY(trooperData.loadUnit(i))),0.)
+				SetUnitX(trooperData.loadUnit(i),polarProjectionX(GetUnitX(base),DUMMY_DIST,tangle))
+				SetUnitY(trooperData.loadUnit(i),polarProjectionY(GetUnitY(base),DUMMY_DIST,tangle))
+			
+		function setTarget(unit target) //if the player want the troopers to attack a specific target
+			for int i = 0 to 2
+				IssueTargetOrder( trooperData.loadUnit(i),"attack",target)
+		
+		function upgrade() // might wanna add some effect so they wont just "disssappear"
+			for int i = 0 to 2
+				ShowUnit(trooperData.loadUnit(i), false)
+				
+			destroy this
+		
+		ondestroy //This tower dies, or the troopers have to be removed.
+			for int i = 0 to 2
+				SetUnitExploded(trooperData.loadUnit(i), true)
+				KillUnit(trooperData.loadUnit(i))
+		
+	function upgradeFinish()
+		int i = 0
+		while base_id[i] != 0
+			if base_id[i] == GetUnitTypeId(GetTriggerUnit())
+				TrooperTower tower = new TrooperTower(GetTriggerUnit(),i)
+			i++
+			
+	function upgradeStart()
+		TrooperTower tower = TrooperTower.getFirst()
+		while tower != null
+			if GetTriggerUnit() == tower.base
+				tower.upgrade()
+				tower = tower.next
+			else
+				tower = tower.next
+	
+	function towerDeath()
+		TrooperTower tower = TrooperTower.getFirst()
+		while tower != null
+			if GetDyingUnit() == tower.base
+				destroy tower
+			tower = tower.next
+				
+	public function initTrooperTower()
+		trigger t1 = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t1, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
+		TriggerAddAction(t1, function upgradeFinish)
+		
+		trigger t2 = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_UPGRADE_START)
+		TriggerAddAction(t2, function upgradeStart)
+		
+		trigger t3 = CreateTrigger()
+		TriggerRegisterAnyUnitEventBJ(t3, EVENT_PLAYER_UNIT_DEATH)
+		TriggerAddAction(t3, function towerDeath)
+	
+		base_id[0] = 'h01E'
+		dummy_id[0] = 'h01F'
 
 endpackage 

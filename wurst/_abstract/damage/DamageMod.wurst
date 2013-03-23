@@ -1,0 +1,248 @@
+package DamageMod
+import AbilityObjEditing
+//===========================================================================
+// Information:
+//==============
+//
+//	 DamageMod allows you to increase or decrease the amount of damage a
+// unit takes during a "Unit Takes Damage" event. You can use it to easily
+// create critical strike or damage mitigation abilities. You can repeatedly
+// modify the damage being dealt during the same "Unit Takes Damage" event,
+// allowing you to combine damage increases and decreases to produce an acc-
+// urate final result.
+//
+// User functions:
+//=================
+//
+//	 You must use all of the following functions within a thread spawned from 
+// a "Unit Takes Damage" trigger.
+//
+// ModifyDamage(real) - Sets the amount of damage that will be dealt to the dam-
+//					  aged unit to the specified value.
+//
+// ModifyDamageBy(real) - Adjusts the amount of damage that will be dealt to the
+//						damaged unit by the specified value.
+//
+// GetDamage() - You should use this in place of GetEventDamage(), as it will 
+//			   return the correct current event damage after the previous 
+//			   functions have modified it.
+//
+// DelayedDamage(amount, attack, ranged, attackType, damageType, weaponType) -
+//		 This function has exactly the same parameter list as UnitDamageTarget,
+//	 minus the damager and the target. Use this function to safely deal extra
+//	 damage from the damager to the target during a Unit Takes Damage event.
+//	 It will cause another Unit Takes Damage event to occur.
+//
+// Usage examples:
+//=================
+//
+// Some examples of how to use DamageMod within a "Unit Takes Damage" event:
+//
+// ModifyDamage(0.) //Will prevent all damage, unless a subsequent call
+//					   //increases it again
+//
+// life = GetWidgetLife(GetTriggerUnit()) //Leaves the damaged unit with 
+// ModifyDamage(life - 1.)			   //one HP remaining
+//										 
+//
+// ModifyDamageBy(GetEventDamage()) //Increases the damage dealt by 100%
+//									   //of the original damage
+//
+// ModifyDamageBy(GetDamage()) //Increases the damage dealt by 100%
+//								  //of the current modified damage
+//
+// ModifyDamageBy(-GetDamage()*0.5) //Decreases the damage dealt by 50%
+//									   //of the current modified damage
+//
+// Considerations for use:
+//=========================
+//
+// -Don't use UnitDamageTarget or SetWidgetLife on the damaged unit during "Unit
+//  Takes Damage" events.* DamageMod cannot track life changes or prevent the damaged
+//  unit from dying if you change its life without using system functions to do so.
+//  So use the system functions as per the following examples:
+//
+//  Instead of: UnitDamageTarget(GetEventDamageSource(), GetTriggerUnit(), 100., ...)
+//	Use this: ModifyDamageBy(100.)  //Same as dealing extra damage (ignores armor).
+//	 Or this: DelayedDamage(100., ...) //Deals damage from the damager to the damaged
+//											//unit (triggers will fire, considers armor).
+//
+//  Instead of: SetWidgetLife(GetTriggerUnit(), GetWidgetLife(GetTriggerUnit()) + 100.)
+//	Use this: ModifyDamageBy(-100.) //Same as healing the damaged unit for 100 life.
+//
+//  *You actually can use UnitDamageTarget during a "Unit Takes Damage" event, as
+//  long as the damager is not the same as the GetEventDamageSource() unit.
+//
+// -The DamageMod ability adds 100,000 max HP to the target to help it survive
+//  when necessary. Don't use attacks dealing over 100,000 damage in your map,
+//  or DamageMod will fail to keep units alive sometimes.
+//
+// -If the same unit has more than one "Unit Takes Damage" event registered to it,
+//  you might wind up seeing a unit deal 1000000000 damage every once in a while.
+//  Don't use more than one damage detection system in your map to avoid this.
+//
+// -If you edit the gameplay constants so that ATTACK_TYPE_CHAOS deals 0% damage
+//  to any armor type, DamageMod will have problems. Any non-zero value is fine.
+//
+// -There is a minor aesthetic issue where the numeric display of life (NOT the 
+//  overhead lifebar) may flicker to a much larger value for one frame. This flaw
+//  is unavoidable for this kind of system, but it is minimized as much as possible.
+//  The flickering only has a chance  to occur when the system adds max life to a
+//  damaged unit, which is avoided whenever possible.
+//
+//===========================================================================
+// Configuration:
+//================
+
+	
+constant int DAMAGE_ABIL_ID = 'dmbm'
+//This rawcode must match the parameter after "AIlz" in the ObjectMerger
+//macro above. You can change both if you want.
+constant real MAX_HP_GAINED = 10000.
+//This value must match the paramater after "Ilif 1" in the ObjectMerger
+//macro above. You can change both if you want. The value must be large
+//enough to prevent the damaged unit from dying from any hit in your map.
+
+
+//===========================================================================
+
+
+timer tim = CreateTimer()
+unit currentDamager = null
+real lifeMod = 0.
+int N = -1
+
+real array damageArray
+unit array damagedArray
+unit array damagerArray
+trigger array trig
+boolean array applied
+
+
+function applyDamageMod()
+	int n = 0
+	real maxlife
+	real percent
+	boolean b
+	currentDamager = null
+	lifeMod = 0.
+	for i = 0 to N
+	maxlife = damagedArray[n].getState(UNIT_STATE_MAX_LIFE)
+	percent = (GetWidgetLife(damagedArray[n]) / maxlife) - (damageArray[n] / (maxlife - MAX_HP_GAINED))
+	if percent > 0.405 / (maxlife - MAX_HP_GAINED) 
+		SetWidgetLife(damagedArray[n], percent*maxlife)
+	else
+		b = IsTriggerEnabled(trig[n])
+		DisableTrigger(trig[n])
+		UnitDamageTarget(damagerArray[n], damagedArray[n], 1000000000., false, false, ATTACK_TYPE_CHAOS, null, null)
+		if b 
+			EnableTrigger(trig[n])
+	
+	if applied[n] 
+		UnitRemoveAbility(damagedArray[n], DAMAGE_ABIL_ID)
+	
+	damagedArray[n] = null
+	damagerArray[n] = null
+	trig[n] = null
+
+
+	N = -1
+	
+
+//===========================================================================
+// User functions:
+//=================
+
+public function getDamage() returns real
+	if N != -1 and currentDamager == GetEventDamageSource() 
+		return damageArray[N]
+
+	return GetEventDamage() - lifeMod
+
+
+public function modifyDamage( real damage )
+	unit u
+	real life
+	real missinglife
+	real lMod
+	if N != -1 and currentDamager == GetEventDamageSource() 
+		damageArray[N] = damage
+	else
+		if currentDamager != GetEventDamageSource() 
+			currentDamager = GetEventDamageSource()
+			lifeMod = 0.
+
+		u = GetTriggerUnit()
+		life = GetWidgetLife(u)
+		missinglife = GetUnitState(u, UNIT_STATE_MAX_LIFE) - life
+		lMod = GetEventDamage() - lifeMod - damage
+		if GetUnitAbilityLevel(u, DAMAGE_ABIL_ID) == 0 and lMod <= missinglife and life + lMod >= 0.405 
+			SetWidgetLife(u, life + lMod)
+			lifeMod += lMod
+		else
+			N++
+			damageArray[N] = damage
+			damagedArray[N] = u
+			damagerArray[N] = GetEventDamageSource()
+			trig[N] = GetTriggeringTrigger()
+			applied[N] = GetUnitAbilityLevel(u, DAMAGE_ABIL_ID) == 0
+			if applied[N] 
+				UnitAddAbility(u, DAMAGE_ABIL_ID)
+
+			SetWidgetLife(u, GetWidgetLife(u) + GetEventDamage() - lifeMod)
+
+		TimerStart(tim, 0., false, function applyDamageMod)
+		u = null
+
+
+
+public function modifyDamageBy(real damage)
+	modifyDamage(damage + getDamage())
+
+
+//===========================================================================
+// Delayed UnitDamageTarget:
+//===========================
+//
+//globals
+//	private timer Timer2 = CreateTimer()
+//	private int D = -1
+//	
+//	private unit array whichUnits
+//	private widget array targets
+//	private real array amounts
+//	private boolean array attacks
+//	private boolean array rangeds
+//	private attacktype array attackTypes
+//	private damagetype array damageTypes
+//	private weapontype array weaponTypes
+//	private trigger array triggers
+//endglobals
+//
+//private function ApplyUnitDamageTargetDelayed takes nothing returns nothing
+//	int d = 0
+//	boolean b
+//		loop
+//			exitwhen d > D
+//			UnitDamageTarget(whichUnits[d], targets[d], amounts[d], attacks[d], rangeds[d], attackTypes[d], damageTypes[d], weaponTypes[d])
+//			whichUnits[d] = null
+//			targets[d] = null
+//			triggers[d] = null
+//			d = d + 1
+//		endloop
+//	D = -1
+//endfunction
+//
+//function DelayedDamage takes real amount, boolean attack, boolean ranged, attacktype attackType, damagetype damageType, weapontype weaponType returns nothing
+//	D = D + 1
+//	whichUnits[D] = GetEventDamageSource()
+//	targets[D] = GetTriggerUnit()
+//	amounts[D] = amount
+//	attacks[D] = attack
+//	rangeds[D] = ranged
+//	attackTypes[D] = attackType
+//	damageTypes[D] = damageType
+//	weaponTypes[D] = weaponType
+//	TimerStart(Timer2, 0.001, false, function ApplyUnitDamageTargetDelayed)
+//endfunction
+

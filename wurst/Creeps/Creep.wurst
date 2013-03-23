@@ -1,0 +1,25 @@
+package Creep
+import Entity
+
+public constant CREEP_OWNER = Player(6)
+
+
+public class Creep extends UnitEntity
+	int bounty
+	
+	construct(vec3 pos, int typeId, vec2 target)
+		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
+		actor.issuePointOrder("attack", target)
+		active = false
+	
+	override function update()
+	
+public class Boss extends Creep
+
+	construct(vec3 pos, int typeId, vec2 target)
+		super(pos, typeId, target)
+		
+public class Special extends Creep
+
+	construct(vec3 pos, int typeId, vec2 target)
+		super(pos, typeId, target)

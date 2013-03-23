@@ -8,31 +8,31 @@ package SuperCharge
 	int REPAIR_ID = 'Ahrp'
 	int SUPERREPAIR_ID = 'A01L'
 
-    function charge()
-        unit target = GetSpellTargetUnit()
-        if (GetSpellAbilityId() == ITEM_ABILITY_ID )
-        	target.removeAbility(REPAIR_ID)
-        	target.addAbility(SUPERREPAIR_ID)
-        	IssueImmediateOrder( target, "repairon" )
-        	DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\Avatar\\AvatarCaster.mdl", target.getX(), target.getY()))
-        	int handle = GetHandleId(target)
-        	timer tim = getTimer()
-        	tim.start(15. ,  function swapBack)
-            charged.saveUnit(handle,target)
-        	tim.setData(handle)
-        
-    function swapBack()
-        int i = GetExpiredTimer().getData()
-        unit u = charged.loadUnit(i)
-        charged.removeHandle(i)
-        u.removeAbility(SUPERREPAIR_ID)
-        u.addAbility(REPAIR_ID)
-        IssueImmediateOrder( u, "repairon" )
-        
-        
-    public function initSuperCharge()
-        trigger t = CreateTrigger( )
-        TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
-        TriggerAddAction( t, function charge )
+	function charge()
+		unit target = GetSpellTargetUnit()
+		if (GetSpellAbilityId() == ITEM_ABILITY_ID )
+			target.removeAbility(REPAIR_ID)
+			target.addAbility(SUPERREPAIR_ID)
+			IssueImmediateOrder( target, "repairon" )
+			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\Avatar\\AvatarCaster.mdl", target.getX(), target.getY()))
+			int hid = GetHandleId(target)
+			timer tim = getTimer()
+			tim.start(15. ,  function swapBack)
+			charged.saveUnit(hid,target)
+			tim.setData(hid)
+		
+	function swapBack()
+		int i = GetExpiredTimer().getData()
+		unit u = charged.loadUnit(i)
+		charged.removeHandle(i)
+		u.removeAbility(SUPERREPAIR_ID)
+		u.addAbility(REPAIR_ID)
+		IssueImmediateOrder( u, "repairon" )
+		
+		
+	public function initSuperCharge()
+		trigger t = CreateTrigger( )
+		TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+		TriggerAddAction( t, function charge )
 
 endpackage

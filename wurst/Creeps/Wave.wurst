@@ -1,0 +1,99 @@
+package Wave
+import TimerUtils
+import Creep
+
+vec3 array startPositions
+public vec2 middle = vec2( 2100.0, 1700.0 )
+
+enum creeptype
+	MELEE
+	MAGE
+	RANGED
+
+public class NormalWave
+	int meleeId
+	int mageId
+	int rangedId
+	
+	int amount
+	
+	creeptype typ = creeptype.MELEE
+
+	construct(int meleeId,int mageId,int rangedId, int amount)
+		this.meleeId = meleeId
+		this.mageId = mageId
+		this.rangedId = rangedId
+		this.amount = amount
+		
+	function spawn()
+		var t = getTimer()
+		t.setData(this castTo int)
+		t.start(0.1, function NormalWave.spawnCallback)
+		
+		
+	static function spawnCallback()
+		var t = GetExpiredTimer()
+		var wave = t.getData() castTo NormalWave
+		int id = 0
+		switch wave.typ
+			case creeptype.MELEE
+				id = wave.meleeId
+				wave.typ = creeptype.MAGE
+				t.start(0.8, function NormalWave.spawnCallback)
+			case creeptype.MAGE
+				id = wave.mageId
+				wave.typ = creeptype.RANGED
+				t.start(0.8, function NormalWave.spawnCallback)
+			case creeptype.RANGED
+				id = wave.rangedId
+				destroy wave
+				t.release()
+				
+		for i = 0 to wave.amount-1
+			for j = 0 to 3
+				new Creep(startPositions[j], id, middle)			
+		
+						
+					
+		
+		
+public class BossWave
+	int bossId
+	int amount
+	sound s
+	
+	construct(int bossId, int amount, sound s)
+		this.bossId = bossId
+		this.amount = amount
+		this.s = s
+		
+	function spawn()
+		PlaySoundBJ(s)
+		print("|cffE62121Attention: Boss incoming!")
+		for i = 0 to amount-1
+			for j = 0 to 3
+				new Boss(startPositions[j], bossId, middle)	
+		
+public class SpecialWave
+	int specialId
+	int amount
+
+	construct(int specialId, int amount)
+		this.specialId = specialId
+		this.amount = amount
+		
+	function spawn()
+		print("|cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
+		for i = 0 to amount-1
+			for j = 0 to 3
+				new Special(startPositions[j], specialId, middle)	
+		
+
+init
+	startPositions[0] = vec3(2549.,-700.,0)
+	startPositions[1] = vec3(-500,600.,0)
+	startPositions[2] = vec3(3600.,4100.,0)
+	startPositions[3] = vec3(4324.,2261.,0)
+	
+	
+	

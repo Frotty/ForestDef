@@ -1,0 +1,38 @@
+package Tower
+//All towers are registered here
+import Entity
+
+constant int BASIC_TOWER_ID = 'h001'
+
+public class Tower extends UnitEntity
+	boolean safe = false
+	
+	construct (unit tower)
+		super(vec3(tower.getX(),tower.getY(),0),tower)
+		tupgrade.registerUnitEvent(tower,EVENT_UNIT_UPGRADE_FINISH)
+		tupgrade.registerUnitEvent(tower,EVENT_UNIT_DEATH)
+		actor.setUserData(this castTo int)
+
+function onConstruction()
+	if GetUnitTypeId(GetTriggerUnit()) == BASIC_TOWER_ID
+		Tower t = new Tower(GetTriggerUnit())
+
+function onUpgrade()
+	//check if needs further defining
+
+function onDeath()
+	Entity e = GetTriggerUnit().getUserData() castTo Entity
+	if e instanceof Tower
+		destroy(e)
+	
+trigger tconstruct
+trigger tupgrade
+trigger tdeath
+init
+	tconstruct = CreateTrigger()
+	tconstruct.registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
+	tconstruct.addAction(function onConstruction)
+	tupgrade = CreateTrigger()
+	tupgrade.addAction(function onUpgrade)
+	tdeath = CreateTrigger()
+	tdeath.addAction(function onDeath)

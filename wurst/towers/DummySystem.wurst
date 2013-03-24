@@ -51,7 +51,7 @@ package DummySystem
 			SetUnitTimeScale(dummy, 0.)
 		
 		function doEffect(unit effected)
-			castSpell(dummy, id, effected)
+			castSpell() //dummy, id, effected
 		
 		function attackOrder(unit target)
 			IssueTargetOrder(dummy, "attack", target)

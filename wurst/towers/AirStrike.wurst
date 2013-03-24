@@ -14,7 +14,7 @@ package AirStrike
 		unit caster
 		unit missile
 		player p
-		real angle
+		real angler
 		real dist = 300
 		real speed
 		real damage
@@ -24,8 +24,8 @@ package AirStrike
 			caster = ucaster
 			p = GetOwningPlayer(caster)
 			speed = GetRandomReal(MISSILE_SPEED-10,MISSILE_SPEED+10)
-			angle = angl
-			missile = CreateUnit(p, MISSILE_ID,polarProjectionXD(x,-dista, angle), polarProjectionYD(y,-dista,angle), angle)
+			angler = angl
+			missile = CreateUnit(p, MISSILE_ID,polarProjectionXD(x,-dista, angler), polarProjectionYD(y,-dista,angler), angler)
 			damage = GetHeroAgi(caster, true)*2
 			aoe = area
 			UnitAddAbility(missile, 'Amrf')
@@ -48,7 +48,7 @@ package AirStrike
 	function move()
 		Missile root = Missile.getFirst()
 		while root != null
-			root.missile.setPos( polarProjectionXD(root.missile.getX(),root.speed,root.angle) , polarProjectionYD(root.missile.getY(),root.speed,root.angle))
+			root.missile.setPos( polarProjectionXD(root.missile.getX(),root.speed,root.angler) , polarProjectionYD(root.missile.getY(),root.speed,root.angle))
 			SetUnitFlyHeight(root.missile, GetUnitFlyHeight(root.missile)-root.speed*(8/3), 0)
 			root.dist -= root.speed
 			
@@ -65,7 +65,7 @@ package AirStrike
 				for int i = 0 to 2+GetUnitAbilityLevel(u,SPELL_ID)*3
 					real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
 					real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)
-					Missile missile = new Missile(u, x, y ,a, 300, GetUnitAbilityLevel(u,SPELL_ID)*60)
+					Missile missile = new Missile(u, x, y ,a, 300, GetUnitAbilityLevel(u,SPELL_ID)*60.)
 	
 	public function initAirStrike()
 		trigger t = CreateTrigger()

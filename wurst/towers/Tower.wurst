@@ -13,13 +13,24 @@ public class Tower extends UnitEntity
 		tupgrade.registerUnitEvent(tower,EVENT_UNIT_DEATH)
 		actor.setUserData(this castTo int)
 
+	function onUprade()
+		switch actor.unitId()
+			case 'asdf' //tower type
+				//replace stuff
+			default
+				break
+	
+function onUpgradeEvent()
+	var i = GetTriggerUnit().getUserData()
+	if i != 0
+		Tower t = i castTo Tower
+		t.onUpgrade()
+
 function onConstruction()
 	if GetUnitTypeId(GetTriggerUnit()) == BASIC_TOWER_ID
 		Tower t = new Tower(GetTriggerUnit())
-
-function onUpgrade()
-	//check if needs further defining
-
+		debugPrint("NewTowerBuilt",1)
+		
 function onDeath()
 	Entity e = GetTriggerUnit().getUserData() castTo Entity
 	if e instanceof Tower
@@ -33,6 +44,6 @@ init
 	tconstruct.registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	tconstruct.addAction(function onConstruction)
 	tupgrade = CreateTrigger()
-	tupgrade.addAction(function onUpgrade)
+	tupgrade.addAction(function Tower.onUpgrade)
 	tdeath = CreateTrigger()
 	tdeath.addAction(function onDeath)

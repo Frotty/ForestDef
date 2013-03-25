@@ -14,17 +14,18 @@ class AdvTower extends Tower
 		tupgstart.registerUnitEvent(tow,EVENT_UNIT_UPGRADE_START)
 		tupgstop.registerUnitEvent(tow,EVENT_UNIT_UPGRADE_CANCEL)
 		
-function onUpgradeStart()
-	//pause dummy
-	
-function onUpgradeStop()
-	//unpause dummy
+	static function onUpgradeStart()
+		//pause dummy
+		
+	static function onUpgradeStop()
+		//unpause dummy
+
 
 trigger tupgstart
 trigger tupgstop
 init
 	tupgstart = CreateTrigger()
 	tupgstart.registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
-	tupgstart.addAction(function onUpgradeStart)
+	tupgstart.addAction(function AdvTower.onUpgradeStart)
 	tupgstop = CreateTrigger()
-	tupgstop.addAction(function onUpgradeStop)
+	tupgstop.addAction(function AdvTower.onUpgradeStop)

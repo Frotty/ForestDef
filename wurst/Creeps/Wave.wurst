@@ -16,14 +16,17 @@ public class NormalWave
 	int rangedId
 	
 	int amount
+	int bounty
 	
 	creeptype typ = creeptype.MELEE
 
-	construct(int meleeId,int mageId,int rangedId, int amount)
+	construct(int meleeId,int mageId,int rangedId, int amount, int bounty)
 		this.meleeId = meleeId
 		this.mageId = mageId
 		this.rangedId = rangedId
 		this.amount = amount
+		this.bounty = bounty
+		
 		
 	function spawn()
 		var t = getTimer()
@@ -51,7 +54,7 @@ public class NormalWave
 				
 		for i = 0 to wave.amount-1
 			for j = 0 to 3
-				new Creep(startPositions[j], id, middle)			
+				new Creep(startPositions[j], id, wave.bounty, middle)			
 		
 						
 					
@@ -60,11 +63,13 @@ public class NormalWave
 public class BossWave
 	int bossId
 	int amount
+	int bounty
 	sound s
 	
-	construct(int bossId, int amount, sound s)
+	construct(int bossId, int amount, int bounty, sound s)
 		this.bossId = bossId
 		this.amount = amount
+		this.bounty = bounty
 		this.s = s
 		
 	function spawn()
@@ -72,21 +77,23 @@ public class BossWave
 		print("|cffE62121Attention: Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to 3
-				new Boss(startPositions[j], bossId, middle)	
+				new Boss(startPositions[j], bossId, bounty, middle)	
 		
 public class SpecialWave
 	int specialId
 	int amount
+	int bounty
 
-	construct(int specialId, int amount)
+	construct(int specialId, int bounty, int amount)
 		this.specialId = specialId
 		this.amount = amount
+		this.bounty = bounty
 		
 	function spawn()
 		print("|cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
 		for i = 0 to amount-1
 			for j = 0 to 3
-				new Special(startPositions[j], specialId, middle)	
+				new Special(startPositions[j], specialId, bounty, middle)	
 		
 
 init

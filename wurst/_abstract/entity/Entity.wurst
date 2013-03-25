@@ -155,15 +155,18 @@ abstract public class UnitEntity extends Entity
 			for bff in attackerData.currentBuffs
 				bff.attackModifier()
 			
-	static function onDeath()
+	function onDeath()
+		terminate()
+			
+	static function onEventDeath()
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
-		data.terminate()
+		data.onDeath()
 		
 
 		
 init
 	UnitEntity.dmgTrig.addAction(function UnitEntity.onDamage)		
-	UnitEntity.deathTrig.addAction(function UnitEntity.onDeath)
+	UnitEntity.deathTrig.addAction(function UnitEntity.onEventDeath)
 
 abstract public class FxEntity extends Entity
 	protected Fx fx

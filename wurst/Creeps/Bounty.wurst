@@ -1,0 +1,32 @@
+package Bounty
+
+//LEAVE THESE UNCHANGED
+boolean array PLAYER_INDICATOR
+//SYSTEM
+integer array share_handicap   //The bounty handicap. E.g 50 is half the normal bounty, 200 will double the normal.
+
+//APPEREANCE
+constant string BOUNTY_ART	  = "UI\\Feedback\\GoldCredit\\GoldCredit.mdl"  //Model path of the bounty art.
+constant string ATTACHMENTPOINT = "overhead"								  //Attachmentpoint of the bounty art.
+
+//TEXTTAG CONFIGURATION
+constant real	TEXTTAG_TEXTSIZE  = 0.024  //The size of the texttag text.
+constant real	TEXTTAG_VELOCITY  = .03//Texttag's velocity.
+constant real	TEXTTAG_ANGLE	 = 90. //Texttag's angle.
+constant real	TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
+constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
+
+
+public function showBountyTextTag ( integer bounty, unit receiver, player p )
+	if ( GetLocalPlayer() == p )
+		texttag t = CreateTextTag()
+		SetTextTagText(t, "+" + I2S(bounty), TEXTTAG_TEXTSIZE)
+		SetTextTagPos( t, GetUnitX(receiver)-20, GetUnitY(receiver), -30. )
+		SetTextTagColor( t, 255, 220, 0, 255 )
+		SetTextTagPermanent( t, false )
+		SetTextTagVelocity(t, 0, TEXTTAG_VELOCITY)
+		SetTextTagLifespan( t, TEXTTAG_LIFESPAN )
+		SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
+		SetTextTagVisibility( t, true )
+
+

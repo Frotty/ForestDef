@@ -3,7 +3,6 @@ package GameInit
 	import PlayerData
 	import GameConditions
 	import TimerUtils
-	import SharedBounty
 	import LumberSystem
 	import Destroy
 	import SuperCharge
@@ -32,7 +31,6 @@ package GameInit
 		initPlayers()
 		initConds()
 		initSpawn()
-		initSharedBounty()
 		
 		GetExpiredTimer().release()
 		PlaySoundBJ(gg_snd_H01Uther03)

@@ -1,8 +1,11 @@
 package Creep
 import Entity
+import Bounty
+import Table
 
 public constant CREEP_OWNER = Player(6)
 
+Table data = new Table()
 
 public class Creep extends UnitEntity
 	int bounty
@@ -11,8 +14,28 @@ public class Creep extends UnitEntity
 		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		active = false
+		// Autocomplete ist auch wieder total fürn Arsch.
+		actor.setPos(this.pos.toVec2())
+		
 	
 	override function update()
+		if vel.lengthSquared() > 0
+			super.update()
+			pos += vel
+			vel *= 0.98
+			actor.setXY(pos.x, pos.y)
+		else
+			active = false
+	
+	function setVelocity(vec3 vel)
+		this.vel = vel
+		active = true
+		
+	override function onDeath()
+		super.onDeath()
+		let p = GetKillingUnit().getOwner()
+		p.addGold(bounty)
+		showBountyTextTag(bounty, actor, owner)
 	
 public class Boss extends Creep
 

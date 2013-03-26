@@ -7,10 +7,10 @@ package GameInit
 	import Destroy
 	import SuperCharge
 	import RevivalSystem
-	import InstantRepair
 	import AssassinTower
 	import AutoCastSystem
 	//import HolyTower
+	import ShieldKit
 	import StompingTower
 	import TrooperTower
 	import WaveTower
@@ -21,14 +21,13 @@ package GameInit
 		initDestroy()
 		initSuperCharge()
 		initRevivalSystem()
-		initInstantRepair()
 		//initHolyTower()
 		initStompingTower()
 		initTrooperTower()
 		initPlayers()
 		initConds()
 		initSpawn()
-		
+		initShieldKit()
 		GetExpiredTimer().release()
 		PlaySoundBJ(gg_snd_H01Uther03)
 		startEntityLoop()

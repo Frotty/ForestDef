@@ -17,7 +17,7 @@ public class Creep extends UnitEntity
 		
 	
 	override function update()
-		if vel.lengthSquared() > 0
+		if vel.lengthSquared() > .5
 			super.update()
 			pos += vel
 			vel *= 0.925

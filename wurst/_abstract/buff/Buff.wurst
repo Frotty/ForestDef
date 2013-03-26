@@ -10,6 +10,7 @@ public abstract class Buff
 	int abilId
 	boolean running = true
 	boolean done = false
+	effect fx
 
 	construct(UnitEntity victim, real dur, int abilId)
 		this.victim = victim
@@ -25,6 +26,9 @@ public abstract class Buff
 	function terminate()
 		done = true
 		
+	function setEffect(string s, string attachment)
+		fx = victim.actor.addEffect(s, attachment)	
+	
 	ondestroy
 		victim.currentBuffs.remove(this)
 		boolean isLast = true
@@ -32,6 +36,9 @@ public abstract class Buff
 			if bff.abilId == this.abilId
 				isLast = false
 				break
+				
+		if fx != null
+			fx.destr()
 		
 		if isLast
 			victim.actor.removeAbility(abilId)

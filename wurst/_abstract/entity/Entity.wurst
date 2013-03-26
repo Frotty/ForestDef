@@ -151,14 +151,16 @@ abstract public class UnitEntity extends Entity
 		actor.setXY(tpos.x,tpos.y)
 		
 	static function onDamage()
-		debugPrint("onDamage" , 0)
+		debugPrint("onDamage" , 2)
 		let victimData = GetTriggerUnit().getUserData() castTo UnitEntity
 		let attackerData = GetEventDamageSource().getUserData() castTo UnitEntity
-		debugPrint("onDamage userData + " + GetAttacker().getName() , 0)
+		debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
+		debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
 		for bff in victimData.currentBuffs
 			bff.defenseModifier()
+			debugPrint("def mod" , 2)
 			
-		debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 0)
+		debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
 			
 		if attackerData != null
 			debugPrint("onDamage attack != null" , 0)

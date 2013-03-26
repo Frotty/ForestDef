@@ -8,14 +8,15 @@ public class TextTagEntity extends Entity
 	texttag tt
 	real dur
 	
-	construct(vec3 pos, vec2 vel, string text, int size, real duration,  colorA col )
+	construct(vec3 pos, vec3 vel, string text, int size, real duration,  colorA col )
 		super(pos,DUMMY_PLAYER)
 		dur = duration
 		tt = createTTEx(pos, vec2(0,0), text, size, duration, col)
-		this.vel = vel.toVec3()
+		this.vel = vel
 		
 	override function update()
 		vel += gravity
+		print(vel.toString())
 		pos += vel
 		tt.setPos(pos)
 		dur -= ANIMATION_PERIOD

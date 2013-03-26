@@ -1,0 +1,27 @@
+package HomingProjectile
+import Entity
+
+
+public enum HOMING
+	attract // Direct homing
+	angular // Chaning angle
+	forced // pushed homing (warlock-like)
+	circle // Circular motion around the target with set distance
+
+public class HomingProjectile extends FxEntity
+	Entity target
+	real speed = 10.
+
+	
+	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
+		super(pos, radius, owner, xyAngle, fxpath)
+
+		
+	function setTarget(Entity e)
+		target = e
+		
+	override function update()
+		vel = (pos - target.pos).setLength(speed)
+		pos += vel
+		fx.setPos(pos)
+	

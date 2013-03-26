@@ -7,6 +7,7 @@ import Fx
 import Angle
 import EntityRegion
 import Buff
+import Tower
 import public LinkedList
 
 /** Base Entity Class  */
@@ -85,6 +86,7 @@ public abstract class Entity
 		
 	function setVel( vec3 vel )
 		this.vel = vel
+		active = true
 	
 	function addVel( vec3 vel )
 		this.vel += vel
@@ -129,6 +131,9 @@ abstract public class UnitEntity extends Entity
 		unitEntityCount++
 		
 	override function update()
+		updatePos()
+		
+	function updatePos()
 		pos = vec3(actor.getX(), actor.getY(), 0.)
 		
 	function setNewActor(unit u)
@@ -146,14 +151,26 @@ abstract public class UnitEntity extends Entity
 		actor.setXY(tpos.x,tpos.y)
 		
 	static function onDamage()
+		debugPrint("onDamage" , 0)
 		let victimData = GetTriggerUnit().getUserData() castTo UnitEntity
-		let attackerData = GetAttacker().getUserData() castTo UnitEntity
+		let attackerData = GetEventDamageSource().getUserData() castTo UnitEntity
+		debugPrint("onDamage userData + " + GetAttacker().getName() , 0)
 		for bff in victimData.currentBuffs
 			bff.defenseModifier()
 			
+		debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 0)
+			
 		if attackerData != null
+			debugPrint("onDamage attack != null" , 0)
 			for bff in attackerData.currentBuffs
 				bff.attackModifier()
+			if attackerData instanceof Tower
+				debugPrint("onDamage attack == tower" , 0)
+				let td = attackerData castTo Tower
+				victimData.updatePos()
+				td.onAttack(victimData)
+				debugPrint("onDamage called onAttack" , 0)
+				
 			
 	function onDeath()
 		terminate()
@@ -192,6 +209,9 @@ abstract public class FxEntity extends Entity
 		
 	function setPos()
 		fx.setPos(pos)
+		
+	function getDummy() returns unit
+		return fx.dummy
 		
 	override function setPos(vec3 tpos)
 		pos = tpos

@@ -20,14 +20,10 @@ public class Creep extends UnitEntity
 		if vel.lengthSquared() > 0
 			super.update()
 			pos += vel
-			vel *= 0.98
+			vel *= 0.925
 			actor.setXY(pos.x, pos.y)
 		else
 			active = false
-	
-	function setVelocity(vec3 vel)
-		this.vel = vel
-		active = true
 		
 	override function onDeath()
 		super.onDeath()

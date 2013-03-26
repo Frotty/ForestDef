@@ -1,102 +1,102 @@
 package AssassinTower
-	import LinkedListModule
-	import Maths
-	import TimerUtils
-	import Terrain
-	
-	int array hitnumberstore
-	int array basetype
-	int array dummytype
-
-	public class AssassinTower
-		use LinkedListModule
-		unit base
-		unit dummy
-		unit target
-		int hitnumber
-		int currenthit
-		timer tim
-		
-		construct  (unit u, int level)
-			base = u
-			dummy = CreateUnit(GetOwningPlayer(base),dummytype[level],GetUnitX(base),GetUnitY(base),270.)
-			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-			SetUnitFlyHeight(dummy, 160., 0.)
-			hitnumber = hitnumberstore[level]
-			print("mph")
-
-		
-		function registerTarget(unit u)
-			target = u
-			currenthit = 0
-			DestroyEffect(AddSpecialEffectTarget( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl" , dummy,"chest" ))
-			tim = getTimer()
-			tim.setData(this castTo int)
-			TimerStart(tim,0.2,true,function hit)
-		
-		function endHitStreak()
-				DestroyTimer(tim)
-				dummy.setX(base.getX())
-				dummy.setY(base.getY())
-				SetUnitVertexColor(dummy, 255,255,255,255)
-				SetUnitFlyHeight(dummy,160.,0.)
-				SetUnitFacing(dummy, angleBetweenCoords(base.getX(),base.getY(),target.getX(),target.getY()).degrees())
-		
-	function hit()
-		AssassinTower root = GetExpiredTimer().getData() castTo AssassinTower
-		if not IsUnitType(root.target, UNIT_TYPE_DEAD)
-			angle tempangle
-			if root.currenthit <= root.hitnumber and root.currenthit > 0 
-				tempangle = GetRandomReal(0.,360.).asAngleDegrees()
-				root.dummy.setX(polarProjectionX(root.target.getX(),40,tempangle))
-				root.dummy.setY(polarProjectionY(root.target.getY(),40,tempangle))
-				SetUnitFacing(root.dummy,tempangle.degrees() + 180.)
-				SetUnitAnimation(root.dummy,"attack")
-				UnitDamageTarget(root.dummy,root.target,GetRandomReal(60,75),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
-				root.currenthit ++
-			else if root.currenthit <= 0
-				tempangle = GetRandomReal(0.,360.).asAngleDegrees()
-				SetUnitTimeScale( root.dummy, 10.00 )
-				SetUnitFlyHeight(root.dummy, 0., 0.)
-				SetUnitVertexColor(root.dummy,160,160,160,190)
-				SetUnitAnimation(root.dummy,"attack")
-				UnitDamageTarget(root.dummy,root.target,GetRandomReal(5,15),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
-				root.currenthit ++ 
-			else if root.currenthit > root.hitnumber
-				root.endHitStreak()
-		else
-			root.endHitStreak()
-			
-	function registerAssassinTower()
-		int i = 0
-		while basetype[i] != 0
-			if basetype[i] == GetUnitTypeId(GetTriggerUnit() )
-				AssassinTower tower = new AssassinTower(GetTriggerUnit(),i)
-				i++
-			else
-				i++
-
-	function setTarget()
-		AssassinTower tower = AssassinTower.getFirst()
-		while tower != null
-			if GetAttacker() == tower.base
-				tower.registerTarget( GetTriggerUnit())
-				tower = tower.next
-			else
-				tower = tower.next
-					
-
-	public function initAssassinTower()
-		trigger build = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(build, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
-		TriggerAddAction(build,function registerAssassinTower)
-		
-		trigger attack = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(attack, EVENT_PLAYER_UNIT_ATTACKED )
-		TriggerAddAction(attack,function setTarget)
-		
-		basetype[0] = 'h01Q'
-		dummytype[0] = 'h01P'
-		hitnumberstore[0] = 3
-
+//	import LinkedListModule
+//	import Maths
+//	import TimerUtils
+//	import Terrain
+//	
+//	int array hitnumberstore
+//	int array basetype
+//	int array dummytype
+//
+//	public class AssassinTower
+//		use LinkedListModule
+//		unit base
+//		unit dummy
+//		unit target
+//		int hitnumber
+//		int currenthit
+//		timer tim
+//		
+//		construct  (unit u, int level)
+//			base = u
+//			dummy = CreateUnit(GetOwningPlayer(base),dummytype[level],GetUnitX(base),GetUnitY(base),270.)
+//			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+//			SetUnitFlyHeight(dummy, 160., 0.)
+//			hitnumber = hitnumberstore[level]
+//			print("mph")
+//
+//		
+//		function registerTarget(unit u)
+//			target = u
+//			currenthit = 0
+//			DestroyEffect(AddSpecialEffectTarget( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl" , dummy,"chest" ))
+//			tim = getTimer()
+//			tim.setData(this castTo int)
+//			TimerStart(tim,0.2,true,function hit)
+//		
+//		function endHitStreak()
+//				DestroyTimer(tim)
+//				dummy.setX(base.getX())
+//				dummy.setY(base.getY())
+//				SetUnitVertexColor(dummy, 255,255,255,255)
+//				SetUnitFlyHeight(dummy,160.,0.)
+//				SetUnitFacing(dummy, angleBetweenCoords(base.getX(),base.getY(),target.getX(),target.getY()).degrees())
+//		
+//	function hit()
+//		AssassinTower root = GetExpiredTimer().getData() castTo AssassinTower
+//		if not IsUnitType(root.target, UNIT_TYPE_DEAD)
+//			angle tempangle
+//			if root.currenthit <= root.hitnumber and root.currenthit > 0 
+//				tempangle = GetRandomReal(0.,360.).asAngleDegrees()
+//				root.dummy.setX(polarProjectionX(root.target.getX(),40,tempangle))
+//				root.dummy.setY(polarProjectionY(root.target.getY(),40,tempangle))
+//				SetUnitFacing(root.dummy,tempangle.degrees() + 180.)
+//				SetUnitAnimation(root.dummy,"attack")
+//				UnitDamageTarget(root.dummy,root.target,GetRandomReal(60,75),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
+//				root.currenthit ++
+//			else if root.currenthit <= 0
+//				tempangle = GetRandomReal(0.,360.).asAngleDegrees()
+//				SetUnitTimeScale( root.dummy, 10.00 )
+//				SetUnitFlyHeight(root.dummy, 0., 0.)
+//				SetUnitVertexColor(root.dummy,160,160,160,190)
+//				SetUnitAnimation(root.dummy,"attack")
+//				UnitDamageTarget(root.dummy,root.target,GetRandomReal(5,15),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
+//				root.currenthit ++ 
+//			else if root.currenthit > root.hitnumber
+//				root.endHitStreak()
+//		else
+//			root.endHitStreak()
+//			
+//	function registerAssassinTower()
+//		int i = 0
+//		while basetype[i] != 0
+//			if basetype[i] == GetUnitTypeId(GetTriggerUnit() )
+//				AssassinTower tower = new AssassinTower(GetTriggerUnit(),i)
+//				i++
+//			else
+//				i++
+//
+//	function setTarget()
+//		AssassinTower tower = AssassinTower.getFirst()
+//		while tower != null
+//			if GetAttacker() == tower.base
+//				tower.registerTarget( GetTriggerUnit())
+//				tower = tower.next
+//			else
+//				tower = tower.next
+//					
+//
+//	public function initAssassinTower()
+//		trigger build = CreateTrigger()
+//		TriggerRegisterAnyUnitEventBJ(build, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
+//		TriggerAddAction(build,function registerAssassinTower)
+//		
+//		trigger attack = CreateTrigger()
+//		TriggerRegisterAnyUnitEventBJ(attack, EVENT_PLAYER_UNIT_ATTACKED )
+//		TriggerAddAction(attack,function setTarget)
+//		
+//		basetype[0] = 'h01Q'
+//		dummytype[0] = 'h01P'
+//		hitnumberstore[0] = 3
+//
 endpackage

@@ -1,19 +1,19 @@
 package WaveTower
-	import TimerUtils
-	import Knockback
-	import LinkedListModule
+	import Tower
+	import Projectile
+	import TempGroups
+
+	constant real AREA_OF_EFFECT = 200.
+	public constant int FIRST_WAVE_ID = 'h01N'
 	
-	int MISSILE_ID = 'h01M'
-	real MISSILE_SPEED = 1000. * 0.03125
-	real AREA_OF_EFFECT = 200.
-	int array tower_id
-	int array spell_id
-	real array missiledistae
-	real array missileAOE
+	public class WaveTower extends Tower
+		
+		construct(Tower t)
+			super(t)
+			
+		override function onAttack(UnitEntity ud)
+			new WaveMissile(pos,ud.pos.toVec2(), 20., owner, 1)
 	
-	// Configure how the distance of the knockback is calculated:
-	function getKnockbackDistance(int unitlevel, int towerlevel) returns real
-		return (towerlevel*100. + 50)/(unitlevel)
 		
 	function getDamage(int level) returns real//towerlevel
 		return ((30. * level) + 25.)/6
@@ -21,81 +21,34 @@ package WaveTower
 	function isUnitTargetable(unit u) returns boolean
 		return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
 
-	class Missile
-		use LinkedListModule
-		unit caster
-		unit missile
-		player p
+	class WaveMissile extends Projectile
 		int level
-		angle tangle
-		real dist = 0
-		real maxdist
-		group effected
+		group affected
 		
-		construct(unit ucaster,int level, real angl)
-			caster = ucaster
-			p = GetOwningPlayer(caster)
-			maxdist = 1000.
-			tangle = angl.asAngleDegrees()
+		construct(vec3 pos, vec2 target, real speed, player owner, int level)
+			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl" )
+			setSpeed(30)
+			setMaxDistance(1000.)
+			affected = CreateGroup()
 			this.level = level
-			missile = CreateUnit(p, MISSILE_ID,caster.getX(), caster.getY(), angl)
-			
-		ondestroy
-			KillUnit(missile)
-		
-		function checkNearby()
-			real x = GetUnitX(missile)
-			real y = GetUnitY(missile)
-			group enumG = CreateGroup()
-			group units = CreateGroup()
-			GroupClear(enumG)
-			GroupEnumUnitsInRange(enumG, x, y, AREA_OF_EFFECT, null)
-			unit temp = FirstOfGroup(enumG)
-			while temp != null
-				temp = FirstOfGroup(enumG)
-				if not IsUnitInGroup(temp, units) and isUnitTargetable(temp) and IsUnitEnemy(temp, p)
-					GroupAddUnit(units, temp)
-					UnitDamageTarget(caster, temp, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
-					real ang = Atan2(GetUnitY(temp) - y, GetUnitX(temp) - x)
-					Knockback knock = new Knockback(caster, temp, getKnockbackDistance(GetUnitLevel(temp),level), 1.5, tangle.degrees())
-				GroupRemoveUnit(enumG, temp)
-			DestroyGroup(enumG)
-			GroupAddGroup(units, effected)
-			DestroyGroup(units)
 
-	function karisFunc()
-		print("insane")
-	function move()
-		Missile root = Missile.getFirst()
-		while root != null
-			SetUnitX(root.missile, polarProjectionX(GetUnitX(root.missile),MISSILE_SPEED,root.tangle))
-			SetUnitY(root.missile, polarProjectionY(GetUnitY(root.missile),MISSILE_SPEED,root.tangle))
-			root.dist += MISSILE_SPEED
-			root.checkNearby()
-			
-			if root.dist >= root.maxdist
-				destroy(root)
-				Missile.getFirst()
-			root = root.next
-			
-			
-	function checkSpell()
-			unit u = GetTriggerUnit()
-			int i = 0
-			while tower_id[i] != 0
-				if GetSpellAbilityId() == spell_id[i]
-					if GetUnitTypeId(u) == tower_id[i]
-						Missile missile = new Missile(u,i,angleBetweenCoords(u.getX(), u.getY(),GetSpellTargetX(),GetSpellTargetY()).degrees())
-				i++
+
+		override function update()
+			super.update()
+			print(dist.toString())
+			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
+			for u in ENUM_GROUP
+				if not IsUnitInGroup(u, affected) and isUnitTargetable(u) and IsUnitEnemy(u, owner)
+					GroupAddUnit(affected, u)
+					let ud = u.getUserData() castTo UnitEntity
+					UnitDamageTarget(getDummy(), u, /*getDamage(level)*/10., false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+					let ang = angleBetweenCoords(pos.x, pos.y, ud.pos.x, ud.pos.y)
+					ud.setVel(vec3(Cos(ang.radians) * (level*15),Sin(ang.radians) * (level*15),0))
+			ENUM_GROUP.clear()
 	
-	public function initWaveTower()
-		trigger t = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_EFFECT)
-		TriggerAddAction(t,function checkSpell)
-		timer tim  = getTimer()
-		tim.startPeriodic(0.03125, function move)
-		//set constants
-		tower_id[0] = 'h01N'
-		spell_id[0] = 'A01A'
+		ondestroy
+			DestroyGroup(affected)
+
+
 
 endpackage

@@ -1,77 +1,77 @@
 package AirStrike
-	import TimerUtils
-	import LinkedListModule
-	
-	int MISSILE_ID = 'h01T'
-	real MISSILE_SPEED = 1000. * 0.03125
-	int SPELL_ID = 'A01R'
-	
-	function isUnitTargetable(unit u) returns boolean
-		return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
-
-	class Missile
-		use LinkedListModule
-		unit caster
-		unit missile
-		player p
-		real angler
-		real dist = 300
-		real speed
-		real damage
-		real aoe
-		
-		construct(unit ucaster,real x, real y, real angl, real dista, real area)
-			caster = ucaster
-			p = GetOwningPlayer(caster)
-			speed = GetRandomReal(MISSILE_SPEED-10,MISSILE_SPEED+10)
-			angler = angl
-			missile = CreateUnit(p, MISSILE_ID,polarProjectionXD(x,-dista, angler), polarProjectionYD(y,-dista,angler), angler)
-			damage = GetHeroAgi(caster, true)*2
-			aoe = area
-			UnitAddAbility(missile, 'Amrf')
-			UnitRemoveAbility(missile, 'Amrf')
-			
-		ondestroy
-			real x = GetUnitX(missile)
-			real y = GetUnitY(missile)
-			KillUnit(missile)
-			group enumG = CreateGroup()
-			GroupClear(enumG)
-			GroupEnumUnitsInRange(enumG, x, y, aoe, null)
-			unit temp = FirstOfGroup(enumG)
-			while temp != null
-				if isUnitTargetable(temp) and IsUnitEnemy(temp, p)
-					UnitDamageTarget(caster, temp, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
-				GroupRemoveUnit(enumG, temp)
-				temp = FirstOfGroup(enumG)
-		
-	function move()
-		Missile root = Missile.getFirst()
-		while root != null
-			root.missile.setPos( polarProjectionXD(root.missile.getX(),root.speed,root.angler) , polarProjectionYD(root.missile.getY(),root.speed,root.angle))
-			SetUnitFlyHeight(root.missile, GetUnitFlyHeight(root.missile)-root.speed*(8/3), 0)
-			root.dist -= root.speed
-			
-			if root.dist <= 0
-				destroy(root)
-				Missile.getFirst()
-			root = root.next
-			
-			
-	function checkSpell()
-			if GetSpellAbilityId() == SPELL_ID
-				unit u = GetTriggerUnit()
-				angle a = angleBetweenCoords(u.getX(),u.getY(),GetSpellTargetX(),GetSpellTargetY())
-				for int i = 0 to 2+GetUnitAbilityLevel(u,SPELL_ID)*3
-					real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
-					real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)
-					Missile missile = new Missile(u, x, y ,a, 300, GetUnitAbilityLevel(u,SPELL_ID)*60.)
-	
-	public function initAirStrike()
-		trigger t = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_EFFECT)
-		TriggerAddAction(t,function checkSpell)
-		timer tim  = getTimer()
-		tim.startPeriodic(0.03125, function move)
-
+//	import TimerUtils
+//	import LinkedListModule
+//	
+//	int MISSILE_ID = 'h01T'
+//	real MISSILE_SPEED = 1000. * 0.03125
+//	int SPELL_ID = 'A01R'
+//	
+//	function isUnitTargetable(unit u) returns boolean
+//		return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+//
+//	class Missile
+//		use LinkedListModule
+//		unit caster
+//		unit missile
+//		player p
+//		real angler
+//		real dist = 300
+//		real speed
+//		real damage
+//		real aoe
+//		
+//		construct(unit ucaster,real x, real y, real angl, real dista, real area)
+//			caster = ucaster
+//			p = GetOwningPlayer(caster)
+//			speed = GetRandomReal(MISSILE_SPEED-10,MISSILE_SPEED+10)
+//			angler = angl
+//			missile = CreateUnit(p, MISSILE_ID,polarProjectionXD(x,-dista, angler), polarProjectionYD(y,-dista,angler), angler)
+//			damage = GetHeroAgi(caster, true)*2
+//			aoe = area
+//			UnitAddAbility(missile, 'Amrf')
+//			UnitRemoveAbility(missile, 'Amrf')
+//			
+//		ondestroy
+//			real x = GetUnitX(missile)
+//			real y = GetUnitY(missile)
+//			KillUnit(missile)
+//			group enumG = CreateGroup()
+//			GroupClear(enumG)
+//			GroupEnumUnitsInRange(enumG, x, y, aoe, null)
+//			unit temp = FirstOfGroup(enumG)
+//			while temp != null
+//				if isUnitTargetable(temp) and IsUnitEnemy(temp, p)
+//					UnitDamageTarget(caster, temp, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+//				GroupRemoveUnit(enumG, temp)
+//				temp = FirstOfGroup(enumG)
+//		
+//	function move()
+//		Missile root = Missile.getFirst()
+//		while root != null
+//			root.missile.setPos( polarProjectionXD(root.missile.getX(),root.speed,root.angler) , polarProjectionYD(root.missile.getY(),root.speed,root.angle))
+//			SetUnitFlyHeight(root.missile, GetUnitFlyHeight(root.missile)-root.speed*(8/3), 0)
+//			root.dist -= root.speed
+//			
+//			if root.dist <= 0
+//				destroy(root)
+//				Missile.getFirst()
+//			root = root.next
+//			
+//			
+//	function checkSpell()
+//			if GetSpellAbilityId() == SPELL_ID
+//				unit u = GetTriggerUnit()
+//				angle a = angleBetweenCoords(u.getX(),u.getY(),GetSpellTargetX(),GetSpellTargetY())
+//				for int i = 0 to 2+GetUnitAbilityLevel(u,SPELL_ID)*3
+//					real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
+//					real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)
+//					Missile missile = new Missile(u, x, y ,a, 300, GetUnitAbilityLevel(u,SPELL_ID)*60.)
+//	
+//	public function initAirStrike()
+//		trigger t = CreateTrigger()
+//		TriggerRegisterAnyUnitEventBJ(t, EVENT_PLAYER_UNIT_SPELL_EFFECT)
+//		TriggerAddAction(t,function checkSpell)
+//		timer tim  = getTimer()
+//		tim.startPeriodic(0.03125, function move)
+//
 endpackage

@@ -17,7 +17,6 @@ public abstract class Buff
 		duration = dur
 
 	function update()
-		debugPrint("running", 1)
 		if running
 			duration -= ANIMATION_PERIOD
 		if duration <= 0.

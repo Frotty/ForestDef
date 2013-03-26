@@ -15,13 +15,13 @@ package UnitSpawnSystem
 		
 			
 	function onSpawnTime()	
-		debugPrint("spawntime", 1)
+		debugPrint("spawntime", 0)
 		if level mod 7 == 0
 			specialWaves.dequeue().spawn()
 		else
-			debugPrint("level not mod 0", 1)
+			debugPrint("level not mod 0", 0)
 			normalWaves.dequeue().spawn()
-			debugPrint("normal spawned", 1)
+			debugPrint("normal spawned", 0)
 			if level mod 4 == 0
 				bossWaves.dequeue().spawn()
 			

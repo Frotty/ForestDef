@@ -14,8 +14,6 @@ public class Creep extends UnitEntity
 		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		active = false
-		// Autocomplete ist auch wieder total fürn Arsch.
-		actor.setPos(this.pos.toVec2())
 		
 	
 	override function update()

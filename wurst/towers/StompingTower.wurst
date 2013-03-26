@@ -107,6 +107,7 @@ package StompingTower
 			i++
 
 
+
 	function setTarget()
 		StompingTower tower = StompingTower.getFirst()
 		while tower != null

@@ -15,8 +15,6 @@ package AutoCastSystem // Towers cast an ability instead of direct attacking
 					IssueImmediateOrder(GetAttacker(),spell_string[i])
 			i++
 
-
-
 	public function initAutoCastSystem()   //AutoCastSystem
 		trigger t = CreateTrigger()
 		TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)

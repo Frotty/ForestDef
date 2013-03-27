@@ -15,7 +15,6 @@ public class Projectile extends FxEntity
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
 		super(pos, radius, owner, xyAngle, fxpath)
 		this.xyAngle = xyAngle
-		print(xyAngle.degrees().toString())
 		active = false
 				
 	function setMaxDistance(real r)

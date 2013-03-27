@@ -15,8 +15,6 @@ public class EntityRegion
 	LinkedList<Entity> entities = new LinkedList<Entity>()
 	
 	construct(int x, int y)
-		if (this castTo int) < 20
-			print((this castTo int).toString())
 		minx = x * size
 		maxx = minx + size
 		miny = y * size

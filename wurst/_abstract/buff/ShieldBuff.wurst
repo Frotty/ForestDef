@@ -8,7 +8,6 @@ public class NormalShieldBuff extends NormalBuff
 	
 	construct(UnitEntity victim, real dur, int abilId, real amount)
 		super(victim, dur, abilId)
-		print("eh?")
 		blockAmount = amount
 		apply()
 		debugPrint("amount set", 2)

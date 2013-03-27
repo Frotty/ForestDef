@@ -3,7 +3,7 @@ import TimerUtils
 import Creep
 
 vec3 array startPositions
-public vec2 middle = vec2( 2100.0, 1700.0 )
+public vec2 middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )
 
 enum creeptype
 	MELEE
@@ -84,7 +84,7 @@ public class SpecialWave
 	int amount
 	int bounty
 
-	construct(int specialId, int bounty, int amount)
+	construct(int specialId, int amount, int bounty)
 		this.specialId = specialId
 		this.amount = amount
 		this.bounty = bounty

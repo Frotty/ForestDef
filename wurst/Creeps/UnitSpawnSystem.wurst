@@ -56,9 +56,9 @@ package UnitSpawnSystem
 		normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 2, 14 ))
 		normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 3, 14 ))
 		
-		bossWaves.enqueue(new BossWave('n003', 1, 35, gg_snd_SkeletonWhat2))
-		bossWaves.enqueue(new BossWave('n004', 1, 75, gg_snd_DuneWormDeath1))
-		bossWaves.enqueue(new BossWave('n007', 1, 100, gg_snd_AbominationPissed5))
+		bossWaves.enqueue(new BossWave('n003', 1, 50, gg_snd_SkeletonWhat2))
+		bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1))
+		bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5))
 		bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_SkeletonWhat2))
 
 		specialWaves.enqueue(new SpecialWave('u00A', 3, 15))

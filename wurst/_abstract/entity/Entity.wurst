@@ -8,6 +8,7 @@ import Angle
 import EntityRegion
 import Buff
 import Tower
+import DamageMod
 import public LinkedList
 
 /** Base Entity Class  */
@@ -151,35 +152,44 @@ abstract public class UnitEntity extends Entity
 		actor.setXY(tpos.x,tpos.y)
 		
 	static function onDamage()
-		debugPrint("onDamage" , 2)
-		let victimData = GetTriggerUnit().getUserData() castTo UnitEntity
-		let attackerData = GetEventDamageSource().getUserData() castTo UnitEntity
-		debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
-		debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
-		for bff in victimData.currentBuffs
-			bff.defenseModifier()
-			debugPrint("def mod" , 2)
-			
-		debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
-			
-		if attackerData != null
-			debugPrint("onDamage attack != null" , 0)
-			for bff in attackerData.currentBuffs
-				bff.attackModifier()
-			if attackerData instanceof Tower
-				debugPrint("onDamage attack == tower" , 0)
-				let td = attackerData castTo Tower
-				victimData.updatePos()
-				td.onAttack(victimData)
-				debugPrint("onDamage called onAttack" , 0)
+		debugPrint("onDamage " + getDamage().toString() , 2)
+		let v = GetTriggerUnit()
+		let a = GetEventDamageSource()
+		if a.getHP() < 0.405 or v.getHP() < 0.405
+			return
+		let victimData = v.getUserData() castTo UnitEntity
+		let attackerData = a.getUserData() castTo UnitEntity
+		if IsPlayerAlly(victimData.owner, attackerData.owner)
+			modifyDamage(0)
+			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
+		else
+			if victimData != null
+				debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
+				debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
+				for bff in victimData.currentBuffs
+					bff.defenseModifier()
+					debugPrint("def mod" , 2)
+					
+				debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
+				
+			if attackerData != null
+				debugPrint("onDamage attack != null" , 0)
+				for bff in attackerData.currentBuffs
+					bff.attackModifier()
+				if attackerData instanceof Tower
+					debugPrint("onDamage attack == tower" , 0)
+					let td = attackerData castTo Tower
+					victimData.updatePos()
+					td.onAttack(victimData)
+					debugPrint("onDamage called onAttack" , 0)
 				
 			
-	function onDeath()
+	function onDeath(unit killer)
 		terminate()
 			
 	static function onEventDeath()
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
-		data.onDeath()
+		data.onDeath(GetKillingUnit())
 		
 
 		

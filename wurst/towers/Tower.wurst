@@ -4,6 +4,12 @@ import WaveTower
 import AssassinTower
 
 constant int BASIC_TOWER_ID = 'h003'
+constant int BASIC_WALL_ID = 'h000'
+
+public class Wall extends UnitEntity
+	construct (unit wall)
+		super(vec3(wall.getX(),wall.getY(),0),wall)
+		tupgrade.registerUnitEvent(wall,EVENT_UNIT_DEATH)
 
 public class Tower extends UnitEntity
 	
@@ -15,8 +21,6 @@ public class Tower extends UnitEntity
 	construct(Tower t)
 		super(t.pos,t.actor)
 		t.terminate()
-		
-		
 	
 	function onAttack(UnitEntity target)
 		debugPrint("onAttack - normal", 0)
@@ -42,11 +46,12 @@ public class Tower extends UnitEntity
 			t.onUpgrade()
 	
 	static function onConstructionEvent()
-		debugPrint("NewTowerBuilt",0)
-		if GetUnitTypeId(GetTriggerUnit()) == BASIC_TOWER_ID
-			new Tower(GetTriggerUnit())
-			debugPrint("New Tower " + GetTriggerUnit().getUserData().toString(), 0)
-			debugPrint("NewTowerBuilt class created",0)
+		let u = GetTriggerUnit()
+		let id = u.getTypeId()
+		if id == BASIC_TOWER_ID
+			new Tower(u)
+		else if id == BASIC_WALL_ID
+			new Wall(u)
 
 trigger tupgrade
 

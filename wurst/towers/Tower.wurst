@@ -1,6 +1,7 @@
 package Tower
 import public Entity
 import WaveTower
+import AssassinTower
 
 constant int BASIC_TOWER_ID = 'h003'
 
@@ -27,6 +28,9 @@ public class Tower extends UnitEntity
 			case FIRST_WAVE_ID
 				debugPrint("isWave", 0)
 				new WaveTower(this)
+			case assasintypeid[0]
+				debugPrint("isAssassin",0)
+				new AssassinTower(this)
 			default
 				skip
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)
@@ -41,7 +45,7 @@ public class Tower extends UnitEntity
 		debugPrint("NewTowerBuilt",0)
 		if GetUnitTypeId(GetTriggerUnit()) == BASIC_TOWER_ID
 			new Tower(GetTriggerUnit())
-			debugPrint("New TOwer " + GetTriggerUnit().getUserData().toString(), 0)
+			debugPrint("New Tower " + GetTriggerUnit().getUserData().toString(), 0)
 			debugPrint("NewTowerBuilt class created",0)
 
 trigger tupgrade

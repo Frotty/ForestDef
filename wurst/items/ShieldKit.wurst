@@ -9,7 +9,6 @@ package ShieldKit
 		
 		construct(UnitEntity victim, real amount)
 			super(victim, 45., 'A01P', amount)
-			print("applied")
 			debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)
 			//this.setEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", "origin")
 
@@ -31,12 +30,8 @@ package ShieldKit
 
 	function repair()
 		if GetSpellAbilityId() == 'A00D'
-			print("casted")
 			let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-			print("data")
-			new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))
-			print("added")
-		
+			new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
 		
 	public function initShieldKit()
 		trigger instarep = CreateTrigger(  )

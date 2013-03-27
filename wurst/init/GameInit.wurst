@@ -39,6 +39,6 @@ package GameInit
 		
 	init
 		getTimer().start( 0.1, function start )
-		getTimer().start( 1, function spawn )
+		getTimer().start( 50., function spawn )
 
 endpackage

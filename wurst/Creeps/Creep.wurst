@@ -14,6 +14,7 @@ public class Creep extends UnitEntity
 		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		active = false
+		this.bounty = bounty
 		
 	
 	override function update()
@@ -25,11 +26,11 @@ public class Creep extends UnitEntity
 		else
 			active = false
 		
-	override function onDeath()
-		super.onDeath()
-		let p = GetKillingUnit().getOwner()
+	override function onDeath(unit killer)
+		super.onDeath(killer)
+		let p = killer.getOwner()
 		p.addGold(bounty)
-		showBountyTextTag(bounty, actor, owner)
+		showBountyTextTag(bounty, actor, p)
 	
 public class Boss extends Creep
 

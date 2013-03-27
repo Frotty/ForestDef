@@ -16,7 +16,6 @@ public class TextTagEntity extends Entity
 		
 	override function update()
 		vel += gravity
-		print(vel.toString())
 		pos += vel
 		tt.setPos(pos)
 		dur -= ANIMATION_PERIOD

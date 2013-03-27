@@ -95,10 +95,10 @@ import AbilityObjEditing
 //================
 
 	
-constant int DAMAGE_ABIL_ID = 'dmbm'
+constant int DAMAGE_ABIL_ID = 'A01Q'
 //This rawcode must match the parameter after "AIlz" in the ObjectMerger
 //macro above. You can change both if you want.
-constant real MAX_HP_GAINED = 10000.
+constant real MAX_HP_GAINED = 50000.
 //This value must match the paramater after "Ilif 1" in the ObjectMerger
 //macro above. You can change both if you want. The value must be large
 //enough to prevent the damaged unit from dying from any hit in your map.
@@ -188,6 +188,7 @@ public function modifyDamage( real damage )
 			applied[N] = GetUnitAbilityLevel(u, DAMAGE_ABIL_ID) == 0
 			if applied[N] 
 				UnitAddAbility(u, DAMAGE_ABIL_ID)
+
 
 			SetWidgetLife(u, GetWidgetLife(u) + GetEventDamage() - lifeMod)
 

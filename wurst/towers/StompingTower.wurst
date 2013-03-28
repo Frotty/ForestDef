@@ -1,138 +1,105 @@
 package StompingTower
-	import LinkedListModule
-	import Maths
+	import Entity
+	import Tower
 	import TimerUtils
 	import Terrain
 	real SPEED = 15.
 	
-	int array basetype
+	public int array stompingbasetype
 	int array dummytype
 	
-	public class StompingTower
-		use LinkedListModule
-		unit base  //tower (selects targets)
+	public class StompingTower extends Tower
 		unit dummy //tauren
 		real targetX
 		real targetY
+		boolean jumping
 		boolean before //stomp
 		boolean animbegun //start the stomp animation
 		timer tim //does the loop
 		
-		construct  (unit u, int level)
-			base = u
-			dummy = CreateUnit(GetOwningPlayer(base),dummytype[level],GetUnitX(base),GetUnitY(base),270.)
+		construct  (Tower t)
+			super(t)
+			dummy = CreateUnit(owner,dummytype[0],pos.x,pos.y,270.)
 			UnitAddAbility( dummy, 'Amrf')
 			UnitRemoveAbility(dummy, 'Amrf')
-			setdummyFlyHeight(190.)//-getTerrainZ(u.getX(), u.getY()))
-			SetUnitX(dummy,GetUnitX(base))
-			SetUnitY(dummy,GetUnitY(base))
+			setdummyFlyHeight(160.)//-getTerrainZ(u.getX(), u.getY()))
+			SetUnitX(dummy,pos.x)
+			SetUnitY(dummy,pos.y)
 
-		function registerTarget(unit u)
-			targetX = GetUnitX(u)
-			targetY = GetUnitY(u)
+		override function onAttack(UnitEntity target)
+			targetX = target.pos.x
+			targetY = target.pos.y
 			animbegun = false
-			PauseUnit(base,true)
-			tim = getTimer()
-			tim.setData(this castTo int)
-			tim.startPeriodic(0.03125,function attackJump)
-			print("timer set")
-			SetUnitFacing(dummy, angleBetweenCoords(GetUnitX(base),GetUnitY(base),targetX,targetY).degrees())
+			PauseUnit(actor,true)
+			jumping = true
+			debugPrint("timer set",0)
+			SetUnitFacing(dummy, angleBetweenCoords(pos.x,pos.y,targetX,targetY).degrees())
 			
+		override function update()
+			if jumping
+				angle angl = angleBetweenCoords(pos.x,pos.y,targetX,targetY)
+				if before
+					real distancedummy = distanceBetweenCoords(pos.x,pos.y,dummy.getX(),dummy.getY())
+					real distancetarget = distanceBetweenCoords(pos.x,pos.y,targetX,targetY)
+					if distancedummy <= distancetarget
+						setdummyFlyHeight(getParabolaHeight(200.-getTerrainZ(pos.x,pos.y),getTerrainZ(targetX,targetY),300.,distancetarget,distancedummy))
+						SetUnitX(dummy,polarProjectionX(GetUnitX(dummy),SPEED,angl))
+						SetUnitY(dummy,polarProjectionY(GetUnitY(dummy),SPEED,angl))
+						if (not animbegun) and (distancetarget-distancedummy <= SPEED*22)
+							animbegun = true
+							SetUnitAnimation(dummy,"attack slam")
+					else
+						debugPrint("ending jump",0)
+						setdummyFlyHeight(0.)
+						IssueImmediateOrder(dummy, "stomp")
+						before = false
+						jumping = false
+						timer t = CreateTimer()
+						t.setData(this castTo int)
+						t.start(0.5, function StompingTower.turnBack)
+				else
+					angl = angle(angl.radians()-PI)
+					real distancebase = distanceBetweenCoords(pos.x,pos.y,dummy.getX(),dummy.getY())
+					real distancedummy = distanceBetweenCoords(dummy.getX(),dummy.getY(),targetX,targetY)
+					if distancebase < SPEED*2
+						dummy.setX(polarProjectionX(dummy.getX(),SPEED,angl))
+						dummy.setY(polarProjectionY(dummy.getY(),SPEED,angl))
+						setdummyFlyHeight(getParabolaHeight(getTerrainZ(targetX,targetY),200.-getTerrainZ(pos.x,pos.y),200.,distancebase,distancedummy))
+					else
+						dummy.setX(pos.x)
+						dummy.setY(pos.y)
+						SetUnitFlyHeight(dummy, 200.,0.)
+						jumping = false
+						before = true
+						PauseUnit(actor,false)
+						
 		function setdummyFlyHeight(real height)
 			SetUnitFlyHeight(dummy, height-getTerrainZ(dummy.getX(),dummy.getY()),0.)
 			print(height.toString()+" - "+ getTerrainZ(dummy.getX(),dummy.getY()).toString()+" = "+(height-getTerrainZ(dummy.getX(),dummy.getY())).toString())
 		
-		function turnBack()
-			timer temptimer = getTimer()
-			temptimer.setData(this castTo int)
-			temptimer.start(0.5,function afterDelay)
-
-		function filter() returns boolean
+		static function turnBack()
+			StompingTower root = GetExpiredTimer().getData() castTo StompingTower
+			DestroyTimer(GetExpiredTimer())
+			root.jumping = true
+			SetUnitFacing(root.dummy, angleBetweenCoords(root.dummy.getX(),root.dummy.getY(),root.pos.x,root.pos.y).degrees())
+		
+/*		function filter() returns boolean
 			return ( IsPlayerAlly(GetOwningPlayer(dummy), GetOwningPlayer(GetFilterUnit())) == true ) 
 			
-	function afterDelay()
-		StompingTower root = GetExpiredTimer().getData() castTo StompingTower
-		DestroyTimer(GetExpiredTimer())
-		root.tim = getTimer()
-		root.tim.setData(root castTo int)
-		root.tim.startPeriodic(0.03125,function backingJump)
-		SetUnitFacing(root.dummy, angleBetweenCoords(GetUnitX(root.dummy),GetUnitY(root.dummy),GetUnitX(root.base),GetUnitY(root.base)).degrees())
-					
-	function attackJump()
-		StompingTower root = GetExpiredTimer().getData() castTo StompingTower
-		real distancetarget = distanceBetweenCoords(GetUnitX(root.base),GetUnitY(root.base),root.targetX,root.targetY)
-		real distancedummy = distanceBetweenCoords(GetUnitX(root.base),GetUnitY(root.base),GetUnitX(root.dummy),GetUnitY(root.dummy))
-		angle angl = angleBetweenCoords(GetUnitX(root.base),GetUnitY(root.base),root.targetX,root.targetY)
-		if  distancetarget >= distancedummy
-			root.setdummyFlyHeight(getParabolaHeight(200.-getTerrainZ(GetUnitX(root.base),GetUnitY(root.base)),getTerrainZ(root.targetX,root.targetY),300.,distancetarget,distancedummy))
-			SetUnitX(root.dummy,polarProjectionX(GetUnitX(root.dummy),SPEED,angl))
-			SetUnitY(root.dummy,polarProjectionY(GetUnitY(root.dummy),SPEED,angl))
-			if (not root.animbegun) and (distancetarget-distancedummy <= SPEED*22)
-				root.animbegun = true
-				SetUnitAnimation(root.dummy,"attack slam")
-		else
-			print("ending jump")
-			root.setdummyFlyHeight(0.)
-			IssueImmediateOrder(root.dummy, "stomp")
-   //		 TerrainDeformCrater(GetUnitX(root.dummy),GetUnitY(root.dummy),160,50,20,false)
- //		   DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl" ,GetUnitX(root.dummy),GetUnitY(root.dummy)))
-// frotty's work ForGroup( GetUnitsInRangeOfLocMatching(160.00, GetUnitLoc(root.dummy),function root.filter), function stompDamage )
-			root.turnBack()
-			DestroyTimer(GetExpiredTimer())
-				
-	function backingJump()
-		StompingTower root = GetExpiredTimer().getData() castTo StompingTower
-		real distancebase = distanceBetweenCoords(root.targetX,root.targetY,GetUnitX(root.base),GetUnitY(root.base))
-		real distancedummy = distanceBetweenCoords(root.targetX,root.targetY,GetUnitX(root.dummy),GetUnitY(root.dummy))
-		angle angl = angleBetweenCoords(root.targetX,root.targetY,GetUnitX(root.base),GetUnitY(root.base))
-		if distancebase >= distancedummy
-			SetUnitX(root.dummy,polarProjectionX(GetUnitX(root.dummy),SPEED,angl))
-			SetUnitY(root.dummy,polarProjectionY(GetUnitY(root.dummy),SPEED,angl))
-			root.setdummyFlyHeight(getParabolaHeight(getTerrainZ(root.targetX,root.targetY),200.-getTerrainZ(GetUnitX(root.base),GetUnitY(root.base)),200.,distancebase,distancedummy))
-		else
-			SetUnitX(root.dummy,GetUnitX(root.base))
-			SetUnitY(root.dummy,GetUnitY(root.base))
-			root.setdummyFlyHeight(200.)
-			PauseUnit(root.base,false)
-			DestroyTimer(GetExpiredTimer())
 
+   		 TerrainDeformCrater(GetUnitX(root.dummy),GetUnitY(root.dummy),160,50,20,false)
+ 		   DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl" ,GetUnitX(root.dummy),GetUnitY(root.dummy)))
+ frotty's work ForGroup( GetUnitsInRangeOfLocMatching(160.00, GetUnitLoc(root.dummy),function root.filter), function stompDamage )
 	function stompDamage()
 		KillUnit(GetEnumUnit())
-			
-	function registerStompingTower()
-		int i = 0
-		while basetype[i] != 0
-			if basetype[i] == GetUnitTypeId(GetTriggerUnit() )
-				StompingTower tower = new StompingTower(GetTriggerUnit(),i)
-			i++
-
-
-
-	function setTarget()
-		StompingTower tower = StompingTower.getFirst()
-		while tower != null
-			if GetAttacker() == tower.base
-				tower.registerTarget( GetTriggerUnit())
-				print("sent")
-				tower = tower.next
-			else
-				tower = tower.next
-	
+	*/
 	function getParabolaHeight(real y0, real y1, real h, real d, real x) returns real
 		real a = (2*(y0+y1)-4*h)/(d*d)
 		real b = (y1-y0-a*d*d)/d
 		return a*x*x + b*x + y0
 		
-	public function initStompingTower()
-		trigger build = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(build, EVENT_PLAYER_UNIT_UPGRADE_FINISH)
-		TriggerAddAction(build,function registerStompingTower)
-		
-		trigger attack = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(attack, EVENT_PLAYER_UNIT_ATTACKED )
-		TriggerAddAction(attack,function setTarget)
-		
-		basetype[0] = 'h01H'
+	public function initStompingTower()		
+		stompingbasetype[0] = 'h01H'
 		dummytype[0] = 'h01G'
 
 endpackage

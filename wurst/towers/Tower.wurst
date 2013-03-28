@@ -2,6 +2,8 @@ package Tower
 import public Entity
 import WaveTower
 import AssassinTower
+import TrooperTower
+import StompingTower
 
 constant int BASIC_TOWER_ID = 'h003'
 constant int BASIC_WALL_ID = 'h000'
@@ -35,6 +37,13 @@ public class Tower extends UnitEntity
 			case assasintypeid[0]
 				debugPrint("isAssassin",0)
 				new AssassinTower(this)
+			case TOWER_TROOPER_ID
+				debugPrint("isTrooper",0)
+				new TrooperTower(this)
+			case stompingbasetype[0]
+				debugPrint("isStomper",0)
+				new StompingTower(this)
+				
 			default
 				skip
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)

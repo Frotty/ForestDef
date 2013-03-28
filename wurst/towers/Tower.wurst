@@ -14,11 +14,13 @@ public class Tower extends UnitEntity
 	
 	construct (unit tower)
 		super(vec3(tower.getX(),tower.getY(),0),tower)
+		active = false
 		tupgrade.registerUnitEvent(tower,EVENT_UNIT_UPGRADE_FINISH)
 		tupgrade.registerUnitEvent(tower,EVENT_UNIT_DEATH)
 			
 	construct(Tower t)
 		super(t.pos,t.actor)
+		active = false
 		t.terminate()
 	
 	function onAttack(UnitEntity target)

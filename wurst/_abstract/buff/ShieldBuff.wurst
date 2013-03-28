@@ -5,12 +5,14 @@ import DamageMod
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
 	boolean silent = false
+	int int = 0
 	
 	construct(UnitEntity victim, real dur, int abilId, real amount)
 		super(victim, dur, abilId)
 		blockAmount = amount
 		apply()
 		debugPrint("amount set", 2)
+
 		
 	override function apply()
 		debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)

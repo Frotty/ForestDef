@@ -75,7 +75,7 @@ package StompingTower
 						
 		function setdummyFlyHeight(real height)
 			SetUnitFlyHeight(dummy, height-getTerrainZ(dummy.getX(),dummy.getY()),0.)
-			print(height.toString()+" - "+ getTerrainZ(dummy.getX(),dummy.getY()).toString()+" = "+(height-getTerrainZ(dummy.getX(),dummy.getY())).toString())
+			debugPrint(height.toString()+" - "+ getTerrainZ(dummy.getX(),dummy.getY()).toString()+" = "+(height-getTerrainZ(dummy.getX(),dummy.getY())).toString(),0)
 		
 		static function turnBack()
 			StompingTower root = GetExpiredTimer().getData() castTo StompingTower

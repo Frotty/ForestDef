@@ -4,6 +4,7 @@ import WaveTower
 import AssassinTower
 import TrooperTower
 import StompingTower
+import ThermoTower
 
 constant int BASIC_TOWER_ID = 'h003'
 constant int BASIC_WALL_ID = 'h000'
@@ -36,7 +37,7 @@ public class Tower extends UnitEntity
 			case FIRST_WAVE_ID
 				debugPrint("isWave", 0)
 				new WaveTower(this)
-			case assasintypeid[0]
+			case ASSASSIN_TOWER_BASE_ID
 				debugPrint("isAssassin",0)
 				new AssassinTower(this)
 			case TOWER_TROOPER_ID
@@ -45,6 +46,9 @@ public class Tower extends UnitEntity
 			case stompingbasetype[0]
 				debugPrint("isStomper",0)
 				new StompingTower(this)
+			case THERMO_TOWER_ID
+				debugPrint("isThermo",0)
+				new ThermoTower(this)
 				
 			default
 				skip

@@ -1,0 +1,37 @@
+package ThermoTower
+
+import Tower
+
+constant int buffcode = 'Bfro'
+constant int dummyid = 'basd'
+public constant int THERMO_TOWER_ID = 'h01C'
+
+public class ThermoTower extends Tower
+	boolean isHot
+	int level
+	
+	construct(Tower t)
+		super(t)
+		debugPrint("MyTOWER wsrdf FFUAEWREGEARWQA",0)
+		isHot = true
+		
+	override function onAttack(UnitEntity ud)
+		debugPrint("MyTOWER ATTACKS FFUAEWREGEARWQA",0)
+		if isHot
+			debugPrint("HOOT",0)
+			actor.addAbility('A01S')
+			debugPrint(GetUnitAbilityLevel(actor, 'A01S').toString(),0)
+			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
+				debugPrint("Extra Damage", 0)
+				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
+				ud.actor.removeAbility(buffcode)
+			isHot = false
+		else
+			//actor.removeAbility('A01T')
+			isHot = true
+
+	override function onUpgrade()
+		level ++
+	
+	function getDamage() returns real
+		return (50.+(40*level))

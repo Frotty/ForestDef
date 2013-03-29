@@ -64,7 +64,7 @@ package UnitSpawnSystem
 		bossWaves.enqueue(new BossWave('n004', 1, 75, gg_snd_DuneWormDeath1))
 		bossWaves.enqueue(new BossWave('n007', 1, 100, gg_snd_AbominationPissed5))
 		bossWaves.enqueue(new BossWave('n00B', 1, 125, gg_snd_HydraDeath1))
-		bossWaves.enqueue(new BossWave('n00E', 1, 150, gg_snd_HydraDeath1))
+		bossWaves.enqueue(new BossWave('n00E', 1, 150, gg_snd_AirBargeDeath1))
 
 		specialWaves.enqueue(new SpecialWave('u00A', 3, 10))
 		specialWaves.enqueue(new SpecialWave('u00B', 1, 25))

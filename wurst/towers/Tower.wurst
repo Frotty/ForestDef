@@ -6,6 +6,7 @@ import TrooperTower
 import StompingTower
 import ThermoTower
 import FlamethrowerTower
+import ArtilleryTower
 
 constant int BASIC_TOWER_ID = 'h003'
 constant int BASIC_WALL_ID = 'h000'
@@ -50,6 +51,9 @@ public class Tower extends UnitEntity
 			case FLAMETHROWER_ID
 				debugPrint("isThermo",0)
 				new FlamethrowerTower(this)
+			case ART_TOWER_ID
+				debugPrint("isArtillery",0)
+				new ArtilleryTower(this)
 				
 			default
 				skip

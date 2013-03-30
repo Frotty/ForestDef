@@ -3,8 +3,8 @@ package ThermoTower
 import Tower
 
 constant int buffcode = 'Bfro'
-constant int dummyid = 'basd'
-public constant int THERMO_TOWER_ID = 'h01C'
+constant int ORB_ID = 'A01S'
+public constant int THERMO_TOWER_ID = 'h01R'
 
 public class ThermoTower extends Tower
 	boolean isHot
@@ -12,24 +12,28 @@ public class ThermoTower extends Tower
 	
 	construct(Tower t)
 		super(t)
-		debugPrint("MyTOWER wsrdf FFUAEWREGEARWQA",0)
 		isHot = true
 		
 	override function onAttack(UnitEntity ud)
-		debugPrint("MyTOWER ATTACKS FFUAEWREGEARWQA",0)
 		if isHot
 			debugPrint("HOOT",0)
-			actor.addAbility('A01S')
-			debugPrint(GetUnitAbilityLevel(actor, 'A01S').toString(),0)
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
 				debugPrint("Extra Damage", 0)
 				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
 				ud.actor.removeAbility(buffcode)
+			actor.addAbility(ORB_ID)
 			isHot = false
 		else
-			//actor.removeAbility('A01T')
+			timer t = getTimer()
+			t.setData(this castTo int)
+			t.start(1.3, function ThermoTower.removeFrostAbil)
 			isHot = true
 
+	static function removeFrostAbil()
+		ThermoTower t = GetExpiredTimer().getData() castTo ThermoTower
+		DestroyTimer(GetExpiredTimer())
+		t.actor.removeAbility(ORB_ID)
+	
 	override function onUpgrade()
 		level ++
 	

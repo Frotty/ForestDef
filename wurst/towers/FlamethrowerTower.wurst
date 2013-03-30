@@ -1,0 +1,42 @@
+package FlamethrowerTower
+import Tower
+import Projectile
+import TempGroups
+
+public constant string FX_PATH = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeDamageTarget.mdl"
+public constant real AOE_RADIUS = 64.
+public constant int FLAMETHROWER_ID = 'h01C'
+
+public class FlamethrowerTower extends Tower
+	
+	construct(Tower t)
+		super(t)
+		
+	override function onAttack(UnitEntity ud)
+			new FlameMissile(pos+vec3(0,0,64.),ud.pos.toVec2(), 20., owner, 1)
+			
+function isUnitTargetable(unit u) returns boolean
+	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+		
+class FlameMissile extends Projectile
+	int level
+	group affected
+	
+	construct(vec3 pos, vec2 target, real speed, player owner, int level)
+		super( pos, AOE_RADIUS, owner, pos.angleTo2d(target), FX_PATH )
+		setSpeed(6.5)
+		setMaxDistance(650.)
+		this.level = level
+
+
+	override function update()
+		super.update()
+		print(dist.toString())
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
+		for u in ENUM_GROUP
+			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
+				UnitDamageTarget(getDummy(), u, 10. * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+
+		ENUM_GROUP.clear()
+		
+	

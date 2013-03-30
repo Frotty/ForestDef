@@ -155,35 +155,43 @@ abstract public class UnitEntity extends Entity
 		debugPrint("onDamage " + getDamage().toString() , 2)
 		let v = GetTriggerUnit()
 		let a = GetEventDamageSource()
+		debugPrint("onDamage a: " + a.getName() , 2)
+		debugPrint("onDamage v: " + v.getName() , 2)
 		if a.getHP() < 0.405 or v.getHP() < 0.405
 			return
+		debugPrint("onDamage both alive" , 2)
 		let victimData = v.getUserData() castTo UnitEntity
 		let attackerData = a.getUserData() castTo UnitEntity
-		if IsPlayerAlly(victimData.owner, attackerData.owner)
-			modifyDamage(0)
-			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
+//		if IsPlayerAlly(victimData.owner, attackerData.owner)
+//			modifyDamage(0)
+//			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
+//		else
+		debugPrint("onDamage both alive else" , 2)
+		if victimData != null
+			debugPrint("vcitim != null" , 2)
+			debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
+			debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
+			for bff in victimData.currentBuffs
+				bff.defenseModifier()
+				debugPrint("def mod" , 2)
+				
+			debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
+		
+		debugPrint("attacker ? null" , 2)
+		if attackerData != null
+			debugPrint("attacker != null" , 2)
+			debugPrint("onDamage attack != null" , 0)
+			for bff in attackerData.currentBuffs
+				bff.attackModifier()
+			if attackerData instanceof Tower
+				debugPrint("onDamage attack == tower" , 0)
+				let td = attackerData castTo Tower
+				victimData.updatePos()
+				td.onAttack(victimData)
+				debugPrint("onDamage called onAttack" , 0)
 		else
-			if victimData != null
-				debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
-				debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
-				for bff in victimData.currentBuffs
-					bff.defenseModifier()
-					debugPrint("def mod" , 2)
-					
-				debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
+			debugPrint("attacker == null" , 2)
 				
-			if attackerData != null
-				debugPrint("onDamage attack != null" , 0)
-				for bff in attackerData.currentBuffs
-					bff.attackModifier()
-				if attackerData instanceof Tower
-					debugPrint("onDamage attack == tower" , 0)
-					let td = attackerData castTo Tower
-					victimData.updatePos()
-					td.onAttack(victimData)
-					debugPrint("onDamage called onAttack" , 0)
-				
-			
 	function onDeath(unit killer)
 		terminate()
 			

@@ -5,6 +5,7 @@ import AssassinTower
 import TrooperTower
 import StompingTower
 import ThermoTower
+import FlamethrowerTower
 
 constant int BASIC_TOWER_ID = 'h003'
 constant int BASIC_WALL_ID = 'h000'
@@ -28,7 +29,7 @@ public class Tower extends UnitEntity
 		t.terminate()
 	
 	function onAttack(UnitEntity target)
-		debugPrint("onAttack - normal", 0)
+		debugPrint("onAttack - normal", 2)
 
 
 	function onUpgrade()
@@ -46,9 +47,9 @@ public class Tower extends UnitEntity
 			case stompingbasetype[0]
 				debugPrint("isStomper",0)
 				new StompingTower(this)
-			case THERMO_TOWER_ID
+			case FLAMETHROWER_ID
 				debugPrint("isThermo",0)
-				new ThermoTower(this)
+				new FlamethrowerTower(this)
 				
 			default
 				skip

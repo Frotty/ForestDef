@@ -5,18 +5,23 @@ package WaveTower
 
 	constant real AREA_OF_EFFECT = 200.
 	public constant int FIRST_WAVE_ID = 'h01N'
+	constant string FX_PATH = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl"
 	
 	public class WaveTower extends Tower
+		int level = 1
 		
 		construct(Tower t)
 			super(t)
 			
 		override function onAttack(UnitEntity ud)
-			new WaveMissile(pos,ud.pos.toVec2(), 20., owner, 1)
+			new WaveMissile(pos,ud.pos.toVec2(), 20., owner, level)
+			
+		override function onUpgrade()
+			level++
 	
 		
 	function getDamage(int level) returns real//towerlevel
-		return ((30. * level) + 25.)/6
+		return ((250. * level) + 50.)
 	
 	function isUnitTargetable(unit u) returns boolean
 		return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
@@ -26,22 +31,21 @@ package WaveTower
 		group affected
 		
 		construct(vec3 pos, vec2 target, real speed, player owner, int level)
-			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl" )
+			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
 			setSpeed(30)
-			setMaxDistance(1000.)
+			setMaxDistance(750.)
 			affected = CreateGroup()
 			this.level = level
 
 
 		override function update()
 			super.update()
-			print(dist.toString())
 			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 			for u in ENUM_GROUP
 				if not IsUnitInGroup(u, affected) and isUnitTargetable(u) and IsUnitEnemy(u, owner)
 					GroupAddUnit(affected, u)
 					let ud = u.getUserData() castTo UnitEntity
-					UnitDamageTarget(getDummy(), u, /*getDamage(level)*/10., false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+					UnitDamageTarget(getDummy(), u, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
 					let ang = angleBetweenCoords(pos.x, pos.y, ud.pos.x, ud.pos.y)
 					ud.setVel(vec3(Cos(ang.radians) * (level*15),Sin(ang.radians) * (level*15),0))
 			ENUM_GROUP.clear()

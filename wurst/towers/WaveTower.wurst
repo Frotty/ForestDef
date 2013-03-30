@@ -33,7 +33,7 @@ package WaveTower
 		construct(vec3 pos, vec2 target, real speed, player owner, int level)
 			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
 			setSpeed(30)
-			setMaxDistance(750.)
+			setRanged(750.)
 			affected = CreateGroup()
 			this.level = level
 

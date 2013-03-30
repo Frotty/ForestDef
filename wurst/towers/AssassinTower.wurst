@@ -76,6 +76,8 @@ package AssassinTower
 			dummy = CreateUnit(owner,dummyid[level],pos.x,pos.y,270.)
 			SetUnitFlyHeight(dummy, 160., 0.)
 			
+		ondestroy
+			dummy.remove()
 			
 	function getDamage(int level) returns real // Assassintower damage
 		return GetRandomReal(level*10.,100.)

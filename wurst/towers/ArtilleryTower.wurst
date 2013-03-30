@@ -1,9 +1,12 @@
 package ArtilleryTower
 import Tower
 import TempGroups
+import Projectile
+import Terrain
+import PhysicsConstants
 
 constant int MISSILE_ID = 'h01S'
-constant real MISSILE_SPEED = 1000. * ANIMATION_PERIOD
+constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant int ART_TOWER_ID = 'h01O'
 constant int SPELL_ID = 'A01T'
 trigger castTrigger
@@ -15,40 +18,35 @@ public class ArtilleryTower extends Tower
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		level = 0
+		SetUnitPropWindow(actor, 0.)
 		
 	override function onUpgrade()
 		level ++
 		
-class ArtilleryMissile extends UnitEntity
-	angle ang
-	real speed
+class ArtilleryMissile extends Projectile
 	real damage
-	real aoeradius
 	
-	construct(unit missile, angle targetangle, real radius, real damage)
-		super( vec3(missile.getX(),missile.getY(), 1000.),missile)
-		speed = GetRandomReal(MISSILE_SPEED-10,MISSILE_SPEED+10)
-		ang = targetangle
-		// = CreateUnit(caster.getOwner(), MISSILE_ID,polarProjectionX(x,-dista, angler), polarProjectionY(y,-dista,angler), angler)
-		this.damage = damage// = 350.+(level*100)
-		aoeradius = radius
+	construct(vec3 pos, real radius, player owner, angle targetangle, real damage)
+		super( pos, radius, owner, targetangle, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl")
+		setSpeed(MISSILE_SPEED + GetRandomReal(-2,2))
+		setZAngle((-45).asAngleDegrees())
+		vel.z = -getSpeed()
+		print(vel.toString())
+		this.damage = damage
 	
 	
 	override function update()
-		if GetUnitFlyHeight(actor) > speed
-			pos = vec3(polarProjectionX(pos.x,speed,ang),polarProjectionY(pos.y,speed,ang),GetUnitFlyHeight(actor)-speed)
-			actor.setPos( polarProjectionX(pos.x,speed,ang) , polarProjectionY(pos.y,speed,ang))
-			SetUnitFlyHeight(actor, GetUnitFlyHeight(actor)-speed, 0)
-		else
-			destroy(this)
+		super.update()
+		if pos.z < getTerrainZ(pos.x, pos.y)
+			terminate()
 		
 	ondestroy
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, aoeradius, null)
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)
 		for u in ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
 				let ud = u.getUserData() castTo UnitEntity
-				UnitDamageTarget(actor, u, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)		
-		KillUnit(actor)
+				UnitDamageTarget(getDummy(), u, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)	
+		ENUM_GROUP.clear()
 	
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
@@ -58,12 +56,12 @@ function checkSpell()
 		if GetSpellAbilityId() == SPELL_ID
 			ArtilleryTower at = GetTriggerUnit().getUserData() castTo ArtilleryTower
 			vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
-			angle a = angleBetweenCoords(at.pos.x,at.pos.y,target.x,target.y)
+			angle a = at.pos.angleTo2d(target)
 			for int i = 0 to 5+at.level*3
 				real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
 				real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)
-				new ArtilleryMissile(CreateUnit(at.owner, MISSILE_ID,polarProjectionX(x,-1000, a), polarProjectionY(y,-1000,a), a.degrees())/*
-				*/, a, 250.+at.level*50, 350.+(at.level*100))
+				new ArtilleryMissile(vec3(polarProjectionX(x,-1000, a), polarProjectionY(y,-1000,a), 1000.),
+									250.+at.level*50, at.owner, a, 350.+(at.level*100))
 
 public function initArtilleryTower()
 	castTrigger = CreateTrigger()

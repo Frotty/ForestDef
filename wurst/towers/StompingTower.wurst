@@ -20,11 +20,10 @@ package StompingTower
 		construct  (Tower t)
 			super(t)
 			dummy = CreateUnit(owner,dummytype[0],pos.x,pos.y,270.)
-			UnitAddAbility( dummy, 'Amrf')
-			UnitRemoveAbility(dummy, 'Amrf')
-			setdummyFlyHeight(160.)//-getTerrainZ(u.getX(), u.getY()))
-			SetUnitX(dummy,pos.x)
-			SetUnitY(dummy,pos.y)
+			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			.setXY(pos)
+			setdummyFlyHeight(160.)
+			active = true
 
 		override function onAttack(UnitEntity target)
 			targetX = target.pos.x
@@ -82,6 +81,9 @@ package StompingTower
 			DestroyTimer(GetExpiredTimer())
 			root.jumping = true
 			SetUnitFacing(root.dummy, angleBetweenCoords(root.dummy.getX(),root.dummy.getY(),root.pos.x,root.pos.y).degrees())
+		
+		ondestroy
+			dummy.remove()
 		
 /*		function filter() returns boolean
 			return ( IsPlayerAlly(GetOwningPlayer(dummy), GetOwningPlayer(GetFilterUnit())) == true ) 

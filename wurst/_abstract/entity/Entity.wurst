@@ -211,14 +211,17 @@ abstract public class FxEntity extends Entity
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string sfxpath )
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle, sfxpath)
+		fx.setOwner(owner, true)
 		
 	construct( vec3 pos, real radius, player owner, angle xyAngle )
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle)
+		fx.setOwner(owner, true)
 	
 	construct( vec3 pos, player owner, angle xyAngle )
 		super(pos, 0., owner)
 		fx = new Fx(pos, xyAngle)
+		fx.setOwner(owner, true)
 		
 	override function update()
 		pos += (vel*speedFactor)

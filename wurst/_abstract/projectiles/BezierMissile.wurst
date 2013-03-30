@@ -74,10 +74,9 @@ public class BezierMissile extends Projectile
 		dz = z - fx.getZ()
 		
 		if dx != 0 or dy != 0 
-			zAngle = angle(Atan(dz / (SquareRoot(dx*dx + dy*dy))))
-			fx.setZAngle(zAngle)
+			setZAngle(angle(Atan(dz / (SquareRoot(dx*dx + dy*dy)))))
 
-		xyAngle = angle(Atan2(dy, dx))
+		setXYAngle(angle(Atan2(dy, dx)))
 
 		
 

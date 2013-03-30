@@ -1,0 +1,46 @@
+package HealbackTower
+import Tower
+import Projectile
+import TempGroups
+
+constant real AREA_OF_EFFECT = 20.
+public constant int HEAL_TOWER_ID = 'h01K'
+
+public class HealbackTower extends Tower
+	int level
+	
+	construct(Tower t)
+		super(t)
+		
+	override function onAttack(UnitEntity ud)
+		new HealMissile(ud.pos,pos.toVec2(), 20., owner, 1)
+	
+		
+function getDamage(int level) returns real//towerlevel
+	return ((30. * level) + 25.)/6
+
+function isUnitTargetable(unit u) returns boolean
+	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+
+class HealMissile extends Projectile
+	int level
+	int heal
+	
+	construct(vec3 pos, vec2 target, real speed, player owner, int level)
+		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl" )
+		setSpeed(20)
+		//setMaxDistance(distanceBetweenCoords(pos.x,pos.y,target.x,target.y))
+		heal = 0400
+		this.level = level
+
+
+	override function update()
+		super.update()
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
+		for u in ENUM_GROUP
+			let ud = u.getUserData() castTo UnitEntity
+			if ud instanceof Wall
+				ud.actor.setHP(ud.actor.getHP()+heal)
+				destroy(this)
+				break
+		ENUM_GROUP.clear()

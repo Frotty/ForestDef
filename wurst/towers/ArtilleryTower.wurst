@@ -15,6 +15,7 @@ public class ArtilleryTower extends Tower
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		level = 0
+		SetUnitPropWindow(actor, 0.)
 		
 	override function onUpgrade()
 		level ++

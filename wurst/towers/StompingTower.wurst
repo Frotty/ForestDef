@@ -83,6 +83,9 @@ package StompingTower
 			root.jumping = true
 			SetUnitFacing(root.dummy, angleBetweenCoords(root.dummy.getX(),root.dummy.getY(),root.pos.x,root.pos.y).degrees())
 		
+		ondestroy
+			dummy.remove()
+		
 /*		function filter() returns boolean
 			return ( IsPlayerAlly(GetOwningPlayer(dummy), GetOwningPlayer(GetFilterUnit())) == true ) 
 			

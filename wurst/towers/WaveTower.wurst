@@ -35,7 +35,7 @@ package WaveTower
 
 		override function update()
 			super.update()
-			print(dist.toString())
+			debugPrint(dist.toString(),0)
 			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 			for u in ENUM_GROUP
 				if not IsUnitInGroup(u, affected) and isUnitTargetable(u) and IsUnitEnemy(u, owner)

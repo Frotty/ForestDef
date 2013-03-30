@@ -10,6 +10,7 @@ package GameInit
 	import AssassinTower
 	import AutoCastSystem
 	//import HolyTower
+	import ArtilleryTower
 	import ShieldKit
 	import StompingTower
 	import TrooperTower
@@ -23,7 +24,9 @@ package GameInit
 		initRevivalSystem()
 		//initHolyTower()
 		initStompingTower()
+		initAssassinTower()
 		initTrooperTower()
+		initArtilleryTower()
 		initPlayers()
 		initConds()
 		initSpawn()
@@ -39,6 +42,6 @@ package GameInit
 		
 	init
 		getTimer().start( 0.1, function start )
-		getTimer().start( 50., function spawn )
+		getTimer().start( 10., function spawn )
 
 endpackage

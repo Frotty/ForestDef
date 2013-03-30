@@ -31,7 +31,7 @@ package AssassinTower
 			DestroyEffect(AddSpecialEffectTarget( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl" , dummy,"chest" ))
 			tim = getTimer()
 			tim.setData(this castTo int)
-			tim.startPeriodic(0.2,function AssassinTower.hit)
+			tim.startPeriodic(0.4,function AssassinTower.hit)
 		
 		function endHitStreak()
 				UnitEntity ue = target castTo UnitEntity
@@ -39,6 +39,8 @@ package AssassinTower
 				dummy.setX(actor.getX())
 				dummy.setY(actor.getY())
 				SetUnitVertexColor(dummy, 255,255,255,255)
+				SetUnitTimeScale( root.dummy, 1.00 )
+				SetUnitAnimation(dummy,"stand")
 				SetUnitFlyHeight(dummy,160.,0.)
 				SetUnitFacing(dummy, angleBetweenCoords(actor.getX(),actor.getY(),ue.actor.getX(),ue.actor.getY()).degrees())
 		
@@ -59,7 +61,7 @@ package AssassinTower
 					tempangle = GetRandomReal(0.,360.).asAngleDegrees()
 					SetUnitTimeScale( root.dummy, 10.00 )
 					SetUnitFlyHeight(root.dummy, 0., 0.)
-					SetUnitVertexColor(root.dummy,160,160,160,190)
+					SetUnitVertexColor(root.dummy,180,180,180,220)
 					SetUnitAnimation(root.dummy,"attack")
 					UnitDamageTarget(root.dummy,ue.actor,getDamage(root.level),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
 					root.currenthit ++ 

@@ -52,7 +52,7 @@ public class Projectile extends FxEntity
 		pos += vel
 		setPos()
 		if timed
-			time *= ANIMATION_PERIOD
+			time += ANIMATION_PERIOD
 			if time >= maxTime
 				terminate()
 		if ranged

@@ -2,6 +2,7 @@ package WaveTower
 	import Tower
 	import Projectile
 	import TempGroups
+	import Creep
 
 	constant real AREA_OF_EFFECT = 200.
 	public constant int FIRST_WAVE_ID = 'h01N'
@@ -23,9 +24,6 @@ package WaveTower
 	function getDamage(int level) returns real//towerlevel
 		return ((250. * level) + 50.)
 	
-	function isUnitTargetable(unit u) returns boolean
-		return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
-
 	class WaveMissile extends Projectile
 		int level
 		group affected
@@ -42,12 +40,12 @@ package WaveTower
 			super.update()
 			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 			for u in ENUM_GROUP
-				if not IsUnitInGroup(u, affected) and isUnitTargetable(u) and IsUnitEnemy(u, owner)
+				let data = (u.getUserData() castTo UnitEntity)
+				if data != null and data instanceof Creep
 					GroupAddUnit(affected, u)
-					let ud = u.getUserData() castTo UnitEntity
 					UnitDamageTarget(getDummy(), u, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
-					let ang = angleBetweenCoords(pos.x, pos.y, ud.pos.x, ud.pos.y)
-					ud.setVel(vec3(Cos(ang.radians) * (level*15),Sin(ang.radians) * (level*15),0))
+					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
+					data.setVel(vec3(Cos(ang.radians) * (level*15),Sin(ang.radians) * (level*15),0))
 			ENUM_GROUP.clear()
 	
 		ondestroy

@@ -162,7 +162,7 @@ abstract public class UnitEntity extends Entity
 		debugPrint("onDamage both alive" , 2)
 		let victimData = v.getUserData() castTo UnitEntity
 		let attackerData = a.getUserData() castTo UnitEntity
-		if IsPlayerAlly(victimData.owner, attackerData.owner)
+		if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
 			modifyDamage(0)
 			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
 		else

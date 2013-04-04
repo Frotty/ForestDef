@@ -58,7 +58,9 @@ public class Tower extends UnitEntity
 			case HEAL_TOWER_ID
 				debugPrint("isHeal",0)
 				new HealbackTower(this)
-				
+			case THERMO_TOWER_ID
+				debugPrint("isHeal",0)
+				new ThermoTower(this)
 			default
 				skip
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)

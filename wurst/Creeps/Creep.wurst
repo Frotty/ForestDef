@@ -2,6 +2,7 @@ package Creep
 import Entity
 import Bounty
 import Table
+import PlayerData
 
 public constant CREEP_OWNER = Player(6)
 
@@ -28,14 +29,20 @@ public class Creep extends UnitEntity
 		
 	override function onDeath(unit killer)
 		super.onDeath(killer)
-		let p = killer.getOwner()
-		p.addGold(bounty)
-		showBountyTextTag(bounty, actor, p)
+		actor.setUserData(0)
+		killer.getOwner().addGold(bounty mod playerCount)
+		for i = 0 to 3
+			Player(i).addGold((bounty) div playerCount)
+			showBountyTextTag((bounty) div playerCount, actor, Player(i))
 	
 public class Boss extends Creep
 
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, typeId, bounty, target)
+		
+	ondestroy
+		for i = 0 to 3
+			Player(i).addLumber(1)
 		
 public class Special extends Creep
 

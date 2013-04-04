@@ -5,17 +5,19 @@ package PlayerData
 	import Wave
 	import Builder
 	
+	public int playerCount = 0
+	
 	public function initPlayers()
-		real randDrg = (GetRandomInt(0,3)*90).toReal()
-		int c = 0
+		real randDrg = (GetRandomInt(0,4)*90).toReal()
 		for int i = 0 to 3
 			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
-				new Builder(middle.polarOffset((90.*i).asAngleDegrees(), 250.).toVec3(), Player(i))
-				c++
+				new Builder(middle.polarOffset((randDrg).asAngleDegrees(), 250.).toVec3(), Player(i))
+				randDrg += 90.
+				playerCount++
 
 		for int i = 0 to 3
 			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
-				SetPlayerState( Player(i), PLAYER_STATE_RESOURCE_GOLD, (480/c).toInt() )	 
+				SetPlayerState( Player(i), PLAYER_STATE_RESOURCE_GOLD, (540/playerCount).toInt() )	 
 		
 
 endpackage

@@ -1,0 +1,54 @@
+package SphereTower
+
+import Tower
+import Projectile
+import TempGroups
+
+constant real AREA_OF_EFFECT = 40.
+constant string FX_PATH = "sdg"
+
+public class SphereTower extends Tower
+	int level
+	Sphere sphere
+	real spdistance = 500.
+	boolean isDistChanging = false
+	
+	construct(Tower t)
+		super(t)
+		level = 0
+		sphere = new Sphere(pos,ud.pos.toVec2(), 20., owner, level)
+	
+	override function update()
+		super.update()
+		//change sphere angle
+		if isDistChanging
+			//change sphere distance and speed
+	
+	override function onUpgrade()
+		level ++
+		
+	
+function isUnitTargetable(unit u) returns boolean
+	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
+		
+	
+class Sphere extends Projectile
+	int level
+	
+	construct(vec3 pos, vec2 target, real speed, player owner, int level)
+		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
+		setSpeed(30)
+		setRanged(750.)
+		this.level = level
+	
+	override function update()
+		super.update()
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
+		for u in ENUM_GROUP
+			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
+				UnitDamageTarget(getDummy(), u, 15. * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+
+		ENUM_GROUP.clear()
+	
+		ondestroy
+			DestroyGroup(affected)

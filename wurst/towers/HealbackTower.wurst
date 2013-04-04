@@ -33,7 +33,6 @@ class HealMissile extends Projectile
 		heal = 0400
 		this.level = level
 
-
 	override function update()
 		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)

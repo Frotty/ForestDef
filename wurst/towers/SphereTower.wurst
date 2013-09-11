@@ -65,7 +65,7 @@ class Sphere extends Projectile
 	
 	override function update()
 		super.update()
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, OF_EFFECT, null)
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u in ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
 				UnitDamageTarget(getDummy(), u, 5. * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)

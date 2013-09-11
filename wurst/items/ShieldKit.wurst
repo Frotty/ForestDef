@@ -1,42 +1,39 @@
 package ShieldKit
-	import DamageMod
-	import ShieldBuff
-	import Entity
-	import TextTagEntity
-	import GameConditions
+import DamageMod
+import ShieldBuff
+import Entity
+import TextTagEntity
+import GameConditions
 
-	class ShieldKitBuff extends NormalShieldBuff
-		
-		construct(UnitEntity victim, real amount)
-			super(victim, 45., 'A01P', amount)
-			debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)
-			//this.setEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", "origin")
+class ShieldKitBuff extends NormalShieldBuff
+	
+	construct(UnitEntity victim, real amount)
+		super(victim, 45., 'A01P', amount)
+		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)
+		//this.setEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", "origin")
 
-		
-		override function defenseModifier()
-			super.defenseModifier()
+	
+	override function defenseModifier()
+		super.defenseModifier()
+		new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
+								blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
+
+	ondestroy
+		if not silent
 			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
-									blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
-
-		ondestroy
-			if not silent
-				new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
-									"Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
-			else
-				new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
-									"added " + blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
-								
-			
-
-	function repair()
-		if GetSpellAbilityId() == 'A00D'
-			let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-			new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
-		
-	public function initShieldKit()
-		trigger instarep = CreateTrigger(  )
-		TriggerRegisterAnyUnitEventBJ( instarep, EVENT_PLAYER_UNIT_SPELL_EFFECT )
-		TriggerAddAction( instarep, function repair )
+								"Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
+		else
+			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
+								"added " + blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
+							
 		
 
-endpackage
+function repair()
+	if GetSpellAbilityId() == 'A00D'
+		let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
+		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
+	
+public function initShieldKit()
+	trigger instarep = CreateTrigger(  )
+	TriggerRegisterAnyUnitEventBJ( instarep, EVENT_PLAYER_UNIT_SPELL_EFFECT )
+	TriggerAddAction( instarep, function repair )

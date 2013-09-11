@@ -16,9 +16,9 @@ public abstract class Entity
 	use LinkedListModule
 	
 	/** 3d vector position */
-	protected vec3 pos
+	vec3 pos
 	/** 3d vector velocity */
-	protected vec3 vel
+	vec3 vel
 	
 	/** radius */
 	real radius = 0.
@@ -112,7 +112,7 @@ public abstract class Entity
 abstract public class UnitEntity extends Entity
 	static trigger dmgTrig = CreateTrigger()
 	static trigger deathTrig = CreateTrigger()
-	protected unit actor
+	unit actor
 	
 	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
 	
@@ -170,7 +170,7 @@ abstract public class UnitEntity extends Entity
 			if victimData != null
 				debugPrint("vcitim != null" , 2)
 				debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
-				debugPrint("def mod " + victimData.currentBuffs.size.toString() , 2)
+				debugPrint("def mod " + victimData.currentBuffs.getSize().toString() , 2)
 				for bff in victimData.currentBuffs
 					bff.defenseModifier()
 					debugPrint("def mod" , 2)
@@ -234,7 +234,7 @@ abstract public class FxEntity extends Entity
 		fx.setPos(pos)
 		
 	function getDummy() returns unit
-		return fx.dummy
+		return fx.getDummy()
 		
 	override function setPos(vec3 tpos)
 		pos = tpos

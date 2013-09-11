@@ -15,7 +15,7 @@ public class NormalShieldBuff extends NormalBuff
 
 		
 	override function apply()
-		debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)
+		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)
 		for bff in victim.currentBuffs
 			if bff instanceof thistype
 				let sd = bff castTo thistype
@@ -25,10 +25,10 @@ public class NormalShieldBuff extends NormalBuff
 				debugPrint("SILENCE" , 2)	
 				terminate()
 				return
-		debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)	
+		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)	
 		victim.currentBuffs.add(this)
 		victim.actor.addAbility(abilId)
-		debugPrint("current Buffs: " + victim.currentBuffs.size.toString() , 2)
+		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)
 		debugPrint("added ABil", 2)
 		
 

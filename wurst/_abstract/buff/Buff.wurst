@@ -48,3 +48,4 @@ public abstract class Buff
 	abstract function attackModifier()
 	
 	abstract function defenseModifier()
+

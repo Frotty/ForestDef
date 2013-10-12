@@ -6,6 +6,7 @@ function updateEntities()
 	Entity e = Entity.first
 	while e != null
 		if e.done
+			debugPrint("destroying Entity", 0)
 			destroy e
 			debugPrint("destroyed Entity", 0)
 		else if e.active

@@ -5,7 +5,6 @@ import PhysicsConstants
 import Debug
 import Fx
 import Angle
-import EntityRegion
 import Buff
 import Tower
 import DamageMod
@@ -36,14 +35,11 @@ public abstract class Entity
 	boolean done 		= false
 	/** even if the Entites pos.z might be > 0, it still can be below terrainZ */
 	boolean flying 		= false
-	
-	EntityRegion currentRegion
 
 	construct( vec3 pos, player owner )
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner
-		currentRegion = getEntityRegion(pos)
 		
 		entityCount++
 
@@ -52,7 +48,6 @@ public abstract class Entity
 		this.vel = vec3(0,0,0)
 		this.owner = owner
 		this.radius = radius
-		currentRegion = getEntityRegion(pos)
 		
 		entityCount++
 		
@@ -60,7 +55,6 @@ public abstract class Entity
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
-		currentRegion = getEntityRegion(pos)
 		
 		entityCount++
 		
@@ -69,7 +63,6 @@ public abstract class Entity
 		this.vel = vel
 		this.owner = owner
 		this.radius = radius
-		currentRegion = getEntityRegion(pos)
 		
 		entityCount++
 		
@@ -212,16 +205,19 @@ abstract public class FxEntity extends Entity
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle, sfxpath)
 		fx.setOwner(owner, true)
+		debugPrint("Created Fx", 1)
 		
 	construct( vec3 pos, real radius, player owner, angle xyAngle )
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle)
 		fx.setOwner(owner, true)
+		debugPrint("Created Fx", 1)
 	
 	construct( vec3 pos, player owner, angle xyAngle )
 		super(pos, 0., owner)
 		fx = new Fx(pos, xyAngle)
 		fx.setOwner(owner, true)
+		debugPrint("Created Fx", 1)
 		
 	override function update()
 		pos += (vel*speedFactor)
@@ -241,6 +237,7 @@ abstract public class FxEntity extends Entity
 		fx.setPos(tpos.x,tpos.y)
 		
 	ondestroy
+		debugPrint("fx destroyed", 1)
 		destroy fx
 
 

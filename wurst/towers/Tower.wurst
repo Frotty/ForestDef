@@ -60,7 +60,7 @@ public class Tower extends UnitEntity
 				debugPrint("isHeal",0)
 				new ThermoTower(this)
 			default
-				printError("Wtf Crigges")
+				debugPrint("upgrade not catched", 1)
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)
 	
 	static function onUpgradeEvent()

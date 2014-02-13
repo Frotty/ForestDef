@@ -44,7 +44,6 @@ public class BezierMissile extends Projectile
 		real dy
 		real dz
 		
-		print("update")
 
 		time += ANIMATION_PERIOD
 		

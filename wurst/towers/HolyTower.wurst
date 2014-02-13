@@ -87,11 +87,11 @@ package HolyTower
 					   //If a unit matches the conditions, add it to the potientional targets
 					GroupRemoveUnit(g, tempunit)
 					tempunit = FirstOfGroup(g)
-				print("units in group: " +CountUnitsInGroup(targetables).toString())
+//				print("units in group: " +CountUnitsInGroup(targetables).toString())
 				for int i2 = 1 to (bounces[i]-1)
 					unit myunit = GroupPickRandomUnit(targetables)
 					thisbounce[i2] = new Bounce(myunit,GetAttacker(),bouncetargets.loadUnit(i2-1).getX(),bouncetargets.loadUnit(i2-1).getY(),(i2).toReal(),i)
-					print(i2.toString()+"th bounce registered")
+//					print(i2.toString()+"th bounce registered")
 					bouncetargets.saveUnit(i2,myunit)
 					GroupRemoveUnit(targetables,myunit)
 			i++

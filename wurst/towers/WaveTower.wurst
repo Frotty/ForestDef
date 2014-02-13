@@ -42,11 +42,11 @@ package WaveTower
 			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 			for u in ENUM_GROUP
 				let data = (u.getUserData() castTo UnitEntity)
-				if data != null and data instanceof Creep
+				if data != null and data instanceof Creep and not IsUnitInGroup(u, affected)
 					GroupAddUnit(affected, u)
 					UnitDamageTarget(getDummy(), u, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
 					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
-					data.setVel(vec3(ang.cos() * (5 + level*5),ang.sin() * (5 + level*5),0))
+					data.setVel(vec3(ang.cos() * (5 + level*2),ang.sin() * (5 + level*5),0))
 			ENUM_GROUP.clear()
 	
 		ondestroy

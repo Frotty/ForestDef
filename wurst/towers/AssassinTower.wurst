@@ -20,7 +20,7 @@ package AssassinTower
 			level = 0
 			dummy = CreateUnit(owner,dummyid[level],pos.x,pos.y,270.)
 			debugPrint("Dummy Created",0)
-			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			SetUnitFlyHeight(dummy, 200., 0.)
 			hitnumber = hitnumberstore[level]
 			debugPrint("AssassinTower Created",1)

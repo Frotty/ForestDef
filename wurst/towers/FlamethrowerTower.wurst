@@ -29,7 +29,7 @@ class FlameMissile extends Projectile
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
 		super( pos, AOE_RADIUS, owner, pos.angleTo2d(target), FX_PATH )
 		setSpeed(6.5+ GetRandomReal(-2, 2))
-		setTimed(1.5)
+		setRanged(610)
 		this.level = level
 
 

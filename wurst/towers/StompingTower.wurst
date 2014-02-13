@@ -20,7 +20,7 @@ package StompingTower
 		construct  (Tower t)
 			super(t)
 			dummy = CreateUnit(owner,dummytype[0],pos.x,pos.y,270.)
-			dummy.addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+			dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
 			.setXY(pos)
 			setdummyFlyHeight(160.)
 			active = true

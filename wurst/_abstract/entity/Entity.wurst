@@ -112,7 +112,7 @@ abstract public class UnitEntity extends Entity
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
 		this.actor = actor
-		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
 		deathTrig.registerUnitEvent(actor, EVENT_UNIT_DEATH)
 		unitEntityCount++
@@ -120,7 +120,7 @@ abstract public class UnitEntity extends Entity
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
 		this.actor = actor
-		actor.setUserData(this castTo int).addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
+		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
 		unitEntityCount++
 		
@@ -205,19 +205,19 @@ abstract public class FxEntity extends Entity
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle, sfxpath)
 		fx.setOwner(owner, true)
-		debugPrint("Created Fx", 1)
+		print("Created Fx")
 		
 	construct( vec3 pos, real radius, player owner, angle xyAngle )
 		super(pos, radius, owner)
 		fx = new Fx(pos, xyAngle)
 		fx.setOwner(owner, true)
-		debugPrint("Created Fx", 1)
+		print("Created Fx")
 	
 	construct( vec3 pos, player owner, angle xyAngle )
 		super(pos, 0., owner)
 		fx = new Fx(pos, xyAngle)
 		fx.setOwner(owner, true)
-		debugPrint("Created Fx", 1)
+		print("Created Fx")
 		
 	override function update()
 		pos += (vel*speedFactor)

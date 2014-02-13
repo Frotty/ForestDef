@@ -28,7 +28,7 @@ class ArtilleryMissile extends Projectile
 	
 	construct(vec3 pos, real radius, player owner, angle targetangle, real damage)
 		super( pos, radius, owner, targetangle, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl")
-		setSpeed(MISSILE_SPEED + GetRandomReal(-2,2))
+		setSpeed(MISSILE_SPEED + GetRandomReal(-10,6))
 		setZAngle((-45).asAngleDegrees())
 		vel.z = -getSpeed()
 		print(vel.toString())
@@ -47,6 +47,7 @@ class ArtilleryMissile extends Projectile
 				let ud = u.getUserData() castTo UnitEntity
 				UnitDamageTarget(getDummy(), u, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)	
 		ENUM_GROUP.clear()
+		addEffect("Abilities\\Weapons\\FragDriller\\FragDriller.mdl", pos).destr()
 	
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)

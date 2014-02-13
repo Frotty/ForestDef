@@ -19,5 +19,6 @@ package PlayerData
 			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
 				SetPlayerState( Player(i), PLAYER_STATE_RESOURCE_GOLD, (540/playerCount).toInt() )	 
 		
-
+	
+	
 endpackage

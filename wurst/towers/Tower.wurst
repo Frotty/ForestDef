@@ -57,7 +57,7 @@ public class Tower extends UnitEntity
 				debugPrint("isHeal",0)
 				new HealbackTower(this)
 			case THERMO_TOWER_ID
-				debugPrint("isHeal",0)
+				debugPrint("iThermo",0)
 				new ThermoTower(this)
 			default
 				debugPrint("upgrade not catched", 1)

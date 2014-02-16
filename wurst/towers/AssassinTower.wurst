@@ -6,6 +6,36 @@ package AssassinTower
 	int array hitnumberstore
 	public constant int ASSASSIN_TOWER_BASE_ID = 'h01Q'
 	int array dummyid
+	
+	public class HitDummy // With a created dummy, hits the target and after timer concludes gets destroyed
+		unit dummy
+		timer destroytimer
+		
+		construct(unit u, UnitEntity ue,real damage)
+			dummy = u
+			SetUnitFacing(dummy, angleBetweenCoords(dummy.getX(),dummy.getY(),ue.actor.getX(),ue.actor.getY()).degrees())
+			SetUnitVertexColor(dummy,180,180,180,225)
+			SetUnitTimeScale( dummy, 10.00 )
+			SetUnitAnimation(dummy,"attack")
+			SetUnitFlyHeight(dummy, 0.0, 0.)
+			UnitDamageTarget(dummy,ue.actor,damage,true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
+			
+			destroytimer = getTimer()
+			destroytimer.setData(this castTo int)
+			destroytimer.start(0.5,function HitDummy.endHit)
+			
+			
+		static function endHit()
+			HitDummy root = GetExpiredTimer().getData() castTo HitDummy
+			destroy(root)
+		
+		static function dead()	
+		
+		ondestroy
+			DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl" , dummy.getX(), dummy.getY() ))
+			dummy.remove()
+			destroytimer.release()
+			
 
 	public class AssassinTower extends Tower
 		int level
@@ -21,7 +51,8 @@ package AssassinTower
 			dummy = CreateUnit(owner,dummyid[level],pos.x,pos.y,270.)
 			debugPrint("Dummy Created",0)
 			dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-			SetUnitFlyHeight(dummy, 200., 0.)
+			.setXY(pos)
+			SetUnitFlyHeight(dummy, 180.,0.)
 			hitnumber = hitnumberstore[level]
 			debugPrint("AssassinTower Created",1)
 
@@ -29,6 +60,7 @@ package AssassinTower
 			target = ue castTo int
 			currenthit = 0
 			DestroyEffect(AddSpecialEffectTarget( "Abilities\\Spells\\NightElf\\Blink\\BlinkCaster.mdl" , dummy,"chest" ))
+			dummy.hide()
 			tim = getTimer()
 			tim.setData(this castTo int)
 			tim.startPeriodic(0.4,function AssassinTower.hit)
@@ -36,35 +68,21 @@ package AssassinTower
 		function endHitStreak()
 				UnitEntity ue = target castTo UnitEntity
 				DestroyTimer(tim)
-				dummy.setX(actor.getX())
-				dummy.setY(actor.getY())
-				SetUnitVertexColor(dummy, 255,255,255,255)
-				SetUnitTimeScale( dummy, 1.00 )
-				SetUnitAnimation(dummy,"stand")
-				SetUnitFlyHeight(dummy,160.,0.)
 				SetUnitFacing(dummy, angleBetweenCoords(actor.getX(),actor.getY(),ue.actor.getX(),ue.actor.getY()).degrees())
+				dummy.show()
 		
 		static function hit()
 			AssassinTower root = GetExpiredTimer().getData() castTo AssassinTower
 			UnitEntity ue = root.target castTo UnitEntity
 			if not IsUnitType(ue.actor, UNIT_TYPE_DEAD)
 				angle tempangle
-				if root.currenthit <= root.hitnumber and root.currenthit > 0 
+				if root.currenthit <= root.hitnumber and root.currenthit >= 0
 					tempangle = GetRandomReal(0.,360.).asAngleDegrees()
-					root.dummy.setX(polarProjectionX(ue.actor.getX(),40,tempangle))
-					root.dummy.setY(polarProjectionY(ue.actor.getY(),40,tempangle))
-					SetUnitFacing(root.dummy,tempangle.degrees() + 180.)
-					SetUnitAnimation(root.dummy,"attack")
-					UnitDamageTarget(root.dummy,ue.actor,getDamage(root.level),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
+					unit u = createUnit(root.owner,GetUnitTypeId(root.dummy), vec2(polarProjectionX(ue.actor.getX(),40,tempangle),
+															  polarProjectionY(ue.actor.getY(),40,tempangle)),
+															  tempangle + angle(3.14))
+					new HitDummy(u, ue, getDamage(root.level))
 					root.currenthit ++
-				else if root.currenthit <= 0
-					tempangle = GetRandomReal(0.,360.).asAngleDegrees()
-					SetUnitTimeScale( root.dummy, 10.00 )
-					SetUnitFlyHeight(root.dummy, 0., 0.)
-					SetUnitVertexColor(root.dummy,180,180,180,220)
-					SetUnitAnimation(root.dummy,"attack")
-					UnitDamageTarget(root.dummy,ue.actor,getDamage(root.level),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
-					root.currenthit ++ 
 				else if root.currenthit > root.hitnumber
 					root.endHitStreak()
 			else
@@ -78,6 +96,7 @@ package AssassinTower
 			
 		ondestroy
 			dummy.remove()
+			tim.release()
 			
 	function getDamage(int level) returns real // Assassintower damage
 		return GetRandomReal(level*10.,100.)

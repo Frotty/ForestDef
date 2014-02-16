@@ -2,36 +2,52 @@ package TrooperTower
 	import Terrain
 	import Table
 	import Tower
+	import public Entity
 	
-	real DUMMY_DIST = 30.
+	real DUMMY_DIST = 10.
 	public constant int TOWER_TROOPER_ID = 'h01E'
 	int array dummy_id
+	
+	public class Troop extends UnitEntity
+		
+		construct (unit troop, angle tangle)
+			super(vec3(troop.getX(),troop.getY(),0),troop)
+			SetUnitPropWindow(actor,0)
+			UnitAddAbility( actor, 'Amrf')
+			UnitRemoveAbility(actor , 'Amrf')
+			SetUnitPathing(actor,false)
+			troop..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
+			SetUnitFlyHeight(actor, 180.,0.) //Height is bugged near mountains. this is cause Blizzard made fly height smooth when going up cliffs
+			//SetUnitFlyHeight(trooperData.loadUnit(i), 200.-getTerrainZ(GetUnitX(trooperData.loadUnit(i)),GetUnitY(trooperData.loadUnit(i))),0.)
+			SetUnitX(actor,polarProjectionX(pos.x,DUMMY_DIST,tangle))
+			SetUnitY(actor,polarProjectionY(pos.y,DUMMY_DIST,tangle))
+			
+			
+		ondestroy
+			SetUnitExploded(actor, true)
+			SetUnitFlyHeight(actor, 0.,0.) //on the ground...
+			KillUnit(actor)
 
 	public class TrooperTower extends Tower
 		Table trooperData = new Table()
 		int level
+		//Still needs function for attack, stop, and upgrade.
 		
 		construct (Tower t)
 			super(t)
 			level = 0
 			for int i = 0 to 2
 				angle tangle = angle(i*2*PI/3)
-				trooperData.saveUnit(i, CreateUnit(owner,dummy_id[0]
+				unit troop = CreateUnit(owner,dummy_id[0]
 										, polarProjectionX(pos.x,DUMMY_DIST,tangle),
-										polarProjectionY(pos.y,DUMMY_DIST,tangle), tangle.degrees()))
-				SetUnitPropWindow(trooperData.loadUnit(i),0)
-				UnitAddAbility( trooperData.loadUnit(i) , 'Amrf')
-				UnitRemoveAbility( trooperData.loadUnit(i) , 'Amrf')
-				SetUnitPathing(trooperData.loadUnit(i),false)
-				trooperData.loadUnit(i).setFlyHeight(160.,0.)
-//				SetUnitFlyHeight(trooperData.loadUnit(i), 200.-getTerrainZ(GetUnitX(trooperData.loadUnit(i)),GetUnitY(trooperData.loadUnit(i))),0.)
-				SetUnitX(trooperData.loadUnit(i),polarProjectionX(pos.x,DUMMY_DIST,tangle))
-				SetUnitY(trooperData.loadUnit(i),polarProjectionY(pos.y,DUMMY_DIST,tangle))
+										polarProjectionY(pos.y,DUMMY_DIST,tangle), tangle.degrees())
+										
+				int id = new Troop(troop, tangle) castTo int
+				trooperData.saveInt(i, id)
 			
 		ondestroy //This tower dies, or the troopers have to be removed.
 			for int i = 0 to 2
-				SetUnitExploded(trooperData.loadUnit(i), true)
-				KillUnit(trooperData.loadUnit(i))
+				destroy trooperData.loadInt(i) castTo Troop
 		
 				
 	public function initTrooperTower()

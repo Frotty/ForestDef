@@ -31,7 +31,6 @@ class ArtilleryMissile extends Projectile
 		setSpeed(MISSILE_SPEED + GetRandomReal(-10,6))
 		setZAngle((-45).asAngleDegrees())
 		vel.z = -getSpeed()
-		print(vel.toString())
 		this.damage = damage
 	
 	

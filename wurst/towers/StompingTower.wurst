@@ -95,7 +95,8 @@ package StompingTower
 	function stompDamage()
 		KillUnit(GetEnumUnit())
 	*/
-	function getParabolaHeight(real y0, real y1, real h, real d, real x) returns real
+	public function getParabolaHeight(real y0, real y1, real h, real d, real x) returns real
+	// from Y,to Y, max Height , to destination, x variable
 		real a = (2*(y0+y1)-4*h)/(d*d)
 		real b = (y1-y0-a*d*d)/d
 		return a*x*x + b*x + y0

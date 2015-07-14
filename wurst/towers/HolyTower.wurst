@@ -1,109 +1,129 @@
-package HolyTower
-	import Knockback
-	import TimerUtils
-	string effect_string = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
-	//LIGHTNING EFFECT: HWPB & HWSB
-	int array tower_id // "group" of the towers belong to this system
-	int array bounces
-	real array damage_lowbound
-	real array damage_highbound
-	
-	class Bounce
-		unit target
-		unit attacker
-		real rootX
-		real rootY
-		real delay
-		lightning lightningeffect
-		int level
-		
-		construct (unit u,unit attack, real x ,real y,real r, int level)
-			target = u
-			attacker = attack
-			rootX = x
-			rootY = y
-			delay = r*0.5
-			//classes are constructed at the same time, and for the vision of bouncing, we have to add some delay.
-			this.level = level
-			timer tmp2 = getTimer()
-			tmp2.setData(this castTo int)
-			tmp2.start(delay,function doEffect)
-			
-	function doEffect()
-		Bounce b = GetExpiredTimer().getData() castTo Bounce
-		b.lightningeffect = AddLightning("HWSB",true,b.rootX,b.rootY,GetUnitX(b.target),GetUnitY(b.target))
-		timer tmp = getTimer()
-		tmp.setData(b castTo int)
-		tmp.start(.77,function removeLightning)
-		if b.delay != 0.
-		//no effect for the first target :(
-			real damage = GetRandomReal(damage_lowbound[b.level],damage_highbound[b.level])
-			if IsUnitEnemy(b.target,GetOwningPlayer(b.attacker))
-				UnitDamageTarget(b.attacker, b.target, damage , true, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
-			else
-				SetUnitState(b.target, UNIT_STATE_LIFE, GetUnitState(b.target,UNIT_STATE_LIFE)+(25*damage))
-			DestroyEffect(AddSpecialEffect(effect_string,b.target.getX(),b.target.getY()))
-			
-			
-	function isTargetable(unit filterunit, unit attacker, unit prevtarget) returns boolean
-		real bouncedistance = 450.
-		if not IsUnitType(filterunit, UNIT_TYPE_DEAD) and not IsUnitType(filterunit, UNIT_TYPE_MAGIC_IMMUNE)
-			if IsUnitEnemy(filterunit,GetOwningPlayer(attacker)) and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),prevtarget.getX(),prevtarget.getY()) < bouncedistance // and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),attacker.getX(),attacker.getY()) <=1000.
-				return true
-			else if IsUnitAlly(filterunit, GetOwningPlayer(attacker)) and GetOwningPlayer(filterunit) != Player(5) and GetUnitState(filterunit, UNIT_STATE_MAX_LIFE) > GetUnitState(filterunit, UNIT_STATE_LIFE) and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),prevtarget.getX(),prevtarget.getY()) < bouncedistance
-				return true
-			else
-				return false
-		else
-			return false
-	
-	function removeLightning()
-		Bounce thisbounce = GetExpiredTimer().getData() castTo Bounce
-		DestroyLightning(thisbounce.lightningeffect)
-		destroy thisbounce
-		
-	function startBouncing()
-		Bounce array thisbounce
-		int i = 0
-		while tower_id[i] != 0
-			if GetUnitTypeId(GetAttacker()) == tower_id[i]
-				Table bouncetargets = new Table()
-				thisbounce[0] = new Bounce(GetTriggerUnit(),GetAttacker(),GetUnitX(GetAttacker()),GetUnitY(GetAttacker()),0,i)
-				bouncetargets.saveUnit(0,GetTriggerUnit())
-				group g = CreateGroup() //= Units In 1000 range to GetAttacker(), filter: isTargetable(filterunit,GetAttacker(),bouncetargets.loadUnit(i2)) 
-				GroupClear(g)
-				GroupEnumUnitsInRange(g,GetAttacker().getX(),GetAttacker().getY(),1000.,null)
-				//Create a group for potentional units in the tower's range
-				group targetables = CreateGroup()
-				GroupClear(targetables)
-				//group for the real targetables, the targets will be picked randomly from this group
-				unit tempunit = FirstOfGroup(g)
-				while tempunit != null
-					if isTargetable(tempunit,GetAttacker(),bouncetargets.loadUnit(0))
-						//Well there is a cheat with the bouncedistance, because it watches the first unit's position. 
-						//Else we would have to create a different group for each bounce- TODO later (maybe send the table and an id??)
-						//Let the class select the target after the delay, also dont forget to set the next class.
-						GroupAddUnit(targetables,tempunit) 
-					   //If a unit matches the conditions, add it to the potientional targets
-					GroupRemoveUnit(g, tempunit)
-					tempunit = FirstOfGroup(g)
-//				print("units in group: " +CountUnitsInGroup(targetables).toString())
-				for int i2 = 1 to (bounces[i]-1)
-					unit myunit = GroupPickRandomUnit(targetables)
-					thisbounce[i2] = new Bounce(myunit,GetAttacker(),bouncetargets.loadUnit(i2-1).getX(),bouncetargets.loadUnit(i2-1).getY(),(i2).toReal(),i)
-//					print(i2.toString()+"th bounce registered")
-					bouncetargets.saveUnit(i2,myunit)
-					GroupRemoveUnit(targetables,myunit)
-			i++
-
-	public function initHolyTower()
-		trigger t = CreateTrigger()
-		TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)
-		TriggerAddAction(t,function startBouncing)
-		//REGISTER PART
-		tower_id[0] = 'h01K'
-		bounces[0] = 4
-		damage_lowbound[0] = 40.
-		damage_highbound[0] = 60.
-
-endpackage 
+//package HolyTower
+//	import Knockback
+//	import TimerUtils
+//	import Tower
+//	import Entity
+//	
+//	string effect_string = "Abilities\\Spells\\Human\\HolyBolt\\HolyBoltSpecialArt.mdl"
+//	//LIGHTNING EFFECT: HWPB & HWSB
+//	int array tower_id // "group" of the towers belong to this system
+//	int array bounces
+//	real array damage_lowbound
+//	real array damage_highbound
+//	
+//	class Bounce
+//		Tower attacker
+//		UnitEntity target
+//		int bounces_left
+//		real damage
+//		lightning lightningeffect
+//		timer desttimer
+//		
+//		construct(Tower a, UnitEntity t, int left, real damage)
+//			attacker = a
+//			target = t
+//			this.damage = damage
+//			bounces_left = left
+//			
+//			
+//			
+//	
+//	class BounceTower extends Tower
+//		unit target
+//		unit attacker
+//		real rootX
+//		real rootY
+//		real delay
+//		lightning lightningeffect
+//		int level
+//		
+//		construct (unit u,unit attack, real x ,real y,real r, int level)
+//			target = u
+//			attacker = attack
+//			rootX = x
+//			rootY = y
+//			delay = r*0.5
+//			//classes are constructed at the same time, and for the vision of bouncing, we have to add some delay.
+//			this.level = level
+//			timer tmp2 = getTimer()
+//			tmp2.setData(this castTo int)
+//			tmp2.start(delay,function doEffect)
+//			
+//	function doEffect()
+//		Bounce b = GetExpiredTimer().getData() castTo Bounce
+//		b.lightningeffect = AddLightning("HWSB",true,b.rootX,b.rootY,GetUnitX(b.target),GetUnitY(b.target))
+//		timer tmp = getTimer()
+//		tmp.setData(b castTo int)
+//		tmp.start(.77,function removeLightning)
+//		if b.delay != 0.
+//		//no effect for the first target :(
+//			real damage = GetRandomReal(damage_lowbound[b.level],damage_highbound[b.level])
+//			if IsUnitEnemy(b.target,GetOwningPlayer(b.attacker))
+//				UnitDamageTarget(b.attacker, b.target, damage , true, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
+//			else
+//				SetUnitState(b.target, UNIT_STATE_LIFE, GetUnitState(b.target,UNIT_STATE_LIFE)+(25*damage))
+//			DestroyEffect(AddSpecialEffect(effect_string,b.target.getX(),b.target.getY()))
+//			
+//			
+//	function isTargetable(unit filterunit, unit attacker, unit prevtarget) returns boolean
+//		real bouncedistance = 450.
+//		if not IsUnitType(filterunit, UNIT_TYPE_DEAD) and not IsUnitType(filterunit, UNIT_TYPE_MAGIC_IMMUNE)
+//			if IsUnitEnemy(filterunit,GetOwningPlayer(attacker)) and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),prevtarget.getX(),prevtarget.getY()) < bouncedistance // and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),attacker.getX(),attacker.getY()) <=1000.
+//				return true
+//			else if IsUnitAlly(filterunit, GetOwningPlayer(attacker)) and GetOwningPlayer(filterunit) != Player(5) and GetUnitState(filterunit, UNIT_STATE_MAX_LIFE) > GetUnitState(filterunit, UNIT_STATE_LIFE) and distanceBetweenCoords(filterunit.getX(),filterunit.getY(),prevtarget.getX(),prevtarget.getY()) < bouncedistance
+//				return true
+//			else
+//				return false
+//		else
+//			return false
+//	
+//	function removeLightning()
+//		Bounce thisbounce = GetExpiredTimer().getData() castTo Bounce
+//		DestroyLightning(thisbounce.lightningeffect)
+//		destroy thisbounce
+//		
+//	function startBouncing()
+//		Bounce array thisbounce
+//		int i = 0
+//		while tower_id[i] != 0
+//			if GetUnitTypeId(GetAttacker()) == tower_id[i]
+//				Table bouncetargets = new Table()
+//				thisbounce[0] = new Bounce(GetTriggerUnit(),GetAttacker(),GetUnitX(GetAttacker()),GetUnitY(GetAttacker()),0,i)
+//				bouncetargets.saveUnit(0,GetTriggerUnit())
+//				group g = CreateGroup() //= Units In 1000 range to GetAttacker(), filter: isTargetable(filterunit,GetAttacker(),bouncetargets.loadUnit(i2)) 
+//				GroupClear(g)
+//				GroupEnumUnitsInRange(g,GetAttacker().getX(),GetAttacker().getY(),1000.,null)
+//				//Create a group for potentional units in the tower's range
+//				group targetables = CreateGroup()
+//				GroupClear(targetables)
+//				//group for the real targetables, the targets will be picked randomly from this group
+//				unit tempunit = FirstOfGroup(g)
+//				while tempunit != null
+//					if isTargetable(tempunit,GetAttacker(),bouncetargets.loadUnit(0))
+//						//Well there is a cheat with the bouncedistance, because it watches the first unit's position. 
+//						//Else we would have to create a different group for each bounce- TODO later (maybe send the table and an id??)
+//						//Let the class select the target after the delay, also dont forget to set the next class.
+//						GroupAddUnit(targetables,tempunit) 
+//					   //If a unit matches the conditions, add it to the potientional targets
+//					GroupRemoveUnit(g, tempunit)
+//					tempunit = FirstOfGroup(g)
+////				print("units in group: " +CountUnitsInGroup(targetables).toString())
+//				for int i2 = 1 to (bounces[i]-1)
+//					unit myunit = GroupPickRandomUnit(targetables)
+//					thisbounce[i2] = new Bounce(myunit,GetAttacker(),bouncetargets.loadUnit(i2-1).getX(),bouncetargets.loadUnit(i2-1).getY(),(i2).toReal(),i)
+////					print(i2.toString()+"th bounce registered")
+//					bouncetargets.saveUnit(i2,myunit)
+//					GroupRemoveUnit(targetables,myunit)
+//			i++
+//
+//	public function initHolyTower()
+//		trigger t = CreateTrigger()
+//		TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_ATTACKED)
+//		TriggerAddAction(t,function startBouncing)
+//		//REGISTER PART
+//		tower_id[0] = 'h01K'
+//		bounces[0] = 4
+//		damage_lowbound[0] = 40.
+//		damage_highbound[0] = 60.
+//
+//endpackage 

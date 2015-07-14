@@ -5,8 +5,8 @@ import PhysicsConstants
 import Debug
 import Fx
 import Angle
-import Buff
-import Tower
+import initlater Buff
+import initlater Tower
 import DamageMod
 import public LinkedList
 
@@ -218,13 +218,13 @@ abstract public class FxEntity extends Entity
 		
 	override function update()
 		pos += (vel*speedFactor)
-		fx.setPos(pos)
+		fx.setXYZ(pos)
 		
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		
 	function setPos()
-		fx.setPos(pos)
+		fx.setXYZ(pos)
 		
 	function getDummy() returns unit
 		return fx.getDummy()

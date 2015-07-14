@@ -1,88 +1,84 @@
 package UnitSpawnSystem
-	import Creep
-	import TimerUtils
-	import Queue
-	import Wave
+import initlater Creep
+import TimerUtils
+import Queue
+import Wave
+
+constant real SPAWN_TIME = 20.0
+
+Queue<NormalWave> normalWaves = new Queue<NormalWave>()
+Queue<BossWave> bossWaves = new Queue<BossWave>()
+Queue<SpecialWave> specialWaves = new Queue<SpecialWave>()
+
+timer spawnTimer = getTimer()
+int level = 1
 	
-	constant real SPAWN_TIME = 20.0
-
-	Queue<NormalWave> normalWaves = new Queue<NormalWave>()
-	Queue<BossWave> bossWaves = new Queue<BossWave>()
-	Queue<SpecialWave> specialWaves = new Queue<SpecialWave>()
+		
+function onSpawnTime()	
+	debugPrint("spawntime", 0)
+	if level mod 7 == 0
+		specialWaves.dequeue().spawn()
+	else
+		debugPrint("level not mod 0", 0)
+		normalWaves.dequeue().spawn()
+		debugPrint("normal spawned", 0)
+		if level mod 4 == 0
+			bossWaves.dequeue().spawn()
+		
+	level++
+	if level > 7
+		level = 1
+		
 	
-	timer spawnTimer = getTimer()
-	int level = 1
-		
-			
-	function onSpawnTime()	
-		debugPrint("spawntime", 0)
-		if level mod 7 == 0
-			specialWaves.dequeue().spawn()
-		else
-			debugPrint("level not mod 0", 0)
-			normalWaves.dequeue().spawn()
-			debugPrint("normal spawned", 0)
-			if level mod 4 == 0
-				bossWaves.dequeue().spawn()
-			
-		level++
-		if level > 7
-			level = 1
-			
-		
-	function initWaves()
-		normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 1, 6 ))
-		normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 2, 6 ))
-		normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 3, 6 ))
-		normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 1, 9 ))
-		normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 2, 9 ))
-		normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 3, 9 ))
-		normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 1, 11 ))
-		normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 2, 11 ))
-		normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 3, 11 ))
-		normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 1, 12 ))
-		normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 2, 12 ))
-		normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 3, 12 ))
-		normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 1, 13 ))
-		normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 2, 13 ))
-		normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 3, 13 ))
-		normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 1, 14 ))
-		normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 2, 14 ))
-		normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 3, 14 ))
-		normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 1, 16 ))
-		normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 2, 16 ))
-		normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 3, 16 ))
-		normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 1, 17 ))
-		normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 2, 17 ))
-		normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 3, 17 ))
-		normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-		normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-		normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-		
-		
-		bossWaves.enqueue(new BossWave('n003', 1, 75, gg_snd_SkeletonWhat2))
-		bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1))
-		bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5))
-		bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1))
-		bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1))
+function initWaves()
+	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 1, 6 ))
+	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 2, 6 ))
+	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 3, 6 ))
+	normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 1, 9 ))
+	normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 2, 9 ))
+	normalWaves.enqueue(new NormalWave('u001', 'u004', 'n001', 3, 9 ))
+	normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 1, 11 ))
+	normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 2, 11 ))
+	normalWaves.enqueue(new NormalWave('u002', 'u005', 'n002', 3, 11 ))
+	normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 1, 12 ))
+	normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 2, 12 ))
+	normalWaves.enqueue(new NormalWave('u006', 'u007', 'n005', 3, 12 ))
+	normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 1, 13 ))
+	normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 2, 13 ))
+	normalWaves.enqueue(new NormalWave('u008', 'u009', 'n006', 3, 13 ))
+	normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 1, 14 ))
+	normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 2, 14 ))
+	normalWaves.enqueue(new NormalWave('u00G', 'u00H', 'n008', 3, 14 ))
+	normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 1, 16 ))
+	normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 2, 16 ))
+	normalWaves.enqueue(new NormalWave('u00I', 'u00K', 'n009', 3, 16 ))
+	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 1, 17 ))
+	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 2, 17 ))
+	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 3, 17 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
+	
+	
+	bossWaves.enqueue(new BossWave('n003', 1, 75, gg_snd_SkeletonWhat2))
+	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1))
+	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5))
+	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1))
+	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1))
 
-		specialWaves.enqueue(new SpecialWave('u00A', 3, 10))
-		specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
-		specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
-		specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
+	specialWaves.enqueue(new SpecialWave('u00A', 3, 10))
+	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
+	specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
+	specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
 
 
 
 
-	public function startSpawn()
-		timer t = CreateTimer()
-		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
-		print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
-		PlaySoundBJ( gg_snd_PigWhat2 )
-		
-	public function initSpawn()
-		initWaves()
-		
-		
-
-endpackage 
+public function startSpawn()
+	timer t = CreateTimer()
+	t.startPeriodic( SPAWN_TIME, function onSpawnTime)
+	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
+	PlaySoundBJ( gg_snd_PigWhat2 )
+	
+public function initSpawn()
+	initWaves()

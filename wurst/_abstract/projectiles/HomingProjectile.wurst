@@ -26,7 +26,7 @@ public abstract class HomingProjectile extends FxEntity
 	override function update()
 		vel = (pos - target.pos).setLength(speed)
 		pos += vel
-		fx.setPos(pos)
+		fx.setXYZ(pos)
 		
 		if pos.distToVecSquared(target.pos) <= hitRadius
 			onHit()

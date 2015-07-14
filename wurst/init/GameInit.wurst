@@ -1,48 +1,43 @@
 package GameInit
-	import UnitSpawnSystem
-	import PlayerData
-	import GameConditions
-	import TimerUtils
-	import LumberSystem
-	import Destroy
-	import SuperCharge
-	import RevivalSystem
-	import AssassinTower
-	import AutoCastSystem
-	//import HolyTower
-	import ArtilleryTower
-	import ShieldKit
-	import StompingTower
-	import TrooperTower
-	import WaveTower
-	import EntityManagement
+import UnitSpawnSystem
+import PlayerData
+import GameConditions
+import TimerUtils
+import LumberSystem
+import Destroy
+import SuperCharge
+import RevivalSystem
+import AssassinTower
+import ArtilleryTower
+import ShieldKit
+import StompingTower
+import TrooperTower
+import EntityManagement
+import Wave
+
+function start()
+	initLumberSystem()
+	initDestroy()
+	initSuperCharge()
+	initRevivalSystem()
+	initStompingTower()
+	initAssassinTower()
+	initTrooperTower()
+	initArtilleryTower()
+	initPlayers()
+	initConds()
+	initSpawn()
+	initShieldKit()
+	GetExpiredTimer().release()
+	PlaySoundBJ(gg_snd_H01Uther03)
+	startEntityLoop()
+	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	
-	function start()
-		initLumberSystem()
-		initDestroy()
-		initSuperCharge()
-		initRevivalSystem()
-		//initHolyTower()
-		initStompingTower()
-		initAssassinTower()
-		initTrooperTower()
-		initArtilleryTower()
-		initPlayers()
-		initConds()
-		initSpawn()
-		initShieldKit()
-		GetExpiredTimer().release()
-		PlaySoundBJ(gg_snd_H01Uther03)
-		startEntityLoop()
-		print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
-		
-	function spawn()
-		startSpawn()
-		GetExpiredTimer().release()
-		
-	init
-		getTimer().start( 0.1, function start )
-		getTimer().start( 50., function spawn )
+function spawn()
+	startSpawn()
+	GetExpiredTimer().release()
+	
+init
+	getTimer().start( 0.1, function start )
+	getTimer().start( 50., function spawn )
 
-
-endpackage

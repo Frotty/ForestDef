@@ -1,24 +1,38 @@
 package PlayerData
-	import UnitSpawnSystem
-	import Maths
-	import Real
-	import Wave
-	import Builder
-	
-	public int playerCount = 0
-	
-	public function initPlayers()
-		real randDrg = (GetRandomInt(0,4)*90).toReal()
-		for int i = 0 to 3
-			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
-				new Builder(middle.polarOffset((randDrg).asAngleDegrees(), 250.).toVec3(), Player(i))
-				randDrg += 90.
-				playerCount++
+import Wave
+import Builder
+import LinkedList
 
-		for int i = 0 to 3
-			if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
-				SetPlayerState( Player(i), PLAYER_STATE_RESOURCE_GOLD, (11540/playerCount).toInt() )	 
-		
+public LinkedList<PlayerData> allPlayers
+public PlayerData array pDatas
+
+public class PlayerData
+	player p
+	int kills = 0
+	boolean alive = true
 	
+	construct(player p)
+		this.p = p
+		pDatas[p.getId()] = this
+
+public function initPlayers()
+	allPlayers = new LinkedList<PlayerData>()
 	
-endpackage
+	for int i = 0 to 7
+		if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
+			allPlayers.add(new PlayerData(players[i]))
+	int gold
+	if allPlayers.getSize() > 4
+		initCreepStarts(true)
+		gold = 900
+	else
+		initCreepStarts(false)
+		gold = 450
+	
+	real anglePerP = 360/allPlayers.getSize()
+	real current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
+	for p in allPlayers
+		new Builder(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
+		current += anglePerP
+		SetPlayerState( p.p, PLAYER_STATE_RESOURCE_GOLD, (gold/allPlayers.getSize()).toInt() )	 
+

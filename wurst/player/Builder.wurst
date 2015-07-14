@@ -10,3 +10,4 @@ public class Builder extends UnitEntity
 		DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", pos.x, pos.y ) )
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
+			PanCameraToTimed(actor.getX(), actor.getY(), 0)

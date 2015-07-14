@@ -1,37 +1,36 @@
 package GameConditions
-	import TimerUtils
-	import Entity
+import TimerUtils
+import Entity
+
+public timer gameTime
+
+function victory()
+	print(" You win! " )
+	PauseGame( true )
 	
-	public timer gameTime
+function lose()
+	print("Game over...! " )
+	PauseGame( true )
 	
-	function victory()
-		print(" You win! " )
-		PauseGame( true )
-		
-	function lose()
-		print("Game over...! " )
-		PauseGame( true )
-		
-	function endGameTimer()
-		print("died")
-		timer t = CreateTimer()
-		t.start( 1., function lose )
-		
-	class MagicTreasure extends UnitEntity
-		
-		construct()
-			super(vec3(gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY(), 0.), gg_unit_h00E_0008)
+function endGameTimer()
+	print("died")
+	timer t = CreateTimer()
+	t.start( 1., function lose )
 	
-	public function initConds()
-		gameTime = getTimer()
-		gameTime.start( 16.*60. + 20., function victory )
-		timerdialog td = CreateTimerDialog(gameTime)		
-		TimerDialogSetTitle( td, "Until Victory: " )
-		TimerDialogDisplay( td, true )
-		print( "You have one minute to build up defenses....")
-		trigger tr = CreateTrigger()
-		TriggerRegisterUnitEvent( tr, gg_unit_h00E_0008 , EVENT_UNIT_DEATH )
-		TriggerAddAction( tr, function endGameTimer )
-		new MagicTreasure()
+class MagicTreasure extends UnitEntity
 	
-endpackage 
+	construct()
+		super(vec3(gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY(), 0.), gg_unit_h00E_0008)
+
+public function initConds()
+	gameTime = getTimer()
+	gameTime.start( 16.*60. + 20., function victory )
+	timerdialog td = CreateTimerDialog(gameTime)		
+	TimerDialogSetTitle( td, "Until Victory: " )
+	TimerDialogDisplay( td, true )
+	print( "You have one minute to build up defenses....")
+	trigger tr = CreateTrigger()
+	TriggerRegisterUnitEvent( tr, gg_unit_h00E_0008 , EVENT_UNIT_DEATH )
+	TriggerRegisterUnitEvent( tr, gg_unit_h00E_0007 , EVENT_UNIT_DEATH )
+	TriggerAddAction( tr, function endGameTimer )
+	new MagicTreasure()

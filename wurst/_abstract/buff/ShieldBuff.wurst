@@ -1,6 +1,6 @@
 package ShieldBuff
 import PresetBuffs
-import DamageMod
+import DmgMod
 
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
@@ -37,7 +37,7 @@ public class NormalShieldBuff extends NormalBuff
 			modifyDamageBy(-blockAmount)
 			destroy this
 		else
-			modifyDamageBy(-dmg)
+			modifyDamage(0)
 			blockAmount = blockAmount - dmg
 			
 			

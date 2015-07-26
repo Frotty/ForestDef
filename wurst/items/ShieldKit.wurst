@@ -1,5 +1,4 @@
 package ShieldKit
-import DamageMod
 import ShieldBuff
 import Entity
 import TextTagEntity
@@ -31,7 +30,7 @@ class ShieldKitBuff extends NormalShieldBuff
 function repair()
 	if GetSpellAbilityId() == 'A00D'
 		let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
+		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 3))		
 	
 public function initShieldKit()
 	trigger instarep = CreateTrigger(  )

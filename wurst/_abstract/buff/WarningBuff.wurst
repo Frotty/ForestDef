@@ -1,0 +1,31 @@
+package WarningBuff
+import PresetBuffs
+import DmgMod
+import ShieldBuff
+import SoundHelper
+import TextTagEntity
+import GameTimer
+
+Sound snd = new Sound("Abilities\\Spells\\Other\\Silence\\Silence1.wav", 2276, false)
+
+public class WarningBuff extends NormalShieldBuff
+	real startedTime
+	construct(UnitEntity victim, int abilId)
+		super(victim, 9999999, abilId, 0)
+		startedTime = getElapsedGameTime()
+		
+	override function defenseModifier()
+		let dmg = getDamage()
+		if startedTime + 15 < getElapsedGameTime()
+			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Revive-Protection" , 12, 1, colorA(155, 155, 55, 255))
+			addEffect("Abilities\\Spells\\Items\\SpellShieldAmulet\\SpellShieldCaster.mdl", victim.getPos() ).destr()
+			modifyDamage(0)
+		if victim.actor.getHP() - dmg < (victim.actor.getMaxHP()/1.5)
+			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,12)), "ATTENTION!!" , 15, 1.5, colorA(255, 25, 25, 255))
+			snd.playForPlayer(victim.owner)
+			
+			
+			
+
+		
+	

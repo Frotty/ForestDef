@@ -1,11 +1,59 @@
 package DmgMod
-import ArrayList
+import LinkedListModule
 import AbilityObjEditing
-constant DAMAGE_ABIL_ID = 'xdmo'
-constant MAX_HP_GAINED = 50000
+/*
+ *	Package that allows to modify the damage of a DamageEvent that is happening at the time.
+ *	Therefore it should only be used in callbacks for the Event EVENT_UNIT_DAMAGED
+ *	Use only getDamage() inside callbacks to receive the damage including modifications
+ *	Healing by supplying negative amounts is possible
+ */
 
+// API
+
+/** Returns the damage of the current DamageEvent, uncluding modifications by DmgMod */
+public function getDamage() returns real
+	if Active.last != null and GetEventDamageSource()==Active.last.source and GetTriggerUnit()==Active.last.target and GetEventDamage()==Active.last.realdmg
+		return Active.last.newdmg
+	return GetEventDamage()
+
+/** Modifies the damage to the specified amount */
+public function modifyDamage( real newdmg )
+	unit target = GetTriggerUnit()
+	real actlife = target.getHP()
+	real dmgtake = GetEventDamage()
+	
+	if Active.last != null and GetEventDamageSource()==Active.last.source and target==Active.last.target and dmgtake==Active.last.realdmg 
+		Active.last.newdmg = newdmg
+	else
+		var moddat = new Active()
+		
+		moddat.target = target
+		moddat.taketrg = GetTriggeringTrigger()
+		moddat.source = GetEventDamageSource()
+		moddat.oldlife = actlife
+		moddat.realdmg = dmgtake
+		moddat.newdmg = newdmg
+		
+		moddat.setbonus = not target.hasAbility(DAMAGE_ABIL_ID)
+		if moddat.setbonus
+			target.addAbility( DAMAGE_ABIL_ID )
+			actlife = target.getHP()
+		
+		moddat.setlifed = actlife-0.405 < dmgtake
+		if moddat.setlifed
+			actlife += dmgtake
+			target.setHP(actlife)
+		moddat.newlife = actlife
+
+/** Modifies the damage by a certain value */
+public function modifyDamageBy( real damage)
+	modifyDamage( getDamage() + damage )
+	
+// End of API
 
 class Active
+	use LinkedListModule
+	static timer inst_timer = CreateTimer()
 	trigger taketrg
 	unit target
 	unit source
@@ -17,94 +65,38 @@ class Active
 	boolean setbonus
 	
 	construct()
-		active.add(this)
-		
-	ondestroy
-		active.remove(this)
+		// If this is the first Active DamageEvent we start the timer to apply this and all further
+		if this == first
+			inst_timer.start(0., () -> begin
+				real resetlife = 0
+				for moddat in Active
+					var actlife = GetWidgetLife( moddat.target )
+					if moddat.setlifed and not moddat.setbonus
+						resetlife = actlife
+					else
+						resetlife = moddat.oldlife + (actlife - moddat.newlife + moddat.realdmg)
+						
+					if moddat.setbonus
+						moddat.target.removeAbility(DAMAGE_ABIL_ID)
+					
+					if resetlife - moddat.newdmg > 0.405
+						moddat.target.setHP( resetlife - moddat.newdmg )
+					else
+						var b = moddat.taketrg.isEnabled()
+						moddat.taketrg.disable()
+						moddat.source.damageTarget( moddat.target, MAX_HP_GAINED + 0. )
+						if b
+							moddat.taketrg.enable()
+					
+					destroy moddat
+			end)
 
-ArrayList<Active> active = new ArrayList<Active>()
+/** The ID used for the health bonus Ability */
+constant DAMAGE_ABIL_ID = 'xdmo'
+/** The amount of HP restored by the Ability */
+constant MAX_HP_GAINED = 500000
 
-timer inst_timer = CreateTimer()
-integer N = 0
-Active curr_active = null
-
-
-
-function applyDamage()
-	Active moddat
-	real actlife
-	real resetlife
-	boolean b
-	
-	while N > 0
-		N--
-		moddat = active.get(N)
-		actlife = GetWidgetLife( moddat.target )
-		
-		if moddat.setlifed and not moddat.setbonus
-			resetlife = actlife
-		else
-			resetlife = moddat.oldlife + (actlife - moddat.newlife + moddat.realdmg)
-			
-		if moddat.setbonus
-			moddat.target.removeAbility(DAMAGE_ABIL_ID)
-		
-		if resetlife - moddat.newdmg > 0.405
-			SetWidgetLife( moddat.target, resetlife - moddat.newdmg )
-		else
-			b = IsTriggerEnabled( moddat.taketrg )
-			moddat.taketrg.disable()
-			UnitDamageTarget( moddat.source, moddat.target, MAX_HP_GAINED + 0., false, false, ATTACK_TYPE_CHAOS, DAMAGE_TYPE_UNKNOWN, null )
-			if b
-				EnableTrigger( moddat.taketrg )
-		
-		destroy moddat
-	
-	curr_active = null
-
-public function modifyDamage( real newdmg )
-	unit target = GetTriggerUnit()
-	real actlife = GetWidgetLife( target )
-	real dmgtake = GetEventDamage()
-	Active moddat
-	
-	if curr_active != null and GetEventDamageSource()==curr_active.source and target==curr_active.target and dmgtake==curr_active.realdmg 
-		curr_active.newdmg = newdmg
-	else
-		moddat = new Active()
-		curr_active = moddat
-		
-		moddat.target = target
-		moddat.taketrg = GetTriggeringTrigger()
-		moddat.source = GetEventDamageSource()
-		moddat.oldlife = actlife
-		moddat.realdmg = dmgtake
-		moddat.newdmg = newdmg
-		
-		moddat.setbonus = GetUnitAbilityLevel( target, DAMAGE_ABIL_ID )==0
-		if moddat.setbonus
-			UnitAddAbility( target, DAMAGE_ABIL_ID )
-			actlife = GetWidgetLife( target )
-		
-		moddat.setlifed = actlife-0.405 < dmgtake
-		if moddat.setlifed
-			actlife = actlife + dmgtake
-			SetWidgetLife( target, actlife )
-		moddat.newlife = actlife
-
-		if N==0
-			TimerStart( inst_timer, .0, false, function applyDamage )
-		N++
-
-public function getDamage() returns real
-	if curr_active != null and GetEventDamageSource()==curr_active.source and GetTriggerUnit()==curr_active.target and GetEventDamage()==curr_active.realdmg
-		return curr_active.newdmg
-	return GetEventDamage()
-
-public function modifyDamageBy( real damage)
-	modifyDamage( getDamage() + damage )
-
-
+/** Generates the Health-Bonus Ability */
 @compiletime function generateObject()
 	let def = new AbilityDefinitionMaxLifeBonusGreater(DAMAGE_ABIL_ID)
 	def.setMaxLifeGained(1, MAX_HP_GAINED)

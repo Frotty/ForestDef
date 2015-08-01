@@ -10,6 +10,7 @@ public class PlayerData
 	player p
 	int kills = 0
 	boolean alive = true
+	Builder builder
 	
 	construct(player p)
 		this.p = p

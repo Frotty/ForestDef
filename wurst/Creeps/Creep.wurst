@@ -3,13 +3,16 @@ import Entity
 import Bounty
 import Table
 import initlater PlayerData
-
 public constant CREEP_OWNER = Player(9)
 
 Table data = new Table()
 
 public class Creep extends UnitEntity
 	int bounty
+	
+	construct(vec3 pos, int typeId, int bounty)
+		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
+		this.bounty = bounty
 	
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
@@ -22,7 +25,7 @@ public class Creep extends UnitEntity
 		if vel.lengthSquared() > .5
 			super.update()
 			pos += vel
-			vel *= 0.925
+			vel *= 0.925 + (1 / bounty*2)
 			actor.setXY(pos.x, pos.y)
 		else
 			active = false
@@ -38,6 +41,7 @@ public class Creep extends UnitEntity
 			if(pd.p != killer.getOwner())
 				pd.p.addGold(restBounty)
 				showBountyTextTag(restBounty, actor, pd.p)
+				
 	
 public class Boss extends Creep
 
@@ -45,10 +49,28 @@ public class Boss extends Creep
 		super(pos, typeId, bounty, target)
 		
 	ondestroy
-		for i = 0 to allPlayers.getSize()
-			Player(i).addLumber(1)
+		for p in allPlayers
+			p.p.addLumber(2)
 		
 public class Special extends Creep
 
+	construct(vec3 pos, int typeId, int bounty)
+			super(pos, typeId, bounty)
+			
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, typeId, bounty, target)
+		
+	override function onDeath(unit killer)
+		super.onDeath(killer)
+		// Souls
+		if actor.getTypeId() == 'u00B'
+			for i = 0 to 3
+				new Special(pos, 'u00C', 4)
+		else if actor.getTypeId() == 'u00C'
+			for i = 0 to 3
+				new Special(pos, 'u00D', 2)
+		else if actor.getTypeId() == 'u00D'
+			for i = 0 to 3
+				new Special(pos, 'u00E', 1)
+				
+			

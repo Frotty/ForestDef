@@ -1,40 +1,33 @@
 package RevivalSystem
 import PlayerData
-
-boolean array isDead
-vec2 array dpos
+import Wave
+import Builder
 
 function registerDeath()
 	let u = GetTriggerUnit()
 	let owner = GetTriggerUnit().getOwner()
 	let id = owner.getId()
 	if u.getTypeId() == 'h00F'
-		isDead[id] = true
-		dpos[id] = u.getPos()
-		DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + owner.getName() + " has died! Buy a revival Scroll from the middle to revive him.")
+		pDatas[id].alive = false
+		DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + owner.getName() + " has died! Buy a Revival-Scroll from the middle to revive him.")
 		
 
 		
 function reviveAll()
 	if GetItemTypeId(GetManipulatedItem()) == 'I007'
 		var s = ""
-		for i = 0 to allPlayers.getSize()
-			if isDead[i] == true
-				player p = Player(i)
-				s += " " + p.getName()
-				unit u = createUnit(p,'h00F', dpos[i] , angle(0))
-				SelectUnitForPlayerSingle(u, p)
-				AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", u,"origin" )
-				isDead[i] = false
+		for pd in allPlayers
+			if not pd.alive
+				s += " " + pd.p.getName()
+				pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p)
+				AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor ,"origin" )
+				printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
+				pd.alive = true
 		if s.length() > 0
 			s += "."
 			DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + GetTriggerPlayer().getName() + " has revived the following players: " + s)
 			
 public function initRevivalSystem()
-	isDead[0] = false
-	isDead[1] = false
-	isDead[2] = false
-	isDead[3] = false
 	trigger t = CreateTrigger()
 	TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_DEATH)
 	TriggerAddAction(t,function registerDeath)

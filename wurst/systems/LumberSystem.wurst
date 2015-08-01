@@ -8,17 +8,19 @@ constant real	TEXTTAG_ANGLE	 = 90. //Texttag's angle.
 constant real	TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
 constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
 
-
+int killcount = 0
 function getLumber ()
 	player p = GetOwningPlayer(GetKillingUnit())
 	if p != CREEP_OWNER
-		if pDatas[p.getId()].kills >= 5
-			SetPlayerState( p, PLAYER_STATE_RESOURCE_LUMBER, GetPlayerState(p, PLAYER_STATE_RESOURCE_LUMBER) + 1 )
-			pDatas[p.getId()].kills = 0
-			if ( GetLocalPlayer() == p )
+		pDatas[p.getId()].kills++
+		killcount++
+		if killcount >= 20
+			killcount = 0
+			for pd in allPlayers
+				pd.p.addLumber(1)
 				texttag t = CreateTextTag()
 				SetTextTagText(t, "+1" , TEXTTAG_TEXTSIZE)
-				SetTextTagPos( t, GetUnitX(GetKillingUnit())-20, GetUnitY(GetKillingUnit()), -30. )
+				SetTextTagPos( t, GetUnitX(pd.builder.actor)-20, GetUnitY(pd.builder.actor), -30. )
 				SetTextTagColor( t, 50, 205, 50, 255 )
 				SetTextTagPermanent( t, false )
 				SetTextTagVelocity(t, 0, TEXTTAG_VELOCITY)
@@ -26,7 +28,7 @@ function getLumber ()
 				SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
 				SetTextTagVisibility( t, true )	  
 		else
-			pDatas[p.getId()].kills++
+			
 			
 public function initLumberSystem()
 	trigger t = CreateTrigger()

@@ -1,6 +1,7 @@
 package Builder
 
 import Entity
+import WarningBuff
 
 public class Builder extends UnitEntity
 	
@@ -11,3 +12,5 @@ public class Builder extends UnitEntity
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
+			
+		new WarningBuff(this, 0)

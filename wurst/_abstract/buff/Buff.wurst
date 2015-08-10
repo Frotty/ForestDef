@@ -28,6 +28,10 @@ public abstract class Buff
 		
 	function setEffect(string s, string attachment)
 		fx = victim.actor.addEffect(s, attachment)	
+		
+	function refresh() 
+		if not victim.actor.hasAbility(abilId)
+			victim.actor.addAbility(abilId)
 	
 	ondestroy
 		victim.currentBuffs.remove(this)

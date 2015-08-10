@@ -16,22 +16,27 @@ package WaveTower
 			active = false
 			
 		override function onAttack(UnitEntity ud)
-			new WaveMissile(pos,ud.pos.toVec2(), 20., owner, level)
+			new WaveMissile(pos,ud.pos.toVec2(), 17.5, owner, level, actor)
 			
 		override function onUpgrade()
 			level++
 	
 		
-	function getDamage(int level) returns real//towerlevel
-		return ((100. * level) + 250.)
+	function getBlowDamage(int level) returns real//towerlevel
+		return ((75. * level) + 50.)
+		
+	function getDOT(int level) returns real//towerlevel
+		return ((5. * level))
 	
 	class WaveMissile extends Projectile
 		int level
 		group affected
+		unit tower
 		
-		construct(vec3 pos, vec2 target, real speed, player owner, int level)
+		construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
 			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
-			setSpeed(25)
+			this.tower = tower
+			setSpeed(speed)
 			setRanged(750.)
 			affected = CreateGroup()
 			this.level = level
@@ -41,12 +46,17 @@ package WaveTower
 			super.update()
 			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 			for u in ENUM_GROUP
-				let data = (u.getUserData() castTo UnitEntity)
-				if data != null and data instanceof Creep and not IsUnitInGroup(u, affected)
-					GroupAddUnit(affected, u)
-					UnitDamageTarget(getDummy(), u, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
-					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
-					data.setVel(vec3(ang.cos() * (4 + level*2),ang.sin() * (4 + level*5),0))
+				if u.isAliveTrick()
+					let data = (u.getUserData() castTo UnitEntity)
+					if IsUnitInGroup(u, affected)
+						getDummy().damageTarget(u, getDOT(level))
+						addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
+					else if data != null and data instanceof Creep
+						GroupAddUnit(affected, u)
+						getDummy().damageTarget(u, getDOT(level))
+						let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
+						data.setVel(vec3(ang.cos() * (4 + level*2),ang.sin() * (4 + level*2),0))
+				
 			ENUM_GROUP.clear()
 	
 		ondestroy

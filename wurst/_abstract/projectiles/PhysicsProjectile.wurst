@@ -1,0 +1,25 @@
+package PhysicsProjectile
+import Entity
+import Angle
+import Projectile
+import PhysicsEntity
+
+public abstract class OnExpireEvent
+	abstract function onExpire(vec2 pos, player owner)
+
+public class PhysicsProjectile extends Projectile
+	use PhysicsModule
+	OnExpireEvent oe
+	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath, OnExpireEvent onEvent )
+		super(pos, radius, owner, xyAngle, fxpath)
+		setXYAngle(xyAngle)
+		active = false
+		oe = onEvent
+		
+	override function update()
+		super.update()
+		physicsUpdate(this)
+		if done
+			oe.onExpire(pos.toVec2(), owner)
+		
+		

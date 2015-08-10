@@ -1,11 +1,40 @@
 package Creep
 import Entity
+import Terrain
+import initlater SpawnlingBuff
 import Bounty
 import Table
 import initlater PlayerData
 public constant CREEP_OWNER = Player(9)
 
 Table data = new Table()
+
+public int array pow2
+	
+init
+	for int i = 0 to 31
+		pow2[i] = R2I(Pow(2, I2R(i)))
+
+public function getPathingNormal(vec2 pos) returns vec2
+	int numberOfTests = 60
+	real radius = 128
+	vec2 addedVecs = vec2(0, 0)
+	for int i = 1 to numberOfTests
+		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
+		vec2 testPoint = pos + direction
+		if isTerrainWalkable(testPoint.x, testPoint.y)
+			addedVecs += direction
+	return addedVecs.setLength(1.) * (-1.)
+	
+public function getBounceVec(vec2 vel2, vec2 nor2) returns vec2
+		vec3 vel3 = vel2.toVec3()
+		vec3 nor3 = nor2.toVec3()
+		vec3 pv3 = vel3.project(nor3)
+		vec2 pv2 = pv3.toVec2()
+		pv2 *= (-1.4)
+		vec2 nvel2 = vel2
+		nvel2 += pv2
+		return nvel2
 
 public class Creep extends UnitEntity
 	int bounty
@@ -24,8 +53,11 @@ public class Creep extends UnitEntity
 	override function update()
 		if vel.lengthSquared() > .5
 			super.update()
-			pos += vel
-			vel *= 0.925 + (1 / bounty*2)
+			if isTerrainWalkable(pos.x, pos.y)
+				pos += vel
+				vel *= (0.975)
+			else
+				vel = getBounceVec(vel.toVec2(), getPathingNormal(pos.toVec2())).withZ(vel.z)
 			actor.setXY(pos.x, pos.y)
 		else
 			active = false
@@ -47,6 +79,8 @@ public class Boss extends Creep
 
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, typeId, bounty, target)
+		if typeId == 'n003'
+			new SpawnlingBuff(this, 0)
 		
 	ondestroy
 		for p in allPlayers

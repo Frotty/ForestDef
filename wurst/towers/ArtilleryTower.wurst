@@ -67,4 +67,3 @@ public function initArtilleryTower()
 	castTrigger = CreateTrigger()
 	castTrigger.addAction(function checkSpell)
 
-endpackage

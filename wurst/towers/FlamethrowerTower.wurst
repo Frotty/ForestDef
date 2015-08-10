@@ -3,18 +3,19 @@ import Tower
 import Projectile
 import TempGroups
 
-public constant string FX_PATH = "Abilities\\Spells\\Human\\FlameStrike\\FlameStrikeDamageTarget.mdl"
+public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl" 
 public constant real AOE_RADIUS = 64.
 public constant int FLAMETHROWER_ID = 'h01C'
 
 public class FlamethrowerTower extends Tower
 	int level = 1
-	
 	construct(Tower t)
 		super(t)
 		
 	override function onAttack(UnitEntity ud)
-			new FlameMissile(pos+vec3(0,0,64.),ud.pos.toVec2(), 20., owner, level)
+		for i = 0 to level
+			new FlameMissile(pos+vec3(0,0,64.),ud.pos.toVec2(), 4., owner, level)
+			
 			
 	override function onUpgrade()
 		level++
@@ -27,9 +28,10 @@ class FlameMissile extends Projectile
 	group affected
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
-		super( pos, AOE_RADIUS, owner, pos.angleTo2d(target), FX_PATH )
-		setSpeed(6.5+ GetRandomReal(-2, 2))
+		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.2,0.2)).asAngleRadians(), FX_PATH )
+		setSpeed(speed+ GetRandomReal(-2.5, 2.5))
 		setRanged(610)
+		setAcc(1.015 + GetRandomReal(-0.005, 0.005))
 		this.level = level
 
 
@@ -38,7 +40,7 @@ class FlameMissile extends Projectile
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
 		for u in ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				UnitDamageTarget(getDummy(), u, 15. * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+				UnitDamageTarget(getDummy(), u, 7.5 * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
 
 		ENUM_GROUP.clear()
 		

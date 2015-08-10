@@ -157,6 +157,8 @@ abstract public class UnitEntity extends Entity
 		let attackerData = a.getUserData() castTo UnitEntity
 		if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
 			modifyDamage(0)
+			for bff in attackerData.currentBuffs
+					bff.attackModifier()
 			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
 		else
 			debugPrint("onDamage both alive else" , 2)

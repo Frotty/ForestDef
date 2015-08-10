@@ -11,13 +11,16 @@ constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
 int killcount = 0
 function getLumber ()
 	player p = GetOwningPlayer(GetKillingUnit())
+	int woodcount = 1
+	if allPlayers.getSize() < 3
+		woodcount++
 	if p != CREEP_OWNER
 		pDatas[p.getId()].kills++
 		killcount++
 		if killcount >= 20
 			killcount = 0
 			for pd in allPlayers
-				pd.p.addLumber(1)
+				pd.p.addLumber(woodcount)
 				texttag t = CreateTextTag()
 				SetTextTagText(t, "+1" , TEXTTAG_TEXTSIZE)
 				SetTextTagPos( t, GetUnitX(pd.builder.actor)-20, GetUnitY(pd.builder.actor), -30. )

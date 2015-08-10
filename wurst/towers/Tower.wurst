@@ -33,6 +33,8 @@ public class Tower extends UnitEntity
 
 
 	function onUpgrade()
+		for bff in currentBuffs
+			bff.refresh()
 		debugPrint("onUpgrade " + actor.getTypeId().toString(), 0)
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID

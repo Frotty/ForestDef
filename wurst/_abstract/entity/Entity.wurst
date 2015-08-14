@@ -7,9 +7,10 @@ import Fx
 import Angle
 import initlater Buff
 import initlater Tower
-import DmgMod
-import public LinkedList
-
+import public ArrayList
+import public DmgMod
+import initlater PhysicsProjectile
+import MapBounds
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
@@ -31,17 +32,12 @@ public abstract class Entity
 	boolean isStatic 	= false
 	/** sleeping or active? */
 	boolean active 		= true
-	/** for removing */
-	boolean done 		= false
-	/** even if the Entites pos.z might be > 0, it still can be below terrainZ */
 	boolean flying 		= false
 
 	construct( vec3 pos, player owner )
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner
-		
-		entityCount++
 
 	construct( vec3 pos, real radius, player owner )
 		this.pos = pos
@@ -49,22 +45,16 @@ public abstract class Entity
 		this.owner = owner
 		this.radius = radius
 		
-		entityCount++
-		
 	construct( vec3 pos, vec3 vel, player owner )
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
-		
-		entityCount++
 		
 	construct( vec3 pos, vec3 vel, real radius, player owner )
 		this.pos = pos
 		this.vel = vel
 		this.owner = owner
 		this.radius = radius
-		
-		entityCount++
 		
 	function getPos() returns vec3
 		return pos
@@ -96,9 +86,6 @@ public abstract class Entity
 		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
 		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
 		
-	function terminate()
-		done = true
-		
 	/** This function is called every ANIMATION_PERIOD tick if the Entity is active */
 	abstract function update()
 	
@@ -107,7 +94,7 @@ abstract public class UnitEntity extends Entity
 	static trigger deathTrig = CreateTrigger()
 	unit actor
 	
-	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
+	ArrayList<Buff> currentBuffs = new ArrayList<Buff>()
 	
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
@@ -137,8 +124,11 @@ abstract public class UnitEntity extends Entity
 		
 	override function setPos(vec3 tpos)
 		pos = tpos
-		actor.setPos(tpos.x,tpos.y)
-		actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
+		if(pos.inPlayable())
+			actor.setPos(tpos.x,tpos.y)
+			actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
+		else 
+			destroy this
 		
 	function setXY(vec3 tpos)
 		pos = tpos
@@ -159,6 +149,14 @@ abstract public class UnitEntity extends Entity
 			modifyDamage(0)
 			for bff in attackerData.currentBuffs
 					bff.attackModifier()
+					
+			for i = 0 to 15
+				var p =new PhysicsProjectile(victimData.getPos(), 32, attackerData.owner, angle(0), "Abilities\\Weapons\\VoidWalkerMissile\\VoidWalkerMissile.mdl", null )
+				p.setVel(vec3(GetRandomReal(-1,1),GetRandomReal(-1,1),GetRandomReal(10,20)))
+				p.setTimed(60)
+				p.restitution = 0.98
+				p.speedFactor = GetRandomReal(0.3, 1.2)
+			
 			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
 		else
 			debugPrint("onDamage both alive else" , 2)
@@ -188,7 +186,7 @@ abstract public class UnitEntity extends Entity
 				debugPrint("attacker == null" , 2)
 				
 	function onDeath(unit killer)
-		terminate()
+		destroy this
 			
 	static function onEventDeath()
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
@@ -220,13 +218,16 @@ abstract public class FxEntity extends Entity
 		
 	override function update()
 		pos += (vel*speedFactor)
-		fx.setXYZ(pos)
+		setPos()
 		
 	function setFx(string sfxpath)
 		fx.setFx(sfxpath)
 		
 	function setPos()
-		fx.setXYZ(pos)
+		if(pos.inPlayable())
+			fx.setXYZ(pos)
+		else 
+			destroy this
 		
 	function getDummy() returns unit
 		return fx.getDummy()

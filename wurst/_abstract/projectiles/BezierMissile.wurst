@@ -80,7 +80,7 @@ public class BezierMissile extends Projectile
 		
 
 		if time >= duration
-			terminate()
+			destroy this
 			
 		pos = vec3(x,y,z)
 		super.update()

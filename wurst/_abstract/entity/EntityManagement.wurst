@@ -3,23 +3,14 @@ import public Entity
 import Buff
 
 function updateEntities()
-	Entity e = Entity.first
-	while e != null
-		if e.done
-			debugPrint("destroying Entity", 0)
-			destroy e
-			debugPrint("destroyed Entity", 0)
-		else if e.active
+	for e in Entity
+		if e.active
 			e.update()
-		e = e.next
 		
-	Buff b = Buff.first
-	while b != null
-		if b.done
-			destroy b
-		else
-			b.update()
-		b = b.next
+	for b in Buff
+		b.update()
+		
+	print("Entities: " + Entity.size.toString())
 
 public function startEntityLoop() returns boolean
 	getTimer().startPeriodic(0.03, function updateEntities)

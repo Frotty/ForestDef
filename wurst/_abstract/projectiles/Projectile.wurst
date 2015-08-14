@@ -61,8 +61,9 @@ public class Projectile extends FxEntity
 		if timed
 			time += ANIMATION_PERIOD
 			if time >= maxTime
-				terminate()
+				destroy this
+				return
 		if ranged
 			if startpos.distToVecSquared(pos) > maxDist
-				terminate()
+				destroy this
 		

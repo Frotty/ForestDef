@@ -12,13 +12,13 @@ public abstract class NormalBuff extends Buff
 		if running
 			duration -= ANIMATION_PERIOD
 		if duration <= 0.
-			terminate()
+			destroy this
 			
 	override function apply()
 		for bff in victim.currentBuffs
 			if bff instanceof thistype
 				bff.duration = duration
-				terminate()
+				destroy this
 				return
 				
 		victim.currentBuffs.add(this)
@@ -36,7 +36,7 @@ public abstract class StackingBuff extends Buff
 		if running
 			duration -= ANIMATION_PERIOD
 		if duration <= 0.
-			done = true
+			destroy this
 			
 	override function apply()			
 		victim.currentBuffs.add(this)

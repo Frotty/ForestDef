@@ -37,7 +37,7 @@ class ArtilleryMissile extends Projectile
 	override function update()
 		super.update()
 		if pos.z < getTerrainZ(pos.x, pos.y)
-			terminate()
+			destroy this
 		
 	ondestroy
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)

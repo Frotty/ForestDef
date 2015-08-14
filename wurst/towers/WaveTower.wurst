@@ -50,12 +50,12 @@ package WaveTower
 					let data = (u.getUserData() castTo UnitEntity)
 					if IsUnitInGroup(u, affected)
 						getDummy().damageTarget(u, getDOT(level))
-						addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
 					else if data != null and data instanceof Creep
 						GroupAddUnit(affected, u)
 						getDummy().damageTarget(u, getDOT(level))
 						let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
 						data.setVel(vec3(ang.cos() * (4 + level*2),ang.sin() * (4 + level*2),0))
+						addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
 				
 			ENUM_GROUP.clear()
 	

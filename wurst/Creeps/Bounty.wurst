@@ -1,5 +1,4 @@
 package Bounty
-
 //LEAVE THESE UNCHANGED
 boolean array PLAYER_INDICATOR
 //SYSTEM
@@ -19,13 +18,14 @@ constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
 	
 
 public function showBountyTextTag ( integer bounty, unit receiver, player p )
-	if ( GetLocalPlayer() == p )
-		texttag t = CreateTextTag()
-		SetTextTagText(t, "+" + I2S(bounty), TEXTTAG_TEXTSIZE)
-		SetTextTagPos( t, GetUnitX(receiver)-20, GetUnitY(receiver), -30. )
-		SetTextTagColor( t, 255, 220, 0, 255 )
-		SetTextTagPermanent( t, false )
-		SetTextTagVelocity(t, 0, TEXTTAG_VELOCITY)
-		SetTextTagLifespan( t, TEXTTAG_LIFESPAN )
-		SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
-		SetTextTagVisibility( t, true )
+	if(bounty > 0)
+		if ( GetLocalPlayer() == p )
+			texttag t = CreateTextTag()
+			SetTextTagText(t, "+" + I2S(bounty), TEXTTAG_TEXTSIZE)
+			SetTextTagPos( t, GetUnitX(receiver)-20, GetUnitY(receiver), -30. )
+			SetTextTagColor( t, 255, 220, 0, 255 )
+			SetTextTagPermanent( t, false )
+			SetTextTagVelocity(t, 0, TEXTTAG_VELOCITY)
+			SetTextTagLifespan( t, TEXTTAG_LIFESPAN )
+			SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
+			SetTextTagVisibility( t, true )

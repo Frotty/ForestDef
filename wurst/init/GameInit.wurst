@@ -14,7 +14,11 @@ import StompingTower
 import TrooperTower
 import EntityManagement
 import Wave
-
+import Terrain
+import Fx
+import ArrayList
+import PhysicsEntity
+import ClosureTimers
 function start()
 	initLumberSystem()
 	initDestroy()
@@ -33,11 +37,96 @@ function start()
 	startEntityLoop()
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	
+	
 function spawn()
 	startSpawn()
 	GetExpiredTimer().release()
 	
+
+ArrayList<Fx> fxs
+	
+function norm()
+	if fxs != null and fxs.getSize() > 0
+		for fx in fxs
+			destroy fx
+		destroy fxs
+	fxs = new ArrayList<Fx>()
+	var s = GetEventPlayerChatString()
+	s = s.substring(1)
+	var sample = s.toInt() * 1.0
+	vec2 tmid = vec2(1600, 1800)
+	for i2 = -10 to 0
+		for j = -10 to 0
+			var pos = vec3(tmid.x + 32 * i2, tmid.y + 32 * j, 0)
+			pos.z = getTerrainZ(pos.z, pos.y)
+			vec3 norm
+			if(useTwo) 
+				norm = getTerrainNormal2(pos.x, pos.y, sample)
+			else
+				norm = getTerrainNormal(pos.x, pos.y, sample)
+			var tpos = pos.moveTowards(pos+norm, 5)
+			var fx = new Fx(pos, pos.angleTo2d(tpos), "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl" )
+			fxs.add(fx)
+			fx.setZAngle(getSlopeAngle(pos.z, tpos.z, 1))
+	doAfter(0.1, () -> begin
+		for i2 = 0 to 10
+			for j = 0 to 10
+				var pos = vec3(tmid.x + 32 * i2, tmid.y + 32 * j, 0)
+				pos.z = getTerrainZ(pos.z, pos.y)
+				vec3 norm
+				if(useTwo) 
+					norm = getTerrainNormal2(pos.x, pos.y, sample)
+				else
+					norm = getTerrainNormal(pos.x, pos.y, sample)
+				var tpos = pos.moveTowards(pos+norm, 5)
+				var fx = new Fx(pos, pos.angleTo2d(tpos), "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl" )
+				fxs.add(fx)
+				fx.setZAngle(getSlopeAngle(pos.z, tpos.z, 1))
+	end)
+	doAfter(0.2, () -> begin
+		for i2 = -10 to 0
+			for j = 0 to 10
+				var pos = vec3(tmid.x + 32 * i2, tmid.y + 32 * j, 0)
+				pos.z = getTerrainZ(pos.z, pos.y)
+				vec3 norm
+				if(useTwo) 
+					norm = getTerrainNormal2(pos.x, pos.y, sample)
+				else
+					norm = getTerrainNormal(pos.x, pos.y, sample)
+				var tpos = pos.moveTowards(pos+norm, 5)
+				var fx = new Fx(pos, pos.angleTo2d(tpos), "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl" )
+				fxs.add(fx)
+				fx.setZAngle(getSlopeAngle(pos.z, tpos.z, 1))
+	end)
+	doAfter(0.3, () -> begin
+		for i2 = 0 to 10
+			for j = -10 to 0
+				var pos = vec3(tmid.x + 32 * i2, tmid.y + 32 * j, 0)
+				pos.z = getTerrainZ(pos.z, pos.y)
+				vec3 norm
+				if(useTwo) 
+					norm = getTerrainNormal2(pos.x, pos.y, sample)
+				else
+					norm = getTerrainNormal(pos.x, pos.y, sample)
+				var tpos = pos.moveTowards(pos+norm, 5)
+				var fx = new Fx(pos, pos.angleTo2d(tpos), "Abilities\\Weapons\\GuardTowerMissile\\GuardTowerMissile.mdl" )
+				fxs.add(fx)
+				fx.setZAngle(getSlopeAngle(pos.z, tpos.z, 1))
+	end)
 init
 	getTimer().start( 0.1, function start )
 	getTimer().start( 50., function spawn )
+
+	let t = CreateTrigger()
+//	t.addAction(() -> norm())
+//	for i = 0 to 11
+//		t.registerPlayerChatEvent(Player(i), "-", false)
+		
+	let t2 = CreateTrigger()
+	t2.addAction(() -> begin 
+		useTwo = not useTwo 
+		print("usingTwo: " + useTwo.toString())
+	end)
+	for i = 0 to 11
+		t2.registerPlayerChatEvent(Player(i), "-x", false)
 

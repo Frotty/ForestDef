@@ -1,7 +1,6 @@
 package ShieldBuff
 import PresetBuffs
 import DmgMod
-
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
 	boolean silent = false
@@ -22,7 +21,7 @@ public class NormalShieldBuff extends NormalBuff
 				sd.blockAmount += blockAmount
 				silent = true
 				debugPrint("SILENCE" , 2)	
-				terminate()
+				destroy this
 				return
 		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)	
 		victim.currentBuffs.add(this)

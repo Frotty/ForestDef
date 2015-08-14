@@ -4,6 +4,7 @@ import Terrain
 import PhysicsConstants
 import Debug
 
+public boolean useTwo = false
 //Module for Physical Simulation
 public module PhysicsModule
 	/** Affected by gravity */
@@ -18,7 +19,6 @@ public module PhysicsModule
 	// Defines the bounciness
 	real restitution = 0.5
 		
-		
 	// This function is called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
 		terrainZ = getTerrainZ(e.pos.x, e.pos.y)
@@ -32,7 +32,7 @@ public module PhysicsModule
 	// When the Entity is on or near the ground	
 	function onGround(Entity e)
 		// If the Entity is moving towards 
-		vec3 normal = getTerrainNormal(e.pos.x, e.pos.y, 2.)
+		vec3 normal = getTerrainNormal2(e.pos.x, e.pos.y, 2.).norm()
 		// Is the Entity going away from the ground?
 		if e.vel.dot(normal) > 0 
 			return

@@ -9,7 +9,6 @@ public abstract class Buff
 	real duration
 	int abilId
 	boolean running = true
-	boolean done = false
 	effect fx
 
 	construct(UnitEntity victim, real dur, int abilId)
@@ -21,10 +20,7 @@ public abstract class Buff
 		if running
 			duration -= ANIMATION_PERIOD
 		if duration <= 0.
-			terminate()
-			
-	function terminate()
-		done = true
+			destroy this
 		
 	function setEffect(string s, string attachment)
 		fx = victim.actor.addEffect(s, attachment)	

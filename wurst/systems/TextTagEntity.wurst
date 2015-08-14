@@ -20,7 +20,7 @@ public class TextTagEntity extends Entity
 		tt.setPos(pos)
 		dur -= ANIMATION_PERIOD
 		if dur <= 0
-			terminate()
+			destroy this
 			
 	ondestroy
 		DestroyTextTag(tt)

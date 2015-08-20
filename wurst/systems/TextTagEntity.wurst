@@ -18,7 +18,7 @@ public class TextTagEntity extends Entity
 		vel += gravity
 		pos += vel
 		tt.setPos(pos)
-		dur -= ANIMATION_PERIOD
+		dur -= tick
 		if dur <= 0
 			done = true
 			

@@ -3,12 +3,20 @@ import public Entity
 import Buff
 
 function updateEntities()
+	var activee = 0
 	for e in Entity
 		if e.active
+			activee++
 			e.update()
 		if e.done
 			destroy e
-		
+			
+	var tick = ANIMATION_PERIOD + activee/2750.
+	if tick > 0.06
+		tick = 0.06
+	GetExpiredTimer().start(tick, function updateEntities)
+
+function updateBuffs()		
 	for b in Buff
 		b.update()
 		if b.done
@@ -16,5 +24,6 @@ function updateEntities()
 			
 			
 public function startEntityLoop() returns boolean
-	getTimer().startPeriodic(0.03, function updateEntities)
+	getTimer().start(ANIMATION_PERIOD, function updateEntities)
+	getTimer().startPeriodic(BUFF_ANIM_PERIOD, function updateBuffs)
 	return true

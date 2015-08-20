@@ -3,6 +3,7 @@ import public Entity
 import initlater PresetBuffs
 import LinkedListModule
 
+public constant BUFF_ANIM_PERIOD = 0.25
 public abstract class Buff
 	use LinkedListModule
 	UnitEntity victim
@@ -21,7 +22,7 @@ public abstract class Buff
 
 	function update()
 		if running
-			duration -= ANIMATION_PERIOD
+			duration -= BUFF_ANIM_PERIOD
 		if duration <= 0.
 			done = true
 		
@@ -44,8 +45,6 @@ public abstract class Buff
 					break
 			if isLast
 				victim.actor.removeAbility(abilId)
-		if this instanceof NormalBuff
-			victim.actor.removeAbility(abilId)			
 		if fx != null
 			fx.destr()
 		

@@ -45,7 +45,7 @@ public class BezierMissile extends Projectile
 		real dz
 		
 
-		time += ANIMATION_PERIOD
+		time += tick
 		
 		p = time / duration
 		q = 1 - p

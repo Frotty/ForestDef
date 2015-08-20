@@ -1,5 +1,5 @@
 package Projectile
-import Entity
+import public Entity
 import Angle
 
 
@@ -58,7 +58,7 @@ public class Projectile extends FxEntity
 		pos += vel
 		setPos()
 		if timed
-			time += ANIMATION_PERIOD
+			time += tick
 			if time >= maxTime
 				done = true
 				return

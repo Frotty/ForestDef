@@ -8,8 +8,6 @@ import Table
 import initlater PlayerData
 public constant CREEP_OWNER = Player(9)
 
-Table data = new Table()
-
 public int array pow2
 	
 init

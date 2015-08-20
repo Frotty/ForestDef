@@ -15,13 +15,10 @@ int level = 1
 	
 		
 function onSpawnTime()	
-	debugPrint("spawntime", 0)
 	if level mod 7 == 0
 		specialWaves.dequeue().spawn()
 	else
-		debugPrint("level not mod 0", 0)
 		normalWaves.dequeue().spawn()
-		debugPrint("normal spawned", 0)
 		if level mod 4 == 0
 			bossWaves.dequeue().spawn()
 		
@@ -76,11 +73,11 @@ function initWaves()
 	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
 	
 	
-	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2))
-	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1))
-	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5))
-	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1))
-	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1))
+	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "  Fast, melee, spawns minions on death"))
+	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, "  Average speed, melee"))
+	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, "  slow, melee, slow but powerful attack"))
+	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, "  Fast, melee, attacks all surrounding buildings with acid"))
+	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "  Average speed, tanky unit"))
 
 	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
 	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
@@ -94,7 +91,6 @@ public function startSpawn()
 	timer t = CreateTimer()
 	t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
-	PlaySoundBJ( gg_snd_PigWhat2 )
 	
 public function initSpawn()
 	initWaves()

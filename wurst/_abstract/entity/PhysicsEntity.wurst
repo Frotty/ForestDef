@@ -3,8 +3,8 @@ import Entity
 import Terrain
 import PhysicsConstants
 import Debug
+import Maths
 
-public boolean useTwo = false
 //Module for Physical Simulation
 public module PhysicsModule
 	/** Affected by gravity */
@@ -15,9 +15,12 @@ public module PhysicsModule
 	// Physical factors
 	
 	// The higher the more slide. Should be < 1.
-	real friction = 0.9
+	real surfaceFriction = 0.9
 	// Defines the bounciness
-	real restitution = 0.5
+	real restitution = 0.9
+	// The density of the object
+	real mass = 0
+	
 		
 	// This function is called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
@@ -26,8 +29,8 @@ public module PhysicsModule
 			onGround(e)
 		else
 			inAir(e)
-			
-		e.pos += (e.vel * e.speedFactor)
+		
+		e.pos += e.vel
 		
 	// When the Entity is on or near the ground	
 	function onGround(Entity e)
@@ -42,7 +45,7 @@ public module PhysicsModule
 		if pv.z > 4.
 			e.vel += pv
 		else	
-			e.vel *= friction
+			e.vel *= surfaceFriction * (1/mass)
 			
 		e.pos.z = terrainZ
 		

@@ -29,13 +29,11 @@ public class Tower extends UnitEntity
 		destroy t
 	
 	function onAttack(UnitEntity target)
-		debugPrint("onAttack - normal", 2)
 
 
 	function onUpgrade()
 		for bff in currentBuffs
 			bff.refresh()
-		debugPrint("onUpgrade " + actor.getTypeId().toString(), 0)
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
 				debugPrint("isWave", 0)

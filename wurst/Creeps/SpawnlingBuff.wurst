@@ -11,15 +11,17 @@ public class SpawnlingBuff extends NormalShieldBuff
 		super(victim, 9999999, abilId, 0)
 		
 	override function defenseModifier()
-		if victim.actor.getHP() - getDamage() < .405
+		if not done and victim.actor.getHP() - getDamage() < .405
+			done = true
 			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", victim.actor.getPos()).destr()
 			for i = 0 to 5
-				var pj = new PhysicsProjectile(victim.getPos(), 16, victim.owner, GetRandomReal(0,1).asAngleRadians()
+				var pj = new PhysicsProjectile(victim.getPos() + vec3(0,0,32), 16, victim.owner, GetRandomReal(0,1).asAngleRadians()
 				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12) )
-				pj.setTimed(GetRandomReal(2,4))
-				pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(10,17)))
-				pj.restitution = 0.8
-			destroy this
+				pj.setTimed(GetRandomReal(2,3))
+				pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
+				pj.restitution = 0.75
+				pj.surfaceFriction = 0.75
+			
 		
 		
 	override function attackModifier()

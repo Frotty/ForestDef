@@ -32,7 +32,7 @@ public function getBounceVec(vec2 vel2, vec2 nor2) returns vec2
 		vec3 nor3 = nor2.toVec3()
 		vec3 pv3 = vel3.project(nor3)
 		vec2 pv2 = pv3.toVec2()
-		pv2 *= (-1.4)
+		pv2 *= (-1.5)
 		vec2 nvel2 = vel2
 		nvel2 += pv2
 		return nvel2
@@ -47,12 +47,12 @@ public class Creep extends UnitEntity
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
-		active = false
 		this.bounty = bounty
+		active = false
 		
 	
 	override function update()
-		if vel.lengthSquared() > .5
+		if vel.lengthSquared() > 1.5
 			super.update()
 			if isTerrainWalkable(pos.x, pos.y)
 				pos += vel
@@ -77,17 +77,20 @@ public class Creep extends UnitEntity
 				
 	
 public class Boss extends Creep
-	static Sound snd = new Sound("Units//Undead//Abomination//AbominationAlternateDeath1.wav", 2320, false)
-
+	static Sound snd = new Sound("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", 2320, false)
+	effect glow
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
 		super(pos, typeId, bounty, target)
+		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
 		if typeId == 'n003'
 			snd.play()
 			new SpawnlingBuff(this, 0)
 		
 	ondestroy
 		for p in allPlayers
-			p.p.addLumber(2)
+			p.p.addLumber(1)
+		if glow != null
+			glow.destr()
 		
 public class Special extends Creep
 

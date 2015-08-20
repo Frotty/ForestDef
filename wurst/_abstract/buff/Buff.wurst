@@ -1,5 +1,6 @@
 package Buff
 import public Entity
+import initlater PresetBuffs
 import LinkedListModule
 
 public abstract class Buff
@@ -10,6 +11,8 @@ public abstract class Buff
 	int abilId
 	boolean running = true
 	effect fx
+	
+	boolean done = false
 
 	construct(UnitEntity victim, real dur, int abilId)
 		this.victim = victim
@@ -20,28 +23,33 @@ public abstract class Buff
 		if running
 			duration -= ANIMATION_PERIOD
 		if duration <= 0.
-			destroy this
+			done = true
 		
 	function setEffect(string s, string attachment)
 		fx = victim.actor.addEffect(s, attachment)	
 		
 	function refresh() 
 		if not victim.actor.hasAbility(abilId)
+			if fx != null
+				fx.destr()
 			victim.actor.addAbility(abilId)
-	
+			
 	ondestroy
-		victim.currentBuffs.remove(this)
-		boolean isLast = true
-		for bff in victim.currentBuffs
-			if bff.abilId == this.abilId
-				isLast = false
-				break
-				
+		if not victim.done
+			victim.currentBuffs.remove(this)
+			boolean isLast = true
+			for bff in victim.currentBuffs
+				if bff.typeId == this.typeId
+					isLast = false
+					break
+			if isLast
+				victim.actor.removeAbility(abilId)
+		if this instanceof NormalBuff
+			victim.actor.removeAbility(abilId)			
 		if fx != null
 			fx.destr()
 		
-		if isLast
-			victim.actor.removeAbility(abilId)
+		
 			
 	abstract function apply()
 

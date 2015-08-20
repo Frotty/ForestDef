@@ -1,67 +1,69 @@
 package WaveTower
-	import Tower
-	import Projectile
-	import TempGroups
-	import Creep
+import Tower
+import Projectile
+import TempGroups
+import Creep
 
-	constant real AREA_OF_EFFECT = 200.
-	public constant int FIRST_WAVE_ID = 'h01N'
-	constant string FX_PATH = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl"
+constant real AREA_OF_EFFECT = 200.
+public constant int FIRST_WAVE_ID = 'h01N'
+constant string FX_PATH = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl"
+
+public class WaveTower extends Tower
+	int level = 1
 	
-	public class WaveTower extends Tower
-		int level = 1
+	construct(Tower t)
+		super(t)
+		active = false
 		
-		construct(Tower t)
-			super(t)
-			active = false
+	override function onAttack(UnitEntity ud)
+		new WaveMissile(pos,ud.pos.toVec2(), 17.5, owner, level, actor)
+		
+	override function onUpgrade()
+		level++
+
+	
+function getBlowDamage(int level) returns real//towerlevel
+	return ((75. * level) + 50.)
+	
+function getDOT(int level) returns real//towerlevel
+	return ((5. * level))
+
+class WaveMissile extends Projectile
+	int level
+	group affected
+	unit tower
+	
+	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
+		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
+		this.tower = tower
+		setSpeed(speed)
+		setRanged(750.)
+		affected = CreateGroup()
+		this.level = level
+
+
+	override function update()
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
+		for u in ENUM_GROUP
+			if u.isAliveTrick()
+				let data = (u.getUserData() castTo UnitEntity)
+				if IsUnitInGroup(u, affected)
+					getDummy().damageTarget(u, getDOT(level))
+				else if data != null and data instanceof Creep
+					GroupAddUnit(affected, u)
+					getDummy().damageTarget(u, getDOT(level))
+					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
+					if data instanceof Boss
+						data.setVel(vec3(ang.cos() * (5+ level),ang.sin() * (5+level),0))
+					else
+						data.setVel(vec3(ang.cos() * (6 + level*2),ang.sin() * (6 + level*2),0))
+					addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
 			
-		override function onAttack(UnitEntity ud)
-			new WaveMissile(pos,ud.pos.toVec2(), 17.5, owner, level, actor)
-			
-		override function onUpgrade()
-			level++
-	
-		
-	function getBlowDamage(int level) returns real//towerlevel
-		return ((75. * level) + 50.)
-		
-	function getDOT(int level) returns real//towerlevel
-		return ((5. * level))
-	
-	class WaveMissile extends Projectile
-		int level
-		group affected
-		unit tower
-		
-		construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
-			super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
-			this.tower = tower
-			setSpeed(speed)
-			setRanged(750.)
-			affected = CreateGroup()
-			this.level = level
+		ENUM_GROUP.clear()
+		super.update()
 
-
-		override function update()
-			super.update()
-			GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
-			for u in ENUM_GROUP
-				if u.isAliveTrick()
-					let data = (u.getUserData() castTo UnitEntity)
-					if IsUnitInGroup(u, affected)
-						getDummy().damageTarget(u, getDOT(level))
-					else if data != null and data instanceof Creep
-						GroupAddUnit(affected, u)
-						getDummy().damageTarget(u, getDOT(level))
-						let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
-						data.setVel(vec3(ang.cos() * (4 + level*2),ang.sin() * (4 + level*2),0))
-						addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
-				
-			ENUM_GROUP.clear()
-	
-		ondestroy
-			DestroyGroup(affected)
+	ondestroy
+		DestroyGroup(affected)
 
 
 
-endpackage

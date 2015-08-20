@@ -13,7 +13,7 @@ function lose()
 	PauseGame( true )
 	
 function endGameTimer()
-	print("died")
+	print("You lost!")
 	timer t = CreateTimer()
 	t.start( 1., function lose )
 	

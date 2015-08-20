@@ -18,7 +18,7 @@ public class ArtilleryTower extends Tower
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		level = 0
-		SetUnitPropWindow(actor, 0.)
+		actor.setPropWindow(0.)
 		
 	override function onUpgrade()
 		level ++
@@ -35,15 +35,15 @@ class ArtilleryMissile extends Projectile
 	
 	
 	override function update()
-		super.update()
 		if pos.z < getTerrainZ(pos.x, pos.y)
-			destroy this
+			done = true
+			return			
+		super.update()
 		
 	ondestroy
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)
 		for u in ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				let ud = u.getUserData() castTo UnitEntity
 				UnitDamageTarget(getDummy(), u, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)	
 		ENUM_GROUP.clear()
 		addEffect("Abilities\\Weapons\\FragDriller\\FragDriller.mdl", pos).destr()

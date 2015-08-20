@@ -1,6 +1,7 @@
 package ShieldBuff
 import PresetBuffs
 import DmgMod
+
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
 	boolean silent = false
@@ -9,32 +10,31 @@ public class NormalShieldBuff extends NormalBuff
 		super(victim, dur, abilId)
 		blockAmount = amount
 		apply()
-		debugPrint("amount set", 2)
-
+		
+	override function update()
+		super.update()
+		if blockAmount <= 0
+			done = true
 		
 	override function apply()
-		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)
 		for bff in victim.currentBuffs
 			if bff instanceof thistype
 				let sd = bff castTo thistype
 				sd.duration = duration
 				sd.blockAmount += blockAmount
 				silent = true
-				debugPrint("SILENCE" , 2)	
-				destroy this
+				done = true
 				return
-		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)	
 		victim.currentBuffs.add(this)
 		victim.actor.addAbility(abilId)
-		debugPrint("current Buffs: " + victim.currentBuffs.getSize().toString() , 2)
-		debugPrint("added ABil", 2)
 		
 
 	override function defenseModifier()
 		let dmg = getDamage()
 		if dmg >= blockAmount
 			modifyDamageBy(-blockAmount)
-			destroy this
+			blockAmount = 0
+			done = true
 		else
 			modifyDamage(0)
 			blockAmount = blockAmount - dmg

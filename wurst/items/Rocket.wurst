@@ -1,0 +1,10 @@
+package Rocket
+import PhysicsProjectile
+
+//class Rocket extends PhysicsProjectile
+//	
+//	construct(vec3 startPos, vec3 targetPos)
+//		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", null )
+//		
+//class Shrapnell 
+//	

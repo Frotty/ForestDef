@@ -1,0 +1,19 @@
+package ParaTower
+import Tower
+import PresetBuffs
+
+class ParaBuff extends NormalBuff
+	construct(UnitEntity victim, real dur, int abilId)
+		super(victim, dur, abilId)
+		
+	override function attackModifier()
+	
+	override function defenseModifier()
+		if getDamage() > victim.actor.getHP()
+			
+
+class ParaTower extends Tower
+	int level = 1
+	
+	construct(Tower t)
+		super(t)

@@ -6,12 +6,15 @@ function updateEntities()
 	for e in Entity
 		if e.active
 			e.update()
+		if e.done
+			destroy e
 		
 	for b in Buff
 		b.update()
-		
-	print("Entities: " + Entity.size.toString())
-
+		if b.done
+			destroy b
+			
+			
 public function startEntityLoop() returns boolean
 	getTimer().startPeriodic(0.03, function updateEntities)
 	return true

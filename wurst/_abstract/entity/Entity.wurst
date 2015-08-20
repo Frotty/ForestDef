@@ -2,15 +2,16 @@ package Entity
 import LinkedListModule
 import Terrain
 import PhysicsConstants
-import Debug
+import initlater PhysicsProjectile
 import Fx
 import Angle
 import initlater Buff
 import initlater Tower
-import public ArrayList
+import public LinkedList
 import public DmgMod
-import initlater PhysicsProjectile
 import MapBounds
+import Squares
+import initlater TextTagEntity
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
@@ -33,6 +34,7 @@ public abstract class Entity
 	/** sleeping or active? */
 	boolean active 		= true
 	boolean flying 		= false
+	boolean done 		= false
 
 	construct( vec3 pos, player owner )
 		this.pos = pos
@@ -94,7 +96,7 @@ abstract public class UnitEntity extends Entity
 	static trigger deathTrig = CreateTrigger()
 	unit actor
 	
-	ArrayList<Buff> currentBuffs = new ArrayList<Buff>()
+	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
 	
 	construct( vec3 pos, unit actor )
 		super(pos, actor.getOwner())
@@ -102,14 +104,12 @@ abstract public class UnitEntity extends Entity
 		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
 		deathTrig.registerUnitEvent(actor, EVENT_UNIT_DEATH)
-		unitEntityCount++
 		
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
 		this.actor = actor
 		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
-		unitEntityCount++
 		
 	override function update()
 		updatePos()
@@ -128,69 +128,50 @@ abstract public class UnitEntity extends Entity
 			actor.setPos(tpos.x,tpos.y)
 			actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
 		else 
-			destroy this
+			done = true
 		
 	function setXY(vec3 tpos)
 		pos = tpos
 		actor.setXY(tpos.x,tpos.y)
 		
 	static function onDamage()
-		debugPrint("onDamage " + getDamage().toString() , 2)
 		let v = GetTriggerUnit()
 		let a = GetEventDamageSource()
-		debugPrint("onDamage a: " + a.getName() , 2)
-		debugPrint("onDamage v: " + v.getName() , 2)
 		if a.getHP() < 0.405 or v.getHP() < 0.405
 			return
-		debugPrint("onDamage both alive" , 2)
 		let victimData = v.getUserData() castTo UnitEntity
 		let attackerData = a.getUserData() castTo UnitEntity
 		if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
-			modifyDamage(0)
+			if getDamage() > 1
+				new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
+				,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
 			for bff in attackerData.currentBuffs
 					bff.attackModifier()
-					
-			for i = 0 to 15
-				var p =new PhysicsProjectile(victimData.getPos(), 32, attackerData.owner, angle(0), "Abilities\\Weapons\\VoidWalkerMissile\\VoidWalkerMissile.mdl", null )
-				p.setVel(vec3(GetRandomReal(-1,1),GetRandomReal(-1,1),GetRandomReal(10,20)))
-				p.setTimed(60)
-				p.restitution = 0.98
-				p.speedFactor = GetRandomReal(0.3, 1.2)
-			
-			debugPrint("onDamage no dmg " + getDamage().toString() , 2)
+			modifyDamage(0)
 		else
-			debugPrint("onDamage both alive else" , 2)
 			if victimData != null
-				debugPrint("vcitim != null" , 2)
-				debugPrint("onDamage userData + " + GetAttacker().getName() , 2)
-				debugPrint("def mod " + victimData.currentBuffs.getSize().toString() , 2)
 				for bff in victimData.currentBuffs
 					bff.defenseModifier()
-					debugPrint("def mod" , 2)
 					
-				debugPrint("onDamage applied victim buffs attackerdata: " + (attackerData castTo int).toString()  , 2)
 			
-			debugPrint("attacker ? null" , 2)
 			if attackerData != null
-				debugPrint("attacker != null" , 2)
-				debugPrint("onDamage attack != null" , 0)
 				for bff in attackerData.currentBuffs
 					bff.attackModifier()
 				if attackerData instanceof Tower
-					debugPrint("onDamage attack == tower" , 0)
 					let td = attackerData castTo Tower
 					victimData.updatePos()
 					td.onAttack(victimData)
-					debugPrint("onDamage called onAttack" , 0)
 			else
-				debugPrint("attacker == null" , 2)
 				
 	function onDeath(unit killer)
-		destroy this
+		done = true
 			
 	static function onEventDeath()
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
 		data.onDeath(GetKillingUnit())
+		
+	ondestroy
+		destroy currentBuffs
 		
 
 		
@@ -227,7 +208,7 @@ abstract public class FxEntity extends Entity
 		if(pos.inPlayable())
 			fx.setXYZ(pos)
 		else 
-			destroy this
+			done = true
 		
 	function getDummy() returns unit
 		return fx.getDummy()

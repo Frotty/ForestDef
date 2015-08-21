@@ -12,6 +12,7 @@ public class WarningBuff extends NormalShieldBuff
 	real startedTime
 	real lastWarning
 	real lastSelect
+	
 	construct(UnitEntity victim, int abilId)
 		super(victim, 9999999, abilId, 0)
 		startedTime = currentTime

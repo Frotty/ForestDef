@@ -58,7 +58,7 @@ public class Projectile extends FxEntity
 		pos += vel
 		setPos()
 		if timed
-			time += tick
+			time += ANIMATION_PERIOD
 			if time >= maxTime
 				done = true
 				return

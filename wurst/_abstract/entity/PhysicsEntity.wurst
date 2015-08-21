@@ -35,7 +35,7 @@ public module PhysicsModule
 	// When the Entity is on or near the ground	
 	function onGround(Entity e)
 		// If the Entity is moving towards 
-		vec3 normal = getTerrainNormal2(e.pos.x, e.pos.y, 2.).norm()
+		vec3 normal = getTerrainNormal(e.pos.x, e.pos.y, 2.).norm()
 		// Is the Entity going away from the ground?
 		if e.vel.dot(normal) > 0 
 			return

@@ -36,7 +36,7 @@ public abstract class Buff
 			victim.actor.addAbility(abilId)
 			
 	ondestroy
-		if not victim.done
+		if victim != null and not victim.done
 			victim.currentBuffs.remove(this)
 			boolean isLast = true
 			for bff in victim.currentBuffs
@@ -45,6 +45,7 @@ public abstract class Buff
 					break
 			if isLast
 				victim.actor.removeAbility(abilId)
+			
 		if fx != null
 			fx.destr()
 		

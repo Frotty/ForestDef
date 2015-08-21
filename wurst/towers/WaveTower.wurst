@@ -26,7 +26,10 @@ function getBlowDamage(int level) returns real//towerlevel
 	return ((75. * level) + 50.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((5. * level))
+	return ((7.5 * level))
+	
+function getKB(int level) returns real//towerlevel
+	return (4. + (level*level))
 
 class WaveMissile extends Projectile
 	int level
@@ -43,6 +46,7 @@ class WaveMissile extends Projectile
 
 
 	override function update()
+		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u in ENUM_GROUP
 			if u.isAliveTrick()
@@ -53,14 +57,14 @@ class WaveMissile extends Projectile
 					GroupAddUnit(affected, u)
 					getDummy().damageTarget(u, getDOT(level))
 					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
+					var kb = getKB(level)
 					if data instanceof Boss
-						data.setVel(vec3(ang.cos() * (5+ level),ang.sin() * (5+level),0))
+						data.setVel(vec3(ang.cos() * (kb * 0.75),ang.sin() * (kb * 0.75),0))
 					else
-						data.setVel(vec3(ang.cos() * (6 + level*2),ang.sin() * (6 + level*2),0))
+						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
 			
 		ENUM_GROUP.clear()
-		super.update()
 
 	ondestroy
 		DestroyGroup(affected)

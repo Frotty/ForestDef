@@ -13,4 +13,4 @@ public class Builder extends UnitEntity
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
-		new WarningBuff(this, 0)
+		new WarningBuff(this, 999999)

@@ -48,7 +48,6 @@ public class Creep extends UnitEntity
 		this.bounty = bounty
 		active = false
 		
-	
 	override function update()
 		if vel.lengthSquared() > 1.5
 			super.update()
@@ -62,16 +61,20 @@ public class Creep extends UnitEntity
 			active = false
 		
 	override function onDeath(unit killer)
-		super.onDeath(killer)
 		actor.setUserData(0)
-		int killBounty = bounty div allPlayers.getSize() + 1
-		int restBounty = ((bounty-killBounty) / (allPlayers.getSize() - 1.)).round()
+		var size = allPlayers.getSize()
+		int killBounty = bounty div size + bounty mod size
+		int restBounty = 0
+		if size > 1
+			restBounty = ((bounty-killBounty) / (size - 1.)).round()
+			
 		killer.getOwner().addGold(killBounty)
 		showBountyTextTag(killBounty, actor, killer.getOwner())
 		for pd in allPlayers
 			if(pd.p != killer.getOwner())
 				pd.p.addGold(restBounty)
 				showBountyTextTag(restBounty, actor, pd.p)
+		super.onDeath(killer)
 				
 	
 public class Boss extends Creep

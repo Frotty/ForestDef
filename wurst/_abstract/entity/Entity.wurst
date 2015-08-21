@@ -13,8 +13,6 @@ import MapBounds
 import Squares
 import initlater TextTagEntity
 
-public real tick = ANIMATION_PERIOD
-
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
@@ -149,22 +147,23 @@ abstract public class UnitEntity extends Entity
 				new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
 				,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
 			for bff in attackerData.currentBuffs
+				if not bff.done
 					bff.attackModifier()
 			modifyDamage(0)
 		else
 			if victimData != null
 				for bff in victimData.currentBuffs
-					bff.defenseModifier()
+					if not bff.done
+						bff.defenseModifier()
 					
-			
 			if attackerData != null
 				for bff in attackerData.currentBuffs
-					bff.attackModifier()
+					if not bff.done
+						bff.attackModifier()
 				if attackerData instanceof Tower
 					let td = attackerData castTo Tower
 					victimData.updatePos()
 					td.onAttack(victimData)
-			else
 				
 	function onDeath(unit killer)
 		done = true
@@ -175,10 +174,10 @@ abstract public class UnitEntity extends Entity
 		
 	ondestroy
 		for bff in currentBuffs
+			bff.victim = null
 			bff.done = true
 		destroy currentBuffs
 		
-
 		
 init
 	UnitEntity.dmgTrig.addAction(function UnitEntity.onDamage)		

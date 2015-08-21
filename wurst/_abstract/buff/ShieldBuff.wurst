@@ -13,7 +13,7 @@ public class NormalShieldBuff extends NormalBuff
 		
 	override function update()
 		super.update()
-		if blockAmount <= 0
+		if blockAmount < 0
 			done = true
 		
 	override function apply()

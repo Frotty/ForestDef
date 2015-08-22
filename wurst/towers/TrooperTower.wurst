@@ -15,7 +15,7 @@ package TrooperTower
 		vec2 staticpos
 		
 		construct (unit troop, angle tangle)
-			super(vec3(troop.getX(),troop.getY(),0),troop)
+			super(vec3(troop.getX(),troop.getY(),0),64,troop)
 			staticpos = vec2(actor.getX(), actor.getY())
 			
 		function setStaticPos()

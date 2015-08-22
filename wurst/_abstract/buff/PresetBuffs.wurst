@@ -1,6 +1,5 @@
 package PresetBuffs
-import public Entity
-import Buff
+import public Buff
 
 
 public abstract class NormalBuff extends Buff
@@ -17,8 +16,6 @@ public abstract class NormalBuff extends Buff
 				
 		victim.currentBuffs.add(this)
 		victim.actor.addAbility(abilId)
-		
-	
 
 public abstract class StackingBuff extends Buff
 

@@ -6,7 +6,7 @@ import WarningBuff
 public class Builder extends UnitEntity
 	
 	construct(vec3 pos, player owner)
-		super(pos, createUnit( owner, 'h00F', pos, angle(0)))
+		super(pos, 0, createUnit( owner, 'h00F', pos, angle(0)))
 		IssueImmediateOrder( actor, "repairon" )
 		DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", pos.x, pos.y ) )
 		if GetLocalPlayer() == owner

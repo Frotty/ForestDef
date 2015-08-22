@@ -8,13 +8,13 @@ import GameTimer
 
 Sound snd = new Sound("Abilities\\Spells\\Other\\Silence\\Silence1.wav", 2276, false)
 
-public class WarningBuff extends NormalShieldBuff
+public class WarningBuff extends NormalBuff
 	real startedTime
 	real lastWarning
 	real lastSelect
 	
 	construct(UnitEntity victim, int abilId)
-		super(victim, 9999999, abilId, 0)
+		super(victim, 9999999, abilId)
 		startedTime = currentTime
 		lastWarning = currentTime
 		lastSelect = currentTime
@@ -33,5 +33,5 @@ public class WarningBuff extends NormalShieldBuff
 			victim.owner.selectSingle(victim.actor)
 			lastSelect = currentTime
 		
-			
+	override function attackModifier()	
 			

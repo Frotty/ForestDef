@@ -6,12 +6,12 @@ import Creep
 import PhysicsProjectile
 
 
-public class SpawnlingBuff extends NormalShieldBuff
+public class SpawnlingBuff extends NormalBuff
 	construct(UnitEntity victim, int abilId)
-		super(victim, 9999999, abilId, 0)
+		super(victim, 9999999, abilId)
 		
 	override function defenseModifier()
-		if not done and victim.actor.getHP() - getDamage() < .405
+		if victim.actor.getHP() - getDamage() < .405
 			done = true
 			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", victim.actor.getPos()).destr()
 			for i = 0 to 5

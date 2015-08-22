@@ -1,0 +1,41 @@
+package Event
+import LinkedList
+import RegisterEvents
+
+public enum EventType
+	ON_DAMAGE
+	ON_DEATH
+	
+public class Event
+	EventType etype
+	
+public abstract class EventListener
+	static LinkedList<EventListener> listeners = new LinkedList<EventListener>()
+	abstract function onEvent(Event evnt)
+	
+	static function add(EventListener listener)
+		listeners.add(listener)
+		
+	static function onDamage()
+		var evnt = new Event()
+		evnt.etype = EventType.ON_DAMAGE
+		for listener in listeners
+			listener.onEvent(evnt)
+			
+	static function onDeath()
+		var evnt = new Event()
+		evnt.etype = EventType.ON_DEATH
+		for listener in listeners
+			listener.onEvent(evnt)
+			
+public function registerUnit(unit u)
+	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
+	deathTrig.registerUnitEvent(u, EVENT_UNIT_DEATH)
+			
+trigger dmgTrig = CreateTrigger()
+trigger deathTrig = CreateTrigger()
+	
+init
+	dmgTrig.addAction(function EventListener.onDamage)		
+	deathTrig.addAction(function EventListener.onDeath)
+	

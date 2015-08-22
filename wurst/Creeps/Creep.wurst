@@ -39,11 +39,11 @@ public class Creep extends UnitEntity
 	int bounty
 	
 	construct(vec3 pos, int typeId, int bounty)
-		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
+		super(pos, 16, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		this.bounty = bounty
 	
 	construct(vec3 pos, int typeId, int bounty, vec2 target)
-		super(pos, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
+		super(pos, 16, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
 		active = false
@@ -52,10 +52,10 @@ public class Creep extends UnitEntity
 		if vel.lengthSquared() > 1.5
 			super.update()
 			if isTerrainWalkable(pos.x, pos.y)
-				pos += vel
 				vel *= (0.975)
 			else
-				vel = getBounceVec(vel.toVec2(), getPathingNormal(pos.toVec2())).withZ(vel.z)
+				vel = getBounceVec(vel.toVec2(), getPathingNormal(pos.toVec2())).withZ(0)
+			pos += vel
 			actor.setXY(pos.x, pos.y)
 		else
 			active = false

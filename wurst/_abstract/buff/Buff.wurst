@@ -1,9 +1,11 @@
 package Buff
 import public Entity
-import initlater PresetBuffs
 import LinkedListModule
-
+import Event
+import Squares
+import TextTagEntity
 public constant BUFF_ANIM_PERIOD = 0.25
+
 public abstract class Buff
 	use LinkedListModule
 	UnitEntity victim
@@ -11,14 +13,12 @@ public abstract class Buff
 	real duration
 	int abilId
 	boolean running = true
-	effect fx
-	
 	boolean done = false
 
 	construct(UnitEntity victim, real dur, int abilId)
 		this.victim = victim
 		this.abilId = abilId
-		duration = dur
+		this.duration = dur
 
 	function update()
 		if running
@@ -26,13 +26,9 @@ public abstract class Buff
 		if duration <= 0.
 			done = true
 		
-	function setEffect(string s, string attachment)
-		fx = victim.actor.addEffect(s, attachment)	
 		
 	function refresh() 
 		if not victim.actor.hasAbility(abilId)
-			if fx != null
-				fx.destr()
 			victim.actor.addAbility(abilId)
 			
 	ondestroy
@@ -46,14 +42,41 @@ public abstract class Buff
 			if isLast
 				victim.actor.removeAbility(abilId)
 			
-		if fx != null
-			fx.destr()
-		
-		
-			
 	abstract function apply()
 
 	abstract function attackModifier()
 	
 	abstract function defenseModifier()
 
+init
+	EventListener.add((Event evnt) -> begin
+		if evnt.etype == EventType.ON_DAMAGE
+			let v = GetTriggerUnit()
+			let a = GetEventDamageSource()
+			if a.getHP() > 0.405 and v.getHP() > 0.405
+				let victimData = v.getUserData() castTo UnitEntity
+				let attackerData = a.getUserData() castTo UnitEntity
+				if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
+					// Falsify teamattacks
+					if getDamage() > 1
+						new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
+						,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
+					for bff in attackerData.currentBuffs
+						if not bff.done
+							bff.attackModifier()
+					modifyDamage(0)
+				else
+					// Correct attack, apply Buffs
+					if victimData != null
+						for bff in victimData.currentBuffs
+							if not bff.done
+								bff.defenseModifier()
+					if attackerData != null
+						for bff in attackerData.currentBuffs
+							if not bff.done
+								bff.attackModifier()
+		else if evnt.etype == EventType.ON_DEATH
+			let v = GetTriggerUnit()
+			let victimData = v.getUserData() castTo UnitEntity
+			victimData.onDeath(GetKillingUnit())
+	end)

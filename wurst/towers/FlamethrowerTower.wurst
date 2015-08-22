@@ -14,7 +14,7 @@ public class FlamethrowerTower extends Tower
 		
 	override function onAttack(UnitEntity ud)
 		for i = 0 to level
-			new FlameMissile(pos+vec3(0,0,85.),ud.pos.toVec2(), 6., owner, level)
+			new FlameMissile(pos+vec3(0,0,85.),ud.getPos().toVec2(), 6., owner, level)
 			
 			
 	override function onUpgrade()

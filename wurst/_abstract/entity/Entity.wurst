@@ -2,7 +2,6 @@ package Entity
 import LinkedListModule
 import Terrain
 import PhysicsConstants
-import initlater PhysicsProjectile
 import Fx
 import Angle
 import initlater Buff
@@ -12,7 +11,9 @@ import public DmgMod
 import MapBounds
 import Squares
 import initlater TextTagEntity
+import Event
 
+		
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
@@ -37,22 +38,12 @@ public abstract class Entity
 	boolean flying 		= false
 	boolean done 		= false
 
-	construct( vec3 pos, player owner )
-		this.pos = pos
-		this.vel = vec3(0,0,0)
-		this.owner = owner
-
 	construct( vec3 pos, real radius, player owner )
 		this.pos = pos
 		this.vel = vec3(0,0,0)
 		this.owner = owner
 		this.radius = radius
-		
-	construct( vec3 pos, vec3 vel, player owner )
-		this.pos = pos
-		this.vel = vel
-		this.owner = owner
-		
+	
 	construct( vec3 pos, vec3 vel, real radius, player owner )
 		this.pos = pos
 		this.vel = vel
@@ -93,24 +84,15 @@ public abstract class Entity
 	abstract function update()
 	
 abstract public class UnitEntity extends Entity
-	static trigger dmgTrig = CreateTrigger()
-	static trigger deathTrig = CreateTrigger()
 	unit actor
 	
 	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
 	
-	construct( vec3 pos, unit actor )
-		super(pos, actor.getOwner())
-		this.actor = actor
-		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
-		deathTrig.registerUnitEvent(actor, EVENT_UNIT_DEATH)
-		
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
 		this.actor = actor
 		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
-		dmgTrig.registerUnitEvent(actor, EVENT_UNIT_DAMAGED)
+		registerUnit(actor)
 		
 	override function update()
 		updatePos()
@@ -130,41 +112,15 @@ abstract public class UnitEntity extends Entity
 			actor.setFlyHeight(tpos.z - getTerrainZ(tpos.x, tpos.y), 0)
 		else 
 			done = true
+			
+	override function getPos() returns vec3
+		updatePos()
+		return pos
 		
 	function setXY(vec3 tpos)
 		pos = tpos
 		actor.setXY(tpos.x,tpos.y)
-		
-	static function onDamage()
-		let v = GetTriggerUnit()
-		let a = GetEventDamageSource()
-		if a.getHP() < 0.405 or v.getHP() < 0.405
-			return
-		let victimData = v.getUserData() castTo UnitEntity
-		let attackerData = a.getUserData() castTo UnitEntity
-		if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
-			if getDamage() > 1
-				new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
-				,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
-			for bff in attackerData.currentBuffs
-				if not bff.done
-					bff.attackModifier()
-			modifyDamage(0)
-		else
-			if victimData != null
-				for bff in victimData.currentBuffs
-					if not bff.done
-						bff.defenseModifier()
-					
-			if attackerData != null
-				for bff in attackerData.currentBuffs
-					if not bff.done
-						bff.attackModifier()
-				if attackerData instanceof Tower
-					let td = attackerData castTo Tower
-					victimData.updatePos()
-					td.onAttack(victimData)
-				
+
 	function onDeath(unit killer)
 		done = true
 			
@@ -179,10 +135,6 @@ abstract public class UnitEntity extends Entity
 		destroy currentBuffs
 		
 		
-init
-	UnitEntity.dmgTrig.addAction(function UnitEntity.onDamage)		
-	UnitEntity.deathTrig.addAction(function UnitEntity.onEventDeath)
-
 abstract public class FxEntity extends Entity
 	protected Fx fx
 	

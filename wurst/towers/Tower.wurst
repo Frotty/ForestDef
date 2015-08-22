@@ -8,23 +8,23 @@ import initlater ThermoTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower
 import initlater HealbackTower
-
+import Event
 constant int BASIC_TOWER_ID = 'h003'
 constant int BASIC_WALL_ID = 'h000'
 
 public class Wall extends UnitEntity
 	construct (unit wall)
-		super(vec3(wall.getX(),wall.getY(),0),wall)
+		super(vec3(wall.getX(),wall.getY(),0),64,wall)
 
 public class Tower extends UnitEntity
 	
 	construct (unit tower)
-		super(vec3(tower.getX(),tower.getY(),0),tower)
+		super(vec3(tower.getX(),tower.getY(),0),64,tower)
 		active = false
 		tupgrade.registerUnitEvent(tower,EVENT_UNIT_UPGRADE_FINISH)
 			
 	construct(Tower t)
-		super(t.pos,t.actor)
+		super(t.pos, 64, t.actor)
 		active = false
 		destroy t
 	
@@ -83,3 +83,12 @@ init
 	CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	..addAction(function Tower.onConstructionEvent)
 	tupgrade = CreateTrigger()..addAction(function Tower.onUpgradeEvent)
+	EventListener.add((Event evnt) -> begin
+		if evnt.etype == EventType.ON_DAMAGE
+			let damager = GetEventDamageSource()
+			if damager.getUserData() > 0
+				let e = damager.getUserData() castTo UnitEntity
+				if e instanceof Tower
+					let t = e castTo Tower
+					t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
+	end)

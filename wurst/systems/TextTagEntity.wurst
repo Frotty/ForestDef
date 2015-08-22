@@ -9,7 +9,7 @@ public class TextTagEntity extends Entity
 	real dur
 	
 	construct(vec3 pos, vec3 vel, string text, real size, real duration,  colorA col )
-		super(pos,DUMMY_PLAYER)
+		super(pos, 0,DUMMY_PLAYER)
 		dur = duration
 		tt = createTTEx(pos, vec2(0,0), text, size, duration, col)
 		this.vel = vel

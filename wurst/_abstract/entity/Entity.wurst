@@ -124,10 +124,6 @@ abstract public class UnitEntity extends Entity
 	function onDeath(unit killer)
 		done = true
 			
-	static function onEventDeath()
-		let data = GetTriggerUnit().getUserData() castTo UnitEntity
-		data.onDeath(GetKillingUnit())
-		
 	ondestroy
 		for bff in currentBuffs
 			bff.victim = null

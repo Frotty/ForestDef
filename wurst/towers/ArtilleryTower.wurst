@@ -56,7 +56,7 @@ function checkSpell()
 		if GetSpellAbilityId() == SPELL_ID
 			ArtilleryTower at = GetTriggerUnit().getUserData() castTo ArtilleryTower
 			vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
-			angle a = at.pos.angleTo2d(target)
+			angle a = at.getPos().angleTo2d(target)
 			for int i = 0 to 5+at.level*3
 				real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
 				real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)

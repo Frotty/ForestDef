@@ -1,10 +1,10 @@
 package Creep
 import Entity
+import Wave
 import SoundHelper
 import Terrain
 import initlater SpawnlingBuff
 import Bounty
-import Table
 import initlater PlayerData
 public constant CREEP_OWNER = Player(9)
 
@@ -38,12 +38,8 @@ public function getBounceVec(vec2 vel2, vec2 nor2) returns vec2
 public class Creep extends UnitEntity
 	int bounty
 	
-	construct(vec3 pos, int typeId, int bounty)
-		super(pos, 16, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
-		this.bounty = bounty
-	
-	construct(vec3 pos, int typeId, int bounty, vec2 target)
-		super(pos, 16, createUnit(CREEP_OWNER, typeId, pos.toVec2(), angle(0)))
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, 16, createUnit(CREEP_OWNER, typId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
 		active = false
@@ -63,29 +59,30 @@ public class Creep extends UnitEntity
 	override function onDeath(unit killer)
 		actor.setUserData(0)
 		var size = allPlayers.getSize()
-		int killBounty = bounty div size + bounty mod size
+		int killBounty = (bounty div size) + (bounty mod size)
 		int restBounty = 0
-		if size > 1
+		if size > 1 and bounty-killBounty > 0
 			restBounty = ((bounty-killBounty) / (size - 1.)).round()
 			
 		killer.getOwner().addGold(killBounty)
 		showBountyTextTag(killBounty, actor, killer.getOwner())
-		for pd in allPlayers
-			if(pd.p != killer.getOwner())
-				pd.p.addGold(restBounty)
-				showBountyTextTag(restBounty, actor, pd.p)
+		if restBounty > 0
+			for pd in allPlayers
+				if(pd.p != killer.getOwner())
+					pd.p.addGold(restBounty)
+					showBountyTextTag(restBounty, actor, pd.p)
 		super.onDeath(killer)
 				
 	
 public class Boss extends Creep
 	static Sound snd = new Sound("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", 2320, false)
 	effect glow
-	construct(vec3 pos, int typeId, int bounty, vec2 target)
-		super(pos, typeId, bounty, target)
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
 		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
-		if typeId == 'n003'
+		if typId == 'n003'
 			snd.play()
-			new SpawnlingBuff(this, 0)
+			new SpawnlingBuff(this)
 		
 	ondestroy
 		for p in allPlayers
@@ -94,23 +91,24 @@ public class Boss extends Creep
 			glow.destr()
 		
 public class Special extends Creep
+	effect glow
 
-	construct(vec3 pos, int typeId, int bounty)
-			super(pos, typeId, bounty)
-			
-	construct(vec3 pos, int typeId, int bounty, vec2 target)
-		super(pos, typeId, bounty, target)
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
 		
 	override function onDeath(unit killer)
 		super.onDeath(killer)
+		if glow != null
+			glow.destr()
 		// Souls
 		if actor.getTypeId() == 'u00B'
 			for i = 0 to 3
-				new Special(pos, 'u00C', 4)
+				new Special(getPos(), 'u00C', 4, middle)
 		else if actor.getTypeId() == 'u00C'
 			for i = 0 to 2
-				new Special(pos, 'u00D', 2)
+				new Special(getPos(), 'u00D', 3, middle)
 		else if actor.getTypeId() == 'u00D'
-				new Special(pos, 'u00E', 1)
+				new Special(getPos(), 'u00E', 2, middle)
 				
 			

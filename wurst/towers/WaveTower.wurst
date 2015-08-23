@@ -16,7 +16,7 @@ public class WaveTower extends Tower
 		active = false
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(pos,ud.pos.toVec2(), 17.5, owner, level, actor)
+		new WaveMissile(pos,ud.getPos().toVec2(), 15, owner, level, actor)
 		
 	override function onUpgrade()
 		level++
@@ -40,6 +40,7 @@ class WaveMissile extends Projectile
 		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
 		this.tower = tower
 		setSpeed(speed)
+		setAcc(1.025)
 		setRanged(750.)
 		affected = CreateGroup()
 		this.level = level
@@ -56,7 +57,8 @@ class WaveMissile extends Projectile
 				else if data != null and data instanceof Creep
 					GroupAddUnit(affected, u)
 					getDummy().damageTarget(u, getDOT(level))
-					let ang = angleBetweenCoords(pos.x, pos.y, data.pos.x, data.pos.y)
+					let upos = data.getPos()
+					let ang = angleBetweenCoords(pos.x, pos.y, upos.x, upos.y)
 					var kb = getKB(level)
 					if data instanceof Boss
 						data.setVel(vec3(ang.cos() * (kb * 0.75),ang.sin() * (kb * 0.75),0))

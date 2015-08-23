@@ -1,6 +1,6 @@
 package Wave
 import TimerUtils
-import Creep
+import initlater Creep
 
 vec3 array startPositions
 int startPosCount

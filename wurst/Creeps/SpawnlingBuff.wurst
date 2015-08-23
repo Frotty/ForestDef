@@ -1,14 +1,12 @@
 package SpawnlingBuff
 import PresetBuffs
-import ShieldBuff
-import SoundHelper
 import Creep
 import PhysicsProjectile
-
+import Wave
 
 public class SpawnlingBuff extends NormalBuff
-	construct(UnitEntity victim, int abilId)
-		super(victim, 9999999, abilId)
+	construct(UnitEntity victim)
+		super(victim, 9999999, 0)
 		
 	override function defenseModifier()
 		if victim.actor.getHP() - getDamage() < .405
@@ -16,14 +14,12 @@ public class SpawnlingBuff extends NormalBuff
 			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", victim.actor.getPos()).destr()
 			for i = 0 to 5
 				var pj = new PhysicsProjectile(victim.getPos() + vec3(0,0,32), 16, victim.owner, GetRandomReal(0,1).asAngleRadians()
-				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12) )
+				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 				pj.setTimed(GetRandomReal(2,3))
 				pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
 				pj.restitution = 0.75
 				pj.surfaceFriction = 0.75
 			
-		
-		
 	override function attackModifier()
 		
 			

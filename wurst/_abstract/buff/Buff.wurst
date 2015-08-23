@@ -4,6 +4,7 @@ import LinkedListModule
 import Event
 import Squares
 import TextTagEntity
+import NewDummyRecycler
 public constant BUFF_ANIM_PERIOD = 0.25
 
 public abstract class Buff
@@ -19,6 +20,7 @@ public abstract class Buff
 		this.victim = victim
 		this.abilId = abilId
 		this.duration = dur
+		apply()
 
 	function update()
 		if running
@@ -53,7 +55,7 @@ init
 		if evnt.etype == EventType.ON_DAMAGE
 			let v = GetTriggerUnit()
 			let a = GetEventDamageSource()
-			if a.getHP() > 0.405 and v.getHP() > 0.405
+			if a.isAliveTrick() and a.getUserData() > 0 and v.isAliveTrick() and v.getUserData() > 0
 				let victimData = v.getUserData() castTo UnitEntity
 				let attackerData = a.getUserData() castTo UnitEntity
 				if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
@@ -76,7 +78,8 @@ init
 							if not bff.done
 								bff.attackModifier()
 		else if evnt.etype == EventType.ON_DEATH
-			let v = GetTriggerUnit()
-			let victimData = v.getUserData() castTo UnitEntity
-			victimData.onDeath(GetKillingUnit())
+			let v = GetDyingUnit()
+			if v.getUserData() > 0
+				let victimData = v.getUserData() castTo UnitEntity
+				victimData.onDeath(GetKillingUnit())
 	end)

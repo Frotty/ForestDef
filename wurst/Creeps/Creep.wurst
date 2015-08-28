@@ -1,5 +1,6 @@
 package Creep
 import Entity
+import ClosureTimers
 import Wave
 import SoundHelper
 import Terrain
@@ -56,22 +57,28 @@ public class Creep extends UnitEntity
 		else
 			active = false
 		
-	override function onDeath(unit killer)
-		actor.setUserData(0)
+	override function onDeath(unit killer)	
+		if killer == null
+			done = true
+			return
 		var size = allPlayers.getSize()
-		int killBounty = (bounty div size) + (bounty mod size)
-		int restBounty = 0
-		if size > 1 and bounty-killBounty > 0
-			restBounty = ((bounty-killBounty) / (size - 1.)).round()
-			
-		killer.getOwner().addGold(killBounty)
-		showBountyTextTag(killBounty, actor, killer.getOwner())
-		if restBounty > 0
-			for pd in allPlayers
-				if(pd.p != killer.getOwner())
-					pd.p.addGold(restBounty)
-					showBountyTextTag(restBounty, actor, pd.p)
-		super.onDeath(killer)
+		if size > 0 and bounty > 0
+			int killBounty = (bounty div size) + (bounty mod size)
+			if killBounty < 1
+				return
+			int restBounty = 0
+			if size > 1 and bounty-killBounty > 0
+				restBounty = ((bounty-killBounty) / (size - 1.)).round()
+				
+			killer.getOwner().addGold(killBounty)
+			showBountyTextTag(killBounty, actor, killer.getOwner())
+			if restBounty > 0
+				for pd in allPlayers
+					if(pd.p != killer.getOwner())
+						pd.p.addGold(restBounty)
+						showBountyTextTag(restBounty, actor, pd.p)
+			super.onDeath(killer)
+			actor.setUserData(0)
 				
 	
 public class Boss extends Creep
@@ -98,17 +105,24 @@ public class Special extends Creep
 		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
 		
 	override function onDeath(unit killer)
-		super.onDeath(killer)
 		if glow != null
 			glow.destr()
 		// Souls
+		var ppos = getPos()
 		if actor.getTypeId() == 'u00B'
-			for i = 0 to 3
-				new Special(getPos(), 'u00C', 4, middle)
+			doAfter(0.5, ()-> begin
+				for i = 0 to 3
+					new Special(ppos, 'u00C', 8, middle)
+			end)
 		else if actor.getTypeId() == 'u00C'
-			for i = 0 to 2
-				new Special(getPos(), 'u00D', 3, middle)
+			doAfter(0.5, ()-> begin
+				for i = 0 to 2
+					new Special(ppos, 'u00D', 7, middle)
+			end)
 		else if actor.getTypeId() == 'u00D'
-				new Special(getPos(), 'u00E', 2, middle)
+			doAfter(0.5, ()-> begin
+				new Special(ppos, 'u00E', 6, middle)
+			end)
+		super.onDeath(killer)
 				
 			

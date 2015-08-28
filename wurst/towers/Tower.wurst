@@ -83,8 +83,8 @@ init
 	CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	..addAction(function Tower.onConstructionEvent)
 	tupgrade = CreateTrigger()..addAction(function Tower.onUpgradeEvent)
-	EventListener.add((Event evnt) -> begin
-		if evnt.etype == EventType.ON_DAMAGE
+	EventListener.add((EventType evnt) -> begin
+		if evnt == EventType.ON_DAMAGE
 			let damager = GetEventDamageSource()
 			if damager.getUserData() > 0
 				let e = damager.getUserData() castTo UnitEntity

@@ -6,27 +6,26 @@ public enum EventType
 	ON_DAMAGE
 	ON_DEATH
 	
-public class Event
-	EventType etype
+//public class Event
+//	EventType etype
+//	
+//	construct()
+//		print((this castTo int).toString())
 	
 public abstract class EventListener
 	static LinkedList<EventListener> listeners = new LinkedList<EventListener>()
-	abstract function onEvent(Event evnt)
+	abstract function onEvent(EventType evnt)
 	
 	static function add(EventListener listener)
 		listeners.add(listener)
 		
 	static function onDamage()
-		var evnt = new Event()
-		evnt.etype = EventType.ON_DAMAGE
 		for listener in listeners
-			listener.onEvent(evnt)
+			listener.onEvent(EventType.ON_DAMAGE)
 			
 	static function onDeath()
-		var evnt = new Event()
-		evnt.etype = EventType.ON_DEATH
 		for listener in listeners
-			listener.onEvent(evnt)
+			listener.onEvent(EventType.ON_DEATH)
 			
 public function registerUnit(unit u)
 	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)

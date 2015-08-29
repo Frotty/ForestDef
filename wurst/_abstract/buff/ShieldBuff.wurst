@@ -4,7 +4,6 @@ import DmgMod
 
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
-	boolean silent = false
 	
 	construct(UnitEntity victim, real dur, int abilId, real amount)
 		super(victim, dur, abilId)
@@ -12,7 +11,7 @@ public class NormalShieldBuff extends NormalBuff
 		
 	override function update()
 		super.update()
-		if blockAmount < 0
+		if blockAmount <= 0
 			done = true
 		
 	override function apply()
@@ -21,11 +20,11 @@ public class NormalShieldBuff extends NormalBuff
 				let sd = bff castTo thistype
 				sd.duration = duration
 				sd.blockAmount += blockAmount
-				silent = true
 				done = true
 				return
 		victim.currentBuffs.add(this)
 		victim.actor.addAbility(abilId)
+		applied = true
 		
 
 	override function defenseModifier()

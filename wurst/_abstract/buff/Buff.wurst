@@ -15,6 +15,7 @@ public abstract class Buff
 	int abilId
 	boolean running = true
 	boolean done = false
+	boolean applied = false
 
 	construct(UnitEntity victim, real dur, int abilId)
 		this.victim = victim
@@ -34,7 +35,7 @@ public abstract class Buff
 			victim.actor.addAbility(abilId)
 			
 	ondestroy
-		if victim != null and not victim.done
+		if applied and victim != null and not victim.done
 			victim.currentBuffs.remove(this)
 			boolean isLast = true
 			for bff in victim.currentBuffs

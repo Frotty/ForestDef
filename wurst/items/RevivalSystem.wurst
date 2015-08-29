@@ -2,12 +2,13 @@ package RevivalSystem
 import PlayerData
 import Wave
 import Builder
+import Selector
 
 function registerDeath()
 	let u = GetTriggerUnit()
 	let owner = GetTriggerUnit().getOwner()
 	let id = owner.getId()
-	if u.getTypeId() == 'h00F'
+	if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
 		pDatas[id].alive = false
 		DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + owner.getName() + " has died! Buy a Revival-Scroll from the middle to revive him.")
 		
@@ -19,7 +20,7 @@ function reviveAll()
 		for pd in allPlayers
 			if not pd.alive
 				s += " " + pd.p.getName()
-				pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p)
+				pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, SLIM_ID)
 				AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor ,"origin" )
 				printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
 				pd.alive = true

@@ -1,0 +1,45 @@
+package Selector
+import RegisterEvents
+import Entity
+import Builder
+import ClosureTimers
+
+public constant FAT_ID = 'h022'
+public constant SLIM_ID = 'h00F'
+public constant FAT_SPELL_ID = 'A01Y'
+public constant SLIM_SPELL_ID = 'A01X'
+
+public class Selector extends UnitEntity
+	
+	static function onCast()
+		let caster = GetSpellAbilityUnit()
+		let id = GetSpellAbilityId()
+		let data = caster.getUserData() castTo UnitEntity
+		if data instanceof Selector
+			if id == FAT_SPELL_ID
+				new Builder(caster.getPos3(), caster.getOwner(), FAT_ID)
+			else if id == SLIM_SPELL_ID
+				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID)
+			data.done = true
+	
+	ondestroy
+		actor.remove()
+	
+	construct(vec3 pos, player owner)
+		super(pos, 0, createUnit( owner, 'h023', pos, angle(0)))
+		if GetLocalPlayer() == owner
+			SelectUnit( actor, true )
+			PanCameraToTimed(actor.getX(), actor.getY(), 0)
+		let ths = this
+		doAfter(15, () -> begin
+			if ths != null and not ths.done and ths.actor.isAliveTrick()
+				new Builder(ths.getPos(), ths.owner, SLIM_ID)
+				ths.actor.kill()
+				ths.actor.remove()	
+		end)
+
+trigger t
+	
+init
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	

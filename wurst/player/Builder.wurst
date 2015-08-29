@@ -5,12 +5,12 @@ import WarningBuff
 
 public class Builder extends UnitEntity
 	
-	construct(vec3 pos, player owner)
-		super(pos, 0, createUnit( owner, 'h00F', pos, angle(0)))
+	construct(vec3 pos, player owner, int id)
+		super(pos, 0, createUnit( owner, id, pos, angle(0)))
 		IssueImmediateOrder( actor, "repairon" )
 		DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", pos.x, pos.y ) )
+		owner.selectSingle(actor)
 		if GetLocalPlayer() == owner
-			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
 		new WarningBuff(this, 999999)

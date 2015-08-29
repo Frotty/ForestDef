@@ -1,5 +1,6 @@
 package PlayerData
 import Wave
+import Selector
 import Builder
 import LinkedList
 
@@ -11,6 +12,7 @@ public class PlayerData
 	int kills = 0
 	boolean alive = true
 	Builder builder
+	boolean fat
 	
 	construct(player p)
 		this.p = p
@@ -33,7 +35,7 @@ public function initPlayers()
 	real anglePerP = 360/allPlayers.getSize()
 	real current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
 	for p in allPlayers
-		new Builder(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
+		new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
 		current += anglePerP
 		SetPlayerState( p.p, PLAYER_STATE_RESOURCE_GOLD, (gold/allPlayers.getSize()).toInt() )	 
 

@@ -18,7 +18,7 @@ class ShieldKitBuff extends NormalShieldBuff
 								blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 
 	ondestroy
-		if not silent
+		if applied
 			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
 								"Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
 		else

@@ -16,7 +16,8 @@ public abstract class NormalBuff extends Buff
 				
 		victim.currentBuffs.add(this)
 		victim.actor.addAbility(abilId)
-
+		applied = true
+		
 public abstract class StackingBuff extends Buff
 
 	construct(UnitEntity victim, real dur, int abilId)
@@ -24,5 +25,6 @@ public abstract class StackingBuff extends Buff
 			
 	override function apply()			
 		victim.currentBuffs.add(this)
+		applied = true
 		
 

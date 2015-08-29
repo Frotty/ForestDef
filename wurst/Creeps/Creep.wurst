@@ -26,15 +26,12 @@ public function getPathingNormal(vec2 pos) returns vec2
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
 	
-public function getBounceVec(vec2 vel2, vec2 nor2) returns vec2
-		vec3 vel3 = vel2.toVec3()
-		vec3 nor3 = nor2.toVec3()
-		vec3 pv3 = vel3.project(nor3)
-		vec2 pv2 = pv3.toVec2()
-		pv2 *= (-1.5)
-		vec2 nvel2 = vel2
-		nvel2 += pv2
-		return nvel2
+public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
+	vec3 nor3 = nor2.toVec3()
+	vec3 pv3 = vel3.project(nor3)
+	vec2 pv2 = pv3.toVec2()
+	pv2 *= (-1.5)
+	return vel3 + pv2
 
 public class Creep extends UnitEntity
 	int bounty
@@ -51,7 +48,7 @@ public class Creep extends UnitEntity
 			if isTerrainWalkable(pos.x, pos.y)
 				vel *= (0.975)
 			else
-				vel = getBounceVec(vel.toVec2(), getPathingNormal(pos.toVec2())).withZ(0)
+				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))
 			pos += vel
 			actor.setXY(pos.x, pos.y)
 		else

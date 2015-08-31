@@ -5,19 +5,16 @@ import PhysicsConstants
 import Fx
 import Angle
 import initlater Buff
-import initlater Tower
 import public LinkedList
 import public DmgMod
 import MapBounds
-import Squares
-import initlater TextTagEntity
 import Event
-
+import InstanceBoard
 		
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
-	
+	use ShowInstances
 	/** 3d vector position */
 	vec3 pos
 	/** 3d vector velocity */
@@ -37,6 +34,9 @@ public abstract class Entity
 	boolean active 		= true
 	boolean flying 		= false
 	boolean done 		= false
+	
+	override static function classname() returns string
+		return "Entity"
 
 	construct( vec3 pos, real radius, player owner )
 		this.pos = pos

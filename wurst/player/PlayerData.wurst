@@ -1,6 +1,6 @@
 package PlayerData
 import Wave
-import Selector
+import initlater Selector
 import Builder
 import LinkedList
 

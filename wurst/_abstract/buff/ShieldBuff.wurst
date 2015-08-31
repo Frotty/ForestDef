@@ -8,6 +8,7 @@ public class NormalShieldBuff extends NormalBuff
 	construct(UnitEntity victim, real dur, int abilId, real amount)
 		super(victim, dur, abilId)
 		blockAmount = amount
+		apply()
 		
 	override function update()
 		super.update()

@@ -1,15 +1,18 @@
 package Builder
-
+import initlater Selector
 import Entity
 import WarningBuff
 
 public class Builder extends UnitEntity
-	
-	construct(vec3 pos, player owner, int id)
+
+	construct(vec3 pos, player owner, int id, boolean first)
 		super(pos, 0, createUnit( owner, id, pos, angle(0)))
-		IssueImmediateOrder( actor, "repairon" )
+		if first
+			IssueImmediateOrder( actor, "repairon" )
 		DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", pos.x, pos.y ) )
 		owner.selectSingle(actor)
+		if id == FAT_ID
+			actor.setTimeScale(0.25)
 		if GetLocalPlayer() == owner
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			

@@ -2,7 +2,7 @@ package Selector
 import RegisterEvents
 import Entity
 import Builder
-import ClosureTimers
+import PlayerData
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
@@ -17,9 +17,11 @@ public class Selector extends UnitEntity
 		let data = caster.getUserData() castTo UnitEntity
 		if data instanceof Selector
 			if id == FAT_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), FAT_ID)
+				new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
+				pDatas[data.owner.getId()].fat = true
 			else if id == SLIM_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID)
+				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
+				pDatas[data.owner.getId()].fat = false
 			data.done = true
 	
 	ondestroy
@@ -30,13 +32,6 @@ public class Selector extends UnitEntity
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
-		let ths = this
-		doAfter(15, () -> begin
-			if ths != null and not ths.done and ths.actor.isAliveTrick()
-				new Builder(ths.getPos(), ths.owner, SLIM_ID)
-				ths.actor.kill()
-				ths.actor.remove()	
-		end)
 
 trigger t
 	

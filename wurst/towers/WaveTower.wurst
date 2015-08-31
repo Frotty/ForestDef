@@ -30,7 +30,7 @@ function getDOT(int level) returns real//towerlevel
 	
 function getKB(int level) returns real//towerlevel
 	return (4. + (level*level))
-
+	
 class WaveMissile extends Projectile
 	int level
 	group affected
@@ -44,13 +44,12 @@ class WaveMissile extends Projectile
 		setRanged(750.)
 		affected = CreateGroup()
 		this.level = level
-
-
+		
 	override function update()
 		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u in ENUM_GROUP
-			if u.isAliveTrick()
+			if u.isAliveTrick() and not IsUnitType(u, UNIT_TYPE_FLYING)
 				let data = (u.getUserData() castTo UnitEntity)
 				if IsUnitInGroup(u, affected)
 					getDummy().damageTarget(u, getDOT(level))

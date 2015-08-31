@@ -1,5 +1,6 @@
 package Buff
 import public Entity
+import InstanceBoard
 import LinkedListModule
 import Event
 import Squares
@@ -7,7 +8,9 @@ import TextTagEntity
 import NewDummyRecycler
 public constant BUFF_ANIM_PERIOD = 0.25
 
+
 public abstract class Buff
+	use ShowInstances
 	use LinkedListModule
 	UnitEntity victim
 
@@ -16,6 +19,9 @@ public abstract class Buff
 	boolean running = true
 	boolean done = false
 	boolean applied = false
+	
+	override static function classname() returns string
+		return "Buff"
 
 	construct(UnitEntity victim, real dur, int abilId)
 		this.victim = victim

@@ -4,7 +4,7 @@ import TimerUtils
 import Queue
 import Wave
 
-constant real SPAWN_TIME = 20.0
+constant real SPAWN_TIME = 10.0
 
 Queue<NormalWave> normalWaves = new Queue<NormalWave>()
 Queue<BossWave> bossWaves = new Queue<BossWave>()

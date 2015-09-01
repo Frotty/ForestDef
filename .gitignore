@@ -1,5 +1,3 @@
 *.w3x
-war3map.j
 wurst.dependencies
-objectEditingOutput/wurstCreatedObjects.w3o
-objectEditingOutput/WurstExportedObjects_w3u.wurst.txt
+objectEditingOutput/

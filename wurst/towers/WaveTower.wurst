@@ -1,5 +1,6 @@
 package WaveTower
 import Tower
+import Terrain
 import Projectile
 import TempGroups
 import Creep
@@ -16,14 +17,14 @@ public class WaveTower extends Tower
 		active = false
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(pos,ud.getPos().toVec2(), 14, owner, level, actor)
+		new WaveMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 14, owner, level, actor)
 		
 	override function onUpgrade()
 		level++
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((75. * level) + 50.)
+	return ((75. * level) + 85.)
 	
 function getDOT(int level) returns real//towerlevel
 	return ((7.5 * level))
@@ -60,7 +61,8 @@ class WaveMissile extends Projectile
 					let ang = angleBetweenCoords(pos.x, pos.y, upos.x, upos.y)
 					var kb = getKB(level)
 					if data instanceof Boss
-						data.setVel(vec3(ang.cos() * (kb * 0.75),ang.sin() * (kb * 0.75),0))
+						var speedPerc = 0.25 + (data.actor.getMoveSpeed() / 522)
+						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()

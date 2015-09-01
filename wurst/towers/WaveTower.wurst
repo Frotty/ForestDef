@@ -66,7 +66,6 @@ class WaveMissile extends Projectile
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
-			
 		ENUM_GROUP.clear()
 
 	ondestroy

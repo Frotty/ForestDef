@@ -3,10 +3,8 @@ import public Entity
 import Buff
 
 function updateEntities()
-	var activee = 0
 	for e in Entity
-		if e.active
-			activee++
+		if not e.done and e.active
 			e.update()
 		if e.done
 			destroy e

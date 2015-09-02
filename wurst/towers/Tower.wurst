@@ -21,7 +21,6 @@ public class Tower extends UnitEntity
 	construct (unit tower)
 		super(vec3(tower.getX(),tower.getY(),0),64,tower)
 		active = false
-		tupgrade.registerUnitEvent(tower,EVENT_UNIT_UPGRADE_FINISH)
 			
 	construct(Tower t)
 		super(t.pos, 64, t.actor)
@@ -77,18 +76,16 @@ public class Tower extends UnitEntity
 		else if id == BASIC_WALL_ID
 			new Wall(u)
 
-trigger tupgrade
 
 init
 	CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
 	..addAction(function Tower.onConstructionEvent)
-	tupgrade = CreateTrigger()..addAction(function Tower.onUpgradeEvent)
-	EventListener.add((EventType evnt) -> begin
-		if evnt == EventType.ON_DAMAGE
-			let damager = GetEventDamageSource()
-			if damager.getUserData() > 0
-				let e = damager.getUserData() castTo UnitEntity
-				if e instanceof Tower
-					let t = e castTo Tower
-					t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
+//	tupgrade = CreateTrigger()..addAction(function Tower.onUpgradeEvent)
+	EventListener.add(EventType.ON_DAMAGE, () -> begin
+		let damager = GetEventDamageSource()
+		if damager.getUserData() > 0
+			let e = damager.getUserData() castTo UnitEntity
+			if e instanceof Tower
+				let t = e castTo Tower
+				t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
 	end)

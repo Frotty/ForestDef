@@ -5,27 +5,43 @@ import RegisterEvents
 public enum EventType
 	ON_DAMAGE
 	ON_DEATH
-	
-//public class Event
-//	EventType etype
-//	
-//	construct()
-//		print((this castTo int).toString())
+	ON_CONSTRUCT
+	ON_USE_ITEM
 	
 public abstract class EventListener
-	static LinkedList<EventListener> listeners = new LinkedList<EventListener>()
-	abstract function onEvent(EventType evnt)
+	static LinkedList<EventListener> onDamageListeners = new LinkedList<EventListener>()
+	static LinkedList<EventListener> onDeathListeners = new LinkedList<EventListener>()
+	static LinkedList<EventListener> onConstructListeners = new LinkedList<EventListener>()
+	static LinkedList<EventListener> onUseItemListeners = new LinkedList<EventListener>()
 	
-	static function add(EventListener listener)
-		listeners.add(listener)
+	abstract function onEvent()
+	
+	static function add(EventType etype, EventListener listener)
+		switch (etype)
+			case ON_DAMAGE
+				onDamageListeners.add(listener)
+			case ON_DEATH
+				onDeathListeners.add(listener)
+			case ON_CONSTRUCT
+				onConstructListeners.add(listener)
+			case ON_USE_ITEM
+				onUseItemListeners.add(listener)
 		
 	static function onDamage()
-		for listener in listeners
-			listener.onEvent(EventType.ON_DAMAGE)
+		for listener in onDamageListeners
+			listener.onEvent()
 			
 	static function onDeath()
-		for listener in listeners
-			listener.onEvent(EventType.ON_DEATH)
+		for listener in onDeathListeners
+			listener.onEvent()
+	
+	static function onConstruct()
+		for listener in onConstructListeners
+			listener.onEvent()
+		
+	static function onUseItem()
+		for listener in onUseItemListeners
+			listener.onEvent()
 			
 public function registerUnit(unit u)
 	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
@@ -33,8 +49,10 @@ public function registerUnit(unit u)
 			
 trigger dmgTrig = CreateTrigger()
 trigger deathTrig = CreateTrigger()
-	
+
 init
 	dmgTrig.addAction(function EventListener.onDamage)		
 	deathTrig.addAction(function EventListener.onDeath)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH, function EventListener.onConstruct)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.onConstruct)
 	

@@ -2,9 +2,9 @@ package PhysicsEntity
 import Entity
 import Terrain
 import PhysicsConstants
-import Debug
-import Maths
+import Interpolation
 
+public constant MAX_MASS = 1000
 //Module for Physical Simulation
 public module PhysicsModule
 	/** Affected by gravity */
@@ -19,10 +19,10 @@ public module PhysicsModule
 	// Defines the bounciness
 	real restitution = 0.9
 	// The density of the object
-	real mass = 0
+	real mass = 10
 	
 		
-	// This function is called every ANIMATION_PERIOD tick if the Entity is active
+	// This function should be called every ANIMATION_PERIOD tick if the Entity is active
 	function physicsUpdate(Entity e)
 		terrainZ = getTerrainZ(e.pos.x, e.pos.y)
 		if e.pos.z <= terrainZ + .2
@@ -45,11 +45,13 @@ public module PhysicsModule
 		if pv.z > 4.
 			e.vel += pv
 		else	
-			e.vel *= surfaceFriction * (1/mass)
+			e.vel *= surfaceFriction * bezier_3(1,0.2,0,mass/MAX_MASS)
 			
 		e.pos.z = terrainZ
 		
 	function inAir(Entity e)
 		if affectedByGravity
 			e.vel += gravity
+		if mass < 25
+			e.vel *= 0.75
 			

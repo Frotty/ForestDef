@@ -5,7 +5,8 @@ import LinkedListModule
 import Event
 import Squares
 import TextTagEntity
-import NewDummyRecycler
+import PhysicsProjectile
+import Creep
 public constant BUFF_ANIM_PERIOD = 0.25
 
 
@@ -16,24 +17,24 @@ public abstract class Buff
 
 	real duration
 	int abilId
-	boolean running = true
 	boolean done = false
 	boolean applied = false
 	
 	override static function classname() returns string
 		return "Buff"
 
-	construct(UnitEntity victim, real dur, int abilId)
+	construct(UnitEntity victim, real dur, int abilId, boolean apply)
 		this.victim = victim
 		this.abilId = abilId
 		this.duration = dur
-		apply()
+		if apply
+			apply()
 
 	function update()
-		if running
-			duration -= BUFF_ANIM_PERIOD
 		if duration <= 0.
 			done = true
+		else
+			duration -= BUFF_ANIM_PERIOD
 		
 		
 	function refresh() 
@@ -58,35 +59,43 @@ public abstract class Buff
 	abstract function defenseModifier()
 
 init
-	EventListener.add((EventType evnt) -> begin
-		if evnt == EventType.ON_DAMAGE
-			let v = GetTriggerUnit()
-			let a = GetEventDamageSource()
-			if a.isAliveTrick() and a.getUserData() > 0 and v.isAliveTrick() and v.getUserData() > 0
-				let victimData = v.getUserData() castTo UnitEntity
-				let attackerData = a.getUserData() castTo UnitEntity
-				if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
-					// Falsify teamattacks
-					if getDamage() > 0.5
-						new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
-						,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
-						for bff in attackerData.currentBuffs
-							if not bff.done
-								bff.attackModifier()
-						modifyDamage(0)
-				else
-					// Correct attack, apply Buffs
-					if victimData != null
-						for bff in victimData.currentBuffs
-							if not bff.done
-								bff.defenseModifier()
-					if attackerData != null
-						for bff in attackerData.currentBuffs
-							if not bff.done
-								bff.attackModifier()
-		else if evnt == EventType.ON_DEATH
-			let v = GetDyingUnit()
-			if v.getUserData() > 0
-				let victimData = v.getUserData() castTo UnitEntity
-				victimData.onDeath(GetKillingUnit())
+	EventListener.add(EventType.ON_DAMAGE, () -> begin
+		let v = GetTriggerUnit()
+		let a = GetEventDamageSource()
+		if a.isAliveTrick() and a.getUserData() > 0 and v.isAliveTrick() and v.getUserData() > 0
+			let victimData = v.getUserData() castTo UnitEntity
+			let attackerData = a.getUserData() castTo UnitEntity
+			if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
+				// Falsify teamattacks
+				if getDamage() > 0.5
+					new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
+					,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
+					for bff in attackerData.currentBuffs
+						if not bff.done
+							bff.attackModifier()
+					modifyDamage(0)
+					for i = 0 to 5
+						var pj = new PhysicsProjectile(attackerData.actor.getPos3() + vec3(0,0,32), 16, attackerData.owner, GetRandomReal(0,1).asAngleRadians()
+						, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, vec2(0,0)) )
+						pj.setTimed(GetRandomReal(2,3))
+						pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
+						pj.restitution = 0.75
+						pj.surfaceFriction = 0.75
+						pj.mass = GetRandomReal(1,30)
+			else
+				// Correct attack, apply Buffs
+				if victimData != null
+					for bff in victimData.currentBuffs
+						if not bff.done
+							bff.defenseModifier()
+				if attackerData != null
+					for bff in attackerData.currentBuffs
+						if not bff.done
+							bff.attackModifier()
+	end)							
+	EventListener.add(EventType.ON_DEATH, () -> begin
+		let v = GetDyingUnit()
+		if v.getUserData() > 0
+			let victimData = v.getUserData() castTo UnitEntity
+			victimData.onDeath(GetKillingUnit())
 	end)

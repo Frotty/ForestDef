@@ -5,18 +5,18 @@ import Wave
 import Builder
 import Selector
 
-function registerDeath()
-	let u = GetTriggerUnit()
-	let owner = GetTriggerUnit().getOwner()
-	let id = owner.getId()
-	if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
-		pDatas[id].alive = false
-		DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + owner.getName() + " has died! Buy a Revival-Scroll from the middle to revive him.")
 		
-
-		
-function reviveAll()
-	if GetItemTypeId(GetManipulatedItem()) == 'I007'
+public function initRevivalSystem()
+	EventListener.add(EventType.ON_DEATH, () -> begin
+		let u = GetTriggerUnit()
+		let owner = u.getOwner()
+		if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
+			pDatas[owner.getId()].alive = false
+			DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + owner.getName() + " has died! Buy a Revival-Scroll from the middle to revive him.")
+	end)
+	
+	EventListener.add(EventType.ON_USE_ITEM, () -> begin
+		if GetItemTypeId(GetManipulatedItem()) == 'I007'
 		var s = ""
 		for pd in allPlayers
 			if not pd.alive
@@ -31,16 +31,5 @@ function reviveAll()
 		if s.length() > 0
 			s += "."
 			DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + GetTriggerPlayer().getName() + " has revived the following players: " + s)
-			
-public function initRevivalSystem()
-	EventListener.add((EventType evnt) -> begin
-		
 	end)
-	trigger t = CreateTrigger()
-	TriggerRegisterAnyUnitEventBJ(t,EVENT_PLAYER_UNIT_DEATH)
-	TriggerAddAction(t,function registerDeath)
 	
-	trigger t2 = CreateTrigger()
-	TriggerRegisterAnyUnitEventBJ(t2, EVENT_PLAYER_UNIT_USE_ITEM)
-	TriggerAddAction(t2,function reviveAll)
-		

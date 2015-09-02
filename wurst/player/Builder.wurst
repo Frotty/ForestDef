@@ -9,7 +9,6 @@ public class Builder extends UnitEntity
 		super(pos, 0, createUnit( owner, id, pos, angle(0)))
 		if first
 			IssueImmediateOrder( actor, "repairon" )
-		DestroyEffect(AddSpecialEffect( "Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", pos.x, pos.y ) )
 		owner.selectSingle(actor)
 		if id == FAT_ID
 			actor.setTimeScale(0.25)

@@ -5,7 +5,6 @@ import Projectile
 import Terrain
 import PhysicsConstants
 
-constant int MISSILE_ID = 'h01S'
 constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant int ART_TOWER_ID = 'h01O'
 constant int SPELL_ID = 'A01T'

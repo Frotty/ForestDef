@@ -6,7 +6,7 @@ public class NormalShieldBuff extends NormalBuff
 	real blockAmount
 	
 	construct(UnitEntity victim, real dur, int abilId, real amount)
-		super(victim, dur, abilId)
+		super(victim, dur, abilId, false)
 		blockAmount = amount
 		apply()
 		

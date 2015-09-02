@@ -14,7 +14,7 @@ public class WarningBuff extends NormalBuff
 	real lastSelect
 	
 	construct(UnitEntity victim, int abilId)
-		super(victim, 9999999, abilId)
+		super(victim, 9999999, abilId, true)
 		startedTime = currentTime
 		lastWarning = currentTime
 		lastSelect = currentTime

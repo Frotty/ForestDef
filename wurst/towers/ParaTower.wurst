@@ -4,7 +4,7 @@ import PresetBuffs
 
 class ParaBuff extends NormalBuff
 	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId)
+		super(victim, dur, abilId, true)
 		
 	override function attackModifier()
 	

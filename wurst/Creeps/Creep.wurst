@@ -4,9 +4,9 @@ import ClosureTimers
 import Wave
 import SoundHelper
 import Terrain
-import initlater SpawnlingBuff
 import Bounty
 import initlater PlayerData
+import PhysicsProjectile
 public constant CREEP_OWNER = Player(9)
 
 public int array pow2
@@ -81,18 +81,32 @@ public class Creep extends UnitEntity
 public class Boss extends Creep
 	static Sound snd = new Sound("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", 2320, false)
 	effect glow
+	
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
 		if typId == 'n003'
 			snd.play()
-			new SpawnlingBuff(this)
-		
-	ondestroy
+			
+			
+	override function onDeath(unit killer)
 		for p in allPlayers
 			p.p.addLumber(1)
 		if glow != null
 			glow.destr()
+		if actor.getTypeId() == 'n003'
+			print("spawning")
+			done = true
+			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
+			for i = 0 to 5
+				var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,32), 16, owner, GetRandomReal(0,1).asAngleRadians()
+				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
+				pj.setTimed(GetRandomReal(2,3))
+				pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
+				pj.restitution = 0.75
+				pj.surfaceFriction = 0.75
+			print("spawned")
+		super.onDeath(killer)
 		
 public class Special extends Creep
 	effect glow

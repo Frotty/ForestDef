@@ -17,7 +17,7 @@ public class Projectile extends FxEntity
 	private real acc = 1.0
 	private real dist = 0
 	private real maxDist = 0
-	private real time = 0
+	protected real time = 0
 	private real maxTime = 0
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )

@@ -1,5 +1,4 @@
 package UnitSpawnSystem
-import initlater Creep
 import TimerUtils
 import Queue
 import Wave

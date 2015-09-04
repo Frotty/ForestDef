@@ -1,10 +1,56 @@
 package Rocket
+import Event
 import PhysicsProjectile
+import Interpolation
 
-//class Rocket extends PhysicsProjectile
-//	
-//	construct(vec3 startPos, vec3 targetPos)
-//		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", null )
-//		
-//class Shrapnell 
-//	
+constant ROCKET_ITEM_ID = 'A01Z'
+public constant ROCKET_SPELL_ID = 'A01Z'
+
+class Rocket extends PhysicsProjectile
+	
+	construct(vec3 startPos, vec2 targetPos)
+		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", 0 castTo OnExpireEvent )
+		setXYAngle(startPos.angleTo2d(targetPos))
+		setSpeed(GetRandomReal(8,12))
+		vel.z = GetRandomReal(9,13)
+		setMass(25)
+		
+	override function update()
+		super.update()
+		if vel.z <= 0
+			done = true
+			
+	ondestroy
+		for i = 0 to 16
+			new Shrapnell(getPos())
+			
+		
+class Shrapnell extends PhysicsProjectile
+	real initialTime
+	
+	construct(vec3 startPos)
+		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DruidoftheTalonMissile\\DruidoftheTalonMissile.mdl", 0 castTo OnExpireEvent )
+		setXYAngle(GetRandomReal(0,360).asAngleDegrees())
+		setSpeed(GetRandomReal(4,9))
+		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
+		fx.setScale(GetRandomReal(0.5,2))
+		vel.z = GetRandomReal(1,5)
+		setMass(GetRandomReal(1,5))
+		initialTime = GetRandomReal(2,4)
+		setTimed(initialTime)
+		
+	
+		
+	override function update()
+		super.update()
+		var col = fx.getColor()
+		col.alpha = bezier_3(255, 200, -5, time/initialTime).toInt()
+		print(col.alpha.toString())
+		fx.setColor(col)
+	
+public function initRocket()
+	EventListener.add(EventType.ON_SPELL_EFFECT, () -> begin
+		if GetSpellAbilityId() == ROCKET_SPELL_ID
+			new Rocket(GetSpellAbilityUnit().getPos3(), vec2(GetSpellTargetX(),GetSpellTargetY()))
+	end)
+	

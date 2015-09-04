@@ -15,6 +15,9 @@ public class PhysicsProjectile extends Projectile
 		setXYAngle(xyAngle)
 		oe = onEvent
 		
+	function setMass(real mass)
+		this.mass = mass
+		
 	override function update()
 		super.update()
 		physicsUpdate(this)
@@ -25,5 +28,7 @@ public class PhysicsProjectile extends Projectile
 		if oe != null
 			oe.onExpire(pos.toVec2(), owner)
 			destroy oe
+			
+
 		
 		

@@ -30,7 +30,7 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	vec3 nor3 = nor2.toVec3()
 	vec3 pv3 = vel3.project(nor3)
 	vec2 pv2 = pv3.toVec2()
-	pv2 *= (-1.5)
+	pv2 *= (-1.25)
 	return vel3 + pv2
 
 public class Creep extends UnitEntity
@@ -95,17 +95,15 @@ public class Boss extends Creep
 		if glow != null
 			glow.destr()
 		if actor.getTypeId() == 'n003'
-			print("spawning")
 			done = true
 			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
 			for i = 0 to 5
 				var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,32), 16, owner, GetRandomReal(0,1).asAngleRadians()
 				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 				pj.setTimed(GetRandomReal(2,3))
-				pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
+				pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
 				pj.restitution = 0.75
 				pj.surfaceFriction = 0.75
-			print("spawned")
 		super.onDeath(killer)
 		
 public class Special extends Creep

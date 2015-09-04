@@ -31,8 +31,9 @@ public class Tower extends UnitEntity
 
 
 	function onUpgrade()
-		for bff in currentBuffs
-			bff.refresh()
+		if hasBuffs()
+			for bff in getBuffs()
+				bff.refresh()
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
 				debugPrint("isWave", 0)
@@ -60,27 +61,24 @@ public class Tower extends UnitEntity
 				new ThermoTower(this)
 			default
 				debugPrint("upgrade not catched", 1)
+		actor.issueImmediateOrderById(OrderId("stop"))
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)
 	
-	static function onUpgradeEvent()
-		var i = GetTriggerUnit().getUserData()
-		if i != 0
-			Tower t = i castTo Tower
-			t.onUpgrade()
 	
-	static function onConstructionEvent()
+init
+	EventListener.add(EventType.ON_CONSTRUCT, () -> begin
 		let u = GetTriggerUnit()
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
 			new Tower(u)
 		else if id == BASIC_WALL_ID
 			new Wall(u)
-
-
-init
-	CreateTrigger()..registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH)
-	..addAction(function Tower.onConstructionEvent)
-//	tupgrade = CreateTrigger()..addAction(function Tower.onUpgradeEvent)
+	end)
+	EventListener.add(EventType.ON_UPGRADE, () -> begin
+		let data = GetTriggerUnit().getUserData() castTo UnitEntity
+		if data != null and data instanceof Tower
+			(data castTo Tower).onUpgrade()
+	end)
 	EventListener.add(EventType.ON_DAMAGE, () -> begin
 		let damager = GetEventDamageSource()
 		if damager.getUserData() > 0

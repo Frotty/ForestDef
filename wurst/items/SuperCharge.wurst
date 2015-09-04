@@ -19,7 +19,6 @@ package SuperCharge
 			target.removeAbility(REPAIR_ID)
 			target.addAbility(SUPERREPAIR_ID)
 			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getX(), target.getY()))
-			int i = GetPlayerId(GetOwningPlayer(target))
 			timer tim = getTimer()
 			tim.start(15. ,  function swapBack)
 			Temp t = new Temp(target)

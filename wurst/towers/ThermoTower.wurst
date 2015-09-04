@@ -14,7 +14,6 @@ public class ThermoTower extends Tower
 		super(t)
 		debugPrint("THERMO TOWER BUILT",12)
 		isHot = true
-		
 	override function onAttack(UnitEntity ud)
 		debugPrint("Attacking",12)
 		if isHot

@@ -1,5 +1,6 @@
 package GameInit
 import MultiboardSystem
+import Rocket
 import UnitSpawnSystem
 import SoundHelper
 import PlayerData
@@ -15,6 +16,7 @@ import ShieldKit
 import StompingTower
 import TrooperTower
 import EntityManagement
+
 function start()
 	initLumberSystem()
 	initDestroy()
@@ -29,6 +31,7 @@ function start()
 	initSpawn()
 	initShieldKit()
 	initMultiboard()
+	initRocket()
 	GetExpiredTimer().release()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")

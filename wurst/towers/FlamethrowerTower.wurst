@@ -4,7 +4,7 @@ import Terrain
 import Projectile
 import TempGroups
 
-public constant string FX_PATH = "Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"
+public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl"//"Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"
 public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
@@ -15,7 +15,7 @@ public class FlamethrowerTower extends Tower
 		
 	override function onAttack(UnitEntity ud)
 		for i = 0 to level
-			new FlameMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 6., owner, level)
+			new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), 6.2, owner, level)
 			
 			
 	override function onUpgrade()
@@ -29,13 +29,15 @@ class FlameMissile extends Projectile
 	group affected
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
-		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.15,0.15)).asAngleRadians(), FX_PATH )
+		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.175,0.175)).asAngleRadians(), FX_PATH )
+		fx.setScale(0.2)
 		setSpeed(speed + GetRandomReal(-1.5, 1.5))
-		setRanged(610)
-		setAcc(1.015 + GetRandomReal(-0.005, 0.005))
+		setRanged(680)
+		setAcc(1.015 + GetRandomReal(-0.005, 0.0075))
 		fx.recolor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)
 		this.level = level
+		silent = true
 
 
 	override function update()

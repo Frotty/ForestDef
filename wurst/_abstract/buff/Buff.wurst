@@ -1,4 +1,5 @@
 package Buff
+
 import public Entity
 import InstanceBoard
 import LinkedListModule
@@ -7,8 +8,8 @@ import Squares
 import TextTagEntity
 import PhysicsProjectile
 import Creep
-public constant BUFF_ANIM_PERIOD = 0.25
 
+public constant BUFF_ANIM_PERIOD = 0.25
 
 public abstract class Buff
 	use ShowInstances
@@ -43,9 +44,9 @@ public abstract class Buff
 			
 	ondestroy
 		if applied and victim != null and not victim.done
-			victim.currentBuffs.remove(this)
+			victim.getBuffs().remove(this)
 			boolean isLast = true
-			for bff in victim.currentBuffs
+			for bff in victim.getBuffs()
 				if bff.typeId == this.typeId
 					isLast = false
 					break
@@ -70,26 +71,19 @@ init
 				if getDamage() > 0.5
 					new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
 					,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
-					for bff in attackerData.currentBuffs
-						if not bff.done
-							bff.attackModifier()
+					if attackerData.hasBuffs()
+						for bff in attackerData.getBuffs()
+							if not bff.done
+								bff.attackModifier()
 					modifyDamage(0)
-					for i = 0 to 5
-						var pj = new PhysicsProjectile(attackerData.actor.getPos3() + vec3(0,0,32), 16, attackerData.owner, GetRandomReal(0,1).asAngleRadians()
-						, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, vec2(0,0)) )
-						pj.setTimed(GetRandomReal(2,3))
-						pj.setVel(vec3(GetRandomReal(-4,4),GetRandomReal(-4,4),GetRandomReal(9,15)))
-						pj.restitution = 0.75
-						pj.surfaceFriction = 0.75
-						pj.mass = GetRandomReal(1,30)
 			else
 				// Correct attack, apply Buffs
-				if victimData != null
-					for bff in victimData.currentBuffs
+				if victimData != null and victimData.hasBuffs()
+					for bff in victimData.getBuffs()
 						if not bff.done
 							bff.defenseModifier()
-				if attackerData != null
-					for bff in attackerData.currentBuffs
+				if attackerData != null and attackerData.hasBuffs()
+					for bff in attackerData.getBuffs()
 						if not bff.done
 							bff.attackModifier()
 	end)							

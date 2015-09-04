@@ -16,14 +16,14 @@ public class NormalShieldBuff extends NormalBuff
 			done = true
 		
 	override function apply()
-		for bff in victim.currentBuffs
+		for bff in victim.getBuffs()
 			if bff instanceof thistype
 				let sd = bff castTo thistype
 				sd.duration = duration
 				sd.blockAmount += blockAmount
 				done = true
 				return
-		victim.currentBuffs.add(this)
+		victim.getBuffs().add(this)
 		victim.actor.addAbility(abilId)
 		applied = true
 		

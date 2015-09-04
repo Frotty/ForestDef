@@ -4,7 +4,7 @@ import Terrain
 import PhysicsConstants
 import Interpolation
 
-public constant MAX_MASS = 1000
+public constant MAX_MASS = 250
 //Module for Physical Simulation
 public module PhysicsModule
 	/** Affected by gravity */
@@ -45,13 +45,15 @@ public module PhysicsModule
 		if pv.z > 4.
 			e.vel += pv
 		else	
-			e.vel *= surfaceFriction * bezier_3(1,0.2,0,mass/MAX_MASS)
+			e.vel *= surfaceFriction * bezier_3(1,0.85,0,mass/MAX_MASS)
 			
 		e.pos.z = terrainZ
 		
 	function inAir(Entity e)
+		let coef = bezier_3(0.930,0.985,1,mass/MAX_MASS)
+		let gcoef = bezier_3(0.1,0.875,1,mass/MAX_MASS)
 		if affectedByGravity
-			e.vel += gravity
-		if mass < 25
-			e.vel *= 0.75
-			
+			e.vel += gravity * gcoef
+		e.vel.x *= coef
+		e.vel.y *= coef
+		

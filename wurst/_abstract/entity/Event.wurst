@@ -7,12 +7,16 @@ public enum EventType
 	ON_DEATH
 	ON_CONSTRUCT
 	ON_USE_ITEM
+	ON_UPGRADE
+	ON_SPELL_EFFECT
 	
 public abstract class EventListener
 	static LinkedList<EventListener> onDamageListeners = new LinkedList<EventListener>()
 	static LinkedList<EventListener> onDeathListeners = new LinkedList<EventListener>()
 	static LinkedList<EventListener> onConstructListeners = new LinkedList<EventListener>()
 	static LinkedList<EventListener> onUseItemListeners = new LinkedList<EventListener>()
+	static LinkedList<EventListener> onUpgradeListeners = new LinkedList<EventListener>()
+	static LinkedList<EventListener> spellEffectListeners = new LinkedList<EventListener>()
 	
 	abstract function onEvent()
 	
@@ -26,6 +30,10 @@ public abstract class EventListener
 				onConstructListeners.add(listener)
 			case ON_USE_ITEM
 				onUseItemListeners.add(listener)
+			case ON_UPGRADE
+				onUpgradeListeners.add(listener)
+			case ON_SPELL_EFFECT
+				spellEffectListeners.add(listener)
 		
 	static function onDamage()
 		for listener in onDamageListeners
@@ -42,6 +50,14 @@ public abstract class EventListener
 	static function onUseItem()
 		for listener in onUseItemListeners
 			listener.onEvent()
+	
+	static function onUpgrade()
+		for listener in onUpgradeListeners
+			listener.onEvent()
+	
+	static function onSpellEffect()
+		for listener in spellEffectListeners
+			listener.onEvent()
 			
 public function registerUnit(unit u)
 	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
@@ -55,4 +71,5 @@ init
 	deathTrig.addAction(function EventListener.onDeath)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH, function EventListener.onConstruct)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.onConstruct)
-	
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_UPGRADE_FINISH, function EventListener.onUpgrade)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function EventListener.onSpellEffect)

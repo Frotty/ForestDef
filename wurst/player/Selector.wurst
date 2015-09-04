@@ -3,7 +3,7 @@ import RegisterEvents
 import Entity
 import Builder
 import PlayerData
-
+import Rocket
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
 public constant FAT_SPELL_ID = 'A01Y'
@@ -23,7 +23,8 @@ public class Selector extends UnitEntity
 				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
 				pDatas[data.owner.getId()].fat = false
 			data.done = true
-	
+			if GetRandomInt(0,3) > 2
+				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_SPELL_ID)
 	ondestroy
 		actor.remove()
 	

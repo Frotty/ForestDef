@@ -86,13 +86,23 @@ public abstract class Entity
 abstract public class UnitEntity extends Entity
 	unit actor
 	
-	LinkedList<Buff> currentBuffs = new LinkedList<Buff>()
+	private LinkedList<Buff> currentBuffs
 	
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
 		this.actor = actor
 		actor..setUserData(this castTo int)..addAbility(HEIGHT_ENABLER).removeAbility(HEIGHT_ENABLER)
 		registerUnit(actor)
+		
+	function getBuffs() returns LinkedList<Buff>
+		if done
+			return null
+		if currentBuffs == null
+			currentBuffs = new LinkedList<Buff>()
+		return currentBuffs
+		
+	function hasBuffs() returns boolean
+		return currentBuffs != null
 		
 	override function update()
 		updatePos()
@@ -125,14 +135,16 @@ abstract public class UnitEntity extends Entity
 		done = true
 			
 	ondestroy
-		for bff in currentBuffs
-			bff.victim = null
-			bff.done = true
-		destroy currentBuffs
+		if hasBuffs()
+			for bff in currentBuffs
+				bff.victim = null
+				bff.done = true
+			destroy currentBuffs
 		
 		
 abstract public class FxEntity extends Entity
 	protected Fx fx
+	boolean silent = false
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string sfxpath )
 		super(pos, radius, owner)
@@ -171,7 +183,10 @@ abstract public class FxEntity extends Entity
 		
 	ondestroy
 		debugPrint("fx destroyed", 1)
-		destroy fx
+		if silent
+			fx.hiddenDestroy()
+		else
+			destroy fx
 
 
 

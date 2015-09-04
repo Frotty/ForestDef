@@ -21,7 +21,7 @@ public class BezierMissile extends Projectile
 	///the duration until the target is reached
 	real duration
 	//the time already passed
-	private real time = 0.
+	private real ptime = 0.
 	
 	
 	function getTarget() returns unit
@@ -45,9 +45,9 @@ public class BezierMissile extends Projectile
 		real dz
 		
 
-		time += ANIMATION_PERIOD
+		ptime += ANIMATION_PERIOD
 		
-		p = time / duration
+		p = ptime / duration
 		q = 1 - p
 		
 		if target != null and GetUnitState(target, UNIT_STATE_LIFE) > .405

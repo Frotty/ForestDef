@@ -1,0 +1,33 @@
+package BoulderTower
+
+import ClosureForGroups
+import Tower
+import PresetBuffs
+
+class BoulderBuff extends NormalBuff
+	
+	construct(BoulderTower bt)
+		super(bt, 999999, 0, true)
+		
+	override function attackModifier()
+		var tower = victim castTo BoulderTower
+		if tower.newAttack
+			forUnitsInRange(tower.lastTarget)
+			tower.newAttack = false
+			
+	
+	override function defenseModifier()
+
+class BoulderTower extends Tower
+	int level = 0
+	boolean newAttack = false
+	vec2 lastTarget
+	
+	construct(Tower t)
+		super(t)
+		new BoulderBuff(this)
+		
+	override function onAttack(UnitEntity target)
+		lastTarget = target.getPos().toVec2()
+		
+	

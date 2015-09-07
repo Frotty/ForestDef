@@ -27,7 +27,7 @@ public class Tower extends UnitEntity
 		active = false
 		destroy t
 	
-	function onAttack(UnitEntity target)
+	function onAttack(UnitEntity _target)
 
 
 	function onUpgrade()
@@ -67,7 +67,7 @@ public class Tower extends UnitEntity
 	
 init
 	EventListener.add(EventType.ON_CONSTRUCT, () -> begin
-		let u = GetTriggerUnit()
+		let u = GetConstructingStructure()
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
 			new Tower(u)

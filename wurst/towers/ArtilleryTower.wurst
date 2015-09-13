@@ -1,5 +1,5 @@
 package ArtilleryTower
-import Tower
+import ATower
 import TempGroups
 import Projectile
 import Terrain
@@ -10,10 +10,10 @@ public constant int ART_TOWER_ID = 'h01O'
 constant int SPELL_ID = 'A01T'
 trigger castTrigger
 
-public class ArtilleryTower extends Tower
+public class ArtilleryTower extends ATower
 	int level
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		level = 0

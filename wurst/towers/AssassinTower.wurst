@@ -1,7 +1,7 @@
 package AssassinTower
 	import TimerUtils
 	import Terrain
-	import Tower
+	import ATower
 	
 	int array hitnumberstore
 	public constant int ASSASSIN_TOWER_BASE_ID = 'h01Q'
@@ -37,7 +37,7 @@ package AssassinTower
 			destroytimer.release()
 			
 
-	public class AssassinTower extends Tower
+	public class AssassinTower extends ATower
 		int level
 		unit dummy
 		int target
@@ -45,7 +45,7 @@ package AssassinTower
 		int currenthit
 		timer tim
 		
-		construct  (Tower t)
+		construct  (ATower t)
 			super(t)
 			level = 0
 			dummy = CreateUnit(owner,dummyid[level],pos.x,pos.y,270.)

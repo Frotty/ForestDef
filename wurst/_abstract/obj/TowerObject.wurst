@@ -1,0 +1,74 @@
+package TowerObject
+import UnitObjEditing
+import Scanner
+import ObjectIds
+
+constant BASE_TOWER_ID = 'hwtw'
+
+public class TowerObject
+	BuildingDefinition bdef
+	string upgrades = ""
+	
+	construct(int newId, string name, string hotkey)
+		bdef = new BuildingDefinition(newId, BASE_TOWER_ID)
+		bdef..setUpgradesTo("")
+		..setHotkey(hotkey)
+		..setName(name)
+		..setTooltipBasic("Build |cffB5B5B5" + name + "|r[|cffFFCC00" + hotkey.toUpperCase() + "|r]")
+		..setRepairGoldCost(0)
+		..setRepairLumberCost(0)
+		..setSightRadiusDay(1100)
+		..setSightRadiusNight(700)
+		
+	function setTooltip(string description, string pros, string cons)
+		var tooltip = "|cffA0A0A0" + description + "|r|n"
+		if pros.length() > 0
+			tooltip += "|cff7FB83EPros:|r|n"
+			let sc = new Scanner(pros, ",")
+			for token in sc
+				tooltip += "|cff7FB83E+|r " + token + "|n"
+		if cons.length() > 0 
+			tooltip += "|cffEA3525Cons:|r|n"
+			let sc = new Scanner(cons, ",")
+			for token in sc
+				tooltip += "|cffEA3525-|r " + token + "|n"
+		
+		bdef.setTooltipExtended(tooltip)
+			
+		
+		
+		
+	function setDefense(int hitpoints, real regen, int armor)
+		bdef..setHitPointsMaximumBase(hitpoints)
+		..setHitPointsRegenerationRate(regen)
+		..setDefenseBase(armor)
+		
+	function setCost(int gold, int lumber, int buildtime, int repairtime)
+		bdef..setGoldCost(gold)..setLumberCost(lumber)
+		..setBuildTime(buildtime)..setRepairTime(repairtime)
+		
+	function setArt(string model, string icon, real scale, color col)
+		if model.length() > 1
+			bdef.setModelFile(model)
+		if icon.length() > 1
+			bdef.setIconGameInterface(icon)
+		if scale > 0
+			bdef.setScalingValue(scale)
+		bdef..setTintingColorRed(col.red)
+		..setTintingColorGreen(col.green)
+		..setTintingColorBlue(col.blue)
+		
+	function setAttack(int dmg, int range, int speed, string missileFx, real arc)
+		bdef..setAttacksEnabled(1)
+		..setAttack1DamageBase(dmg)
+		..setAttack1Range(range)
+		..setAttack1ProjectileSpeed(speed)
+		..setAttack1ProjectileArt(missileFx)
+		..setAttack1ProjectileArc(arc)
+		
+	
+	function addUpgrade(int newId)
+		if upgrades.length() > 0
+			upgrades += ","
+		upgrades += idInteger2IdString(newId)
+		bdef.setUpgradesTo(upgrades)

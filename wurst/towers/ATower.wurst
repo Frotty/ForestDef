@@ -1,5 +1,6 @@
-package Tower
+package ATower
 import public Entity
+import initlater BoulderTower
 import initlater WaveTower
 import initlater AssassinTower
 import initlater TrooperTower
@@ -8,21 +9,24 @@ import initlater ThermoTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower
 import initlater HealbackTower
+import ObjectIdGenerator
+import TowerObject
 import Event
-constant int BASIC_TOWER_ID = 'h003'
-constant int BASIC_WALL_ID = 'h000'
 
-public class Wall extends UnitEntity
+int BASIC_TOWER_ID
+int BASIC_WALL_ID
+
+public class AWall extends UnitEntity
 	construct (unit wall)
 		super(vec3(wall.getX(),wall.getY(),0),64,wall)
 
-public class Tower extends UnitEntity
+public class ATower extends UnitEntity
 	
 	construct (unit tower)
 		super(vec3(tower.getX(),tower.getY(),0),64,tower)
 		active = false
 			
-	construct(Tower t)
+	construct(ATower t)
 		super(t.pos, 64, t.actor)
 		active = false
 		destroy t
@@ -70,20 +74,22 @@ init
 		let u = GetConstructingStructure()
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
-			new Tower(u)
+			new ATower(u)
 		else if id == BASIC_WALL_ID
-			new Wall(u)
+			new AWall(u)
 	end)
 	EventListener.add(EventType.ON_UPGRADE, () -> begin
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
-		if data != null and data instanceof Tower
-			(data castTo Tower).onUpgrade()
+		if data != null and data instanceof ATower
+			(data castTo ATower).onUpgrade()
 	end)
 	EventListener.add(EventType.ON_DAMAGE, () -> begin
 		let damager = GetEventDamageSource()
 		if damager.getUserData() > 0
 			let e = damager.getUserData() castTo UnitEntity
-			if e instanceof Tower
-				let t = e castTo Tower
+			if e instanceof ATower
+				let t = e castTo ATower
 				t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
 	end)
+	
+		

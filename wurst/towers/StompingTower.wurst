@@ -1,6 +1,6 @@
 package StompingTower
 	import Entity
-	import Tower
+	import ATower
 	import TimerUtils
 	import Terrain
 	real SPEED = 15.
@@ -8,7 +8,7 @@ package StompingTower
 	public int array stompingbasetype
 	int array dummytype
 	
-	public class StompingTower extends Tower
+	public class StompingTower extends ATower
 		unit dummy //tauren
 		real targetX
 		real targetY
@@ -17,7 +17,7 @@ package StompingTower
 		boolean animbegun //start the stomp animation
 		timer tim //does the loop
 		
-		construct  (Tower t)
+		construct  (ATower t)
 			super(t)
 			dummy = CreateUnit(owner,dummytype[0],pos.x,pos.y,270.)
 			dummy..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)

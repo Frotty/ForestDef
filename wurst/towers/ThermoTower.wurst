@@ -1,16 +1,16 @@
 package ThermoTower
 
-import Tower
+import ATower
 
 constant int buffcode = 'Bfro'
 constant int ORB_ID = 'A01S'
 public constant int THERMO_TOWER_ID = 'h01R'
 
-public class ThermoTower extends Tower
+public class ThermoTower extends ATower
 	boolean isHot
 	int level
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		debugPrint("THERMO TOWER BUILT",12)
 		isHot = true

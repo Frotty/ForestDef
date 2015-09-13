@@ -1,8 +1,10 @@
 package BoulderTower
 
 import ClosureForGroups
-import Tower
+import ATower
 import PresetBuffs
+import Interpolation
+
 
 class BoulderBuff extends NormalBuff
 	
@@ -11,23 +13,35 @@ class BoulderBuff extends NormalBuff
 		
 	override function attackModifier()
 		var tower = victim castTo BoulderTower
+		// Only execute for one damage event
 		if tower.newAttack
-			forUnitsInRange(tower.lastTarget)
+			forUnitsInRange(tower.lastTarget, tower.getSplashRadius(), (unit u) -> begin
+				let targetData = u.getUserData() castTo UnitEntity
+				let distanceSq = tower.lastTarget.distToVecSquared(targetData.getPos().toVec2())
+				let percentageSplash = bezier_3(0, 0.3, 1, distanceSq / tower.getSplashRadius().squared())
+				let angl = tower.lastTarget.angleTo(targetData.getPos().toVec2())
+				targetData.addVel(vec3(angl.cos() * percentageSplash * 5,angl.sin() * percentageSplash * 5, 4 * percentageSplash))
+			end)
 			tower.newAttack = false
 			
 	
 	override function defenseModifier()
 
-class BoulderTower extends Tower
+class BoulderTower extends ATower
 	int level = 0
 	boolean newAttack = false
 	vec2 lastTarget
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		new BoulderBuff(this)
 		
 	override function onAttack(UnitEntity target)
 		lastTarget = target.getPos().toVec2()
+		newAttack = true
+		
+	function getSplashRadius() returns real
+		return level * 50 + 100.
+			
 		
 	

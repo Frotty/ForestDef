@@ -1,5 +1,5 @@
 package WaveTower
-import Tower
+import ATower
 import Terrain
 import Projectile
 import TempGroups
@@ -9,10 +9,10 @@ constant real AREA_OF_EFFECT = 200.
 public constant int FIRST_WAVE_ID = 'h01N'
 constant string FX_PATH = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl"
 
-public class WaveTower extends Tower
+public class WaveTower extends ATower
 	int level = 1
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		active = false
 		

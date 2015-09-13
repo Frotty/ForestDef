@@ -1,0 +1,62 @@
+package AllTowers
+import ObjectIdGenerator
+import Colors
+import TowerObject
+import Scanner
+
+public int BASE_TOWER_ID
+public int BASE_WALL_ID
+public int SPLASH_TOWER_ID1
+public int SPLASH_TOWER_ID2
+public int SPLASH_TOWER_ID3
+public int GLEVE_TOWER_ID1
+public int GLEVE_TOWER_ID2
+public int GLEVE_TOWER_ID3
+public int POISON_TOWER_ID1
+public int POISON_TOWER_ID2
+public int POISON_TOWER_ID3
+
+@compiletime function createAll()
+	callFunctionsWithAnnotation("@objdef")
+
+@objdef function createTowerObjects()
+	BASE_TOWER_ID = UNIT_ID_GEN.next()
+	BASE_WALL_ID = UNIT_ID_GEN.next()
+	SPLASH_TOWER_ID1 = UNIT_ID_GEN.next()
+	SPLASH_TOWER_ID2 = UNIT_ID_GEN.next()
+	SPLASH_TOWER_ID3 = UNIT_ID_GEN.next()
+	GLEVE_TOWER_ID1 = UNIT_ID_GEN.next()
+	GLEVE_TOWER_ID2 = UNIT_ID_GEN.next()
+	GLEVE_TOWER_ID3 = UNIT_ID_GEN.next()
+	POISON_TOWER_ID1 = UNIT_ID_GEN.next()
+	POISON_TOWER_ID2 = UNIT_ID_GEN.next()
+	POISON_TOWER_ID3 = UNIT_ID_GEN.next()
+	
+	if compiletime
+		// Base Tower
+		new TowerObject(BASE_TOWER_ID, "Base Tower", "Q")
+		..setCost(5, 0, 2, 5)
+		..setDefense(50, 5, 1)
+		..setArt("", "", 0.7, COLOR_WHITE)
+		..setTooltip("The basic template tower that can be upgraded into various other towers",
+						"", "HAS NO ATTACK")
+		..addUpgrade(SPLASH_TOWER_ID1)
+		..addUpgrade(GLEVE_TOWER_ID1)
+		..addUpgrade(POISON_TOWER_ID1)
+		print("heh")
+		// Splash lvl 1-3
+		new TowerObject(SPLASH_TOWER_ID1, "Splash Tower Level 1", "Q")
+		..setCost(28, 0, 4, 10)
+		..setDefense(200, 5, 1)
+		..addUpgrade(SPLASH_TOWER_ID2)
+		..setAttack(25, 600, 500, "", 0.4)
+		
+		new TowerObject(SPLASH_TOWER_ID2, "Splash Tower Level 2", "Q")
+		..setCost(45, 0, 0,0)
+		..addUpgrade(SPLASH_TOWER_ID3)
+		
+		new TowerObject(SPLASH_TOWER_ID3, "Splash Tower Level 3", "Q")
+		..setCost(45, 0, 0, 0)
+		..addUpgrade(SPLASH_TOWER_ID3)
+		
+	

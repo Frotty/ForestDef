@@ -1,3 +1,4 @@
 *.w3x
 wurst.dependencies
 objectEditingOutput/
+wurst/compiled.j.txt

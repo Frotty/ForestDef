@@ -1,6 +1,6 @@
 package SphereTower
 
-import Tower
+import ATower
 import Projectile
 import TempGroups
 
@@ -8,7 +8,7 @@ constant real AREA_OF_EFFECT = 40.
 constant string FX_PATH = "sdg"
 constant real HEIGHT = 50.
 
-public class SphereTower extends Tower
+public class SphereTower extends ATower
 	int level
 	Sphere sphere
 	real speed
@@ -16,7 +16,7 @@ public class SphereTower extends Tower
 	boolean isDistGrowing = false
 	boolean isDistSrinking = false
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		level = 0
 		sphere = new Sphere(vec3(pos.x+spdist,pos.y,HEIGHT), speed, owner, level)

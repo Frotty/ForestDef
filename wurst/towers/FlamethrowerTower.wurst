@@ -1,5 +1,5 @@
 package FlamethrowerTower
-import Tower
+import ATower
 import Terrain
 import Projectile
 import TempGroups
@@ -8,9 +8,9 @@ public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Mi
 public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
-public class FlamethrowerTower extends Tower
+public class FlamethrowerTower extends ATower
 	int level = 1
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		
 	override function onAttack(UnitEntity ud)

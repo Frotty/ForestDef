@@ -1,7 +1,7 @@
 package TrooperTower
 	import Terrain
 	import Table
-	import Tower
+	import ATower
 	import public Entity
 	
 	real DUMMY_DIST = 15.
@@ -28,13 +28,13 @@ package TrooperTower
 			SetUnitFlyHeight(actor, 0.,0.) //on the ground...
 			KillUnit(actor)
 
-	public class TrooperTower extends Tower
+	public class TrooperTower extends ATower
 		Table trooperData = new Table()
 		int troopcount
 		int level
 		//Still needs function for attack, stop, and upgrade.
 		
-		construct (Tower t)
+		construct (ATower t)
 			super(t)
 			level = 0
 			troopcount = 2

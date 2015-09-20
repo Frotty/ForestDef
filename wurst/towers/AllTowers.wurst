@@ -1,17 +1,23 @@
 package AllTowers
 import ObjectIdGenerator
 import Colors
-import TowerObject
-import Scanner
+import public TowerObject
 
 public int BASE_TOWER_ID
 public int BASE_WALL_ID
 public int SPLASH_TOWER_ID1
 public int SPLASH_TOWER_ID2
 public int SPLASH_TOWER_ID3
+public int FIRE_TOWER_ID1
+public int FIRE_TOWER_ID2
+public int FIRE_TOWER_ID3
+public int BOULDER_TOWER_ID1
+public int BOULDER_TOWER_ID2
+public int BOULDER_TOWER_ID3
 public int GLEVE_TOWER_ID1
 public int GLEVE_TOWER_ID2
 public int GLEVE_TOWER_ID3
+public int WAVE_TOWER_ID1
 public int POISON_TOWER_ID1
 public int POISON_TOWER_ID2
 public int POISON_TOWER_ID3
@@ -31,32 +37,85 @@ public int POISON_TOWER_ID3
 	POISON_TOWER_ID1 = UNIT_ID_GEN.next()
 	POISON_TOWER_ID2 = UNIT_ID_GEN.next()
 	POISON_TOWER_ID3 = UNIT_ID_GEN.next()
+	BOULDER_TOWER_ID1 = UNIT_ID_GEN.next()
+	BOULDER_TOWER_ID2 = UNIT_ID_GEN.next()
+	BOULDER_TOWER_ID3 = UNIT_ID_GEN.next()
+	WAVE_TOWER_ID1 = UNIT_ID_GEN.next()
 	
 	if compiletime
 		// Base Tower
 		new TowerObject(BASE_TOWER_ID, "Base Tower", "Q")
 		..setCost(5, 0, 2, 5)
-		..setDefense(50, 5, 1)
-		..setArt("", "", 0.7, COLOR_WHITE)
+		..setDefense(50, 0, 1)
+		..setArt("", "", 0.7, COLOR_WHITE, "")
 		..setTooltip("The basic template tower that can be upgraded into various other towers",
 						"", "HAS NO ATTACK")
 		..addUpgrade(SPLASH_TOWER_ID1)
 		..addUpgrade(GLEVE_TOWER_ID1)
 		..addUpgrade(POISON_TOWER_ID1)
-		print("heh")
+		
 		// Splash lvl 1-3
 		new TowerObject(SPLASH_TOWER_ID1, "Splash Tower Level 1", "Q")
+		..setTooltip("The first Splash Tower",
+						"Splash Damage,Good vs Melee & Bosses", "Low Attackspeed,Weak vs Ranged & Magic")
+		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp", 0.8, color(255,255,255), "upgrade,second")
 		..setCost(28, 0, 4, 10)
-		..setDefense(200, 5, 1)
+		..setDefense(200, 0, 5)
+		..setAttack(AttackType.Siege, 40, 600, 2, 800, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl", 0.35, false)
+		..setSplash(50, 75, 100, 0.5, 0.25)
 		..addUpgrade(SPLASH_TOWER_ID2)
-		..setAttack(25, 600, 500, "", 0.4)
 		
 		new TowerObject(SPLASH_TOWER_ID2, "Splash Tower Level 2", "Q")
-		..setCost(45, 0, 0,0)
+		..setTooltip("The first upgrade for the siege tower",
+						"Improved Splash Range & Damage,Good vs Melee & Bosses", "Low Attackspeed,Weak vs Ranged & Magic")
+		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp", 0.9, color(200,200,200), "upgrade,second")
+		..setCost(43, 0, 5, 12)
+		..setDefense(275, 0, 5)
+		..setAttack(AttackType.Siege, 45, 600, 2, 800, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl", 0.35, false)
+		..setSplash(75, 100, 125, 0.5, 0.25)
 		..addUpgrade(SPLASH_TOWER_ID3)
 		
 		new TowerObject(SPLASH_TOWER_ID3, "Splash Tower Level 3", "Q")
-		..setCost(45, 0, 0, 0)
-		..addUpgrade(SPLASH_TOWER_ID3)
+		..setTooltip("The second upgrade for the siege tower",
+						"Improved Splash Range & Damage,Good vs Melee & Bosses", "Low Attackspeed,Weak vs Ranged & Magic")
+		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp", 1, color(150,150,150), "upgrade,second")
+		..setCost(65, 0, 6, 14)
+		..setDefense(350, 0, 5)
+		..setAttack(AttackType.Siege, 50, 600, 2, 800, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl", 0.35, false)
+		..setSplash(90, 125, 165, 0.5, 0.25)
+		..addUpgrade(BOULDER_TOWER_ID1)
+		// Gleve 1-3
+		new TowerObject(GLEVE_TOWER_ID1, "Gleve Tower Level 1", "E")
+		..setTooltip("The first Gleve Tower",
+						"Bouncing Attack,Good vs Mages,Medium Attackspeed", "Weak vs Bosses")
+		..setArt("buildings\\orc\\WatchTower\\WatchTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNOrcTower.blp", 0.8, color(255,255,255), "")
+		..setCost(22, 0, 3, 8)
+		..setDefense(150, 0, 2)
+		..setAttack(AttackType.Pierce, 8, 800, 1.5, 800, "Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl", 0.1, true)
+		..setBounce(2, 0.12)
+		..addUpgrade(GLEVE_TOWER_ID2)
+		
+		new TowerObject(GLEVE_TOWER_ID2, "Gleve Tower Level 2", "E")
+		..setTooltip("The first Gleve Tower",
+						"Bouncing Attack,Good vs Mages,Medium Attackspeed", "Weak vs Bosses")
+		..setArt("buildings\\orc\\WatchTower\\WatchTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNOrcTower.blp", 0.8, color(255,255,255), "")
+		..setCost(30, 0, 4, 10)
+		..setDefense(225, 0, 2)
+		..setAttack(AttackType.Pierce, 18, 800, 1.4, 800, "Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl", 0.1, true)
+		..setBounce(3, 0.10)
+		..addUpgrade(GLEVE_TOWER_ID3)
+		
+		new TowerObject(GLEVE_TOWER_ID3, "Gleve Tower Level 3", "E")
+		..setTooltip("The first Gleve Tower",
+						"Bouncing Attack,Good vs Mages,Medium Attackspeed", "Weak vs Bosses")
+		..setArt("buildings\\orc\\WatchTower\\WatchTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNOrcTower.blp", 0.8, color(255,255,255), "")
+		..setCost(45, 0, 5, 12)
+		..setDefense(325, 0, 2)
+		..setAttack(AttackType.Pierce, 35, 800, 1.3, 800, "Abilities\\Weapons\\GlaiveMissile\\GlaiveMissile.mdl", 0.1, true)
+		..setBounce(4, 0.10)
+		..addUpgrade(WAVE_TOWER_ID1)
+		
+		callFunctionsWithAnnotation("@towerdef")
+		
 		
 	

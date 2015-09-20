@@ -1,5 +1,6 @@
 package ATower
 import public Entity
+import public AllTowers
 import initlater BoulderTower
 import initlater WaveTower
 import initlater AssassinTower

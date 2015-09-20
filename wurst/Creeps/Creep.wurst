@@ -16,13 +16,13 @@ init
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 60
+	int numberOfTests = 30
 	real radius = 128
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
 		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
 		vec2 testPoint = pos + direction
-		if isTerrainWalkable(testPoint.x, testPoint.y)
+		if IsTerrainPathable(testPoint.x, testPoint.y, PATHING_TYPE_WALKABILITY)
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
 	
@@ -45,7 +45,7 @@ public class Creep extends UnitEntity
 	override function update()
 		if vel.lengthSquared() > 1.5
 			super.update()
-			if isTerrainWalkable(pos.x, pos.y)
+			if IsTerrainPathable(pos.x, pos.y, PATHING_TYPE_WALKABILITY)
 				vel *= (0.975)
 			else
 				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))

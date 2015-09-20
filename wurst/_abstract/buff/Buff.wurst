@@ -6,8 +6,6 @@ import LinkedListModule
 import Event
 import Squares
 import TextTagEntity
-import PhysicsProjectile
-import Creep
 
 public constant BUFF_ANIM_PERIOD = 0.25
 
@@ -59,7 +57,7 @@ public abstract class Buff
 	
 	abstract function defenseModifier()
 
-init
+@initStart function initBuff()
 	EventListener.add(EventType.ON_DAMAGE, () -> begin
 		let v = GetTriggerUnit()
 		let a = GetEventDamageSource()

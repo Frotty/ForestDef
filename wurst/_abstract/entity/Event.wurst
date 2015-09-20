@@ -66,7 +66,7 @@ public function registerUnit(unit u)
 trigger dmgTrig = CreateTrigger()
 trigger deathTrig = CreateTrigger()
 
-init
+@initStart function initEvent()
 	dmgTrig.addAction(function EventListener.onDamage)		
 	deathTrig.addAction(function EventListener.onDeath)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.onConstruct)

@@ -91,5 +91,5 @@ public function startSpawn()
 	t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
 	
-public function initSpawn()
+@startInit function initSpawn()
 	initWaves()

@@ -1,5 +1,5 @@
 package TowerObject
-import UnitObjEditing
+import public UnitObjEditing
 import Scanner
 import ObjectIds
 
@@ -19,6 +19,8 @@ public class TowerObject
 		..setRepairLumberCost(0)
 		..setSightRadiusDay(1100)
 		..setSightRadiusNight(700)
+		..setNormalAbilities("")
+		..setUpgradesUsed("")
 		
 	function setTooltip(string description, string pros, string cons)
 		var tooltip = "|cffA0A0A0" + description + "|r|n"
@@ -47,7 +49,7 @@ public class TowerObject
 		bdef..setGoldCost(gold)..setLumberCost(lumber)
 		..setBuildTime(buildtime)..setRepairTime(repairtime)
 		
-	function setArt(string model, string icon, real scale, color col)
+	function setArt(string model, string icon, real scale, color col, string reqAnimNames)
 		if model.length() > 1
 			bdef.setModelFile(model)
 		if icon.length() > 1
@@ -57,14 +59,54 @@ public class TowerObject
 		bdef..setTintingColorRed(col.red)
 		..setTintingColorGreen(col.green)
 		..setTintingColorBlue(col.blue)
-		
-	function setAttack(int dmg, int range, int speed, string missileFx, real arc)
+		if reqAnimNames.length() > 1
+			bdef.setRequiredAnimationNames(reqAnimNames)
+	
+	boolean canAir = false
+	function setAttack(AttackType atype, int dmg, int range, real rate, int speed, string missileFx, real arc, boolean canAir)
 		bdef..setAttacksEnabled(1)
+		..setAttack1AttackType(atype)
+		..setAttack1CooldownTime(rate)
 		..setAttack1DamageBase(dmg)
 		..setAttack1Range(range)
+		..setAcquisitionRange(range+50.)
 		..setAttack1ProjectileSpeed(speed)
 		..setAttack1ProjectileArt(missileFx)
 		..setAttack1ProjectileArc(arc)
+		..setAttack1AnimationBackswingPoint(0.3)
+		..setAttack1AnimationDamagePoint(0.5)
+		..setAttack1DamageNumberofDice(1)
+		..setAttack1DamageSidesperDie(2)
+		..setAttack1MaximumNumberofTargets(1)
+		..setAttack1RangeMotionBuffer(250)
+		this.canAir = canAir
+		if canAir
+			bdef.setAttack1TargetsAllowed("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1TargetsAllowed("debris,ground,item,ward")
+			
+	function setSplash(int fullRad, int mediumRad, int smallRad, real medFac, real smallFac)
+		bdef..setAttack1AreaofEffectFullDamage(fullRad)
+		..setAttack1AreaofEffectMediumDamage(mediumRad)
+		..setAttack1AreaofEffectSmallDamage(smallRad)
+		..setAttack1DamageFactorMedium(medFac)
+		..setAttack1DamageFactorSmall(smallFac)
+		..setAttack1WeaponType(WeaponType.Artillery)
+		if canAir
+			bdef.setAttack1AreaofEffectTargets("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1AreaofEffectTargets("debris,ground,item,ward")
+		
+	
+	function setBounce(int targets, real lossFactor)
+		bdef..setAttack1MaximumNumberofTargets(targets)
+		..setAttack1AreaofEffectFullDamage(500)
+		..setAttack1DamageLossFactor(lossFactor)
+		..setAttack1WeaponType(WeaponType.MissileBounce)
+		if canAir
+			bdef.setAttack1AreaofEffectTargets("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1AreaofEffectTargets("debris,ground,item,ward")
 		
 	
 	function addUpgrade(int newId)

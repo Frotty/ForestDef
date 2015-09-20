@@ -16,8 +16,11 @@ import ShieldKit
 import StompingTower
 import TrooperTower
 import EntityManagement
+import Fx
+import ClosureTimers
 
 function start()
+	callFunctionsWithAnnotation("@initStart")
 	initLumberSystem()
 	initDestroy()
 	initSuperCharge()
@@ -27,8 +30,6 @@ function start()
 	initTrooperTower()
 	initArtilleryTower()
 	initPlayers()
-	initConds()
-	initSpawn()
 	initShieldKit()
 	initMultiboard()
 	initRocket()
@@ -36,6 +37,7 @@ function start()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
+	
 	
 function spawn()
 	var snd = new Sound("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", 16740, false)

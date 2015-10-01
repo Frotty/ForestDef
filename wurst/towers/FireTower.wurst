@@ -1,0 +1,31 @@
+package FireTower
+import ATower
+
+
+class FireTower extends ATower
+	int level = 0
+	boolean newAttack = false
+	vec2 lastTarget
+	
+	construct(ATower t)
+		super(t)
+		
+	override function onAttack(UnitEntity target)
+		lastTarget = target.getPos().toVec2()
+		newAttack = true
+		
+	function getSplashRadius() returns real
+		return level * 50 + 100.
+			
+		
+@towerdef function fireDef()
+	// Fire 1-3
+	new TowerObject(FIRE_TOWER_ID1, "Fire Tower Level 1", "Q")
+	..setTooltip("The Fire Tower leaves burning oil on impact, damaging foes over time.",
+					"Splash & DOT,Good vs Melee & Bosses", "Weak vs Ranged & Magic")
+	..setArt("", "ReplaceableTextures\\CommandButtons\\BTNFlameTower.blp", 0.9, color(255,220,220), "third")
+	..setCost(95, 0, 8, 17)
+	..setDefense(750, 0, 6)
+	..setAttack(AttackType.Siege, 55, 600, 2.2, 800, "Abilities\\Weapons\\DemolisherFireMissile\\DemolisherFireMissile.mdl", 0.35, false)
+	..setSplash(90, 115, 155, 0.5, 0.25)
+	..addUpgrade(FIRE_TOWER_ID2)

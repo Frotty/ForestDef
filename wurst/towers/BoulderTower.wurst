@@ -73,4 +73,5 @@ class BoulderTower extends ATower
 		..setDefense(550, 0, 6)
 		..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
 		..setSplash(100, 125, 175, 0.5, 0.25)
+		
 	

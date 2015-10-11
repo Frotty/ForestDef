@@ -20,7 +20,9 @@ import Fx
 import ClosureTimers
 
 function start()
-	callFunctionsWithAnnotation("@initStart")
+	callFunctionsWithAnnotation("@objdef")
+	callFunctionsWithAnnotation("@towerdef")
+	callFunctionsWithAnnotation("@setup")
 	initLumberSystem()
 	initDestroy()
 	initSuperCharge()

@@ -13,18 +13,18 @@ import initlater HealbackTower
 import ObjectIdGenerator
 import TowerObject
 import Event
-
-int BASIC_TOWER_ID
-int BASIC_WALL_ID
+import ChannelAbilityPreset
 
 public class AWall extends UnitEntity
 	construct (unit wall)
 		super(vec3(wall.getX(),wall.getY(),0),64,wall)
+		actor.addAbility(DESTROY_SPELL_ID)
 
 public class ATower extends UnitEntity
 	
 	construct (unit tower)
 		super(vec3(tower.getX(),tower.getY(),0),64,tower)
+		actor.addAbility(DESTROY_SPELL_ID)
 		active = false
 			
 	construct(ATower t)
@@ -64,19 +64,23 @@ public class ATower extends UnitEntity
 			case THERMO_TOWER_ID
 				debugPrint("iThermo",0)
 				new ThermoTower(this)
+			case BOULDER_TOWER_ID1
+				debugPrint("iThermo",0)
+				new BoulderTower(this)
 			default
 				debugPrint("upgrade not catched", 1)
 		actor.issueImmediateOrderById(OrderId("stop"))
 		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)
-	
+		
 	
 init
+	
 	EventListener.add(EventType.ON_CONSTRUCT, () -> begin
 		let u = GetConstructingStructure()
 		let id = u.getTypeId()
-		if id == BASIC_TOWER_ID
+		if id == BASE_TOWER_ID
 			new ATower(u)
-		else if id == BASIC_WALL_ID
+		else if id == BASE_WALL_ID1
 			new AWall(u)
 	end)
 	EventListener.add(EventType.ON_UPGRADE, () -> begin
@@ -92,5 +96,75 @@ init
 				let t = e castTo ATower
 				t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
 	end)
+	EventListener.add(EventType.ON_SPELL_EFFECT, () -> begin
+		if GetSpellAbilityId() == DESTROY_SPELL_ID
+			let caster = GetSpellAbilityUnit()
+			let data = caster.getUserData() castTo UnitEntity
+			if data instanceof AWall
+				if data.actor.getHP() >= data.actor.getMaxHP()
+					data.owner.addGold(10)
+				data.actor.kill()
+			if data instanceof ATower
+				if data.actor.getHP() >= data.actor.getMaxHP()
+					data.owner.addGold(5)
+				data.actor.kill()
+	end)
+	
+	
+int DESTROY_SPELL_ID
+	
+@towerdef function createObjs()
+	DESTROY_SPELL_ID = ABIL_ID_GEN.next()
+	
+	if compiletime
+		new ChannelAbilityPreset(DESTROY_SPELL_ID, 1)
+		..removeChannelProperties(true)
+		..presetTargetTypes(Targettype.NOTARGET)
+		..presetButtonPosNormal(3,2)
+		..presetIcon("ReplaceableTextures\\PassiveButtons\\PASBTNDemolish.blp")
+		..presetTooltipNormal((int lvl) -> "Destroy this building")
+		..presetTooltipNormalExtended((int lvl) -> "|cffcc0000Money is only refunded if the building is at full health")
+		// Base Tower
+		new TowerObject(BASE_TOWER_ID, "Base Tower", "Q")
+		..setCost(5, 0, 2, 5)
+		..setDefense(50, 0, 1)
+		..setArt("", "", 0.7, COLOR_WHITE, "")
+		..setTooltip("The basic template tower that can be upgraded into various other towers",
+						"", "HAS NO ATTACK")
+		..addUpgrade(SPLASH_TOWER_ID1)
+		..addUpgrade(GLEVE_TOWER_ID1)
+		..addUpgrade(POISON_TOWER_ID1)
+		
+		// Base Walls
+		new TowerObject(BASE_WALL_ID1, "Base Wall", "W")
+		..setCost(10, 0, 1, 20)
+		..setDefense(400, 1, 1)
+		..setAttack(AttackType.Normal, -1, 300, 0.05, 0, "", 0, false)
+		..setArt("buildings\\other\\NerubianZiggurat\\NerubianZiggurat.mdl", "ReplaceableTextures\\CommandButtons\\BTNNerubianZiggurat.blp",
+			0.5, COLOR_WHITE, "")
+		..setTooltip("The basic template wall that can be upgraded into various other walls",
+						"", "")
+		..addUpgrade(BASE_WALL_ID2)
+		
+		new TowerObject(BASE_WALL_ID2, "Advanced Wall", "Q")
+		..setCost(12, 0, 3, 25)
+		..setDefense(700, 2, 3)
+		..setAttack(AttackType.Normal, -1, 300, 0.05, 0, "", 0, false)
+		..setArt("buildings\\other\\NerubianZiggurat\\NerubianZiggurat.mdl", "ReplaceableTextures\\CommandButtons\\BTNNerubianZiggurat.blp",
+			0.65, color(160,210,180), "")
+		..setTooltip("An advanced wall that can hold off stronger foes",
+						"", "")
+		..addUpgrade(BASE_WALL_ID3)
+		
+		new TowerObject(BASE_WALL_ID3, "Enemy Stopper", "Q")
+		..setCost(30, 0, 5, 50)
+		..setDefense(1000, 5, 5)
+		..setAttack(AttackType.Normal, -1, 300, 0.05, 0, "", 0, false)
+		..setArt("buildings\\other\\NerubianZiggurat\\NerubianZiggurat.mdl", "ReplaceableTextures\\CommandButtons\\BTNNerubianZiggurat.blp",
+			0.8, color(120,120,120), "")
+		..setTooltip("A big wall that stops enemies",
+						"", "")
+		..addUpgrade(BASE_WALL_ID3)
+	
 	
 		

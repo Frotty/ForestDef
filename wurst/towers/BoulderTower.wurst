@@ -3,7 +3,8 @@ import ClosureForGroups
 import ATower
 import PresetBuffs
 import Interpolation
-
+import Event
+import Assets
 
 class BoulderBuff extends NormalBuff
 	
@@ -13,65 +14,79 @@ class BoulderBuff extends NormalBuff
 	override function attackModifier()
 		var tower = victim castTo BoulderTower
 		// Only execute for one damage event
+		print("attack1")
 		if tower.newAttack
-			forUnitsInRange(tower.lastTarget, tower.getSplashRadius(), (unit u) -> begin
-				let targetData = u.getUserData() castTo UnitEntity
-				let distanceSq = tower.lastTarget.distToVecSquared(targetData.getPos().toVec2())
-				let percentageSplash = bezier_3(0, 0.3, 1, distanceSq / tower.getSplashRadius().squared())
-				let angl = tower.lastTarget.angleTo(targetData.getPos().toVec2())
-				targetData.addVel(vec3(angl.cos() * percentageSplash * 5,angl.sin() * percentageSplash * 5, 4 * percentageSplash))
-			end)
+			print("attack2")
 			tower.newAttack = false
+			forUnitsInRange(tower.lastTarget, tower.getSplashRadius(), (unit u) -> begin
+				if tower.owner.isEnemyOf(u.getOwner())
+					print("attack3")
+					let targetData = u.getUserData() castTo UnitEntity
+					let distanceSq = tower.lastTarget.distToVecSquared(targetData.getPos().toVec2())
+					let percentageSplash = bezier_3(1, 0.3, 0, distanceSq / tower.getSplashRadius().squared())
+					print("splash%: " + percentageSplash.toString())
+					let angl = tower.lastTarget.angleTo(targetData.getPos().toVec2())
+					targetData.setVel(vec3(angl.cos() * percentageSplash * 15,angl.sin() * percentageSplash * 15, 14 * percentageSplash))
+			end)
+			
 			
 	
 	override function defenseModifier()
 
-class BoulderTower extends ATower
-	int level = 0
+public class BoulderTower extends ATower
+	int level = 1
 	boolean newAttack = false
 	vec2 lastTarget
 	
 	construct(ATower t)
 		super(t)
 		new BoulderBuff(this)
-		
-	override function onAttack(UnitEntity target)
-		lastTarget = target.getPos().toVec2()
-		newAttack = true
+		print("buff added")
 		
 	function getSplashRadius() returns real
 		return level * 50 + 100.
 			
+			
+@setup function initBoulder()
+	EventListener.add(EventType.ON_ATTACK, () -> begin
+		let data = GetAttacker().getUserData() castTo UnitEntity
+		if data instanceof BoulderTower
+			let tower = data castTo BoulderTower
+			tower.lastTarget = GetTriggerUnit().getPos()
+			tower.newAttack = true
+			addEffect(Other.shockwavemissile, tower.lastTarget)
+			print("target set")
+	end)
 		
 @towerdef function boulderDef()
 	// Boulder 1-3
-		new TowerObject(BOULDER_TOWER_ID1, "Boulder Tower Level 1", "Q")
-		..setTooltip("The Boulder Tower comes with a radial knockback",
-						"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
-		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), " ,second")
-		..setCost(78, 0, 7, 15)
-		..setDefense(550, 0, 6)
-		..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
-		..setSplash(100, 125, 175, 0.5, 0.25)
-		..addUpgrade(BOULDER_TOWER_ID2)
-		
-		new TowerObject(BOULDER_TOWER_ID2, "Boulder Tower Level 2", "Q")
-		..setTooltip("The first upgrade",
-						"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
-		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), "second")
-		..setCost(78, 0, 7, 15)
-		..setDefense(550, 0, 6)
-		..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
-		..setSplash(100, 125, 175, 0.5, 0.25)
-		..addUpgrade(BOULDER_TOWER_ID3)
-		
-		new TowerObject(BOULDER_TOWER_ID3, "Boulder Tower Level 3", "Q")
-		..setTooltip("The second upgrade",
-						"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
-		..setArt("", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), "second")
-		..setCost(78, 0, 7, 15)
-		..setDefense(550, 0, 6)
-		..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
-		..setSplash(100, 125, 175, 0.5, 0.25)
+	new TowerObject(BOULDER_TOWER_ID1, "Boulder Tower Level 1", "Q")
+	..setTooltip("The Boulder Tower comes with a radial knockback",
+					"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
+	..setArt("buildings\\other\\TowerDefenseTower\\TowerDefenseTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), "second")
+	..setCost(78, 0, 7, 15)
+	..setDefense(550, 0, 6)
+	..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
+	..setSplash(100, 125, 175, 0.5, 0.25)
+	..addUpgrade(BOULDER_TOWER_ID2)
+	
+	new TowerObject(BOULDER_TOWER_ID2, "Boulder Tower Level 2", "Q")
+	..setTooltip("The first upgrade",
+					"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
+	..setArt("buildings\\other\\TowerDefenseTower\\TowerDefenseTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), "second")
+	..setCost(78, 0, 7, 15)
+	..setDefense(850, 0, 6)
+	..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
+	..setSplash(100, 125, 175, 0.5, 0.25)
+	..addUpgrade(BOULDER_TOWER_ID3)
+	
+	new TowerObject(BOULDER_TOWER_ID3, "Boulder Tower Level 3", "Q")
+	..setTooltip("The second upgrade",
+					"Splash & Knockback,Good vs Melee & Bosses", "Lower Attackspeed,Requires Micro,Weak vs Ranged & Magic")
+	..setArt("buildings\\other\\TowerDefenseTower\\TowerDefenseTower.mdl", "ReplaceableTextures\\CommandButtons\\BTNRockTower.blp", 0.9, color(200,200,200), "second")
+	..setCost(78, 0, 7, 15)
+	..setDefense(1100, 0, 6)
+	..setAttack(AttackType.Siege, 50, 600, 2.5, 800, "Abilities\\Weapons\\AncientProtectorMissile\\AncientProtectorMissile.mdl", 0.35, false)
+	..setSplash(100, 125, 175, 0.5, 0.25)
 		
 	

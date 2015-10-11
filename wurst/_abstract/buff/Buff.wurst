@@ -57,7 +57,7 @@ public abstract class Buff
 	
 	abstract function defenseModifier()
 
-@initStart function initBuff()
+@setup function initBuff()
 	EventListener.add(EventType.ON_DAMAGE, () -> begin
 		let v = GetTriggerUnit()
 		let a = GetEventDamageSource()

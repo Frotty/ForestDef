@@ -3,11 +3,11 @@ import TimerUtils
 import Queue
 import Wave
 
-constant real SPAWN_TIME = 10.0
+constant real SPAWN_TIME = 20.0
 
-Queue<NormalWave> normalWaves = new Queue<NormalWave>()
-Queue<BossWave> bossWaves = new Queue<BossWave>()
-Queue<SpecialWave> specialWaves = new Queue<SpecialWave>()
+Queue<NormalWave> normalWaves
+Queue<BossWave> bossWaves
+Queue<SpecialWave> specialWaves
 
 timer spawnTimer = getTimer()
 int level = 1
@@ -27,6 +27,15 @@ function onSpawnTime()
 		
 	
 function initWaves()
+	if normalWaves != null
+		destroy normalWaves
+	normalWaves = new Queue<NormalWave>()
+	if bossWaves != null
+		destroy bossWaves
+	bossWaves = new Queue<BossWave>()
+	if specialWaves != null
+		destroy specialWaves
+	specialWaves = new Queue<SpecialWave>()
 	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 1, 6 ))
 	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 2, 6 ))
 	normalWaves.enqueue(new NormalWave('u000', 'u003', 'n000', 3, 6 ))
@@ -91,5 +100,5 @@ public function startSpawn()
 	t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
 	
-@startInit function initSpawn()
+@setup function initSpawn()
 	initWaves()

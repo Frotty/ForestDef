@@ -45,12 +45,12 @@ public class Creep extends UnitEntity
 	override function update()
 		if vel.lengthSquared() > 1.5
 			super.update()
-			if IsTerrainPathable(pos.x, pos.y, PATHING_TYPE_WALKABILITY)
+			if isTerrainWalkable(pos.x, pos.y)
 				vel *= (0.975)
 			else
 				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))
 			pos += vel
-			actor.setXY(pos.x, pos.y)
+			actor.setXYZReal(pos)
 		else
 			active = false
 		

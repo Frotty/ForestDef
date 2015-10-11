@@ -14,7 +14,7 @@ public class TowerObject
 		bdef..setUpgradesTo("")
 		..setHotkey(hotkey)
 		..setName(name)
-		..setTooltipBasic("Build |cffB5B5B5" + name + "|r[|cffFFCC00" + hotkey.toUpperCase() + "|r]")
+		..setTooltipBasic( "|r[|cffFFCC00" + hotkey.toUpperCase() + "|r] Build |cff669999" + name )
 		..setRepairGoldCost(0)
 		..setRepairLumberCost(0)
 		..setSightRadiusDay(1100)
@@ -28,12 +28,12 @@ public class TowerObject
 			tooltip += "|cff7FB83EPros:|r|n"
 			let sc = new Scanner(pros, ",")
 			for token in sc
-				tooltip += "|cff7FB83E+|r " + token + "|n"
+				tooltip += "    |cff7FB83E+|r " + token + "|n"
 		if cons.length() > 0 
 			tooltip += "|cffEA3525Cons:|r|n"
 			let sc = new Scanner(cons, ",")
 			for token in sc
-				tooltip += "|cffEA3525-|r " + token + "|n"
+				tooltip += "    |cffEA3525-|r " + token + "|n"
 		
 		bdef.setTooltipExtended(tooltip)
 			
@@ -114,3 +114,6 @@ public class TowerObject
 			upgrades += ","
 		upgrades += idInteger2IdString(newId)
 		bdef.setUpgradesTo(upgrades)
+		
+	function setButtonPosition(int x, int y)
+		bdef..setButtonPositionX(x)..setButtonPositionY(y)

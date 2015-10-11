@@ -68,6 +68,7 @@ public abstract class Entity
 	
 	function addVel( vec3 vel )
 		this.vel += vel
+		active = true
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
@@ -133,6 +134,7 @@ abstract public class UnitEntity extends Entity
 
 	function onDeath(unit killer)
 		done = true
+		
 			
 	ondestroy
 		if hasBuffs()

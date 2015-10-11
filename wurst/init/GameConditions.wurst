@@ -22,7 +22,7 @@ class MagicTreasure extends UnitEntity
 	construct()
 		super(vec3(gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY(), 0.), 128, gg_unit_h00E_0008)
 
-@initStart function initConds()
+@setup function initConds()
 	gameTime = getTimer()
 	gameTime.start( 16.*60. + 20., function victory )
 	timerdialog td = CreateTimerDialog(gameTime)		

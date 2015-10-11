@@ -4,10 +4,15 @@ import Entity
 import Builder
 import PlayerData
 import Rocket
-public constant FAT_ID = 'h022'
-public constant SLIM_ID = 'h00F'
-public constant FAT_SPELL_ID = 'A01Y'
-public constant SLIM_SPELL_ID = 'A01X'
+import UnitObjEditing
+import AllTowers
+import ChannelAbilityPreset
+
+public int SELECTOR_ID
+public int FAT_ID
+public int SLIM_ID
+public int FAT_SPELL_ID
+public int SLIM_SPELL_ID
 
 public class Selector extends UnitEntity
 	
@@ -29,7 +34,9 @@ public class Selector extends UnitEntity
 		actor.remove()
 	
 	construct(vec3 pos, player owner)
-		super(pos, 0, createUnit( owner, 'h023', pos, angle(0)))
+		super(pos, 0, createUnit( owner, SELECTOR_ID, pos, angle(0)))
+		print(">>> " + idInteger2IdString(SELECTOR_ID))
+		actor..addAbility(GHOST_ID)..addAbility(FAT_SPELL_ID)..addAbility(SLIM_SPELL_ID)
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
@@ -38,4 +45,61 @@ trigger t
 	
 init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	
+@objdef public function createSelectorObjects()
+	SELECTOR_ID = UNIT_ID_GEN.next()
+	FAT_ID = UNIT_ID_GEN.next()
+	SLIM_ID = UNIT_ID_GEN.next()
+	FAT_SPELL_ID = ABIL_ID_GEN.next()
+	SLIM_SPELL_ID = ABIL_ID_GEN.next()
+	
+	new UnitDefinition(SELECTOR_ID, 'hpea')
+	..setName("Describe your physique:")
+	..setAttacksEnabled(0)
+	..setSpeedBase(0)
+	..setPropulsionWindowdegrees(0)
+	..setStructuresBuilt("")
+	..setModelFile("Objects\\RandomObject\\RandomObject.mdl")
+	..setHitPointsMaximumBase(999999)
+	..setNormalAbilities("")
+	new UnitDefinition(SLIM_ID, 'hpea')
+	..setName("Builder")
+	..setCollisionSize(0)
+	..setStructuresBuilt(idInteger2IdString(BASE_TOWER_ID) + "," + idInteger2IdString(BASE_WALL_ID1) )
+	..setHitPointsMaximumBase(250)
+	..setSpeedBase(120)
+	new UnitDefinition(FAT_ID, 'hpea')
+	..setName("Fat Builder")
+	..setAttack1DamageBase(45)
+	..setDefenseBase(8)
+	..setSpeedBase(120)
+	..setCollisionSize(0)
+	..setStructuresBuilt(idInteger2IdString(BASE_TOWER_ID) + "," + idInteger2IdString(BASE_WALL_ID1) )
+	..setHitPointsMaximumBase(650)
+	..setHitPointsRegenerationRate(10)
+	..setModelFile("war3mapImported\\peasantfatcomp.mdl")
+	
+	new ChannelAbilityPreset(SLIM_SPELL_ID, 1)
+	..presetHotkey("Q")
+	..removeChannelProperties(true)
+	..presetTargetTypes(Targettype.NOTARGET)
+	..setName("[|cffFFCC00Q|r] Choose Fat Builder")
+	..presetTooltipNormal((int lvl) -> "Slim")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..setHeroAbility(false)
+	..presetBaseOrderID((int lvl) -> OSF.getOrderString(true))
+	..presetIcon("BTNTemp.blp")
+	..presetButtonPosNormal(0, 2)
+	
+	new ChannelAbilityPreset(FAT_SPELL_ID, 1)
+	..presetHotkey("W")
+	..removeChannelProperties(true)
+	..presetTargetTypes(Targettype.NOTARGET)
+	..setName("[|cffFFCC00W|r] Choose Slim Builder")
+	..presetTooltipNormal((int lvl) -> "Fat")
+	..presetTooltipNormalExtended((int lvl) -> "")
+	..setHeroAbility(false)
+	..presetBaseOrderID((int lvl) -> OSF.getOrderString(true))
+	..presetIcon("BTNKotoBeast.blp")
+	..presetButtonPosNormal(1, 2)
 	

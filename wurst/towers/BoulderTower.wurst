@@ -26,7 +26,8 @@ class BoulderBuff extends NormalBuff
 					let percentageSplash = bezier_3(1, 0.3, 0, distanceSq / tower.getSplashRadius().squared())
 					print("splash%: " + percentageSplash.toString())
 					let angl = tower.lastTarget.angleTo(targetData.getPos().toVec2())
-					targetData.setVel(vec3(angl.cos() * percentageSplash * 15,angl.sin() * percentageSplash * 15, 14 * percentageSplash))
+					targetData.setVel(vec3(angl.cos() * percentageSplash * 7,angl.sin() * percentageSplash * 7, 0 * percentageSplash))
+					addEffect("Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl", targetData.actor.getPos()).destr()
 			end)
 			
 			
@@ -41,7 +42,6 @@ public class BoulderTower extends ATower
 	construct(ATower t)
 		super(t)
 		new BoulderBuff(this)
-		print("buff added")
 		
 	function getSplashRadius() returns real
 		return level * 50 + 100.
@@ -54,8 +54,6 @@ public class BoulderTower extends ATower
 			let tower = data castTo BoulderTower
 			tower.lastTarget = GetTriggerUnit().getPos()
 			tower.newAttack = true
-			addEffect(Other.shockwavemissile, tower.lastTarget)
-			print("target set")
 	end)
 		
 @towerdef function boulderDef()

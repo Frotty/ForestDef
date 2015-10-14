@@ -22,7 +22,7 @@ public function getPathingNormal(vec2 pos) returns vec2
 	for int i = 1 to numberOfTests
 		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
 		vec2 testPoint = pos + direction
-		if IsTerrainPathable(testPoint.x, testPoint.y, PATHING_TYPE_WALKABILITY)
+		if isTerrainWalkable(testPoint.x, testPoint.y)
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
 	

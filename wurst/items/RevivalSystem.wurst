@@ -17,19 +17,19 @@ public function initRevivalSystem()
 	
 	EventListener.add(EventType.ON_USE_ITEM, () -> begin
 		if GetItemTypeId(GetManipulatedItem()) == 'I007'
-		var s = ""
-		for pd in allPlayers
-			if not pd.alive
-				s += " " + pd.p.getName()
-				if pd.fat
-					pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, FAT_ID, false)
-				else
-					pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, SLIM_ID, false)
-				AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor ,"origin" )
-				printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
-				pd.alive = true
-		if s.length() > 0
-			s += "."
-			DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + GetTriggerPlayer().getName() + " has revived the following players: " + s)
+			var s = ""
+			for pd in allPlayers
+				if not pd.alive
+					s += " " + pd.p.getName()
+					if pd.fat
+						pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, FAT_ID, false)
+					else
+						pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, SLIM_ID, false)
+					AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor ,"origin" )
+					printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
+					pd.alive = true
+			if s.length() > 0
+				s += "."
+				DisplayTimedTextToForce(GetPlayersAll(), 15, "|cffFFCC00>>|r " + GetTriggerPlayer().getName() + " has revived the following players: " + s)
 	end)
 	

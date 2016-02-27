@@ -12,7 +12,7 @@ class BoulderBuff extends NormalBuff
 	override function attackModifier()
 		var tower = victim castTo BoulderTower
 		if tower.newAttack
-			forUnitsInRange(tower.lastTarget)
+			//forUnitsInRange(tower.lastTarget)
 			tower.newAttack = false
 			
 	

@@ -1,7 +1,6 @@
 package Buff
 
 import public Entity
-import InstanceBoard
 import LinkedListModule
 import Event
 import Squares
@@ -10,9 +9,9 @@ import PhysicsProjectile
 import Creep
 
 public constant BUFF_ANIM_PERIOD = 0.25
+public constant EMPTY_BUFFLIST = new LinkedList<Buff>()
 
 public abstract class Buff
-	use ShowInstances
 	use LinkedListModule
 	UnitEntity victim
 
@@ -20,15 +19,14 @@ public abstract class Buff
 	int abilId
 	boolean done = false
 	boolean applied = false
-	
-	override static function classname() returns string
-		return "Buff"
 
 	construct(UnitEntity victim, real dur, int abilId, boolean apply)
 		this.victim = victim
 		this.abilId = abilId
 		this.duration = dur
-		if apply
+		if victim.done
+			done = true
+		else if apply
 			apply()
 
 	function update()
@@ -43,7 +41,7 @@ public abstract class Buff
 			victim.actor.addAbility(abilId)
 			
 	ondestroy
-		if applied and victim != null and not victim.done
+		if applied and victim != null and not victim.done and victim.hasBuffs()
 			victim.getBuffs().remove(this)
 			boolean isLast = true
 			for bff in victim.getBuffs()

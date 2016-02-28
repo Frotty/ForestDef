@@ -17,14 +17,15 @@ public class Selector extends UnitEntity
 		let data = caster.getUserData() castTo UnitEntity
 		if data instanceof Selector
 			if id == FAT_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
+				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
 				pDatas[data.owner.getId()].fat = true
 			else if id == SLIM_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
+				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
 				pDatas[data.owner.getId()].fat = false
 			data.done = true
 			if GetRandomInt(0,3) > 2
-				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_SPELL_ID)
+				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
+				print("added item")
 	ondestroy
 		actor.remove()
 	

@@ -6,32 +6,32 @@ import PlayerData
 public multiboard mboard = CreateMultiboard()
 
 public function initMultiboard()
-//	mboard.setRowCount(allPlayers.getSize())
-//	mboard.setColumnCount(4)
-//	mboard.setTitle("Forest Defense")
-//	
-//	for i=0 to allPlayers.getSize()
-//		
-//		mboard.getItem(i,0).setStyle(true,false)
-//		
-//		mboard.getItem(i,0).setValue("|c0000FF00"+allPlayers.get(i).p.getName()+"|r")
-//		mboard.getItem(i,0).setWidth(0.05)
-//		
-//		mboard.getItem(i,1).setValue(allPlayers.get(i).p.getGold().toString())
-//		mboard.getItem(i,1).setIcon("UI\\Feedback\\Resources\\ResourceGold.blp")
-//		mboard.getItem(i,1).setWidth(0.04)
-//		
-//		mboard.getItem(i,2).setValue(allPlayers.get(i).p.getLumber().toString())
-//		mboard.getItem(i,2).setIcon("UI\\Feedback\\Resources\\ResourceLumber.blp")
-//		mboard.getItem(i,2).setWidth(0.04)
-//		
-//		mboard.getItem(i,3).setValue("0")
-//		mboard.getItem(i,3).setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
-//		mboard.getItem(i,3).setWidth(0.04)
-//		
-//	mboard.display(true)
-//	var t = CreateTrigger()
-//	t..registerTimerEvent(0.1,true)..addAction(function update)
+	mboard.setRowCount(allPlayers.getSize())
+	mboard.setColumnCount(4)
+	mboard.setTitle("Forest Defense")
+	
+	for i=0 to allPlayers.getSize()
+		
+		mboard.getItem(i,0).setStyle(true,false)
+		
+		mboard.getItem(i,0).setValue("|c0000FF00"+allPlayers.get(i).p.getName()+"|r")
+		mboard.getItem(i,0).setWidth(0.05)
+		
+		mboard.getItem(i,1).setValue(allPlayers.get(i).p.getGold().toString())
+		mboard.getItem(i,1).setIcon("UI\\Feedback\\Resources\\ResourceGold.blp")
+		mboard.getItem(i,1).setWidth(0.04)
+		
+		mboard.getItem(i,2).setValue(allPlayers.get(i).p.getLumber().toString())
+		mboard.getItem(i,2).setIcon("UI\\Feedback\\Resources\\ResourceLumber.blp")
+		mboard.getItem(i,2).setWidth(0.04)
+		
+		mboard.getItem(i,3).setValue("0")
+		mboard.getItem(i,3).setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
+		mboard.getItem(i,3).setWidth(0.04)
+		
+	mboard.display(true)
+	var t = CreateTrigger()
+	t..registerTimerEvent(0.1,true)..addAction(function update)
 	
 function update()
 	for int i = 0 to allPlayers.getSize()

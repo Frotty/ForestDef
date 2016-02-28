@@ -16,7 +16,7 @@ init
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 60
+	int numberOfTests = 30
 	real radius = 128
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
@@ -98,11 +98,12 @@ public class Boss extends Creep
 			done = true
 			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
 			for i = 0 to 5
-				var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,32), 16, owner, GetRandomReal(0,1).asAngleRadians()
+				var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,64), 16, owner, GetRandomReal(0,1).asAngleRadians()
 				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 				pj.setTimed(GetRandomReal(2,3))
 				pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
-				pj.restitution = 0.75
+				pj.restitution = 0.55
+				pj.mass = GetRandomReal(10,500)
 				pj.surfaceFriction = 0.75
 		super.onDeath(killer)
 		

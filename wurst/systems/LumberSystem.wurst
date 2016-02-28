@@ -18,6 +18,7 @@ function getLumber ()
 		pDatas[p.getId()].kills++
 		killcount++
 		if killcount >= 20
+			
 			killcount = 0
 			for pd in allPlayers
 				pd.p.addLumber(woodcount)
@@ -30,7 +31,6 @@ function getLumber ()
 				SetTextTagLifespan( t, TEXTTAG_LIFESPAN )
 				SetTextTagFadepoint( t, TEXTTAG_FADEPOINT )
 				SetTextTagVisibility( t, true )	  
-		else
 			
 			
 public function initLumberSystem()

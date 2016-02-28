@@ -24,10 +24,10 @@ public class WaveTower extends Tower
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((75. * level) + 85.)
+	return ((95. * level) + 85.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((7.5 * level))
+	return ((8.5 * level))
 	
 function getKB(int level) returns real//towerlevel
 	return (4. + (level*level))

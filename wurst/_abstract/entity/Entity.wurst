@@ -9,12 +9,10 @@ import public LinkedList
 import public DmgMod
 import MapBounds
 import Event
-import InstanceBoard
 		
 /** Base Entity Class  */
 public abstract class Entity
 	use LinkedListModule
-	use ShowInstances
 	/** 3d vector position */
 	vec3 pos
 	/** 3d vector velocity */
@@ -34,9 +32,6 @@ public abstract class Entity
 	boolean active 		= true
 	boolean flying 		= false
 	boolean done 		= false
-	
-	override static function classname() returns string
-		return "Entity"
 
 	construct( vec3 pos, real radius, player owner )
 		this.pos = pos
@@ -68,6 +63,7 @@ public abstract class Entity
 	
 	function addVel( vec3 vel )
 		this.vel += vel
+		active = true
 		
 	function setTarget( vec3 tpos, real speed )
 		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
@@ -84,9 +80,9 @@ public abstract class Entity
 	abstract function update()
 	
 abstract public class UnitEntity extends Entity
-	unit actor
+	unit actor = null
 	
-	private LinkedList<Buff> currentBuffs
+	private LinkedList<Buff> currentBuffs = null
 	
 	construct( vec3 pos, real radius, unit actor )
 		super(pos, radius, actor.getOwner())
@@ -96,13 +92,13 @@ abstract public class UnitEntity extends Entity
 		
 	function getBuffs() returns LinkedList<Buff>
 		if done
-			return null
+			return EMPTY_BUFFLIST
 		if currentBuffs == null
 			currentBuffs = new LinkedList<Buff>()
 		return currentBuffs
 		
 	function hasBuffs() returns boolean
-		return currentBuffs != null
+		return currentBuffs != null and currentBuffs.getSize() > 0
 		
 	override function update()
 		updatePos()

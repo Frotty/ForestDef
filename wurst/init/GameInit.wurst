@@ -46,6 +46,6 @@ function spawn()
 
 init
 	getTimer().start( 0.1, function start )
-	getTimer().start( 10., function spawn )
+	getTimer().start( 50., function spawn )
 
 

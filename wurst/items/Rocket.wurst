@@ -3,7 +3,7 @@ import Event
 import PhysicsProjectile
 import Interpolation
 
-constant ROCKET_ITEM_ID = 'A01Z'
+public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
 
 class Rocket extends PhysicsProjectile
@@ -45,7 +45,6 @@ class Shrapnell extends PhysicsProjectile
 		super.update()
 		var col = fx.getColor()
 		col.alpha = bezier_3(255, 200, -5, time/initialTime).toInt()
-		print(col.alpha.toString())
 		fx.setColor(col)
 	
 public function initRocket()

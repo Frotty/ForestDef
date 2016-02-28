@@ -1,5 +1,7 @@
 package PlayerData
 import Wave
+import PhysicsProjectile
+import Texttag
 import initlater Selector
 import Builder
 import LinkedList
@@ -38,4 +40,5 @@ public function initPlayers()
 		new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
 		current += anglePerP
 		SetPlayerState( p.p, PLAYER_STATE_RESOURCE_GOLD, (gold/allPlayers.getSize()).toInt() )	 
-
+	
+	createTTEx(middle.toVec3() - vec3(70,0,0), "Item Shop", 15, colorA(225,225,125, 255))

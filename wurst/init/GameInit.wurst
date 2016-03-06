@@ -36,6 +36,11 @@ function start()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
+	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
+		bossWaves.dequeue()
+		getTimer().start( 5., function spawn )
+	else
+		getTimer().start( 50., function spawn )
 	
 function spawn()
 	var snd = new Sound("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", 16740, false)
@@ -46,6 +51,5 @@ function spawn()
 
 init
 	getTimer().start( 0.1, function start )
-	getTimer().start( 50., function spawn )
 
 

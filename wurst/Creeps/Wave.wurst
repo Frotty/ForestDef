@@ -1,6 +1,7 @@
 package Wave
 import TimerUtils
 import initlater Creep
+import initlater Boss
 
 vec3 array startPositions
 int startPosCount
@@ -59,28 +60,32 @@ public class NormalWave
 		
 						
 					
-		
-		
+public abstract class CreateBoss
+	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
+
 public class BossWave
 	int bossId
 	int amount
 	int bounty
 	sound s
 	string info
+	CreateBoss boss
 	
-	construct(int bossId, int amount, int bounty, sound s, string info)
+	construct(int bossId, int amount, int bounty, sound s, string info, CreateBoss boss)
 		this.bossId = bossId
 		this.amount = amount
 		this.bounty = bounty
 		this.s = s
 		this.info = info
+		this.boss = boss
 		
 	function spawn()
 		PlaySoundBJ(s)
 		print("|cffE62121Attention: Boss incoming!\nInfo:\n" + info)
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
-				new Boss(startPositions[j], bossId, bounty, middle)	
+				boss.create(startPositions[j], bossId, bounty, middle)
+				
 		
 public class SpecialWave
 	int specialId

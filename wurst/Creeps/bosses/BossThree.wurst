@@ -1,0 +1,11 @@
+package BossThree
+import Boss
+import ShieldBuff
+
+
+public class BossThree extends Boss
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	

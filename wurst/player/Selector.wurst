@@ -25,7 +25,6 @@ public class Selector extends UnitEntity
 			data.done = true
 			if GetRandomInt(0,3) > 2
 				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
-				print("added item")
 	ondestroy
 		actor.remove()
 	

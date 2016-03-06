@@ -1,5 +1,6 @@
 package WaveTower
 import Tower
+import Boss
 import Terrain
 import Projectile
 import TempGroups

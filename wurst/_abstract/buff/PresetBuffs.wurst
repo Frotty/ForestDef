@@ -1,7 +1,6 @@
 package PresetBuffs
 import public Buff
 
-
 public abstract class NormalBuff extends Buff
 
 	construct(UnitEntity victim, real dur, int abilId, boolean apply)

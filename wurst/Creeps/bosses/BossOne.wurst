@@ -1,0 +1,20 @@
+package BossOne
+import Boss
+
+public class BossOne extends Boss
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	override function onDeath(unit killer)
+		done = true
+		addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
+		for i = 0 to 5
+			var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,64), 16, owner, GetRandomReal(0,1).asAngleRadians()
+			, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
+			pj.setTimed(GetRandomReal(2,3))
+			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
+			pj.restitution = 0.55
+			pj.mass = GetRandomReal(10,500)
+			pj.surfaceFriction = 0.75
+	

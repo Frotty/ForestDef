@@ -8,6 +8,9 @@ public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Mi
 public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
+function getDamage(int level) returns real
+	return 4 + 4.5 * level
+
 public class FlamethrowerTower extends Tower
 	int level = 1
 	construct(Tower t)
@@ -32,7 +35,7 @@ class FlameMissile extends Projectile
 		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.175,0.175)).asAngleRadians(), FX_PATH )
 		fx.setScale(0.2)
 		setSpeed(speed + GetRandomReal(-1.5, 1.5))
-		setRanged(680)
+		setRanged(700)
 		setAcc(1.015 + GetRandomReal(-0.005, 0.0075))
 		fx.recolor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)
@@ -44,7 +47,7 @@ class FlameMissile extends Projectile
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
 		for u in ENUM_GROUP
 			if IsUnitEnemy(u, owner) and isUnitTargetable(u)
-				UnitDamageTarget(getDummy(), u, 4 + 3.5 * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+				UnitDamageTarget(getDummy(), u, getDamage(level), false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
 		ENUM_GROUP.clear()
 		super.update()
 		

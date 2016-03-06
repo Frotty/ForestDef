@@ -6,7 +6,7 @@ import Interpolation
 public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
 
-class Rocket extends PhysicsProjectile
+public class Rocket extends PhysicsProjectile
 	
 	construct(vec3 startPos, vec2 targetPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", 0 castTo OnExpireEvent )

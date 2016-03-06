@@ -2,11 +2,17 @@ package UnitSpawnSystem
 import TimerUtils
 import Queue
 import Wave
+import PlayerData
+import BossOne
+import BossTwo
+import BossThree
+import BossFour
+import BossFive
 
 constant real SPAWN_TIME = 20.0
 
-Queue<NormalWave> normalWaves = new Queue<NormalWave>()
-Queue<BossWave> bossWaves = new Queue<BossWave>()
+public Queue<NormalWave> normalWaves = new Queue<NormalWave>()
+public Queue<BossWave> bossWaves = new Queue<BossWave>()
 Queue<SpecialWave> specialWaves = new Queue<SpecialWave>()
 
 timer spawnTimer = getTimer()
@@ -76,11 +82,21 @@ function initWaves()
 	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
 	
 	
-	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "\tFast, melee, spawns minions on death"))
-	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, "\tAverage speed, melee"))
-	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, "\tslow, melee, slow but powerful attack"))
-	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, "\tFast, melee, attacks all surrounding buildings with acid"))
-	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "\tAverage speed, tanky unit"))
+	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "\tFast, melee, spawns minions on death", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new BossOne(startPos, unitId, bounty, middle)
+	end))
+	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, "\tAverage speed, melee", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new BossTwo(startPos, unitId, bounty, middle)
+	end))
+	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, "\tslow, melee, slow but powerful attack", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new BossThree(startPos, unitId, bounty, middle)
+	end))
+	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, "\tFast, melee, attacks all surrounding buildings with acid", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new BossFour(startPos, unitId, bounty, middle)
+	end))
+	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "\tAverage speed, tanky unit", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new BossFive(startPos, unitId, bounty, middle)
+	end))
 
 	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
 	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
@@ -92,7 +108,11 @@ function initWaves()
 
 public function startSpawn()
 	timer t = CreateTimer()
-	t.startPeriodic( SPAWN_TIME, function onSpawnTime)
+	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
+		print("fast start")
+		t.startPeriodic( SPAWN_TIME/5., function onSpawnTime)
+	else
+		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
 	
 public function initSpawn()

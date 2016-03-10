@@ -3,7 +3,7 @@ import public Creep
 import public SoundHelper
 import public PhysicsProjectile
 
-public class Boss extends Creep
+public abstract class Boss extends Creep
 	static Sound snd = new Sound("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", 2320, false)
 	effect glow
 	
@@ -20,3 +20,4 @@ public class Boss extends Creep
 		if glow != null
 			glow.destr()
 		super.onDeath(killer)
+	

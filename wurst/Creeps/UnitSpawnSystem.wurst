@@ -8,6 +8,7 @@ import BossTwo
 import BossThree
 import BossFour
 import BossFive
+import Boss
 
 constant real SPAWN_TIME = 20.0
 
@@ -97,14 +98,11 @@ function initWaves()
 	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "\tAverage speed, tanky unit", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFive(startPos, unitId, bounty, middle)
 	end))
-
+	
 	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
 	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
 	specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
 	specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
-
-
-
 
 public function startSpawn()
 	timer t = CreateTimer()

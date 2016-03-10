@@ -40,4 +40,3 @@ public class BossTwo extends Boss
 		super(pos, typId, bounty, target)
 		new SludgeBuff(this, 99999, TENTACLE_BUFF_ID)
 
-	

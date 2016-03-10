@@ -16,7 +16,7 @@ package TrooperTower
 		
 		construct (unit troop, angle tangle)
 			super(vec3(troop.getX(),troop.getY(),0),64,troop)
-			staticpos = vec2(actor.getX(), actor.getY()).withZ(64)
+			staticpos = vec2(actor.getX(), actor.getY()).withTerrainZ(64)
 			actor.addAbility(LOCUST_ID)
 			
 		function setStaticPos()

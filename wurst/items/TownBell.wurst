@@ -1,0 +1,41 @@
+package TownBell
+import Event
+import ClosureForGroups
+import ClosureTimers
+import Assets
+
+constant TOWN_BELL_ITEM_ID = 'I006'
+constant TOWER_ID = 'h025'
+constant DUMMY_ID = 'h00D'
+constant SPELL_DURATION = 45.0
+
+player lastRinger
+
+public function onTownBell() 
+	lastRinger = GetManipulatingUnit().getOwner()
+	forUnitsOfPlayer(players[5], (unit u) -> begin
+		if u.getTypeId() == DUMMY_ID
+			let pos = u.getPos()
+			let facing = u.getFacingAngle()
+			addEffect(Other.avatarcaster, pos).destr()
+			u.remove()
+			createUnit(lastRinger, TOWER_ID, pos, facing)
+	end)
+	doAfter(SPELL_DURATION, () -> begin
+		forUnitsOfPlayer(lastRinger, (unit u) -> begin
+			if u.getTypeId() == TOWER_ID
+				let pos = u.getPos()
+				let facing = u.getFacingAngle()
+				addEffect(Other.goldcredit, pos).destr()
+				u.remove()
+				createUnit(players[5], DUMMY_ID, pos, facing)
+		end)
+	end)
+
+
+public function initTownBell()
+	EventListener.add(EventType.ON_PICKUP_ITEM, () -> begin
+		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
+			GetManipulatedItem().remove()
+			onTownBell()
+	end)

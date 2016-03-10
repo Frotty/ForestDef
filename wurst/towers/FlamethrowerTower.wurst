@@ -9,7 +9,7 @@ public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
 function getDamage(int level) returns real
-	return 4 + 4.5 * level
+	return 6 + 4.5 * level
 
 public class FlamethrowerTower extends Tower
 	int level = 1

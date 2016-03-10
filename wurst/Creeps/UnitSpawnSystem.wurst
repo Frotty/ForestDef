@@ -21,11 +21,12 @@ int level = 1
 	
 		
 function onSpawnTime()	
-	if level mod 7 == 0
+	if level mod 7 == 0 and specialWaves.getSize() > 0
 		specialWaves.dequeue().spawn()
 	else
-		normalWaves.dequeue().spawn()
-		if level mod 4 == 0
+		if normalWaves.getSize() > 0
+			normalWaves.dequeue().spawn()
+		if level mod 4 == 0 and normalWaves.getSize() > 0
 			bossWaves.dequeue().spawn()
 		
 	level++

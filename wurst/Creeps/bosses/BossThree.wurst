@@ -1,6 +1,7 @@
 package BossThree
 import Boss
 import ShieldBuff
+import Assets
 
 constant PUDGE_POWER_ID = 'A021'
 
@@ -14,6 +15,7 @@ public class PudgePowerBuff extends NormalShieldBuff
 		
 	override function attackModifier()
 		var target = GetTriggerUnit()
+		addEffect(Other.hcanceldeath, target.getPos()).destr()
 		modifyDamageBy(target.getMaxHP() / 3.0)
 		
 	override function defenseModifier()

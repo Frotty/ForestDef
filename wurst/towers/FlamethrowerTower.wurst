@@ -10,6 +10,9 @@ public constant int FLAMETHROWER_ID = 'h01C'
 
 function getDamage(int level) returns real
 	return 6 + 4.5 * level
+	
+function getSpeed(int level) returns real
+	return 5.75 + level * 1.5
 
 public class FlamethrowerTower extends Tower
 	int level = 1
@@ -18,7 +21,7 @@ public class FlamethrowerTower extends Tower
 		
 	override function onAttack(UnitEntity ud)
 		for i = 0 to level
-			new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), 6.2, owner, level)
+			new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
 			
 			
 	override function onUpgrade()
@@ -36,7 +39,7 @@ class FlameMissile extends Projectile
 		fx.setScale(0.2)
 		setSpeed(speed + GetRandomReal(-1.5, 1.5))
 		setRanged(700)
-		setAcc(1.015 + GetRandomReal(-0.005, 0.0075))
+		setAcc(1.0175 + GetRandomReal(-0.005, 0.0075))
 		fx.recolor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)
 		this.level = level

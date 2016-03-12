@@ -16,7 +16,7 @@ package TrooperTower
 		
 		construct (unit troop, angle tangle)
 			super(vec3(troop.getX(),troop.getY(),0),64,troop)
-			staticpos = vec2(actor.getX(), actor.getY()).withZ(128)
+			staticpos = vec2(actor.getX(), actor.getY()).withZ(168)
 			actor.addAbility(LOCUST_ID)
 			setStaticPos()
 			
@@ -107,6 +107,8 @@ package TrooperTower
 		trooper_count[0] = 2
 		dummy_id[1] = 'h01F'
 		trooper_count[1] = 3
+		dummy_id[2] = 'h01F'
+		trooper_count[2] = 4
 		tupgradestart = CreateTrigger()..addAction(function TrooperTower.onUpgradeStart)
 		tupgradecancel = CreateTrigger()..addAction(function TrooperTower.onUpgradeCancel)
 

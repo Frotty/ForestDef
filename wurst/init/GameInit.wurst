@@ -17,6 +17,7 @@ import StompingTower
 import TrooperTower
 import EntityManagement
 import TownBell
+import ClosureTimers
 
 function start()
 	initLumberSystem()
@@ -48,10 +49,16 @@ function start()
 function spawn()
 	var snd = new Sound("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", 16740, false)
 	let dyn = new DynamicSound(snd)
-	dyn.setTargetPitch(0.675)
+	dyn.currentPitch = 1.65
+	dyn.setTargetPitch(0.60)
 	dyn.play()
 	startSpawn()
 	GetExpiredTimer().release()
+	doAfter(7.75, () -> begin 
+		var snd2 = new Sound("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", 12617, false)
+		snd2.play()
+		doAfter(0.55, () -> snd2.play())
+	end)
 	
 
 init

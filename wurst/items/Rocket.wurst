@@ -2,6 +2,7 @@ package Rocket
 import Event
 import PhysicsProjectile
 import Interpolation
+import TextTagEntity
 
 public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
@@ -21,6 +22,7 @@ public class Rocket extends PhysicsProjectile
 			done = true
 			
 	ondestroy
+		new TextTagEntity(getPos(), vec3(0,0,15), "HELP!", 25, 1.5, colorA(255,50,50,255))
 		for i = 0 to 16
 			new Shrapnell(getPos())
 			

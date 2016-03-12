@@ -21,6 +21,7 @@ public class ArtilleryTower extends Tower
 		
 	override function onUpgrade()
 		level ++
+		actor.setPropWindow(0.)
 		
 class ArtilleryMissile extends Projectile
 	real damage

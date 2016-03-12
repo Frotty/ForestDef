@@ -43,5 +43,3 @@ public function initPlayers()
 		SetPlayerState( p.p, PLAYER_STATE_RESOURCE_GOLD, (gold/allPlayers.getSize()).toInt() )	 
 	
 	createTTEx(middle.toVec3() - vec3(70,0,0), "Item Shop", 15, colorA(225,225,125, 255))
-	for i = 0 to 1
-		new Rocket(middle.withZ(0), middle + vec2(GetRandomReal(-64,64),GetRandomReal(-64,64)))

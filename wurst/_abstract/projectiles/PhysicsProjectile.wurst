@@ -1,8 +1,8 @@
 package PhysicsProjectile
 import Entity
 import Angle
-import Projectile
-import PhysicsEntity
+import public  Projectile
+import public PhysicsEntity
 import Maths
 public abstract class OnExpireEvent
 	abstract function onExpire(vec2 pos, player owner)

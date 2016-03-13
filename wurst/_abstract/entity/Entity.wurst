@@ -75,6 +75,7 @@ public abstract class Entity
 		
 		let startZVelocity = ((-gravity.z * t) / 2 - pos.z/t + e/t)
 		this.setVel( vec3( Cos(tangle.radians()) * speed, Sin(tangle.radians()) * speed, startZVelocity) )
+		real i = ANIMATION_PERIOD + 0
 		
 	/** This function is called every ANIMATION_PERIOD tick if the Entity is active */
 	abstract function update()
@@ -129,6 +130,8 @@ abstract public class UnitEntity extends Entity
 
 	function onDeath(unit killer)
 		done = true
+			
+	function onDamage(unit attacker)
 			
 	ondestroy
 		if hasBuffs()

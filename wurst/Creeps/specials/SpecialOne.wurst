@@ -1,0 +1,9 @@
+package SpecialOne
+
+import Special
+
+public class SpecialOne extends Special
+	
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+	

@@ -1,0 +1,81 @@
+package Special
+
+import Creep
+import ObjEditingNatives
+
+//COMPILETIME
+@compiletime function create_w3u_n00I()
+	let u = createObjectDefinition("w3u", 'n00I', 'nska')
+	u.setString("unam", "Special 5: Dark One")
+	u.setInt("usrg", 0)
+	u.setInt("usst", 0)
+	u.setInt("usma", 0)
+	u.setString("urac", "undead")
+	u.setUnreal("uhpr", 6.0)
+	u.setInt("usin", 1800)
+	u.setInt("usid", 1800)
+	u.setInt("urtm", 1)
+	u.setInt("ugor", 0)
+	u.setInt("ugol", 0)
+	u.setInt("ubsi", 4)
+	u.setInt("ubdi", 4)
+	u.setInt("ubba", 5)
+	u.setInt("ufoo", 0)
+	u.setInt("ubld", 1)
+	u.setString("utub", "")
+	u.setString("utip", "")
+	u.setInt("ua1b", 1)
+	u.setInt("umvs", 240)
+	u.setReal("usca", 1.25)
+	u.setInt("uhpm", 4000)
+	u.setString("udty", "small")
+	u.setInt("udef", 5)
+	u.setString("uabi", "")
+	u.setString("ua1m", "null.mdl")
+	u.setInt("ulev", 6)
+	u.setString("umdl", "units\\undead\\Acolyte\\Acolyte.mdl")
+	u.setUnreal("ucol", 8.0)
+	u.setString("ushu", "")
+	u.setString("uico", "ReplaceableTextures\\CommandButtons\\BTNAcolyte.blp")
+	u.setInt("uclr", 10)
+	u.setInt("uclg", 10)
+	u.setInt("uclb", 10)
+	u.setString("usnd", "Acolyte")
+	u.setInt("ufle", 0)
+
+@compiletime function create_w3a_A022()
+	let u = createObjectDefinition("w3a", 'A022', 'Aasl')
+	u.setLvlDataString("anam", 0, 0, "SlowBuffDummy")
+	u.setLvlDataString("abuf", 1, 0, "B00C")
+	u.setLvlDataUnreal("Slo1", 1, 1, -0.75)
+	u.setLvlDataString("atar", 1, 0, "self")
+	u.setLvlDataString("ansf", 0, 0, "")
+	u.setLvlDataString("atat", 0, 0, "Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+	u.setLvlDataString("aeat", 0, 0, "Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+	u.setLvlDataString("acat", 0, 0, "Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+	u.setLvlDataUnreal("Slo2", 1, 2, -0.75)
+
+@compiletime function create_w3h_B00C()
+	let u = createObjectDefinition("w3h", 'B00C', 'Basl')
+	u.setString("fnam", "*Slow")
+	u.setString("fnsf", "")
+	u.setString("ftip", "Slow")
+	u.setString("fube", "This Unit is slowed.")
+	u.setString("ftat", "")
+	u.setString("fart", "ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
+//
+
+public class Special extends Creep
+	effect glow
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
+		active = true
+		
+	override function onDeath(unit killer)
+		if glow != null
+			glow.destr()
+		super.onDeath(killer)
+		
+		

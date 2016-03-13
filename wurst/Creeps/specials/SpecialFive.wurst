@@ -1,0 +1,42 @@
+package SpecialFive
+
+import Creep
+import PresetBuffs
+import Special
+
+class SlowDebuff extends NormalBuff
+	construct(UnitEntity victim, real dur, int abilId)
+		super(victim, dur, abilId, true)
+
+	override function defenseModifier()
+		super.defenseModifier()
+			
+	override function attackModifier()
+		super.attackModifier()
+	
+
+class Spawn extends Special
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		
+	override function onDamage(unit attacker)
+		new SlowDebuff(this,2.,'A022')
+
+public class SpecialFive extends Special
+	
+	static constant real SPAWNTIME = 20
+	static constant int SPAWNAMOUNT = 2
+	static constant int SPAWNID = 'u000'
+	real spawntimer = 10
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	override function update()
+		super.update()
+		active = true
+		spawntimer += ANIMATION_PERIOD
+		if spawntimer >= SPAWNTIME
+			spawntimer = 0
+			for i = 1 to SPAWNAMOUNT
+				new Spawn(actor.getPos3(),SPAWNID,0,middle)

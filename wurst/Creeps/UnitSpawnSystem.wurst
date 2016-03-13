@@ -8,6 +8,11 @@ import BossTwo
 import BossThree
 import BossFour
 import BossFive
+import SpecialOne
+import SpecialTwo
+import SpecialThree
+import SpecialFour
+import SpecialFive
 import Boss
 
 constant real SPAWN_TIME = 20.0
@@ -21,12 +26,11 @@ int level = 1
 	
 		
 function onSpawnTime()	
-	if level mod 7 == 0 and specialWaves.getSize() > 0
+	if level mod 7 == 0
 		specialWaves.dequeue().spawn()
 	else
-		if normalWaves.getSize() > 0
-			normalWaves.dequeue().spawn()
-		if level mod 4 == 0 and normalWaves.getSize() > 0
+		normalWaves.dequeue().spawn()
+		if level mod 4 == 0
 			bossWaves.dequeue().spawn()
 		
 	level++
@@ -100,10 +104,24 @@ function initWaves()
 		new BossFive(startPos, unitId, bounty, middle)
 	end))
 	
-	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
-	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
-	specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
-	specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
+	
+	specialWaves.enqueue(new SpecialWave('u00A', 3, 15, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialOne(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00B', 1, 25, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialTwo(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00F', 4, 10, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialThree(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00O', 25, 6, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialFour(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('n00I',3,15, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialFive(startPos, unitId, bounty, middle)
+	end))
+	
+
 
 public function startSpawn()
 	timer t = CreateTimer()

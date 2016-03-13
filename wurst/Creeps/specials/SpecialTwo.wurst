@@ -1,0 +1,28 @@
+package SpecialTwo
+
+import Creep
+import Special
+
+public class SpecialTwo extends Special
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	override function onDeath(unit killer)
+		var ppos = getPos()
+		if actor.getTypeId() == 'u00B'
+			doAfter(0.5, ()-> begin
+				for i = 0 to 3
+					new SpecialTwo(ppos, 'u00C', 8, middle)
+			end)
+		else if actor.getTypeId() == 'u00C'
+			doAfter(0.5, ()-> begin
+				for i = 0 to 2
+					new SpecialTwo(ppos, 'u00D', 7, middle)
+			end)
+		else if actor.getTypeId() == 'u00D'
+			doAfter(0.5, ()-> begin
+				new SpecialTwo(ppos, 'u00E', 6, middle)
+			end)
+		super.onDeath(killer)
+

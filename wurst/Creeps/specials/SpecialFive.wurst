@@ -18,7 +18,7 @@ class BoundBuff extends NormalBuff
 		super(victim, dur, abilId,true)
 	
 	override function defenseModifier()
-		new SlowDebuff(victim,2.,'A022')
+		new SlowDebuff(victim,2.,ABIL_ID_SLOWBUFFDUMMY)
 	
 	override function attackModifier()
 
@@ -26,7 +26,7 @@ class BoundBuff extends NormalBuff
 class Spawn extends Special
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new BoundBuff(this,9999,'A023')
+		new BoundBuff(this,9999,ABIL_ID_BOUNDBUFFDUMMY)
 		
 
 public class SpecialFive extends Special

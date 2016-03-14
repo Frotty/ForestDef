@@ -1,15 +1,23 @@
 package Special
 
 import Creep
+import ObjectIdGenerator
 import ObjEditingNatives
 import Basics
 
 import UnitObjEditing
 import AbilityObjEditing
 import BuffObjEditing
+
+public constant UNIT_ID_DARKONE = UNIT_ID_GEN.next()
+public constant ABIL_ID_SLOWBUFFDUMMY = ABIL_ID_GEN.next()
+public constant ABIL_ID_BOUNDBUFFDUMMY = ABIL_ID_GEN.next()
+public constant BUFF_ID_SLOWBUFF = BUFF_ID_GEN.next()
+public constant BUFF_ID_BOUNDBUFF = BUFF_ID_GEN.next()
+
 //COMPILETIME
 @compiletime function create_DarkOne()
-	let u = new UnitDefinition('n00I','nska')
+	let u = new UnitDefinition(UNIT_ID_DARKONE,'nska')
 		..setNormalAbilities("")
 		..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAcolyte.blp")
 		..setModelFile("units\\undead\\Acolyte\\Acolyte.mdl")
@@ -37,33 +45,33 @@ import BuffObjEditing
 		..setShadowImageUnit("")
 		
 @compiletime function create_SlowBuffDummy()
-	let a = new AbilityDefinitionAuraSlow('A022')
+	let a = new AbilityDefinitionAuraSlow(ABIL_ID_SLOWBUFFDUMMY)
 		..setArtCaster("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
 		..setArtEffect("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
 		..setArtTarget("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
 		..setAttackSpeedFactor(1,-0.75)
 		..setMovementSpeedFactor(1,-0.75)
-		..setBuffs(1,"B00C")
+		..setBuffs(1,BUFF_ID_SLOWBUFF.toString())
 		..setTargetsAllowed(1,"self")
 		..setEditorSuffix("")
 		..setName("SlowBuffDummy")
 		
 		
 @compiletime function create_BoundBuffDummy()
-	let a = new AbilityDefinitionAuraSlow('A023')
+	let a = new AbilityDefinitionAuraSlow(ABIL_ID_BOUNDBUFFDUMMY)
 		..setArtCaster("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
 		..setArtEffect("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
 		..setArtTarget("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
 		..setAttackSpeedFactor(1,0)
 		..setMovementSpeedFactor(1,0)
-		..setBuffs(1,"B00D")
+		..setBuffs(1,BUFF_ID_BOUNDBUFF.toString())
 		..setTargetsAllowed(1,"self")
 		..setEditorSuffix("")
 		..setName("BoundBuffDummy")
 		
 		
 @compiletime function create_SlowBuff()
-	let b =  new BuffDefinition('B00C','Basl')
+	let b =  new BuffDefinition(BUFF_ID_SLOWBUFF,'Basl')
 		..setName(1,"*Slow")
 		..setEditorSuffix(1,"")
 		..setTooltipNormal(1,"Slow")
@@ -72,7 +80,7 @@ import BuffObjEditing
 		..setIconNormal(1,"ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
 		
 @compiletime function create_BoundBuff()
-	let b = new BuffDefinition('B00D','Bcrs')
+	let b = new BuffDefinition(BUFF_ID_BOUNDBUFF,'Bcrs')
 		..setName(1,"*Bound")
 		..setEditorSuffix(1,"")
 		..setTooltipNormal(1,"Bound")

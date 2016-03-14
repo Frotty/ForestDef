@@ -1,0 +1,65 @@
+package SpecialFive
+
+import Creep
+import PresetBuffs
+import Special
+
+class SlowDebuff extends NormalBuff
+	construct(UnitEntity victim, real dur, int abilId)
+		super(victim, dur, abilId, true)
+
+	override function defenseModifier()
+			
+	override function attackModifier()
+	
+	
+class BoundBuff extends NormalBuff
+	construct(UnitEntity victim, real dur, int abilId)
+		super(victim, dur, abilId,true)
+	
+	override function defenseModifier()
+		new SlowDebuff(victim,2.,ABIL_ID_SLOWBUFFDUMMY)
+	
+	override function attackModifier()
+
+
+class Spawn extends Special
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		new BoundBuff(this,9999,ABIL_ID_BOUNDBUFFDUMMY)
+		
+
+public class SpecialFive extends Special
+	
+	static constant SPAWNTIME = 20
+	static constant SPAWNAMOUNT = 2
+	static constant SPAWNID = 'u000'
+	real spawntimer = 10
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	override function update()
+		super.update()
+		active = true
+		spawntimer += ANIMATION_PERIOD
+		if spawntimer >= SPAWNTIME
+			spawntimer = 0
+			this.actor.pause()
+			this.actor.setAnimation("Stand Work Gold")
+			doAfter(2.3, () -> begin
+				this.actor.unpause()
+			end)
+			
+			var ppos = getPos().polarProject(100,this.actor.getFacingAngle(),angle(1.5708))
+			for i = 1 to SPAWNAMOUNT
+				doAfter(i.toReal(), ()-> begin
+					let spawn = new Spawn(ppos,SPAWNID,0,middle)
+					let eff = addEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
+					spawn.actor.pause()
+					spawn.actor.setAnimation("birth")
+					doAfter(2.3, () -> begin
+						spawn.actor.unpause()
+						eff.destr()
+					end)
+				end)

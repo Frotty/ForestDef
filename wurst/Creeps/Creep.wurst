@@ -74,36 +74,4 @@ public class Creep extends UnitEntity
 						showBountyTextTag(restBounty, actor, pd.p)
 			super.onDeath(killer)
 			actor.setUserData(0)
-				
-	
-
-		
-public class Special extends Creep
-	effect glow
-
-	construct(vec3 pos, int typId, int bounty, vec2 target)
-		super(pos, typId, bounty, target)
-		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
-		
-	override function onDeath(unit killer)
-		if glow != null
-			glow.destr()
-		// Souls
-		var ppos = getPos()
-		if actor.getTypeId() == 'u00B'
-			doAfter(0.5, ()-> begin
-				for i = 0 to 3
-					new Special(ppos, 'u00C', 8, middle)
-			end)
-		else if actor.getTypeId() == 'u00C'
-			doAfter(0.5, ()-> begin
-				for i = 0 to 2
-					new Special(ppos, 'u00D', 7, middle)
-			end)
-		else if actor.getTypeId() == 'u00D'
-			doAfter(0.5, ()-> begin
-				new Special(ppos, 'u00E', 6, middle)
-			end)
-		super.onDeath(killer)
-				
 			

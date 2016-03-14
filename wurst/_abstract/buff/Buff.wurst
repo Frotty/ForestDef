@@ -63,35 +63,42 @@ init
 		let a = GetEventDamageSource()
 		UnitEntity victimData
 		UnitEntity attackerData
-		if a.isAliveTrick() and a.getUserData() > 0
-			//Attacker is alive, apply his attack modifiers
-			attackerData = a.getUserData() castTo UnitEntity
-			if attackerData != null and attackerData.hasBuffs()
-				for bff in attackerData.getBuffs()
-					if not bff.done
-						bff.attackModifier()
-		
-		if v.isAliveTrick() and v.getUserData() > 0
-			//Defender is alive, apply his defense modifiers
-			victimData = v.getUserData() castTo UnitEntity
-			if victimData != null and victimData.hasBuffs()
-				for bff in victimData.getBuffs()
-					if not bff.done
-						bff.defenseModifier()
-						
-		if v.getUserData() > 0 and a.getUserData() > 0
-			victimData = v.getUserData() castTo UnitEntity
-			attackerData = a.getUserData() castTo UnitEntity
-			if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
-				// Falsify teamattacks
-				if getDamage() > 0.5
-					new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
-					,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
-					if attackerData.hasBuffs()
+		if a.isAliveTrick() and v.isAliveTrick()
+			if not a.getUserData() > 0 and v.getUserData() > 0
+				victimData = v.getUserData() castTo UnitEntity
+				if victimData != null and victimData.hasBuffs()
+					for bff in victimData.getBuffs()
+						if not bff.done
+							bff.defenseModifier()
+			else if not v.getUserData() > 0 and a.getUserData() > 0
+				attackerData = a.getUserData() castTo UnitEntity
+				if attackerData != null and attackerData.hasBuffs()
+					for bff in attackerData.getBuffs()
+						if not bff.done
+							bff.attackModifier()
+			else if v.getUserData() > 0 and a.getUserData() > 0
+				victimData = v.getUserData() castTo UnitEntity
+				attackerData = a.getUserData() castTo UnitEntity
+				if IsPlayerAlly(victimData.owner, attackerData.owner) or victimData.owner == attackerData.owner
+					// Falsify teamattacks
+					if getDamage() > 0.5
+						new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
+						,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
+						if attackerData.hasBuffs()
+							for bff in attackerData.getBuffs()
+								if not bff.done
+									bff.attackModifier()
+						modifyDamage(0)
+				else
+					// Correct attack, apply Buffs
+					if victimData != null and victimData.hasBuffs()
+						for bff in victimData.getBuffs()
+							if not bff.done
+								bff.defenseModifier()
+					if attackerData != null and attackerData.hasBuffs()
 						for bff in attackerData.getBuffs()
 							if not bff.done
-								bff.attackModifier()
-					modifyDamage(0)
+								bff.attackModifier()					
 	end)							
 	EventListener.add(EventType.ON_DEATH, () -> begin
 		let v = GetDyingUnit()

@@ -1,0 +1,11 @@
+package SpecialThree
+
+import Special
+
+public class SpecialThree extends Special
+	
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+	
+
+

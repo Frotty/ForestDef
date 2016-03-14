@@ -26,7 +26,7 @@ int level = 1
 	
 		
 function onSpawnTime()	
-	if level mod 7 == 0
+	if level mod 7 == 0 and specialWaves.getSize() > 0
 		specialWaves.dequeue().spawn()
 	else
 		normalWaves.dequeue().spawn()
@@ -117,9 +117,10 @@ function initWaves()
 	specialWaves.enqueue(new SpecialWave('u00O', 25, 6, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFour(startPos, unitId, bounty, middle)
 	end))
-	specialWaves.enqueue(new SpecialWave('n00I',3,15, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	specialWaves.enqueue(new SpecialWave('n00I', 3, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFive(startPos, unitId, bounty, middle)
 	end))
+	
 	
 
 

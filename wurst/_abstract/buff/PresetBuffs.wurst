@@ -8,7 +8,7 @@ public abstract class NormalBuff extends Buff
 
 	override function apply()
 		for bff in victim.getBuffs()
-			if bff instanceof thistype
+			if bff.typeId == this.typeId
 				bff.duration = duration
 				done = true
 				return

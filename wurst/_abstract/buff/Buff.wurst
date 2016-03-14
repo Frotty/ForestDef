@@ -98,9 +98,7 @@ init
 					if attackerData != null and attackerData.hasBuffs()
 						for bff in attackerData.getBuffs()
 							if not bff.done
-								bff.attackModifier()
-								
-					victimData.onDamage(a)					
+								bff.attackModifier()					
 	end)							
 	EventListener.add(EventType.ON_DEATH, () -> begin
 		let v = GetDyingUnit()

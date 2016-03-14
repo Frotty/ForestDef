@@ -9,24 +9,31 @@ class SlowDebuff extends NormalBuff
 		super(victim, dur, abilId, true)
 
 	override function defenseModifier()
-		super.defenseModifier()
 			
 	override function attackModifier()
-		super.attackModifier()
 	
+	
+class BoundBuff extends NormalBuff
+	construct(UnitEntity victim, real dur, int abilId)
+		super(victim, dur, abilId,true)
+	
+	override function defenseModifier()
+		new SlowDebuff(victim,2.,'A022')
+	
+	override function attackModifier()
+
 
 class Spawn extends Special
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
+		new BoundBuff(this,9999,'A023')
 		
-	override function onDamage(unit attacker)
-		new SlowDebuff(this,2.,'A022')
 
 public class SpecialFive extends Special
 	
-	static constant real SPAWNTIME = 20
-	static constant int SPAWNAMOUNT = 2
-	static constant int SPAWNID = 'u000'
+	static constant SPAWNTIME = 20
+	static constant SPAWNAMOUNT = 2
+	static constant SPAWNID = 'u000'
 	real spawntimer = 10
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
@@ -38,5 +45,21 @@ public class SpecialFive extends Special
 		spawntimer += ANIMATION_PERIOD
 		if spawntimer >= SPAWNTIME
 			spawntimer = 0
+			this.actor.pause()
+			this.actor.setAnimation("Stand Work Gold")
+			doAfter(2.3, () -> begin
+				this.actor.unpause()
+			end)
+			
+			var ppos = getPos().polarProject(100,this.actor.getFacingAngle(),angle(1.5708))
 			for i = 1 to SPAWNAMOUNT
-				new Spawn(actor.getPos3(),SPAWNID,0,middle)
+				doAfter(i.toReal(), ()-> begin
+					let spawn = new Spawn(ppos,SPAWNID,0,middle)
+					let eff = addEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
+					spawn.actor.pause()
+					spawn.actor.setAnimation("birth")
+					doAfter(2.3, () -> begin
+						spawn.actor.unpause()
+						eff.destr()
+					end)
+				end)

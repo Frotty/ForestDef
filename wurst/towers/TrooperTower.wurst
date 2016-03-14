@@ -54,6 +54,7 @@ package TrooperTower
 			troopcount = trooper_count[level]
 			for int i = 0 to troopcount
 				create_Trooper(i)
+			actor.issueImmediateOrderById(OrderId("stop"))
 		
 		override function onAttack(UnitEntity target)
 			for int i = 0 to troopcount

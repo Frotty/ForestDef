@@ -15,7 +15,6 @@ constant real	TEXTTAG_ANGLE	 = 90. //Texttag's angle.
 constant real	TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
 constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
 
-	
 
 public function showBountyTextTag ( integer bounty, unit receiver, player p )
 	if(bounty > 0)

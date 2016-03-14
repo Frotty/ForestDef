@@ -42,6 +42,8 @@ function start()
 	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
 		allPlayers.get(0).p..addGold(10000)..addLumber(10000)
 		bossWaves.dequeue()
+		bossWaves.dequeue()
+		bossWaves.dequeue()
 		getTimer().start( 5., function spawn )
 	else
 		getTimer().start( 50., function spawn )

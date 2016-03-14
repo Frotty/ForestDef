@@ -21,6 +21,7 @@ public class WaveTower extends Tower
 		new WaveMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 14, owner, level, actor)
 		
 	override function onUpgrade()
+		actor.issueImmediateOrderById(OrderId("stop"))
 		level++
 
 	

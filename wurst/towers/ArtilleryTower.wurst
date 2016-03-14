@@ -22,6 +22,7 @@ public class ArtilleryTower extends Tower
 	override function onUpgrade()
 		level ++
 		actor.setPropWindow(0.)
+		actor.issueImmediateOrderById(OrderId("stop"))
 		
 class ArtilleryMissile extends Projectile
 	real damage

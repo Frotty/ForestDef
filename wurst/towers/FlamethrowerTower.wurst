@@ -25,6 +25,7 @@ public class FlamethrowerTower extends Tower
 			
 			
 	override function onUpgrade()
+		actor.issueImmediateOrderById(OrderId("stop"))
 		level++
 			
 function isUnitTargetable(unit u) returns boolean

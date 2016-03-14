@@ -3,6 +3,7 @@ import Event
 import ClosureForGroups
 import ClosureTimers
 import Assets
+import SoundHelper
 
 constant TOWN_BELL_ITEM_ID = 'I006'
 constant TOWER_ID = 'h025'
@@ -10,8 +11,10 @@ constant DUMMY_ID = 'h00D'
 constant SPELL_DURATION = 45.0
 
 player lastRinger
+int usages = 0
 
 public function onTownBell() 
+	snd.play()
 	lastRinger = GetManipulatingUnit().getOwner()
 	forUnitsOfPlayer(players[5], (unit u) -> begin
 		if u.getTypeId() == DUMMY_ID
@@ -31,9 +34,15 @@ public function onTownBell()
 				createUnit(players[5], DUMMY_ID, pos, facing)
 		end)
 	end)
+	
+	usages++
+			
 
+
+Sound snd
 
 public function initTownBell()
+	snd = new Sound("Abilities\\Spells\\Human\\CallToArms\\HumanCallToArmsWhat1.wav", 3971, false)
 	EventListener.add(EventType.ON_PICKUP_ITEM, () -> begin
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
 			GetManipulatedItem().remove()

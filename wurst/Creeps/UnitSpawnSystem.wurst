@@ -67,21 +67,33 @@ function initWaves()
 	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 2, 17 ))
 	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 3, 17 ))
 	
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
 	
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
 	
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
 	
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	
 	
 	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "\tFast, melee, spawns minions on death", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
@@ -101,9 +113,9 @@ function initWaves()
 	end))
 	
 	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
-	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
+	specialWaves.enqueue(new SpecialWave('u00B', 1, 20))
 	specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
-	specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
+	specialWaves.enqueue(new SpecialWave('u00O', 25, 2))
 
 public function startSpawn()
 	timer t = CreateTimer()

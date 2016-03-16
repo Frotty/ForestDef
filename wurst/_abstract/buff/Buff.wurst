@@ -87,7 +87,7 @@ init
 				if getDamage() > 0.5
 					new TextTagEntity(victimData.getPos(), vec3(GetRandomReal(-2,2),GetRandomReal(-2,2),GetRandomReal(8,10)), getSquare(), 10, .8
 					,colorA(GetRandomInt(150,250),GetRandomInt(125,150),GetRandomInt(125,150), 255))
-					if attackerData.hasBuffs()				
+					modifyDamage(0)	
 	end)							
 	EventListener.add(EventType.ON_DEATH, () -> begin
 		let v = GetDyingUnit()

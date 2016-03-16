@@ -1,14 +1,14 @@
 package BossThree
 import Boss
-import ShieldBuff
+import PresetBuffs
 import Assets
 
 constant PUDGE_POWER_ID = 'A021'
 
-public class PudgePowerBuff extends NormalShieldBuff
+public class PudgePowerBuff extends NormalBuff
 
 	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId, 6500)
+		super(victim, dur, abilId, true)
 		
 	override function update()
 		super.update()

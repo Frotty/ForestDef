@@ -102,19 +102,19 @@ function initWaves()
 	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	
 	
-	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "\tFast, melee, spawns minions on death", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, "\tAverage speed, melee", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossTwo(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, "\tslow, melee, slow but powerful attack", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossThree(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, "\tFast, melee, attacks all surrounding buildings with acid", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFour(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "\tAverage speed, tanky unit", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFive(startPos, unitId, bounty, middle)
 	end))
 	
@@ -138,11 +138,11 @@ function initWaves()
 public function startSpawn()
 	timer t = CreateTimer()
 	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
-		print("fast start")
+		print("|cffFFCC00>>|r Debug Mode")
 		t.startPeriodic( SPAWN_TIME/5., function onSpawnTime)
 	else
 		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
-	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
+	print("|cffFFCC00>>|r Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds." )
 	
 public function initSpawn()
 	initWaves()

@@ -3,18 +3,21 @@ import Event
 import PhysicsProjectile
 import Interpolation
 import TextTagEntity
+import SoundHelper
 
 public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
+
+constant UNDER_ATTACK_SOUND = new Sound("Sound\\Dialogue\\GenericWarnings\\GenericWarningUnitAttack1.mp3", 2064, false)
 
 public class Rocket extends PhysicsProjectile
 	
 	construct(vec3 startPos, vec2 targetPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", 0 castTo OnExpireEvent )
 		setXYAngle(startPos.angleTo2d(targetPos))
-		setSpeed(GetRandomReal(8,12))
+		setSpeed(GetRandomReal(2,4))
 		vel.z = GetRandomReal(9,13)
-		setMass(25)
+		setMass(45)
 		
 	override function update()
 		super.update()
@@ -22,7 +25,8 @@ public class Rocket extends PhysicsProjectile
 			done = true
 			
 	ondestroy
-		new TextTagEntity(getPos(), vec3(0,0,15), "HELP!", 25, 1.5, colorA(255,50,50,255))
+		new TextTagEntity(getPos(), vec3(0,0,15), "HELP!", 25, 2, colorA(255,50,50,255))
+		UNDER_ATTACK_SOUND.play()
 		for i = 0 to 16
 			new Shrapnell(getPos())
 			

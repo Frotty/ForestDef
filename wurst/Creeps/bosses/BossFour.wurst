@@ -19,10 +19,8 @@ public class JumpyBuff extends NormalShieldBuff
 	override function defenseModifier()
 		let attacker = GetEventDamageSource()
 		
-		print("attacked")
 		if attacker.getOwner().isEnemyOf(victim.owner) and attacker.getPos3().distToVecSquared(victim.getPos()) < JUMP_DIST
 			victim.setTarget(GetEventDamageSource().getPos3(), 6)
-			print("jumped")
 			this.done = true
 	
 public class BossFour extends Boss

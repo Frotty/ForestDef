@@ -43,7 +43,7 @@ Sound snd
 
 public function initTownBell()
 	snd = new Sound("Abilities\\Spells\\Human\\CallToArms\\HumanCallToArmsWhat1.wav", 3971, false)
-	EventListener.add(EventType.ON_PICKUP_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
 			GetManipulatedItem().remove()
 			onTownBell()

@@ -1,5 +1,5 @@
 package Selector
-import RegisterEvents
+import Event
 import Entity
 import Builder
 import PlayerData
@@ -40,5 +40,5 @@ public class Selector extends UnitEntity
 trigger t
 	
 init
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
 	

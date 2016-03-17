@@ -124,7 +124,7 @@ public function initCreepStarts(boolean eight)
 	else
 		startPosCount = 3
 		startPositions[0] = vec3(2549.,-700.,0)
-		startPositions[1] = vec3(-500,600.,0)
+		startPositions[1] = vec3(-380,1200.,0)
 		startPositions[2] = vec3(3600.,4100.,0)
 		startPositions[3] = vec3(4324.,2261.,0)
 		middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )

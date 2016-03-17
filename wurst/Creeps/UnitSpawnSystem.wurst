@@ -139,7 +139,7 @@ public function startSpawn()
 	timer t = CreateTimer()
 	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
 		print("|cffFFCC00>>|r Debug Mode")
-		t.startPeriodic( SPAWN_TIME/5., function onSpawnTime)
+		t.startPeriodic( SPAWN_TIME/4., function onSpawnTime)
 	else
 		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	print("|cffFFCC00>>|r Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds." )

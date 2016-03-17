@@ -66,7 +66,7 @@ public class Tower extends UnitEntity
 	
 	
 init
-	EventListener.add(EventType.ON_CONSTRUCT, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_CONSTRUCT_START, () -> begin
 		let u = GetConstructingStructure()
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
@@ -74,12 +74,12 @@ init
 		else if id == BASIC_WALL_ID
 			new Wall(u)
 	end)
-	EventListener.add(EventType.ON_UPGRADE, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_START, () -> begin
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
 		if data != null and data instanceof Tower
 			(data castTo Tower).onUpgrade()
 	end)
-	EventListener.add(EventType.ON_DAMAGE, () -> begin
+	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
 		let damager = GetEventDamageSource()
 		if damager.getUserData() > 0
 			let e = damager.getUserData() castTo UnitEntity

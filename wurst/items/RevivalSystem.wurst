@@ -7,7 +7,7 @@ import Selector
 
 		
 public function initRevivalSystem()
-	EventListener.add(EventType.ON_DEATH, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> begin
 		let u = GetTriggerUnit()
 		let owner = u.getOwner()
 		if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
@@ -15,7 +15,7 @@ public function initRevivalSystem()
 			print("|cffFFCC00>>|r " + owner.getName() + " has died! Buy a Revival-Scroll from the middle to revive him.")
 	end)
 	
-	EventListener.add(EventType.ON_USE_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> begin
 		if GetItemTypeId(GetManipulatedItem()) == 'I007'
 			var s = ""
 			for pd in allPlayers

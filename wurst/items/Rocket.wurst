@@ -54,7 +54,7 @@ class Shrapnell extends PhysicsProjectile
 		fx.setColor(col)
 	
 public function initRocket()
-	EventListener.add(EventType.ON_SPELL_EFFECT, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> begin
 		if GetSpellAbilityId() == ROCKET_SPELL_ID
 			new Rocket(GetSpellAbilityUnit().getPos3(), vec2(GetSpellTargetX(),GetSpellTargetY()))
 	end)

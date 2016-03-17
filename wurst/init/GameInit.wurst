@@ -44,12 +44,15 @@ function start()
 		bossWaves.dequeue()
 		bossWaves.dequeue()
 		bossWaves.dequeue()
-		getTimer().start( 5., function spawn )
+		getTimer().start( 15., function spawn )
+		Cheat("warpten")
+		Cheat("iseedeadpeople")
 	else
 		getTimer().start( 50., function spawn )
 	
 function spawn()
 	var snd = new Sound("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", 16740, false)
+	var snd3 = new Sound("Units\\Orc\\Peon\\PeonYesAttack1.wav", 775, false)
 	let dyn = new DynamicSound(snd)
 	dyn.currentPitch = 1.65
 	dyn.setTargetPitch(0.60)
@@ -60,10 +63,11 @@ function spawn()
 		var snd2 = new Sound("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", 12617, false)
 		snd2.play()
 		doAfter(0.55, () -> snd2.play())
+		doAfter(13.5, () -> snd3.play())
 	end)
 	
 
 init
-	getTimer().start( 0.1, function start )
+	getTimer().start( 0.025, function start )
 
 

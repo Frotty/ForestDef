@@ -15,7 +15,7 @@ public class Projectile extends FxEntity
 	// Moving Speed
 	private real speed = 0
 	private real acc = 1.0
-	private real dist = 0
+	protected real dist = 0
 	private real maxDist = 0
 	protected real time = 0
 	private real maxTime = 0

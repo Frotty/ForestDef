@@ -130,7 +130,7 @@ function initWaves()
 	specialWaves.enqueue(new SpecialWave('u00O', 25, 6, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFour(startPos, unitId, bounty, middle)
 	end))
-	specialWaves.enqueue(new SpecialWave(UNIT_ID_DARKONE, 3, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	specialWaves.enqueue(new SpecialWave(UNIT_ID_DARKONE, 4, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFive(startPos, unitId, bounty, middle)
 	end))
 	

@@ -1,5 +1,6 @@
 package Wave
 import TimerUtils
+import initlater Special
 import initlater Creep
 import initlater Boss
 
@@ -71,37 +72,41 @@ public class BossWave
 	string info
 	CreateBoss boss
 	
-	construct(int bossId, int amount, int bounty, sound s, string info, CreateBoss boss)
+	construct(int bossId, int amount, int bounty, sound s, CreateBoss boss)
 		this.bossId = bossId
 		this.amount = amount
 		this.bounty = bounty
 		this.s = s
-		this.info = info
 		this.boss = boss
 		
 	function spawn()
 		PlaySoundBJ(s)
-		print("|cffE62121Attention: Boss incoming!\nInfo:\n" + info)
+		print("|cffE62121## Attention:|r Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
 				boss.create(startPositions[j], bossId, bounty, middle)
 				
-		
+
+public abstract class CreateSpecial
+	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
+
 public class SpecialWave
 	int specialId
 	int amount
 	int bounty
+	CreateSpecial special
 
-	construct(int specialId, int amount, int bounty)
+	construct(int specialId, int amount, int bounty, CreateSpecial special)
 		this.specialId = specialId
 		this.amount = amount
 		this.bounty = bounty
+		this.special = special
 		
 	function spawn()
-		print("|cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
+		print("|cffE62121##|r |cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
-				new Special(startPositions[j], specialId, bounty, middle)	
+				special.create(startPositions[j], specialId, bounty, middle)			
 		
 
 public function initCreepStarts(boolean eight)
@@ -119,7 +124,7 @@ public function initCreepStarts(boolean eight)
 	else
 		startPosCount = 3
 		startPositions[0] = vec3(2549.,-700.,0)
-		startPositions[1] = vec3(-500,600.,0)
+		startPositions[1] = vec3(-380,1200.,0)
 		startPositions[2] = vec3(3600.,4100.,0)
 		startPositions[3] = vec3(4324.,2261.,0)
 		middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )

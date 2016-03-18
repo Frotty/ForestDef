@@ -8,6 +8,12 @@ import BossTwo
 import BossThree
 import BossFour
 import BossFive
+import Special
+import SpecialOne
+import SpecialTwo
+import SpecialThree
+import SpecialFour
+import SpecialFive
 import Boss
 
 constant real SPAWN_TIME = 20.0
@@ -26,7 +32,7 @@ function onSpawnTime()
 	else
 		if normalWaves.getSize() > 0
 			normalWaves.dequeue().spawn()
-		if level mod 4 == 0 and normalWaves.getSize() > 0
+		if level mod 4 == 0 and bossWaves.getSize() > 0
 			bossWaves.dequeue().spawn()
 		
 	level++
@@ -67,52 +73,76 @@ function initWaves()
 	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 2, 17 ))
 	normalWaves.enqueue(new NormalWave('u00J', 'u00L', 'n00A', 3, 17 ))
 	
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
+	normalWaves.enqueue(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
 	
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.enqueue(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
 	
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
+	normalWaves.enqueue(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
 	
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
-	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 18 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	normalWaves.enqueue(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.enqueue(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	
 	
-	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, "\tFast, melee, spawns minions on death", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, "\tAverage speed, melee", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossTwo(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, "\tslow, melee, slow but powerful attack", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossThree(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, "\tFast, melee, attacks all surrounding buildings with acid", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFour(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, "\tAverage speed, tanky unit", (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.enqueue(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFive(startPos, unitId, bounty, middle)
 	end))
 	
-	specialWaves.enqueue(new SpecialWave('u00A', 3, 15))
-	specialWaves.enqueue(new SpecialWave('u00B', 1, 25))
-	specialWaves.enqueue(new SpecialWave('u00F', 4, 10))
-	specialWaves.enqueue(new SpecialWave('u00O', 25, 6))
+	specialWaves.enqueue(new SpecialWave('u00A', 3, 15, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialOne(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00B', 1, 25, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialTwo(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00F', 4, 10, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialThree(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave('u00O', 25, 6, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialFour(startPos, unitId, bounty, middle)
+	end))
+	specialWaves.enqueue(new SpecialWave(UNIT_ID_DARKONE, 4, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+		new SpecialFive(startPos, unitId, bounty, middle)
+	end))
+	
 
 public function startSpawn()
 	timer t = CreateTimer()
 	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
-		print("fast start")
-		t.startPeriodic( SPAWN_TIME/5., function onSpawnTime)
+		print("|cffFFCC00>>|r Debug Mode")
+		t.startPeriodic( SPAWN_TIME/4., function onSpawnTime)
 	else
 		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
-	print( ">-Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds-<" )
+	print("|cffFFCC00>>|r Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds." )
 	
 public function initSpawn()
 	initWaves()

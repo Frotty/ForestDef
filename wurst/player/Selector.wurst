@@ -1,13 +1,19 @@
 package Selector
-import RegisterEvents
+import Event
 import Entity
 import Builder
 import PlayerData
 import Rocket
+import Assets
+import SoundHelper
+import ClosureTimers
+
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
 public constant FAT_SPELL_ID = 'A01Y'
 public constant SLIM_SPELL_ID = 'A01X'
+constant PUDDING_ID = 'I00B'
+constant ENERGY_ID = 'I00C'
 
 public class Selector extends UnitEntity
 	
@@ -19,12 +25,17 @@ public class Selector extends UnitEntity
 			if id == FAT_SPELL_ID
 				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
 				pDatas[data.owner.getId()].fat = true
+				pDatas[data.owner.getId()].builder.actor.addItem(PUDDING_ID)
+				if data.owner.getName() == "curryking" or data.owner.getName() == "crigges"
+					let eff = addEffect(Other.plaguecloudtarget, pDatas[data.owner.getId()].builder.getPos())
+					doAfter(5, () -> eff.destr())
+					snd.playForPlayer(data.owner)
 			else if id == SLIM_SPELL_ID
 				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
 				pDatas[data.owner.getId()].fat = false
+				pDatas[data.owner.getId()].builder.actor.addItem(ENERGY_ID)
 			data.done = true
-			if GetRandomInt(0,3) > 2
-				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
+			pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
 	ondestroy
 		actor.remove()
 	
@@ -35,7 +46,9 @@ public class Selector extends UnitEntity
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 
 trigger t
+Sound snd
 	
 init
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	snd = new Sound("Units\\Creeps\\Ogre\\OgrePissed5.wav", 2897, false)
 	

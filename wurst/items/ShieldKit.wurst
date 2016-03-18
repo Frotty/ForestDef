@@ -30,7 +30,7 @@ class ShieldKitBuff extends NormalShieldBuff
 function repair()
 	if GetSpellAbilityId() == 'A00D'
 		let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 3))		
+		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
 	
 public function initShieldKit()
 	trigger instarep = CreateTrigger(  )

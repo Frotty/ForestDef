@@ -1,0 +1,8 @@
+package SpecialFour
+
+import Special
+
+public class SpecialFour extends Special
+	
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)

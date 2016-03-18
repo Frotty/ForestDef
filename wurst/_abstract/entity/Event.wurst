@@ -1,84 +1,92 @@
 package Event
 import LinkedList
 import RegisterEvents
+import HashMap
+import OnUnitEnterLeave
 
-public enum EventType
-	ON_DAMAGE
-	ON_DEATH
-	ON_CONSTRUCT
-	ON_USE_ITEM
-	ON_UPGRADE
-	ON_SPELL_EFFECT
-	ON_PICKUP_ITEM
-	
 public abstract class EventListener
-	static LinkedList<EventListener> onDamageListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> onDeathListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> onConstructListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> onUseItemListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> onUpgradeListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> spellEffectListeners = new LinkedList<EventListener>()
-	static LinkedList<EventListener> onPickupItemListeners = new LinkedList<EventListener>()
+	static HashMap<int, LinkedList<EventListener>> listenerMap = new HashMap<int, LinkedList<EventListener>>()
+	static HashMap<unit, int> unitListenerMap = new HashMap<unit, int>()
 	
+	static function add(eventid eventId, EventListener listener)
+		int id = eventId.toIntId()
+		if not listenerMap.has(id)
+			listenerMap.put(id, new LinkedList<EventListener>())
+			
+		listenerMap.get(id).add(listener)
+		
+	static function add(unit u, eventid eventId, EventListener listener)
+		int id = eventId.toIntId()
+		if not unitListenerMap.has(u)
+			let list = new LinkedList<EventListener>()
+			let startId = eventTypeCounter + (list castTo int) * eventTypeCounter
+			unitListenerMap.put(u, startId)
+			
+		let listenerId = unitListenerMap.get(u) + id
+		if not listenerMap.has(listenerId)
+			listenerMap.put(listenerId, new LinkedList<EventListener>())
+			
+		listenerMap.get(listenerId).add(listener)
+	
+	static function generalEventCallback()
+		let id = GetTriggerEventId().toIntId()
+		let trigUnit = GetTriggerUnit()
+		if listenerMap.has(id)
+			for listener in listenerMap.get(id)
+				listener.onEvent()
+		if unitListenerMap.has(trigUnit)
+			for listener in listenerMap.get(unitListenerMap.get(trigUnit) + id)
+				listener.onEvent()
+			
 	abstract function onEvent()
-	
-	static function add(EventType etype, EventListener listener)
-		switch (etype)
-			case ON_DAMAGE
-				onDamageListeners.add(listener)
-			case ON_DEATH
-				onDeathListeners.add(listener)
-			case ON_CONSTRUCT
-				onConstructListeners.add(listener)
-			case ON_USE_ITEM
-				onUseItemListeners.add(listener)
-			case ON_UPGRADE
-				onUpgradeListeners.add(listener)
-			case ON_SPELL_EFFECT
-				spellEffectListeners.add(listener)
-			case ON_PICKUP_ITEM
-				onPickupItemListeners.add(listener)
-		
-	static function onDamage()
-		for listener in onDamageListeners
-			listener.onEvent()
 			
-	static function onDeath()
-		for listener in onDeathListeners
-			listener.onEvent()
 	
-	static function onConstruct()
-		for listener in onConstructListeners
-			listener.onEvent()
-		
-	static function onUseItem()
-		for listener in onUseItemListeners
-			listener.onEvent()
-	
-	static function onUpgrade()
-		for listener in onUpgradeListeners
-			listener.onEvent()
-	
-	static function onSpellEffect()
-		for listener in spellEffectListeners
-			listener.onEvent()
-			
-	static function onPickupItem()
-		for listener in onPickupItemListeners
-			listener.onEvent()
-			
-public function registerUnit(unit u)
-	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
-	deathTrig.registerUnitEvent(u, EVENT_UNIT_DEATH)
-			
 trigger dmgTrig = CreateTrigger()
 trigger deathTrig = CreateTrigger()
 
+public function eventid.toIntId() returns int
+	return eventidToIndex[this.getHandleId()]
+			
+int array eventidToIndex
+int eventTypeCounter = 1
+
+function registerEventId(eventid evnt)
+	eventidToIndex[evnt.getHandleId()] = eventTypeCounter
+	eventTypeCounter++
+	
+function registerEventsForUnit(unit u)
+	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
+
+function unregisterEventsForUnit(unit u)
+	if EventListener.unitListenerMap.has(u)
+		for int i = 0 to eventTypeCounter-1
+			let list = EventListener.listenerMap.get(EventListener.unitListenerMap.get(u))
+			for listener in list
+				destroy listener
+			destroy list
+
 init
-	dmgTrig.addAction(function EventListener.onDamage)		
-	deathTrig.addAction(function EventListener.onDeath)
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.onConstruct)
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.onUseItem)
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_UPGRADE_FINISH, function EventListener.onUpgrade)
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function EventListener.onSpellEffect)
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function EventListener.onPickupItem)
+	// Register Eventtypes
+	registerEventId(EVENT_UNIT_DAMAGED)
+	registerEventId(EVENT_PLAYER_UNIT_DEATH)
+	registerEventId(EVENT_PLAYER_UNIT_CONSTRUCT_START)
+	registerEventId(EVENT_PLAYER_UNIT_USE_ITEM)
+	registerEventId(EVENT_PLAYER_UNIT_UPGRADE_FINISH)
+	registerEventId(EVENT_PLAYER_UNIT_SPELL_EFFECT)
+	registerEventId(EVENT_PLAYER_UNIT_SPELL_CAST)
+	registerEventId(EVENT_PLAYER_UNIT_PICKUP_ITEM)
+	// Register Events when unit enters map
+	onEnter(() -> registerEventsForUnit(getEnterLeaveUnit()))
+	// Delete 
+	onLeave(() -> unregisterEventsForUnit(getEnterLeaveUnit()))
+	
+	// Register Actions
+	dmgTrig.addAction(function EventListener.generalEventCallback)		
+	
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_UPGRADE_FINISH, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, function EventListener.generalEventCallback)
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function EventListener.generalEventCallback)

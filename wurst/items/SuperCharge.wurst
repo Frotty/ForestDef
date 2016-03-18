@@ -1,49 +1,30 @@
 package SuperCharge
+import TimerUtils
+import TypeCasting
+import Event
 
+constant ITEM_ABILITY_ID = 'A01M'
+constant REPAIR_ID = 'Ahrp'
+constant SUPERREPAIR_ID = 'A01L'
 
-	import TimerUtils
-
-	int ITEM_ABILITY_ID = 'A01M'
-	int REPAIR_ID = 'Ahrp'
-	int SUPERREPAIR_ID = 'A01L'
-
-	class Temp
-		unit u
-		
-		construct (unit uu)
-			u = uu
+function charge()
+	let target = GetSpellTargetUnit()
+	if (GetSpellAbilityId() == ITEM_ABILITY_ID )
+		target.removeAbility(REPAIR_ID)
+		target.addAbility(SUPERREPAIR_ID)
+		addEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getPos())
+		timer tim = getTimer()
+		tim.start(15. ,  function swapBack)
+		tim.setData(unitToIndex(target))
+		timer tim2 = getTimer()
 	
-	function charge()
-		unit target = GetSpellTargetUnit()
-		if (GetSpellAbilityId() == ITEM_ABILITY_ID )
-			target.removeAbility(REPAIR_ID)
-			target.addAbility(SUPERREPAIR_ID)
-			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getX(), target.getY()))
-			timer tim = getTimer()
-			tim.start(15. ,  function swapBack)
-			Temp t = new Temp(target)
-			tim.setData(t castTo int)
-			timer tim2 = getTimer()
-			tim2.start(.02 ,  function orderRepair)
-			tim2.setData(t castTo int)
-			
-	function orderRepair()
-		Temp root = GetExpiredTimer().getData() castTo Temp
-		unit u = root.u
-		IssueImmediateOrder( u, "repairon" )
-		
-	function swapBack()
-		Temp root = GetExpiredTimer().getData() castTo Temp
-		unit u = root.u
-		destroy root
-		u.removeAbility(SUPERREPAIR_ID)
-		u.addAbility(REPAIR_ID)
-		IssueImmediateOrder( u, "repairon" )
-		
-		
-	public function initSuperCharge()
-		trigger t = CreateTrigger( )
-		TriggerRegisterAnyUnitEventBJ( t, EVENT_PLAYER_UNIT_SPELL_EFFECT )
-		TriggerAddAction( t, function charge )
+function swapBack()
+	let u = unitFromIndex(GetExpiredTimer().getData())
+	u.removeAbility(SUPERREPAIR_ID)
+	u.addAbility(REPAIR_ID)
+	u.issueImmediateOrder("repairon")
+	
+	
+init
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> charge())
 
-endpackage

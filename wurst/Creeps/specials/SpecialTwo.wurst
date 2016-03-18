@@ -1,0 +1,33 @@
+package SpecialTwo
+
+import Creep
+import Special
+
+public class SpecialTwo extends Special
+
+	static constant SOUL1_ID = 'u00B'
+	static constant SOUL2_ID = 'u00C'
+	static constant SOUL3_ID = 'u00D'
+	static constant SOUL4_ID = 'u00E'
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+
+	override function onDeath(unit killer)
+		var ppos = getPos()
+		if actor.getTypeId() == SOUL1_ID
+			doAfter(0.5, ()-> begin
+				for i = 0 to 3
+					new SpecialTwo(ppos, SOUL2_ID, 8, middle)
+			end)
+		else if actor.getTypeId() == SOUL2_ID
+			doAfter(0.5, ()-> begin
+				for i = 0 to 2
+					new SpecialTwo(ppos, SOUL3_ID, 7, middle)
+			end)
+		else if actor.getTypeId() == SOUL3_ID
+			doAfter(0.5, ()-> begin
+				new SpecialTwo(ppos, SOUL4_ID, 6, middle)
+			end)
+		super.onDeath(killer)
+

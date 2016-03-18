@@ -17,6 +17,7 @@ import StompingTower
 import TrooperTower
 import EntityManagement
 import TownBell
+import FatCrigges
 import ClosureTimers
 
 function start()
@@ -34,6 +35,7 @@ function start()
 	initMultiboard()
 	initRocket()
 	initTownBell()
+	initFat()
 	GetExpiredTimer().release()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")

@@ -7,6 +7,7 @@ import Fx
 import Terrain
 import AbilityObjEditing
 import InstantDummyCaster
+import TimerUtils
 
 constant MODEL = "war3mapImported\\peasantfatcomp.mdx"//"Abilities\\Weapons\\Arrow\\ArrowMissile.mdl" //"war3mapImported\\peasantfatcomp.mdx"
 constant EFFECT_MODEL = "Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl"
@@ -68,7 +69,7 @@ class FatCrigges
 		t.release()
 		
 public function initFat()
-	EventListener.add(EventType.ON_PICKUP_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
 		if GetManipulatedItem().getTypeId() == FAT_ITEM_ID
 			GetManipulatedItem().remove()
 			onFatness()

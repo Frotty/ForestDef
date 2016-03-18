@@ -95,3 +95,11 @@ init
 			let victimData = v.getUserData() castTo UnitEntity
 			victimData.onDeath(GetKillingUnit())
 	end)
+	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
+		let v = GetTriggerUnit()
+		if v.getUserData() > 0
+			let victimData = v.getUserData() castTo UnitEntity
+			if victimData.hasBuffs()
+				for bff in victimData.getBuffs()
+					bff.refresh()
+	end)

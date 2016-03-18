@@ -9,8 +9,8 @@ import initlater FlamethrowerTower
 import initlater ArtilleryTower
 import initlater HealbackTower
 import Event
-constant int BASIC_TOWER_ID = 'h003'
-constant int BASIC_WALL_ID = 'h000'
+public constant int BASIC_TOWER_ID = 'h003'
+public constant int BASIC_WALL_ID = 'h000'
 
 public class Wall extends UnitEntity
 	construct (unit wall)
@@ -31,9 +31,6 @@ public class Tower extends UnitEntity
 
 
 	function onUpgrade()
-		if hasBuffs()
-			for bff in getBuffs()
-				bff.refresh()
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
 				debugPrint("isWave", 0)
@@ -74,7 +71,7 @@ init
 		else if id == BASIC_WALL_ID
 			new Wall(u)
 	end)
-	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_START, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
 		if data != null and data instanceof Tower
 			(data castTo Tower).onUpgrade()

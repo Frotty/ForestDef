@@ -4,7 +4,7 @@ import ShieldBuff
 import Assets
 
 constant JUMPY_ID = 'A024'
-constant JUMP_DIST = 378*378
+constant JUMP_DIST = 512*512
 
 public class JumpyBuff extends NormalShieldBuff
 
@@ -21,6 +21,7 @@ public class JumpyBuff extends NormalShieldBuff
 		
 		if attacker.getOwner().isEnemyOf(victim.owner) and attacker.getPos3().distToVecSquared(victim.getPos()) < JUMP_DIST
 			victim.setTarget(GetEventDamageSource().getPos3(), 6)
+			addEffect(Other.roarcaster, victim.getPos()).destr()
 			this.done = true
 	
 public class BossFour extends Boss
@@ -28,5 +29,4 @@ public class BossFour extends Boss
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 		new JumpyBuff(this, 55555, JUMPY_ID)
-	
-	
+		

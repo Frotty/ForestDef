@@ -22,7 +22,6 @@ import ClosureTimers
 function start()
 	initLumberSystem()
 	initDestroy()
-	initSuperCharge()
 	initRevivalSystem()
 	initStompingTower()
 	initAssassinTower()
@@ -63,7 +62,7 @@ function spawn()
 		var snd2 = new Sound("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", 12617, false)
 		snd2.play()
 		doAfter(0.55, () -> snd2.play())
-		doAfter(13.5, () -> snd3.play())
+		doAfter(13.25, () -> snd3.play())
 	end)
 	
 

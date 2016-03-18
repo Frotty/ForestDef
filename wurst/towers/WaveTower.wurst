@@ -5,10 +5,10 @@ import Terrain
 import Projectile
 import TempGroups
 import Creep
+import Assets 
 
 constant real AREA_OF_EFFECT = 200.
 public constant int FIRST_WAVE_ID = 'h01N'
-constant string FX_PATH = "Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveMissile.mdl"
 
 public class WaveTower extends Tower
 	int level = 1
@@ -40,10 +40,10 @@ class WaveMissile extends Projectile
 	unit tower
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
-		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), FX_PATH )
+		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Other.crushingwavemissile )
 		this.tower = tower
 		setSpeed(speed)
-		setAcc(0.975)
+		setAcc(0.985)
 		affected = CreateGroup()
 		this.level = level
 		
@@ -65,11 +65,11 @@ class WaveMissile extends Projectile
 					let ang = angleBetweenCoords(pos.x, pos.y, upos.x, upos.y)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
 					if data instanceof Boss
-						var speedPerc = 0.25 + (data.actor.getMoveSpeed() / 522)
+						var speedPerc = 0.45 + (data.actor.getMoveSpeed() / 522)
 						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
-					addEffect("Abilities\\Weapons\\GryphonRiderMissile\\GryphonRiderMissileTarget.mdl", u.getPos() ).destr()
+					addEffect(Other.gryphonridermissiletarget, u.getPos() ).destr()
 		ENUM_GROUP.clear()
 
 	ondestroy

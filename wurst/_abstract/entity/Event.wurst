@@ -56,7 +56,6 @@ function registerEventId(eventid evnt)
 	
 function registerEventsForUnit(unit u)
 	dmgTrig.registerUnitEvent(u, EVENT_UNIT_DAMAGED)
-	deathTrig.registerUnitEvent(u, EVENT_UNIT_DEATH)
 
 function unregisterEventsForUnit(unit u)
 	if EventListener.unitListenerMap.has(u)
@@ -69,7 +68,7 @@ function unregisterEventsForUnit(unit u)
 init
 	// Register Eventtypes
 	registerEventId(EVENT_UNIT_DAMAGED)
-	registerEventId(EVENT_UNIT_DEATH)
+	registerEventId(EVENT_PLAYER_UNIT_DEATH)
 	registerEventId(EVENT_PLAYER_UNIT_CONSTRUCT_START)
 	registerEventId(EVENT_PLAYER_UNIT_USE_ITEM)
 	registerEventId(EVENT_PLAYER_UNIT_UPGRADE_FINISH)
@@ -83,7 +82,6 @@ init
 	
 	// Register Actions
 	dmgTrig.addAction(function EventListener.generalEventCallback)		
-	deathTrig.addAction(function EventListener.generalEventCallback)
 	
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.generalEventCallback)
@@ -91,4 +89,4 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_EFFECT, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, function EventListener.generalEventCallback)
-	
+	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DEATH, function EventListener.generalEventCallback)

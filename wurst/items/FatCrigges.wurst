@@ -1,0 +1,107 @@
+package FatCrigges
+import Event
+import ClosureForGroups
+import ClosureTimers
+import Wave
+import Fx
+import Terrain
+import AbilityObjEditing
+import InstantDummyCaster
+import TimerUtils
+
+constant MODEL = "war3mapImported\\peasantfatcomp.mdx"//"Abilities\\Weapons\\Arrow\\ArrowMissile.mdl" //"war3mapImported\\peasantfatcomp.mdx"
+constant EFFECT_MODEL = "Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl"
+constant STUN_ID = 'A024'
+constant FAT_ITEM_ID = 'I00D'
+constant START_SPEED = 15.
+constant SPEED_GAIN = 1.5
+constant GRAVITY = 1.0
+constant ROUNDS = 2
+constant MOVE_DISTANCE = 50.
+constant START_DISTANCE = 450.
+constant STUN_RANGE = 600.
+constant STUN_DURATION = 7.
+
+public function onFatness()
+	new FatCrigges(GetManipulatingUnit().getOwner())
+	
+class FatCrigges
+	player caster
+	timer t
+	Fx crigges
+	vec3 vel
+	real speed = START_SPEED
+	vec2 target
+	int hits
+	
+	construct(player caster)
+		this.caster = caster		
+		t = getTimer()..setData(this castTo int)..startPeriodic(0.03, () -> GetExpiredTimer().getData() castTo thistype.callback())
+		crigges = new Fx(middle.withZ(-100. + getTerrainZ(middle.x, middle.y)), 0..asAngleDegrees(), MODEL)..setScale(1.2)
+		crigges.setOwner(caster, false)
+		target = middle + vec2(START_DISTANCE, -120)
+		vel = vec2(0, 0).polarOffset(middle.angleTo(target), speed).withZ(0)
+		
+		
+	function callback()
+		vel.z -= GRAVITY
+		crigges.setXYZ(crigges.getPos3(getTerrainZ(crigges.getX(), crigges.getY() - 5)) + vel)
+		crigges.setXYAngle(crigges.getDummy().getFacingAngle() + 45..asAngleDegrees())
+		if(crigges.getPos2().distToVec(target) < speed + 1)
+			Fx stomp = new Fx(target.withZ(0), 0..asAngleDegrees(), EFFECT_MODEL)..setScale(1.5)
+			nullTimer(() -> destroy stomp)
+			forUnitsInRange(target, STUN_RANGE, (unit u) -> InstantDummyCaster.castTarget(caster, STUN_ID, 1, "thunderbolt", u))
+			speed += SPEED_GAIN
+			vec2 delta = target - middle
+			delta = vec2(delta.y, -delta.x)
+			target = middle + delta
+			target = target.polarOffset(middle.angleTo(target), MOVE_DISTANCE)
+			real steps = crigges.getPos2().distToVec(target) / speed
+			steps /= 2.
+			real z = steps * GRAVITY
+			vel = vec2(0, 0).polarOffset(crigges.getPos2().angleTo(target), speed).withZ(z)
+			hits++
+			if(hits >= ROUNDS * 4)
+				destroy this
+				
+	ondestroy
+		destroy crigges
+		t.release()
+		
+public function initFat()
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
+		if GetManipulatedItem().getTypeId() == FAT_ITEM_ID
+			GetManipulatedItem().remove()
+			onFatness()
+	end)
+
+@compiletime function create_w3t_I00D()
+	let u = createObjectDefinition("w3t", FAT_ITEM_ID, 'srrc')
+	u.setInt("igol", 0)
+	u.setString("ides", "Helps you defend")
+	u.setString("utip", "Feel the Fat")
+	u.setString("utub", "|cffff0000Used immediately upon purchase!|r|nMake the enemys feel the fatness of Crigges")
+	u.setInt("isst", 1)
+	u.setInt("ubpy", 2)
+	u.setInt("ilum", 20)
+	u.setString("iabi", "")
+	u.setInt("idrp", 1)
+	u.setString("uhot", "F")
+	u.setString("unam", "Feel the Fat")
+	u.setString("iico", "ReplaceableTextures\\CommandButtons\\BTNAbomination.blp")
+	u.setInt("istr", 145)
+	
+@compiletime function create_w3a_A024()
+	let u = new AbilityDefinitionMountainKingThunderBolt(STUN_ID)
+	u.setLevels(1)
+	u.setHeroAbility(false)
+	u.setCooldown(1, 0)
+	u.setManaCost(1, 0)
+	u.setCastRange(1, 99999)
+	u.setTargetsAllowed(1, "ground,enemies,friend,air,neutral")
+	u.setDurationHero(1, STUN_DURATION)
+	u.setDurationNormal(1, STUN_DURATION)
+	u.setMissileSpeed(100000)
+	u.setDamage(1, 0)
+	u.setAnimationNames("")
+	u.setMissileArt("")

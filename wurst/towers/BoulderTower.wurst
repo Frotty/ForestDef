@@ -1,6 +1,4 @@
 package BoulderTower
-
-import ClosureForGroups
 import Tower
 import PresetBuffs
 

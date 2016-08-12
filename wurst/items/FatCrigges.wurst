@@ -7,11 +7,10 @@ import Fx
 import Terrain
 import AbilityObjEditing
 import InstantDummyCaster
-import TimerUtils
 
 constant MODEL = "war3mapImported\\peasantfatcomp.mdx"//"Abilities\\Weapons\\Arrow\\ArrowMissile.mdl" //"war3mapImported\\peasantfatcomp.mdx"
 constant EFFECT_MODEL = "Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl"
-constant STUN_ID = 'A024'
+constant STUN_ID = 'A154'
 constant FAT_ITEM_ID = 'I00D'
 constant START_SPEED = 15.
 constant SPEED_GAIN = 1.5

@@ -1,8 +1,5 @@
 package UnitSpawnSystem
-import TimerUtils
 import Queue
-import Wave
-import PlayerData
 import BossOne
 import BossTwo
 import BossThree
@@ -137,7 +134,7 @@ function initWaves()
 
 public function startSpawn()
 	timer t = CreateTimer()
-	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
+	if allPlayers.getSize() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		print("|cffFFCC00>>|r Debug Mode")
 		t.startPeriodic( SPAWN_TIME/4., function onSpawnTime)
 	else

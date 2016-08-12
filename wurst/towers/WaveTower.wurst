@@ -1,10 +1,6 @@
 package WaveTower
 import Tower
 import Boss
-import Terrain
-import Projectile
-import TempGroups
-import Creep
 import Assets 
 
 constant real AREA_OF_EFFECT = 200.
@@ -26,13 +22,13 @@ public class WaveTower extends Tower
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((95. * level) + 85.)
+	return ((135. * level) + 85.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((8.5 * level))
+	return ((9.5 * level))
 	
 function getKB(int level) returns real//towerlevel
-	return (4. + (level*level))
+	return (4.5 + (level*level))
 	
 class WaveMissile extends Projectile
 	int level

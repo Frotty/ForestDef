@@ -5,10 +5,8 @@ import UnitSpawnSystem
 import SoundHelper
 import PlayerData
 import GameConditions
-import TimerUtils
 import LumberSystem
 import Destroy
-import SuperCharge
 import RevivalSystem
 import AssassinTower
 import ArtilleryTower
@@ -40,7 +38,7 @@ function start()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
-	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "WorldEdit"
+	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "Frotty"
 		allPlayers.get(0).p..addGold(10000)..addLumber(10000)
 		bossWaves.dequeue()
 		bossWaves.dequeue()
@@ -66,7 +64,6 @@ function spawn()
 		doAfter(0.55, () -> snd2.play())
 		doAfter(13.25, () -> snd3.play())
 	end)
-	
 
 init
 	getTimer().start( 0.025, function start )

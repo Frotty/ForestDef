@@ -1,9 +1,7 @@
 package ArtilleryTower
 import Tower
-import TempGroups
 import Projectile
 import Terrain
-import PhysicsConstants
 
 constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant int ART_TOWER_ID = 'h01O'
@@ -11,16 +9,16 @@ constant int SPELL_ID = 'A01T'
 trigger castTrigger
 
 public class ArtilleryTower extends Tower
-	int level
+	int level = 1
 	
 	construct(Tower t)
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
-		level = 0
 		actor.setPropWindow(0.)
 		
 	override function onUpgrade()
-		level ++
+		level++
+		actor.setAbilityLevel(SPELL_ID, level)
 		actor.setPropWindow(0.)
 		actor.issueImmediateOrderById(OrderId("stop"))
 		

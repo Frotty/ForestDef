@@ -1,6 +1,5 @@
 package TextTagEntity
 import Entity
-import Texttag
 import PhysicsConstants
 import public Colors
 

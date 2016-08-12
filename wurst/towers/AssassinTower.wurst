@@ -1,6 +1,4 @@
 package AssassinTower
-	import TimerUtils
-	import Terrain
 	import Tower
 	
 	int array hitnumberstore
@@ -101,7 +99,7 @@ package AssassinTower
 	
 
 	function setTarget()
-		AssassinTower at = GetAttacker().getUserData() castTo AssassinTower
+//		AssassinTower at = GetAttacker().getUserData() castTo AssassinTower
 					
 
 	public function initAssassinTower()

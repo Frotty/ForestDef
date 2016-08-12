@@ -1,11 +1,8 @@
 package PlayerData
 import Wave
 import PhysicsProjectile
-import Texttag
 import initlater Selector
 import Builder
-import LinkedList
-import Rocket
 
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
@@ -27,19 +24,20 @@ public function initPlayers()
 	for int i = 0 to 7
 		if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
 			allPlayers.add(new PlayerData(players[i]))
-	int gold
+
+	var gold = 0.
 	if allPlayers.getSize() > 4
 		initCreepStarts(true)
-		gold = 900
+		gold = 1245
 	else
 		initCreepStarts(false)
-		gold = 450
+		gold = 490
 	
-	real anglePerP = 360/allPlayers.getSize()
-	real current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
+	let anglePerP = 360/allPlayers.getSize()
+	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
 	for p in allPlayers
 		new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
 		current += anglePerP
-		SetPlayerState( p.p, PLAYER_STATE_RESOURCE_GOLD, (gold/allPlayers.getSize()).toInt() )	 
+		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	
 	createTTEx(middle.toVec3() - vec3(70,0,0), "Item Shop", 15, colorA(225,225,125, 255))

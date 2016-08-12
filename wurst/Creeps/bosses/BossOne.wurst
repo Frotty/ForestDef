@@ -14,7 +14,7 @@ public class BossOne extends Boss
 			, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 			pj.setTimed(GetRandomReal(1,3))
 			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
-			pj.restitution = 0.55
-			pj.mass = GetRandomReal(10,500)
-			pj.surfaceFriction = 0.75
+			pj.restitution = 0.45
+			pj.mass = GetRandomReal(25,500)
+			pj.surfaceFriction = 0.85
 	

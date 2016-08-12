@@ -1,7 +1,5 @@
 package StompingTower
-	import Entity
 	import Tower
-	import TimerUtils
 	import Terrain
 	real SPEED = 15.
 	

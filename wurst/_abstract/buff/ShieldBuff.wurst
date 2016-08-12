@@ -1,6 +1,5 @@
 package ShieldBuff
 import PresetBuffs
-import DmgMod
 
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount

@@ -1,6 +1,4 @@
 package SuperCharge
-import TimerUtils
-import TypeCasting
 import Event
 
 constant ITEM_ABILITY_ID = 'A01M'
@@ -16,7 +14,6 @@ function charge()
 		timer tim = getTimer()
 		tim.start(15. ,  function swapBack)
 		tim.setData(unitToIndex(target))
-		timer tim2 = getTimer()
 	
 function swapBack()
 	let u = unitFromIndex(GetExpiredTimer().getData())

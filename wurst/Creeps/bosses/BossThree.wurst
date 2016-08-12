@@ -16,7 +16,7 @@ public class PudgePowerBuff extends NormalBuff
 	override function attackModifier()
 		var target = GetTriggerUnit()
 		addEffect(Other.hcanceldeath, target.getPos()).destr()
-		modifyDamageBy(target.getMaxHP() / 3.0)
+		modifyDamageBy(target.getMaxHP() / 3.5)
 		
 	override function defenseModifier()
 

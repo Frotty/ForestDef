@@ -45,7 +45,6 @@ public class Selector extends UnitEntity
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 
-trigger t
 Sound snd
 	
 init

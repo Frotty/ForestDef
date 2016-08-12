@@ -1,7 +1,6 @@
 package ThermoTower
-
 import Tower
-import TimerUtils
+
 constant int buffcode = 'Bfro'
 constant int ORB_ID = 'A01S'
 public constant int THERMO_TOWER_ID = 'h01R'

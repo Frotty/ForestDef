@@ -1,6 +1,5 @@
 package LumberSystem
 import Creep
-import PlayerData
 
 constant real	TEXTTAG_TEXTSIZE  = 0.024  //The size of the texttag text.
 constant real	TEXTTAG_VELOCITY  = .03//Texttag's velocity.

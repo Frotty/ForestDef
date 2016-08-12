@@ -1,12 +1,11 @@
 package GameConditions
-import TimerUtils
 import Entity
+import EndBoss
 
 public timer gameTime
 
 function victory()
-	print(" You win! " )
-	PauseGame( true )
+	startEndBoss()
 	
 function lose()
 	print("Game over...! " )

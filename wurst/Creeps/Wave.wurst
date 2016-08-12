@@ -1,7 +1,4 @@
 package Wave
-import TimerUtils
-import initlater Special
-import initlater Creep
 import initlater Boss
 
 vec3 array startPositions

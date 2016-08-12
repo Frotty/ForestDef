@@ -1,5 +1,4 @@
 package SpecialFive
-
 import Creep
 import PresetBuffs
 import Special
@@ -31,10 +30,10 @@ class Spawn extends Special
 
 public class SpecialFive extends Special
 	
-	static constant SPAWNTIME = 15
+	static constant SPAWNTIME = 45
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u00J'
-	real spawntimer = 10
+	real spawntimer = 30
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
@@ -51,15 +50,9 @@ public class SpecialFive extends Special
 				this.actor.unpause()
 			end)
 			
-			var ppos = getPos().polarProject(100,this.actor.getFacingAngle(),angle(1.5708))
+			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 100)
 			for i = 1 to SPAWNAMOUNT
 				doAfter(i.toReal(), ()-> begin
-					let spawn = new Spawn(ppos,SPAWNID,0,middle)
-					let eff = addEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
-					spawn.actor.pause()
-					spawn.actor.setAnimation("birth")
-					doAfter(2.3, () -> begin
-						spawn.actor.unpause()
-						eff.destr()
-					end)
+					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
+					addEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos()).destr()
 				end)

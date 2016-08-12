@@ -3,12 +3,10 @@ import LinkedListModule
 import Terrain
 import PhysicsConstants
 import Fx
-import Angle
 import initlater Buff
 import public LinkedList
 import public DmgMod
 import MapBounds
-import Event
 		
 /** Base Entity Class  */
 public abstract class Entity
@@ -177,7 +175,6 @@ abstract public class FxEntity extends Entity
 		fx.setPos(tpos.x,tpos.y)
 		
 	ondestroy
-		debugPrint("fx destroyed", 1)
 		if silent
 			fx.hiddenDestroy()
 		else

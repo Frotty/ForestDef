@@ -1,7 +1,5 @@
 package BossFive
 import Boss
-import ShieldBuff
-
 
 public class BossFive extends Boss
 

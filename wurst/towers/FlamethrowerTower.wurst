@@ -2,7 +2,6 @@ package FlamethrowerTower
 import Tower
 import Terrain
 import Projectile
-import TempGroups
 
 public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl"//"Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"
 public constant real AOE_RADIUS = 48.

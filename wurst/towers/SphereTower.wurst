@@ -1,8 +1,6 @@
 package SphereTower
-
 import Tower
 import Projectile
-import TempGroups
 
 constant real AREA_OF_EFFECT = 40.
 constant string FX_PATH = "sdg"

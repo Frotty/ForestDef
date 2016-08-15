@@ -1,6 +1,6 @@
 package FlamethrowerTower
 import Tower
-import Terrain
+import TerrainUtils
 import Projectile
 
 public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl"//"Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"

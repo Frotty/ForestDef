@@ -2,6 +2,7 @@ package Special
 import Creep
 import AbilityObjEditing
 import BuffObjEditing
+import ObjectIdGenerator
 
 public int UNIT_ID_DARKONE
 public int ABIL_ID_SLOWBUFFDUMMY

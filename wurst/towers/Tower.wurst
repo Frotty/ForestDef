@@ -33,33 +33,24 @@ public class Tower extends UnitEntity
 	function onUpgrade()
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
-				debugPrint("isWave", 0)
 				new WaveTower(this)
 			case ASSASSIN_TOWER_BASE_ID
-				debugPrint("isAssassin",0)
-				new AssassinTower(this)
+				// new AssassinTower(this)
 			case TOWER_TROOPER_ID
-				debugPrint("isTrooper",0)
 				new TrooperTower(this)
 			case stompingbasetype[0]
-				debugPrint("isStomper",0)
-				new StompingTower(this)
+				// new StompingTower(this)
 			case FLAMETHROWER_ID
-				debugPrint("isThermo",0)
 				new FlamethrowerTower(this)
 			case ART_TOWER_ID
-				debugPrint("isArtillery",0)
 				new ArtilleryTower(this)
 			case HEAL_TOWER_ID
-				debugPrint("isHeal",0)
 				new HealbackTower(this)
 			case THERMO_TOWER_ID
-				debugPrint("iThermo",0)
 				new ThermoTower(this)
 			default
-				debugPrint("upgrade not catched", 1)
+				printLog(Loglevel.TRACE, "upgrade not catched")
 		actor.issueImmediateOrderById(OrderId("stop"))
-		debugPrint("upgrade finished " + actor.getUserData().toString(), 0)
 	
 	
 init

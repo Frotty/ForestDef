@@ -12,7 +12,7 @@ public function initRevivalSystem()
 		let owner = u.getOwner()
 		if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
 			pDatas[owner.getId()].alive = false
-			print("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!")
+			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
 	end)
 	
 	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> begin
@@ -30,6 +30,6 @@ public function initRevivalSystem()
 					pd.alive = true
 			if s.length() > 0
 				s += "."
-				print("|cffFFCC00>>|r " + GetTriggerPlayer().getNameColored() + " |cff21C55Ahas revived the following players:|r " + s)
+				printTimed("|cffFFCC00>>|r " + GetTriggerPlayer().getNameColored() + " |cff21C55Ahas revived the following players:|r " + s, 15)
 	end)
 	

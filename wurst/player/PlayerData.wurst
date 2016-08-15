@@ -6,6 +6,8 @@ import Builder
 
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
+public boolean bigArena 
+trigger leaveTrig
 
 public class PlayerData
 	player p
@@ -17,19 +19,25 @@ public class PlayerData
 	construct(player p)
 		this.p = p
 		pDatas[p.getId()] = this
+		leaveTrig.registerPlayerEvent(p, EVENT_PLAYER_LEAVE)
+
+	ondestroy
+		allPlayers.remove(this)
 
 public function initPlayers()
 	allPlayers = new LinkedList<PlayerData>()
 	
 	for int i = 0 to 7
-		if GetPlayerSlotState(Player(i)) == PLAYER_SLOT_STATE_PLAYING
+		if players[i].getSlotState() == PLAYER_SLOT_STATE_PLAYING and players[i].getController() == MAP_CONTROL_USER
 			allPlayers.add(new PlayerData(players[i]))
 
 	var gold = 0.
 	if allPlayers.getSize() > 4
+		bigArena = true
 		initCreepStarts(true)
 		gold = 1245
 	else
+		bigArena = false
 		initCreepStarts(false)
 		gold = 490
 	
@@ -41,3 +49,10 @@ public function initPlayers()
 		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	
 	createTTEx(middle.toVec3() - vec3(70,0,0), "Item Shop", 15, colorA(225,225,125, 255))
+
+function onLeave()
+	pDatas[GetTriggerPlayer().getId()]
+
+init
+	leaveTrig = CreateTrigger()
+	leaveTrig.addAction(() -> onLeave())

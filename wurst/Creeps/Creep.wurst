@@ -2,7 +2,7 @@ package Creep
 import public Entity
 import public ClosureTimers
 import public Wave
-import public Terrain
+import public TerrainUtils
 import public Bounty
 import public initlater PlayerData
 public constant CREEP_OWNER = Player(9)
@@ -48,7 +48,7 @@ public class Creep extends UnitEntity
 			else
 				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))
 			pos += vel
-			actor.setXY(pos.x, pos.y)
+			actor.setXY(pos)
 		else
 			active = false
 		

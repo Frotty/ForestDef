@@ -6,47 +6,47 @@ constant real AREA_OF_EFFECT = 40.
 constant string FX_PATH = "sdg"
 constant real HEIGHT = 50.
 
-public class SphereTower extends Tower
-	int level
-	Sphere sphere
-	real speed
-	real spdist = 500.
-	boolean isDistGrowing = false
-	boolean isDistSrinking = false
+// public class SphereTower extends Tower
+// 	int level
+// 	Sphere sphere
+// 	real speed
+// 	real spdist = 500.
+// 	boolean isDistGrowing = false
+// 	boolean isDistSrinking = false
 	
-	construct(Tower t)
-		super(t)
-		level = 0
-		sphere = new Sphere(vec3(pos.x+spdist,pos.y,HEIGHT), speed, owner, level)
+// 	construct(Tower t)
+// 		super(t)
+// 		level = 0
+// 		sphere = new Sphere(vec3(pos.x+spdist,pos.y,HEIGHT), speed, owner, level)
 	
-	override function update()
-		super.update()
-		if isDistGrowing
-			if spdist <= 1000.
-				spdist += 3
-				angle curra = pos.angleTo2d(sphere.pos.toVec2())
-				sphere.setPos(vec3(polarProjectionX(pos.x,spdist,curra),polarProjectionY(pos.y,spdist,curra),HEIGHT))
-			else
-				isDistGrowing = false
-				isDistSrinking = true
-		else if isDistSrinking
-			if spdist >= 180
-				spdist -= 3
-				angle curra = pos.angleTo2d(sphere.pos.toVec2())
-				sphere.setPos(vec3(polarProjectionX(pos.x,spdist,curra),polarProjectionY(pos.y,spdist,curra),HEIGHT))
-			else
-				isDistGrowing = true
-				isDistSrinking = false
-		sphere.setXYAngle(angle(speed/spdist))
+// 	override function update()
+// 		super.update()
+// 		if isDistGrowing
+// 			if spdist <= 1000.
+// 				spdist += 3
+// 				angle curra = pos.angleTo2d(sphere.pos.toVec2())
+// 				sphere.setPos(vec3(polarProjectionX(pos.x,spdist,curra),polarProjectionY(pos.y,spdist,curra),HEIGHT))
+// 			else
+// 				isDistGrowing = false
+// 				isDistSrinking = true
+// 		else if isDistSrinking
+// 			if spdist >= 180
+// 				spdist -= 3
+// 				angle curra = pos.angleTo2d(sphere.pos.toVec2())
+// 				sphere.setPos(vec3(polarProjectionX(pos.x,spdist,curra),polarProjectionY(pos.y,spdist,curra),HEIGHT))
+// 			else
+// 				isDistGrowing = true
+// 				isDistSrinking = false
+// 		sphere.setXYAngle(angle(speed/spdist))
 	
-	override function onUpgrade()
-		level ++
-		sphere.level ++
-		speed += 5
-		sphere.setSpeed(speed)
+// 	override function onUpgrade()
+// 		level ++
+// 		sphere.level ++
+// 		speed += 5
+// 		sphere.setSpeed(speed)
 		
-	ondestroy 
-		destroy(sphere)
+// 	ondestroy 
+// 		destroy(sphere)
 		
 	
 function isUnitTargetable(unit u) returns boolean

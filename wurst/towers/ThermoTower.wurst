@@ -11,14 +11,10 @@ public class ThermoTower extends Tower
 	
 	construct(Tower t)
 		super(t)
-		debugPrint("THERMO TOWER BUILT",12)
 		isHot = true
 	override function onAttack(UnitEntity ud)
-		debugPrint("Attacking",12)
 		if isHot
-			debugPrint("HOOT",2)
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
-				debugPrint("Extra Damage", 2)
 				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
 				ud.actor.removeAbility(buffcode)
 			actor.addAbility(ORB_ID)

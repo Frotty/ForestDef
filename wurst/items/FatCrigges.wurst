@@ -4,9 +4,10 @@ import ClosureForGroups
 import ClosureTimers
 import Wave
 import Fx
-import Terrain
+import TerrainUtils
 import AbilityObjEditing
 import InstantDummyCaster
+import TimerUtils
 
 constant MODEL = "war3mapImported\\peasantfatcomp.mdx"//"Abilities\\Weapons\\Arrow\\ArrowMissile.mdl" //"war3mapImported\\peasantfatcomp.mdx"
 constant EFFECT_MODEL = "Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl"
@@ -46,7 +47,7 @@ class FatCrigges
 		vel.z -= GRAVITY
 		crigges.setXYZ(crigges.getPos3(getTerrainZ(crigges.getX(), crigges.getY() - 5)) + vel)
 		crigges.setXYAngle(crigges.getDummy().getFacingAngle() + 45..asAngleDegrees())
-		if(crigges.getPos2().distToVec(target) < speed + 1)
+		if(crigges.getPos2().distanceTo(target) < speed + 1)
 			Fx stomp = new Fx(target.withZ(0), 0..asAngleDegrees(), EFFECT_MODEL)..setScale(1.5)
 			nullTimer(() -> destroy stomp)
 			forUnitsInRange(target, STUN_RANGE, (unit u) -> InstantDummyCaster.castTarget(caster, STUN_ID, 1, "thunderbolt", u))
@@ -55,7 +56,7 @@ class FatCrigges
 			delta = vec2(delta.y, -delta.x)
 			target = middle + delta
 			target = target.polarOffset(middle.angleTo(target), MOVE_DISTANCE)
-			real steps = crigges.getPos2().distToVec(target) / speed
+			real steps = crigges.getPos2().distanceTo(target) / speed
 			steps /= 2.
 			real z = steps * GRAVITY
 			vel = vec2(0, 0).polarOffset(crigges.getPos2().angleTo(target), speed).withZ(z)

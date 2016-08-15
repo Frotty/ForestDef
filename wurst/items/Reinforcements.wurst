@@ -1,0 +1,21 @@
+package Reinforcements
+import Event
+import GameTimer
+
+constant ITEM_ID = 'I006'
+
+
+public function onReinforcements() 
+	let val = getElapsedGameTime() / 120
+
+	if val <= 0
+		
+	else if val <= 2
+
+
+init
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
+		if GetManipulatedItem().getTypeId() == ITEM_ID
+			GetManipulatedItem().remove()
+			onReinforcements()
+	end)

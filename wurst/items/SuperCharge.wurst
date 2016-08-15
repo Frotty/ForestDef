@@ -1,5 +1,7 @@
 package SuperCharge
 import Event
+import TimerUtils
+import TypeCasting
 
 constant ITEM_ABILITY_ID = 'A01M'
 constant REPAIR_ID = 'Ahrp'
@@ -19,7 +21,6 @@ function swapBack()
 	let u = unitFromIndex(GetExpiredTimer().getData())
 	u.removeAbility(SUPERREPAIR_ID)
 	u.addAbility(REPAIR_ID)
-	u.issueImmediateOrder("repairon")
 	
 	
 init

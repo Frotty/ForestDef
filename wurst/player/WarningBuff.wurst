@@ -1,10 +1,10 @@
 package WarningBuff
 import PresetBuffs
-import SoundHelper
+import SoundUtils
 import TextTagEntity
 import GameTimer
 
-Sound snd = new Sound("Abilities\\Spells\\Other\\Silence\\Silence1.wav", 2276, false)
+SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
 public class WarningBuff extends NormalBuff
 	real startedTime

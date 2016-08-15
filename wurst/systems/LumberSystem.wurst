@@ -1,5 +1,6 @@
 package LumberSystem
 import Creep
+import PlayerData 
 
 constant real	TEXTTAG_TEXTSIZE  = 0.024  //The size of the texttag text.
 constant real	TEXTTAG_VELOCITY  = .03//Texttag's velocity.
@@ -8,7 +9,8 @@ constant real	TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
 constant real	TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.
 
 int killcount = 0
-function getLumber ()
+int killcap
+function getLumber()
 	player p = GetOwningPlayer(GetKillingUnit())
 	int woodcount = 1
 	if allPlayers.getSize() < 3
@@ -16,7 +18,7 @@ function getLumber ()
 	if p != CREEP_OWNER
 		pDatas[p.getId()].kills++
 		killcount++
-		if killcount >= 20
+		if killcount >= killcap
 			
 			killcount = 0
 			for pd in allPlayers
@@ -33,6 +35,11 @@ function getLumber ()
 			
 			
 public function initLumberSystem()
+	if bigArena
+		killcap = 40
+	else
+		killcap = 20
+
 	trigger t = CreateTrigger()
 	TriggerRegisterPlayerUnitEvent( t, Player(9), EVENT_PLAYER_UNIT_DEATH, null )
 	TriggerAddAction( t, function getLumber )

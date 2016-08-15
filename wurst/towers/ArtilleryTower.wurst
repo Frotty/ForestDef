@@ -1,7 +1,8 @@
 package ArtilleryTower
 import Tower
 import Projectile
-import Terrain
+import TerrainUtils
+import ClosureTimers
 
 constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant int ART_TOWER_ID = 'h01O'
@@ -15,12 +16,13 @@ public class ArtilleryTower extends Tower
 		super(t)
 		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
 		actor.setPropWindow(0.)
+		actor..addAbility(SPELL_ID)
 		
 	override function onUpgrade()
 		level++
-		actor.setAbilityLevel(SPELL_ID, level)
-		actor.setPropWindow(0.)
-		actor.issueImmediateOrderById(OrderId("stop"))
+		actor..addAbility(SPELL_ID)..setAbilityLevel(SPELL_ID, level)
+		..setPropWindow(0.)
+		..issueImmediateOrderById(OrderId("stop"))
 		
 class ArtilleryMissile extends Projectile
 	real damage
@@ -52,15 +54,18 @@ function isUnitTargetable(unit u) returns boolean
 	
 	
 function checkSpell()
-		if GetSpellAbilityId() == SPELL_ID
-			ArtilleryTower at = GetTriggerUnit().getUserData() castTo ArtilleryTower
-			vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
-			angle a = at.getPos().angleTo2d(target)
-			for int i = 0 to 5+at.level*3
-				real x = GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.)
-				real y = GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.)
-				new ArtilleryMissile(vec3(polarProjectionX(x,-1000, a), polarProjectionY(y,-1000,a), 1000.),
-									250.+at.level*50, at.owner, a, 350.+(at.level*100))
+	if GetSpellAbilityId() == SPELL_ID
+		ArtilleryTower at = GetTriggerUnit().getUserData() castTo ArtilleryTower
+		vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
+		angle a = at.getPos().angleTo2d(target)
+		if at.pos.distanceTo2d(target) > 2950
+			nullTimer(() -> begin 
+				at.actor..issueImmediateOrderById(OrderId("stop"))
+				..removeAbility(SPELL_ID).addAbility(SPELL_ID)
+			end)
+		for int i = 0 to 3+at.level*3
+			let startPos = vec2(GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.), GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.))
+			new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+at.level*50, at.owner, a, 250.+(at.level*225))
 
 public function initArtilleryTower()
 	castTrigger = CreateTrigger()

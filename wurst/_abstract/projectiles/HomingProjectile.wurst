@@ -7,7 +7,6 @@ public enum HOMING
 	none // wut
 	attract // Direct homing
 	angular // Chaning angle
-	forced // pushed homing (warlock-like)
 	circle // Circular motion around the target with set distance
 
 public abstract class HomingProjectile extends Projectile
@@ -27,8 +26,8 @@ public abstract class HomingProjectile extends Projectile
 		radii = radius*radius + e.radius*e.radius
 				
 	override function update()
-		let dist = pos.distToVecSquared(target.pos)
-		let anglexy = angleBetweenCoords(pos.x, pos.y, target.pos.x, target.pos.y)
+		let dist = pos.distanceToSq(target.pos)
+		let anglexy = pos.angleTo2d(target.pos)
 		if dist < radii
 			done = true
 			return
@@ -78,18 +77,6 @@ public abstract class HomingProjectile extends Projectile
 
 				vel = vec3( getSpeed() * fx.getXYAngle().cos(), getSpeed() * fx.getXYAngle().sin(), 0. )
 				
-			case HOMING.forced
-				vec3 tmp = vec3(polarProjectionX(pos.x, getSpeed(), anglexy), polarProjectionY(pos.y, getSpeed(), anglexy), 0.)
-				
-				tmp -= pos
-				
-				vel += tmp
-				
-				pos += vel
-				
-				fx.setPos(pos.x, pos.y)
-				
-				vel -= (vel*homingSpeed)
 		setXYAngle(anglexy)
 		super.update()
 		

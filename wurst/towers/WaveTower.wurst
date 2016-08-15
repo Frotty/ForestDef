@@ -58,7 +58,7 @@ class WaveMissile extends Projectile
 					GroupAddUnit(affected, u)
 					getDummy().damageTarget(u, getDOT(level))
 					let upos = data.getPos()
-					let ang = angleBetweenCoords(pos.x, pos.y, upos.x, upos.y)
+					let ang = pos.angleTo2d(upos)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
 					if data instanceof Boss
 						var speedPerc = 0.45 + (data.actor.getMoveSpeed() / 522)

@@ -1,7 +1,8 @@
 package TrooperTower
-import Terrain
+import TerrainUtils
 import Tower
 import public Entity
+import Table 
 
 real DUMMY_DIST = 15.
 public constant int TOWER_TROOPER_ID = 'h01E'
@@ -80,16 +81,13 @@ public class TrooperTower extends Tower
 				tr.setStaticPos()
 			
 	function create_Trooper(int i)
-			angle tangle = angle(i*2*PI/(troopcount+1))
-			unit troop = CreateUnit(owner,dummy_id[level]
-									, polarProjectionX(pos.x,DUMMY_DIST,tangle),
-									polarProjectionY(pos.y,DUMMY_DIST,tangle), tangle.degrees())
+			let tangle = angle(i*2*PI/(troopcount+1))
+			unit troop = createUnit(owner, dummy_id[level], pos.toVec2().polarOffset(tangle, DUMMY_DIST), tangle)
 									
 			SetUnitPropWindow(troop,0)
 			SetUnitPathing(troop,false)
 			troop..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-			SetUnitX(troop,polarProjectionX(pos.x,DUMMY_DIST,tangle))
-			SetUnitY(troop,polarProjectionY(pos.y,DUMMY_DIST,tangle))
+			..setXY(pos.toVec2().polarOffset(tangle, DUMMY_DIST))
 			SetUnitFlyHeight(troop, 160.-getTerrainZ(troop.getX(),troop.getY()),0.)
 			int id = new Troop(troop, tangle) castTo int
 			trooperData.saveInt(i, id)

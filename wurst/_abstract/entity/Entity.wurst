@@ -1,6 +1,7 @@
 package Entity
+import public TimerUtils
 import LinkedListModule
-import Terrain
+import TerrainUtils
 import PhysicsConstants
 import Fx
 import initlater Buff
@@ -64,8 +65,8 @@ public abstract class Entity
 		active = true
 		
 	function setTarget( vec3 tpos, real speed )
-		var t = distanceBetweenCoords(pos.x, pos.y, tpos.x, tpos.y) / speed
-		let tangle = angleBetweenCoords(pos.x, pos.y, tpos.x, tpos.y)
+		var t = pos.distanceTo2d(tpos) / speed
+		let tangle = pos.angleTo2d(tpos)
 		let e = getTerrainZ(tpos.x,tpos.y)
 		
 		if t < 1.
@@ -122,7 +123,7 @@ abstract public class UnitEntity extends Entity
 		
 	function setXY(vec3 tpos)
 		pos = tpos
-		actor.setXY(tpos.x,tpos.y)
+		actor.setXY(tpos)
 
 	function onDeath(unit killer)
 		done = true

@@ -1,5 +1,4 @@
 package SphereTower
-import Tower
 import Projectile
 
 constant real AREA_OF_EFFECT = 40.
@@ -58,7 +57,7 @@ class Sphere extends Projectile
 	
 	construct(vec3 pos, real speed, player owner, int level)
 		super( pos, AREA_OF_EFFECT, owner, angle(0.), FX_PATH )
-		setSpeed(30)
+		setSpeed(speed)
 		this.level = level
 	
 	override function update()

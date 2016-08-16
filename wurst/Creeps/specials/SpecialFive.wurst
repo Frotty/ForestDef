@@ -1,58 +1,38 @@
 package SpecialFive
 import Creep
-import PresetBuffs
 import Special
-
-class SlowDebuff extends NormalBuff
-	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId, true)
-
-	override function defenseModifier()
-			
-	override function attackModifier()
-	
-	
-class BoundBuff extends NormalBuff
-	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId,true)
-	
-	override function defenseModifier()
-		new SlowDebuff(victim,2.,ABIL_ID_SLOWBUFFDUMMY)
-	
-	override function attackModifier()
-
 
 class Spawn extends Special
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new BoundBuff(this,9999,ABIL_ID_BOUNDBUFFDUMMY)
 		
 
 public class SpecialFive extends Special
 	
-	static constant SPAWNTIME = 45
+	static constant SPAWNTIME = 35
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u00J'
-	real spawntimer = 30
+	real spawntimer = 15
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
+		active = true
 
 	override function update()
 		super.update()
-		active = true
 		spawntimer += ANIMATION_PERIOD
 		if spawntimer >= SPAWNTIME
 			spawntimer = 0
-			this.actor.pause()
-			this.actor.setAnimation("Stand Work Gold")
-			doAfter(2.3, () -> begin
+			this.actor..pause()
+			..setAnimation("Stand Work Gold")
+			..queueAnimation("Stand Work Gold")
+			doAfter(6, () -> begin
 				this.actor.unpause()
 			end)
 			
-			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 100)
+			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
 			for i = 1 to SPAWNAMOUNT
-				doAfter(i.toReal(), ()-> begin
+				doAfter((i-1).toReal() * 2, ()-> begin
 					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
-					addEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos()).destr()
+					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
 				end)

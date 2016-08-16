@@ -3,7 +3,7 @@ package Squares
 string array squares
 
 public function getSquare() returns string
-	return squares[GetRandomInt(0, 14)]
+	return squares[GetRandomInt(0, 17)]
 
 init
 	squares[0] = "Asshat!"
@@ -21,3 +21,6 @@ init
 	squares[12] = "^)^"
 	squares[13] = "Juicebag"
 	squares[14] = "whoopsie"
+	squares[15] = "monkey!"
+	squares[16] = "get shrekt"
+	squares[17] = "nou"

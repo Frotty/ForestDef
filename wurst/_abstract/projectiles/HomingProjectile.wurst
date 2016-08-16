@@ -74,7 +74,6 @@ public abstract class HomingProjectile extends Projectile
 				else if d < 0
 					d += PI2
 				
-
 				vel = vec3( getSpeed() * fx.getXYAngle().cos(), getSpeed() * fx.getXYAngle().sin(), 0. )
 				
 		setXYAngle(anglexy)

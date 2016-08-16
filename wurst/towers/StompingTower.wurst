@@ -1,6 +1,4 @@
 package StompingTower
-	import Tower
-	import TerrainUtils
 	real SPEED = 15.
 	
 	public int array stompingbasetype

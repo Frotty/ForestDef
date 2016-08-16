@@ -61,7 +61,7 @@ init
 		let a = GetEventDamageSource()
 		UnitEntity victimData
 		UnitEntity attackerData
-		if a.isAliveTrick() and a.getUserData() > 0
+		if a.isAliveTrick() and a.getUserData() > 0 and v.getUserData() > 0
 			//Attacker is alive, apply his attack modifiers
 			attackerData = a.getUserData() castTo UnitEntity
 			if attackerData != null and attackerData.hasBuffs()

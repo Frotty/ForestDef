@@ -1,8 +1,6 @@
 package HealbackTower
 import Tower
 import Projectile
-import StompingTower
-import TerrainUtils
 
 constant real AREA_OF_EFFECT = 50.
 constant string HEAL_MISSILE_SFX = "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl"

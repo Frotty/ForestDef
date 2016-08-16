@@ -1,5 +1,6 @@
 package BossOne
 import Boss
+import Assets
 
 public class BossOne extends Boss
 
@@ -8,13 +9,13 @@ public class BossOne extends Boss
 
 	override function onDeath(unit killer)
 		done = true
-		addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
+		addEffect(Other.abominationexplosion, actor.getPos()).destr()
 		for i = 0 to 5
 			var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,64), 16, owner, GetRandomReal(0,1).asAngleRadians()
-			, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
+			, Other.illidanmissile, (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 			pj.setTimed(GetRandomReal(1,3))
-			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
-			pj.restitution = 0.45
-			pj.mass = GetRandomReal(25,500)
-			pj.surfaceFriction = 0.85
+			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2.5,5)))
+			pj.restitution = 0.425
+			pj.mass = GetRandomReal(45,500)
+			pj.surfaceFriction = 0.825
 	

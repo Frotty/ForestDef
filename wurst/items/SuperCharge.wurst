@@ -10,8 +10,10 @@ constant SUPERREPAIR_ID = 'A01L'
 function charge()
 	let target = GetSpellTargetUnit()
 	if (GetSpellAbilityId() == ITEM_ABILITY_ID )
+		target.getOwner().setAbilityAvailable(SUPERREPAIR_ID, false)
 		target.removeAbility(REPAIR_ID)
 		target.addAbility(SUPERREPAIR_ID)
+		target.getOwner().setAbilityAvailable(SUPERREPAIR_ID, true)
 		addEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getPos())
 		timer tim = getTimer()
 		tim.start(15. ,  function swapBack)
@@ -19,9 +21,11 @@ function charge()
 	
 function swapBack()
 	let u = unitFromIndex(GetExpiredTimer().getData())
-	u.removeAbility(SUPERREPAIR_ID)
-	u.addAbility(REPAIR_ID)
-	
+	u.getOwner().setAbilityAvailable(REPAIR_ID, false)
+	u..removeAbility(SUPERREPAIR_ID)
+	..addAbility(REPAIR_ID)
+	u.getOwner().setAbilityAvailable(REPAIR_ID, true)
+	u.issueImmediateOrder("repairon")
 	
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> charge())

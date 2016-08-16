@@ -21,6 +21,7 @@ let bossWave = new BossWave('n00L', 1, 175, gg_snd_AirBargeDeath1, (vec3 startPo
 
 public function startEndBoss()
 	bossWave.spawn()
+	printTimed("    |cffFFC519Beat the final boss to win!", 25)
 
 public function onVictory()
 	printTimed("|cffFFCC00>> |cffFFA53ACongratulations, you won!|r\n        |cff7B7B7BThe game will end in 20 seconds.", 25)

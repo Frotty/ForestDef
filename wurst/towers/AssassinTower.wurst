@@ -1,5 +1,4 @@
 package AssassinTower
-	import Tower
 	
 	int array hitnumberstore
 	public constant int ASSASSIN_TOWER_BASE_ID = 'h01Q'

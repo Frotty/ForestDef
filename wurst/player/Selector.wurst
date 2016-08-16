@@ -26,7 +26,7 @@ public class Selector extends UnitEntity
 				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
 				pDatas[data.owner.getId()].fat = true
 				pDatas[data.owner.getId()].builder.actor.addItem(PUDDING_ID)
-				if data.owner.getName() == "curryking" or data.owner.getName() == "crigges" or data.owner.getName() == "WaterKnight"
+				if data.owner.getName() == "curryking" or data.owner.getName() == "crigges" or data.owner.getName().toLowerCase() == "waterknight"
 					let eff = addEffect(Other.plaguecloudtarget, pDatas[data.owner.getId()].builder.getPos())
 					doAfter(5, () -> eff.destr())
 					snd.playForPlayer(data.owner)
@@ -36,6 +36,7 @@ public class Selector extends UnitEntity
 				pDatas[data.owner.getId()].builder.actor.addItem(ENERGY_ID)
 			data.done = true
 			pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
+			
 	ondestroy
 		actor.remove()
 	

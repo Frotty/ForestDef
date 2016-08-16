@@ -22,10 +22,10 @@ public class WaveTower extends Tower
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((135. * level) + 85.)
+	return ((85. * level) + 135.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((9.5 * level))
+	return ((6.5 * level))
 	
 function getKB(int level) returns real//towerlevel
 	return (4.5 + (level*level))
@@ -45,30 +45,30 @@ class WaveMissile extends Projectile
 		
 	override function update()
 		super.update()
-		if(getVel().lengthSquared() < 15)
+		if(getVel().lengthSquared() < 16)
 			done = true
 			return
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
-		for u in ENUM_GROUP
+		for u from ENUM_GROUP
 			if u.isAliveTrick() and not IsUnitType(u, UNIT_TYPE_FLYING)
 				let data = (u.getUserData() castTo UnitEntity)
 				if IsUnitInGroup(u, affected)
-					getDummy().damageTarget(u, getDOT(level))
+					getDummy().damageTarget(u, getDOT(level), ATTACK_TYPE_PIERCE)
 				else if data != null and data instanceof Creep
 					GroupAddUnit(affected, u)
-					getDummy().damageTarget(u, getDOT(level))
+					getDummy().damageTarget(u, getBlowDamage(level))
 					let upos = data.getPos()
 					let ang = pos.angleTo2d(upos)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
 					if data instanceof Boss
-						var speedPerc = 0.45 + (data.actor.getMoveSpeed() / 522)
+						var speedPerc = 0.25 + (data.actor.getMoveSpeed() / 522)
 						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect(Other.gryphonridermissiletarget, u.getPos() ).destr()
-		ENUM_GROUP.clear()
 
 	ondestroy
+		affected.clear()
 		DestroyGroup(affected)
 
 

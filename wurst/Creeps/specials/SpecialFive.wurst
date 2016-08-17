@@ -1,0 +1,38 @@
+package SpecialFive
+import Creep
+import Special
+
+class Spawn extends Special
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		
+
+public class SpecialFive extends Special
+	
+	static constant SPAWNTIME = 35
+	static constant SPAWNAMOUNT = 3
+	static constant SPAWNID = 'u00J'
+	real spawntimer = 15
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		active = true
+
+	override function update()
+		super.update()
+		spawntimer += ANIMATION_PERIOD
+		if spawntimer >= SPAWNTIME
+			spawntimer = 0
+			this.actor..pause()
+			..setAnimation("Stand Work Gold")
+			..queueAnimation("Stand Work Gold")
+			doAfter(6, () -> begin
+				this.actor.unpause()
+			end)
+			
+			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
+			for i = 1 to SPAWNAMOUNT
+				doAfter((i-1).toReal() * 2, ()-> begin
+					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
+					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
+				end)

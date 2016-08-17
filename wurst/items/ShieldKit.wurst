@@ -8,8 +8,6 @@ class ShieldKitBuff extends NormalShieldBuff
 	
 	construct(UnitEntity victim, real amount)
 		super(victim, 90., 'A01P', amount)
-		//this.setEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", "origin")
-
 	
 	override function defenseModifier()
 		super.defenseModifier()
@@ -30,7 +28,7 @@ class ShieldKitBuff extends NormalShieldBuff
 function repair()
 	if GetSpellAbilityId() == 'A00D'
 		let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 3))		
+		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
 	
 public function initShieldKit()
 	trigger instarep = CreateTrigger(  )

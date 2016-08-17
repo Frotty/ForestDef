@@ -1,0 +1,77 @@
+package Tower
+import public Entity
+import initlater WaveTower
+import initlater AssassinTower
+import initlater TrooperTower
+import initlater StompingTower
+import initlater ThermoTower
+import initlater FlamethrowerTower
+import initlater ArtilleryTower
+import initlater HealbackTower
+import Event
+public constant int BASIC_TOWER_ID = 'h003'
+public constant int BASIC_WALL_ID = 'h000'
+
+public class Wall extends UnitEntity
+	construct (unit wall)
+		super(vec3(wall.getX(),wall.getY(),0),64,wall)
+
+public class Tower extends UnitEntity
+	
+	construct (unit tower)
+		super(vec3(tower.getX(),tower.getY(),0),64,tower)
+		active = false
+			
+	construct(Tower t)
+		super(t.pos, 64, t.actor)
+		active = false
+		destroy t
+	
+	function onAttack(UnitEntity _target)
+
+
+	function onUpgrade()
+		switch actor.getTypeId()
+			case FIRST_WAVE_ID
+				new WaveTower(this)
+			case ASSASSIN_TOWER_BASE_ID
+				// new AssassinTower(this)
+			case TOWER_TROOPER_ID
+				new TrooperTower(this)
+			case stompingbasetype[0]
+				// new StompingTower(this)
+			case FLAMETHROWER_ID
+				new FlamethrowerTower(this)
+			case ART_TOWER_ID
+				new ArtilleryTower(this)
+			case HEAL_TOWER_ID
+				new HealbackTower(this)
+			case THERMO_TOWER_ID
+				new ThermoTower(this)
+			default
+				printLog(Loglevel.TRACE, "upgrade not catched")
+		actor.issueImmediateOrderById(OrderId("stop"))
+	
+	
+init
+	EventListener.add(EVENT_PLAYER_UNIT_CONSTRUCT_START, () -> begin
+		let u = GetConstructingStructure()
+		let id = u.getTypeId()
+		if id == BASIC_TOWER_ID
+			new Tower(u)
+		else if id == BASIC_WALL_ID
+			new Wall(u)
+	end)
+	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
+		let data = GetTriggerUnit().getUserData() castTo UnitEntity
+		if data != null and data instanceof Tower
+			(data castTo Tower).onUpgrade()
+	end)
+	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
+		let damager = GetEventDamageSource()
+		if damager.getUserData() > 0
+			let e = damager.getUserData() castTo UnitEntity
+			if e instanceof Tower
+				let t = e castTo Tower
+				t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
+	end)

@@ -1,0 +1,55 @@
+package LumberAndCoinSystem
+import Creep
+import StandardTextTags
+import GameTimer
+import Assets
+
+constant WOOD_BOUNTY = 1
+public constant COIN_ID = 'I00F'
+
+var killcount = 0
+var killcap = 18.
+
+var coinCount = 0
+var coinCap = 21 + GetRandomInt(-2,2)
+
+public function shouldSpawnCoin() returns boolean
+	coinCount++
+	if coinCount >= coinCap
+		coinCount = 0
+		coinCap += 1 + GetRandomInt(-1,2)
+		return true
+	return false
+
+function getExtraBounty()
+	let victim = GetDyingUnit().getOwner()
+	let killer = GetKillingUnit().getOwner()
+
+	if victim == CREEP_OWNER and killer != CREEP_OWNER
+		pDatas[killer.getId()].kills++
+		killcount++
+		if killcount >= killcap
+			killcap += 1
+			if bigArena
+				killcap += 1
+
+			killcount = 0
+			for pd in allPlayers
+				pd.p.addLumber(WOOD_BOUNTY)
+				createLumberBountyTextTag(pd.builder.actor, WOOD_BOUNTY)
+
+function grantCoins()
+	if GetManipulatedItem().getTypeId() == COIN_ID
+		let gold = (getElapsedGameTime() / 15.).round()
+
+		for p in allPlayers
+			p.p.addGold(gold)
+			createGoldBountyTextTag(p.builder.actor, gold)
+			flashEffect(Other.resourceeffecttarget, p.builder.getPos())
+			
+public function initLumberSystem()
+	if bigArena
+		killcap = 36
+		coinCap = 45 + GetRandomInt(-4,4)
+	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> getExtraBounty())
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> grantCoins())

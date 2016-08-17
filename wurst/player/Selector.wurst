@@ -1,18 +1,21 @@
 package Selector
-import RegisterEvents
+import Event
 import Entity
 import Builder
 import PlayerData
 import Rocket
-import UnitObjEditing
-import AllTowers
-import ChannelAbilityPreset
+import Assets
+import SoundUtils
+import ClosureTimers
+import Wave
+import Interpolation
 
-public int SELECTOR_ID
-public int FAT_ID
-public int SLIM_ID
-public int FAT_SPELL_ID
-public int SLIM_SPELL_ID
+public constant FAT_ID = 'h022'
+public constant SLIM_ID = 'h00F'
+public constant FAT_SPELL_ID = 'A01Y'
+public constant SLIM_SPELL_ID = 'A01X'
+constant PUDDING_ID = 'I00B'
+constant ENERGY_ID = 'I00C'
 
 public class Selector extends UnitEntity
 	
@@ -22,84 +25,42 @@ public class Selector extends UnitEntity
 		let data = caster.getUserData() castTo UnitEntity
 		if data instanceof Selector
 			if id == FAT_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
+				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
 				pDatas[data.owner.getId()].fat = true
+				pDatas[data.owner.getId()].builder.actor.addItem(PUDDING_ID)
+				if data.owner.getName() == "curryking" or data.owner.getName() == "crigges" or data.owner.getName().toLowerCase() == "waterknight"
+					let eff = addEffect(Other.plaguecloudtarget, pDatas[data.owner.getId()].builder.getPos())
+					doAfter(5, () -> eff.destr())
+					snd.playForPlayer(data.owner)
 			else if id == SLIM_SPELL_ID
-				new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
+				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
 				pDatas[data.owner.getId()].fat = false
+				pDatas[data.owner.getId()].builder.actor.addItem(ENERGY_ID)
 			data.done = true
-			if GetRandomInt(0,3) > 2
-				pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_SPELL_ID)
+			pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
+			
 	ondestroy
 		actor.remove()
-	
-	construct(vec3 pos, player owner)
-		super(pos, 0, createUnit( owner, SELECTOR_ID, pos, angle(0)))
-		print(">>> " + idInteger2IdString(SELECTOR_ID))
-		actor..addAbility(GHOST_ID)..addAbility(FAT_SPELL_ID)..addAbility(SLIM_SPELL_ID)
+
+	vec3 finalPos
+	vec3 mid
+	real p = 0.
+	construct(vec3 ppos, player owner)
+		super(middle.toVec3(), 0, createUnit( owner, 'h023', middle.toVec3(), angle(0)))
+		finalPos = ppos
+		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 148).toVec3()
+		active = true
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 
-trigger t
+	override function update()
+		p = p.lerp(1, 0.025)
+		setPos(pos.bezier(mid, finalPos, p))
+
+SoundDefinition snd
 	
 init
-	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
-	
-@objdef public function createSelectorObjects()
-	SELECTOR_ID = UNIT_ID_GEN.next()
-	FAT_ID = UNIT_ID_GEN.next()
-	SLIM_ID = UNIT_ID_GEN.next()
-	FAT_SPELL_ID = ABIL_ID_GEN.next()
-	SLIM_SPELL_ID = ABIL_ID_GEN.next()
-	
-	new UnitDefinition(SELECTOR_ID, 'hpea')
-	..setName("Describe your physique:")
-	..setAttacksEnabled(0)
-	..setSpeedBase(0)
-	..setPropulsionWindowdegrees(0)
-	..setStructuresBuilt("")
-	..setModelFile("Objects\\RandomObject\\RandomObject.mdl")
-	..setHitPointsMaximumBase(999999)
-	..setNormalAbilities("")
-	new UnitDefinition(SLIM_ID, 'hpea')
-	..setName("Builder")
-	..setCollisionSize(0)
-	..setStructuresBuilt(idInteger2IdString(BASE_TOWER_ID) + "," + idInteger2IdString(BASE_WALL_ID1) )
-	..setHitPointsMaximumBase(350)
-	..setSpeedBase(120)
-	new UnitDefinition(FAT_ID, 'hpea')
-	..setName("Fat Builder")
-	..setAttack1DamageBase(45)
-	..setDefenseBase(8)
-	..setSpeedBase(120)
-	..setCollisionSize(0)
-	..setStructuresBuilt(idInteger2IdString(BASE_TOWER_ID) + "," + idInteger2IdString(BASE_WALL_ID1) )
-	..setHitPointsMaximumBase(650)
-	..setHitPointsRegenerationRate(10)
-	..setModelFile("war3mapImported\\peasantfatcomp.mdl")
-	
-	new ChannelAbilityPreset(SLIM_SPELL_ID, 1)
-	..presetHotkey("Q")
-	..removeChannelProperties(true)
-	..presetTargetTypes(Targettype.NOTARGET)
-	..setName("[|cffFFCC00Q|r] Choose Fat Builder")
-	..presetTooltipNormal((int lvl) -> "Slim")
-	..presetTooltipNormalExtended((int lvl) -> "")
-	..setHeroAbility(false)
-	..presetBaseOrderID((int lvl) -> OSF.getOrderString(true))
-	..presetIcon("BTNTemp.blp")
-	..presetButtonPosNormal(0, 2)
-	
-	new ChannelAbilityPreset(FAT_SPELL_ID, 1)
-	..presetHotkey("W")
-	..removeChannelProperties(true)
-	..presetTargetTypes(Targettype.NOTARGET)
-	..setName("[|cffFFCC00W|r] Choose Slim Builder")
-	..presetTooltipNormal((int lvl) -> "Fat")
-	..presetTooltipNormalExtended((int lvl) -> "")
-	..setHeroAbility(false)
-	..presetBaseOrderID((int lvl) -> OSF.getOrderString(true))
-	..presetIcon("BTNKotoBeast.blp")
-	..presetButtonPosNormal(1, 2)
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
+	snd = new SoundDefinition("Units\\Creeps\\Ogre\\OgrePissed5.wav", false)
 	

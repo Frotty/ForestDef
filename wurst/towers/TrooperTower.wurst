@@ -1,111 +1,111 @@
 package TrooperTower
-	import Terrain
-	import Table
-	import ATower
-	import public Entity
-	
-	real DUMMY_DIST = 15.
-	public constant int TOWER_TROOPER_ID = 'h01E'
-	int array dummy_id
-	int array trooper_count
-	trigger tupgradestart
-	trigger tupgradecancel
-	
-	public class Troop extends UnitEntity
-		vec2 staticpos
-		
-		construct (unit troop, angle tangle)
-			super(vec3(troop.getX(),troop.getY(),0),64,troop)
-			staticpos = vec2(actor.getX(), actor.getY())
-			
-		function setStaticPos()
-			actor.setXY(staticpos)
-			
-			
-		ondestroy
-			if not IsUnitHidden(actor)
-				SetUnitExploded(actor, true)
-			SetUnitFlyHeight(actor, 0.,0.) //on the ground...
-			KillUnit(actor)
+import TerrainUtils
+import Tower
+import public Entity
+import Table 
 
-	public class TrooperTower extends ATower
-		Table trooperData = new Table()
-		int troopcount
-		int level
-		//Still needs function for attack, stop, and upgrade.
-		
-		construct (ATower t)
-			super(t)
-			level = 0
-			troopcount = 2
-			for int i = 0 to troopcount
-				create_Trooper(i)
-			tupgradestart.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_START)
-			tupgradecancel.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_CANCEL)
-				
-		override function onUpgrade()
-			level++
-			for int i = 0 to troopcount
-				Troop t = trooperData.loadInt(i) castTo Troop
-				t.actor.hide()
-				destroy t
-			troopcount = trooper_count[level]
-			for int i = 0 to troopcount
-				create_Trooper(i)
-		
-		override function onAttack(UnitEntity target)
-			for int i = 0 to troopcount
-				Troop t = trooperData.loadInt(i) castTo Troop
-				IssueTargetOrder(t.actor, "smart", target.actor)
-				
-		static function onUpgradeStart()
-			var e = GetTriggerUnit().getUserData()
-			if e != 0
-				TrooperTower t = e castTo TrooperTower
-				for int i = 0 to t.troopcount
-					Troop tr = t.trooperData.loadInt(i) castTo Troop
-					tr.actor.hide()
-					tr.actor.pause()
-				
-		static function onUpgradeCancel()
-			var e = GetTriggerUnit().getUserData()
-			if e != 0
-				TrooperTower t = e castTo TrooperTower
-				for int i = 0 to t.troopcount
-					Troop tr = t.trooperData.loadInt(i) castTo Troop
-					tr.actor.show()
-					tr.actor.unpause()
-					tr.setStaticPos()
-				
-		function create_Trooper(int i)
-				angle tangle = angle(i*2*PI/(troopcount+1))
-				unit troop = CreateUnit(owner,dummy_id[level]
-										, polarProjectionX(pos.x,DUMMY_DIST,tangle),
-										polarProjectionY(pos.y,DUMMY_DIST,tangle), tangle.degrees())
-										
-				SetUnitPropWindow(troop,0)
-				SetUnitPathing(troop,false)
-				troop..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
-				SetUnitX(troop,polarProjectionX(pos.x,DUMMY_DIST,tangle))
-				SetUnitY(troop,polarProjectionY(pos.y,DUMMY_DIST,tangle))
-				SetUnitFlyHeight(troop, 160.-getTerrainZ(troop.getX(),troop.getY()),0.)
-				int id = new Troop(troop, tangle) castTo int
-				trooperData.saveInt(i, id)
-				
-				
-			
-			
-		ondestroy //This tower dies, or the troopers have to be removed.
-			for int i = 0 to troopcount
-				destroy trooperData.loadInt(i) castTo Troop
-		
-				
-	public function initTrooperTower()
-		dummy_id[0] = 'h01F'
-		trooper_count[0] = 2
-		dummy_id[1] = 'h01F'
-		trooper_count[1] = 3
-		tupgradestart = CreateTrigger()..addAction(function TrooperTower.onUpgradeStart)
-		tupgradecancel = CreateTrigger()..addAction(function TrooperTower.onUpgradeCancel)
+real DUMMY_DIST = 15.
+public constant int TOWER_TROOPER_ID = 'h01E'
+int array dummy_id
+int array trooper_count
+trigger tupgradestart
+trigger tupgradecancel
 
-endpackage 
+public class Troop extends UnitEntity
+	vec3 staticpos
+	
+	construct (unit troop, angle tangle)
+		super(vec3(troop.getX(),troop.getY(),0),64,troop)
+		staticpos = vec2(actor.getX(), actor.getY()).withZ(168)
+		actor.addAbility(LOCUST_ID)
+		setStaticPos()
+		
+	function setStaticPos()
+		actor.setXYZ(staticpos)
+		
+		
+	ondestroy
+		if not IsUnitHidden(actor)
+			SetUnitExploded(actor, true)
+		SetUnitFlyHeight(actor, 0.,0.) //on the ground...
+		KillUnit(actor)
+
+public class TrooperTower extends Tower
+	Table trooperData = new Table()
+	int troopcount
+	int level
+	//Still needs function for attack, stop, and upgrade.
+	
+	construct (Tower t)
+		super(t)
+		level = 0
+		troopcount = 2
+		for int i = 0 to troopcount
+			create_Trooper(i)
+		tupgradestart.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_START)
+		tupgradecancel.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_CANCEL)
+			
+	override function onUpgrade()
+		level++
+		for int i = 0 to troopcount
+			Troop t = trooperData.loadInt(i) castTo Troop
+			t.actor.hide()
+			destroy t
+		troopcount = trooper_count[level]
+		for int i = 0 to troopcount
+			create_Trooper(i)
+		actor.issueImmediateOrderById(OrderId("stop"))
+	
+	override function onAttack(UnitEntity target)
+		for int i = 0 to troopcount
+			Troop t = trooperData.loadInt(i) castTo Troop
+			IssueTargetOrder(t.actor, "smart", target.actor)
+			
+	static function onUpgradeStart()
+		var e = GetTriggerUnit().getUserData()
+		if e != 0
+			TrooperTower t = e castTo TrooperTower
+			for int i = 0 to t.troopcount
+				Troop tr = t.trooperData.loadInt(i) castTo Troop
+				tr.actor.hide()
+				tr.actor.pause()
+			
+	static function onUpgradeCancel()
+		var e = GetTriggerUnit().getUserData()
+		if e != 0
+			TrooperTower t = e castTo TrooperTower
+			for int i = 0 to t.troopcount
+				Troop tr = t.trooperData.loadInt(i) castTo Troop
+				tr.actor.show()
+				tr.actor.unpause()
+				tr.setStaticPos()
+			
+	function create_Trooper(int i)
+			let tangle = angle(i*2*PI/(troopcount+1))
+			unit troop = createUnit(owner, dummy_id[level], pos.toVec2().polarOffset(tangle, DUMMY_DIST), tangle)
+									
+			SetUnitPropWindow(troop,0)
+			SetUnitPathing(troop,false)
+			troop..addAbility(HEIGHT_ENABLER)..removeAbility(HEIGHT_ENABLER)
+			..setXY(pos.toVec2().polarOffset(tangle, DUMMY_DIST))
+			SetUnitFlyHeight(troop, 160.-getTerrainZ(troop.getX(),troop.getY()),0.)
+			int id = new Troop(troop, tangle) castTo int
+			trooperData.saveInt(i, id)
+			
+			
+		
+		
+	ondestroy //This tower dies, or the troopers have to be removed.
+		for int i = 0 to troopcount
+			destroy trooperData.loadInt(i) castTo Troop
+	
+			
+public function initTrooperTower()
+	dummy_id[0] = 'h01F'
+	trooper_count[0] = 2
+	dummy_id[1] = 'h01F'
+	trooper_count[1] = 3
+	dummy_id[2] = 'h01F'
+	trooper_count[2] = 4
+	tupgradestart = CreateTrigger()..addAction(function TrooperTower.onUpgradeStart)
+	tupgradecancel = CreateTrigger()..addAction(function TrooperTower.onUpgradeCancel)

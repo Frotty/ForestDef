@@ -1,13 +1,13 @@
 package EntityManagement
 import public Entity
 import Buff
-
 function updateEntities()
 	for e in Entity
-		if not e.done and e.active
-			e.update()
-		if e.done
+		if e.done 
 			destroy e
+		else if e.active
+			e.update()
+		
 
 function updateBuffs()		
 	for b in Buff

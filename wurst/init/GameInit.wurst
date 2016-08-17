@@ -2,13 +2,11 @@ package GameInit
 import MultiboardSystem
 import Rocket
 import UnitSpawnSystem
-import SoundHelper
+import SoundUtils
 import PlayerData
 import GameConditions
-import TimerUtils
-import LumberSystem
+import LumberAndCoinSystem
 import Destroy
-import SuperCharge
 import RevivalSystem
 import AssassinTower
 import ArtilleryTower
@@ -16,40 +14,54 @@ import ShieldKit
 import StompingTower
 import TrooperTower
 import EntityManagement
-import Fx
+import TownBell
+import FatCrigges
 import ClosureTimers
 
 function start()
-	callFunctionsWithAnnotation("@objdef")
-	callFunctionsWithAnnotation("@towerdef")
-	callFunctionsWithAnnotation("@setup")
+	initPlayers()
 	initLumberSystem()
 	initDestroy()
-	initSuperCharge()
 	initRevivalSystem()
-	initStompingTower()
 	initAssassinTower()
 	initTrooperTower()
 	initArtilleryTower()
-	initPlayers()
+	initConds()
+	initSpawn()
 	initShieldKit()
 	initMultiboard()
 	initRocket()
+	initTownBell()
+	initFat()
 	GetExpiredTimer().release()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
-	
+	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "Frotty"
+		allPlayers.get(0).p..addGold(10000)..addLumber(10000)
+		bossWaves.dequeue()
+		bossWaves.dequeue()
+		getTimer().start( 15., function spawn )
+		Cheat("warpten")
+		Cheat("iseedeadpeople")
+	else
+		getTimer().start( 50., function spawn )
 	
 function spawn()
-	var snd = new Sound("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", 16740, false)
+	var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
+	var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
+	let dyn = new DynamicSound(snd)
 	snd.play()
 	startSpawn()
 	GetExpiredTimer().release()
-	
+	doAfter(7.75, () -> begin 
+		var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)
+		snd2.play()
+		doAfter(0.55, () -> snd2.play())
+		doAfter(13.25, () -> snd3.play())
+	end)
 
 init
-	getTimer().start( 0.1, function start )
-	getTimer().start( 10., function spawn )
+	getTimer().start( 0.025, function start )
 
 

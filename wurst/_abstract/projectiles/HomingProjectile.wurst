@@ -1,32 +1,81 @@
 package HomingProjectile
-import Entity
+import public Entity
+import Projectile
 
 
 public enum HOMING
+	none // wut
 	attract // Direct homing
 	angular // Chaning angle
-	forced // pushed homing (warlock-like)
 	circle // Circular motion around the target with set distance
 
-public abstract class HomingProjectile extends FxEntity
+public abstract class HomingProjectile extends Projectile
+	HOMING htype = HOMING.none
 	Entity target
-	real hitRadius = 0.
-	real speed = 10.
+	real homingSpeed = 0.
+	real radii
 
 	
 	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
 		super(pos, radius, owner, xyAngle, fxpath)
 		
-	function setTarget(Entity e)
+	function setTarget(Entity e, HOMING htype, real homingspeed)
 		target = e
-		hitRadius = (radius+target.radius)*(radius+target.radius)
-		
-	abstract function onHit()
-		
+		this.htype = htype
+		homingSpeed = homingspeed
+		radii = radius*radius + e.radius*e.radius
+				
 	override function update()
-		vel = (pos - target.pos).setLength(speed)
-		pos += vel
-		fx.setXYZ(pos)
+		let dist = pos.distanceToSq(target.pos)
+		let anglexy = pos.angleTo2d(target.pos)
+		if dist < radii
+			done = true
+			return
+			
+			
+		switch htype
+			case HOMING.none
+				skip
+			case HOMING.attract
+				vel = (target.pos - this.pos).setLength(homingSpeed)
+			case HOMING.circle
+				skip			
+			case HOMING.angular
+				var df1 = (anglexy - fx.getXYAngle()).radians()
+				var df2 = (PI2 + anglexy.radians()) - fx.getXYAngle().radians()
+				var ns = homingSpeed
 		
-		if pos.distToVecSquared(target.pos) <= hitRadius
-			onHit()
+				if df1 <= 0
+					if df2 <= 0 
+						if df2 >= df1 
+							df1 = df2
+					else
+						if -df1 >= df2
+							df1 = df2
+				else
+					if df2 <= 0 
+						if -df2 <= df1
+							df1 = df2
+					else
+						if df2 <= df1 
+							df1 = df2
+				if df1 <= 0 
+					if -df1 >= ns 
+						ns = -ns
+					else
+						ns = df1
+				else
+					if df1 <= ns 
+						ns = df1
+				var d = fx.getXYAngle().radians()
+				d += ns
+				if d >= PI2
+					d -= PI2
+				else if d < 0
+					d += PI2
+				
+				vel = vec3( getSpeed() * fx.getXYAngle().cos(), getSpeed() * fx.getXYAngle().sin(), 0. )
+				
+		setXYAngle(anglexy)
+		super.update()
+		

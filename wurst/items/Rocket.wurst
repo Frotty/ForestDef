@@ -1,19 +1,23 @@
 package Rocket
-import Event
 import PhysicsProjectile
 import Interpolation
+import TextTagEntity
+import SoundUtils
 
-constant ROCKET_ITEM_ID = 'A01Z'
+public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
 
-class Rocket extends PhysicsProjectile
+constant UNDER_ATTACK_SOUND = new SoundDefinition("Sound\\Dialogue\\GenericWarnings\\GenericWarningUnitAttack1.mp3", false)
+
+public class Rocket extends PhysicsProjectile
 	
 	construct(vec3 startPos, vec2 targetPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", 0 castTo OnExpireEvent )
+		PingMinimapForForce(GetPlayersAll(), startPos.x, startPos.y, 5)
 		setXYAngle(startPos.angleTo2d(targetPos))
-		setSpeed(GetRandomReal(8,12))
+		setSpeed(GetRandomReal(2,4))
 		vel.z = GetRandomReal(9,13)
-		setMass(25)
+		setMass(45)
 		
 	override function update()
 		super.update()
@@ -21,6 +25,8 @@ class Rocket extends PhysicsProjectile
 			done = true
 			
 	ondestroy
+		new TextTagEntity(getPos(), vec3(0,0,15), "HELP!", 25, 2, colorA(255,50,50,255))
+		UNDER_ATTACK_SOUND.play()
 		for i = 0 to 16
 			new Shrapnell(getPos())
 			
@@ -45,11 +51,10 @@ class Shrapnell extends PhysicsProjectile
 		super.update()
 		var col = fx.getColor()
 		col.alpha = bezier_3(255, 200, -5, time/initialTime).toInt()
-		print(col.alpha.toString())
 		fx.setColor(col)
 	
 public function initRocket()
-	EventListener.add(EventType.ON_SPELL_EFFECT, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> begin
 		if GetSpellAbilityId() == ROCKET_SPELL_ID
 			new Rocket(GetSpellAbilityUnit().getPos3(), vec2(GetSpellTargetX(),GetSpellTargetY()))
 	end)

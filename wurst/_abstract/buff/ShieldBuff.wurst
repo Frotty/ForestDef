@@ -1,6 +1,5 @@
 package ShieldBuff
 import PresetBuffs
-import DmgMod
 
 public class NormalShieldBuff extends NormalBuff
 	real blockAmount
@@ -17,7 +16,7 @@ public class NormalShieldBuff extends NormalBuff
 		
 	override function apply()
 		for bff in victim.getBuffs()
-			if bff instanceof thistype
+			if bff.typeId == this.typeId
 				let sd = bff castTo thistype
 				sd.duration = duration
 				sd.blockAmount += blockAmount

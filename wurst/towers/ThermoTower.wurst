@@ -1,25 +1,20 @@
 package ThermoTower
-
-import ATower
+import Tower
 
 constant int buffcode = 'Bfro'
 constant int ORB_ID = 'A01S'
 public constant int THERMO_TOWER_ID = 'h01R'
 
-public class ThermoTower extends ATower
+public class ThermoTower extends Tower
 	boolean isHot
 	int level
 	
-	construct(ATower t)
+	construct(Tower t)
 		super(t)
-		debugPrint("THERMO TOWER BUILT",12)
 		isHot = true
 	override function onAttack(UnitEntity ud)
-		debugPrint("Attacking",12)
 		if isHot
-			debugPrint("HOOT",2)
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
-				debugPrint("Extra Damage", 2)
 				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
 				ud.actor.removeAbility(buffcode)
 			actor.addAbility(ORB_ID)

@@ -1,13 +1,14 @@
 package Creep
-import Entity
-import ClosureTimers
-import Wave
-import SoundHelper
-import Terrain
-import Bounty
-import initlater PlayerData
-import PhysicsProjectile
-public constant CREEP_OWNER = Player(9)
+import public Entity
+import public ClosureTimers
+import public Wave
+import public TerrainUtils
+import public Bounty
+import public initlater PlayerData
+import initlater LumberAndCoinSystem
+
+public constant CREEP_OWNER = players[9]
+
 
 public int array pow2
 	
@@ -16,8 +17,8 @@ init
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 30
-	real radius = 128
+	int numberOfTests = 16
+	real radius = 64
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
 		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
@@ -33,15 +34,18 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	pv2 *= (-1.25)
 	return vel3 + pv2
 
+
 public class Creep extends UnitEntity
 	int bounty
+	boolean dropCoin
 	
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, 16, createUnit(CREEP_OWNER, typId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
 		active = false
-		
+		dropCoin = shouldSpawnCoin()
+
 	override function update()
 		if vel.lengthSquared() > 1.5
 			super.update()
@@ -50,11 +54,13 @@ public class Creep extends UnitEntity
 			else
 				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))
 			pos += vel
-			actor.setXYZReal(pos)
+			actor.setXY(pos)
 		else
 			active = false
 		
-	override function onDeath(unit killer)	
+	override function onDeath(unit killer)
+		if dropCoin
+			createItem(COIN_ID, getPos())
 		if killer == null
 			done = true
 			return
@@ -76,62 +82,4 @@ public class Creep extends UnitEntity
 						showBountyTextTag(restBounty, actor, pd.p)
 			super.onDeath(killer)
 			actor.setUserData(0)
-				
-	
-public class Boss extends Creep
-	static Sound snd = new Sound("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", 2320, false)
-	effect glow
-	
-	construct(vec3 pos, int typId, int bounty, vec2 target)
-		super(pos, typId, bounty, target)
-		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
-		if typId == 'n003'
-			snd.play()
-			
-			
-	override function onDeath(unit killer)
-		for p in allPlayers
-			p.p.addLumber(1)
-		if glow != null
-			glow.destr()
-		if actor.getTypeId() == 'n003'
-			done = true
-			addEffect("Units\\Undead\\Abomination\\AbominationExplosion.mdl", actor.getPos()).destr()
-			for i = 0 to 5
-				var pj = new PhysicsProjectile(actor.getPos3() + vec3(0,0,32), 16, owner, GetRandomReal(0,1).asAngleRadians()
-				, "Abilities\\Weapons\\IllidanMissile\\IllidanMissile.mdl", (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
-				pj.setTimed(GetRandomReal(2,3))
-				pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(2,4)))
-				pj.restitution = 0.75
-				pj.surfaceFriction = 0.75
-		super.onDeath(killer)
-		
-public class Special extends Creep
-	effect glow
-
-	construct(vec3 pos, int typId, int bounty, vec2 target)
-		super(pos, typId, bounty, target)
-		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
-		
-	override function onDeath(unit killer)
-		if glow != null
-			glow.destr()
-		// Souls
-		var ppos = getPos()
-		if actor.getTypeId() == 'u00B'
-			doAfter(0.5, ()-> begin
-				for i = 0 to 3
-					new Special(ppos, 'u00C', 8, middle)
-			end)
-		else if actor.getTypeId() == 'u00C'
-			doAfter(0.5, ()-> begin
-				for i = 0 to 2
-					new Special(ppos, 'u00D', 7, middle)
-			end)
-		else if actor.getTypeId() == 'u00D'
-			doAfter(0.5, ()-> begin
-				new Special(ppos, 'u00E', 6, middle)
-			end)
-		super.onDeath(killer)
-				
 			

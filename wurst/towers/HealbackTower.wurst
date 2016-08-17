@@ -1,9 +1,6 @@
 package HealbackTower
 import ATower
 import Projectile
-import TempGroups
-import StompingTower
-import Terrain
 
 constant real AREA_OF_EFFECT = 50.
 constant string HEAL_MISSILE_SFX = "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl"
@@ -26,23 +23,23 @@ public class HealAttackMissile extends Projectile
 		target = t
 		parent = p
 		
-	function setMissileFlyAngle()
-		real distanceParab =distanceBetweenCoords(parent.pos.x,parent.pos.y,target.pos.x,target.pos.y)
-		real distanceMissile =distanceBetweenCoords(pos.x,pos.y,target.pos.x,target.pos.y)
-		real height = getParabolaHeight(0.,160.,250.,distanceParab,distanceMissile)
-		angle zAngle = vec2(xyspeed,height-pos.z-getTerrainZ(pos.x,pos.y)).getAngle()
-		pos.z = height
+	// function setMissileFlyAngle()
+	// 	real distanceParab = parent.pos.dis,parent.pos.y,target.pos.x,target.pos.y)
+	// 	real distanceMissile =distanceBetweenCoords(pos.x,pos.y,target.pos.x,target.pos.y)
+	// 	real height = getParabolaHeight(0.,160.,250.,distanceParab,distanceMissile)
+	// 	angle zAngle = vec2(xyspeed,height-pos.z-getTerrainZ(pos.x,pos.y)).getAngle()
+	// 	pos.z = height
 		
-		setZAngle(zAngle)
-		fx.setZ(pos.z-getTerrainZ(pos.x,pos.y))
+	// 	setZAngle(zAngle)
+	// 	fx.setZ(pos.z-getTerrainZ(pos.x,pos.y))
 		
-	override function update()
-		super.update()
-		setMissileFlyAngle()
-		if distanceBetweenCoords(pos.x,pos.y,target.pos.x,target.pos.y) <= 70.
-			UnitDamageTarget(getDummy(), target.actor, 170., false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
-			new HealMissile(parent, target.pos,xyspeed,80.)
-			destroy(this)
+	// override function update()
+	// 	super.update()
+	// 	setMissileFlyAngle()
+	// 	if distanceBetweenCoords(pos.x,pos.y,target.pos.x,target.pos.y) <= 70.
+	// 		UnitDamageTarget(getDummy(), target.actor, 170., false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+	// 		new HealMissile(parent, target.pos,xyspeed,80.)
+	// 		destroy(this)
 
 
 public class HealbackTower extends ATower

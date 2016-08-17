@@ -1,6 +1,6 @@
 package PhysicsEntity
-import Entity
-import Terrain
+import public Entity
+import TerrainUtils
 import PhysicsConstants
 import Interpolation
 

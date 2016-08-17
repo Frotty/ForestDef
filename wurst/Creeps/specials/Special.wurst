@@ -1,0 +1,106 @@
+package Special
+import Creep
+import AbilityObjEditing
+import BuffObjEditing
+import ObjectIdGenerator
+
+public int UNIT_ID_DARKONE
+public int ABIL_ID_SLOWBUFFDUMMY
+public int ABIL_ID_BOUNDBUFFDUMMY
+public int BUFF_ID_SLOWBUFF
+public int BUFF_ID_BOUNDBUFF
+
+init
+	create_DarkOne()
+
+@compiletime function create_DarkOne()
+	UNIT_ID_DARKONE = UNIT_ID_GEN.next()
+	ABIL_ID_SLOWBUFFDUMMY = ABIL_ID_GEN.next()
+	ABIL_ID_BOUNDBUFFDUMMY = ABIL_ID_GEN.next()
+	BUFF_ID_SLOWBUFF = BUFF_ID_GEN.next()
+	BUFF_ID_BOUNDBUFF = BUFF_ID_GEN.next()
+	if compiletime
+		new UnitDefinition(UNIT_ID_DARKONE,'nska')
+			..setNormalAbilities("")
+			..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAcolyte.blp")
+			..setModelFile("units\\undead\\Acolyte\\Acolyte.mdl")
+			..setScalingValue(1.25)
+			..setTintingColorRed(10)
+			..setTintingColorGreen(10)
+			..setTintingColorBlue(10)
+			..setAttack1DamageBase(10)
+			..setAttack1ProjectileArt("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl")
+			..setUnitSoundSet("Acolyte")
+			..setHitPointsMaximumBase(4000)
+			..setHitPointsRegenerationRate(6.)
+			..setName("Special 5: Dark One")
+			..setRace(Race.Undead)
+			..setSightRadiusNight(1800)
+			..setSightRadiusDay(1800)
+			..setGoldBountyAwardedSidesperDie(4)
+			..setGoldBountyAwardedNumberofDice(4)
+			..setGoldBountyAwardedBase(5)
+			..setSpeedBase(240)
+			..setArmorType(ArmorType.Small)
+			..setDefenseBase(5)
+			..setLevel(6)
+			..setCollisionSize(8.)
+			..setShadowImageUnit("")
+			
+		new AbilityDefinitionAuraSlow(ABIL_ID_SLOWBUFFDUMMY)
+			..setArtCaster("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+			..setArtEffect("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+			..setArtTarget("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")
+			..setAttackSpeedFactor(1,-0.75)
+			..setMovementSpeedFactor(1,-0.75)
+			..setBuffs(1,BUFF_ID_SLOWBUFF.toString())
+			..setTargetsAllowed(1,"self")
+			..setEditorSuffix("")
+			..setName("SlowBuffDummy")
+			
+			
+		new AbilityDefinitionAuraSlow(ABIL_ID_BOUNDBUFFDUMMY)
+			..setArtCaster("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
+			..setArtEffect("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
+			..setArtTarget("Abilities\\Spells\\Other\\Tornado\\Tornado_Target.mdl")
+			..setAttackSpeedFactor(1,0)
+			..setMovementSpeedFactor(1,0)
+			..setBuffs(1,BUFF_ID_BOUNDBUFF.toString())
+			..setTargetsAllowed(1,"self")
+			..setEditorSuffix("")
+			..setName("BoundBuffDummy")
+			
+			
+		new BuffDefinition(BUFF_ID_SLOWBUFF,'Basl')
+			..setName(1,"*Slow")
+			..setEditorSuffix(1,"")
+			..setTooltipNormal(1,"Slow")
+			..setTooltipNormalExtended(1,"This Unit is slowed.")
+			..setTarget(1,"")
+			..setIconNormal(1,"ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
+			
+		new BuffDefinition(BUFF_ID_BOUNDBUFF,'Bcrs')
+			..setName(1,"*Bound")
+			..setEditorSuffix(1,"")
+			..setTooltipNormal(1,"Bound")
+			..setTooltipNormalExtended(1,"This Unit is bound to the Darkness.")
+			..setTarget(1,"")
+			..setIconNormal(1,"ReplaceableTextures\\PassiveButtons\\PASBTNShadeTrueSight.blp")
+			..setRace(1,"Other")
+			..setTargetAttachmentPoint0(1,"")
+
+
+public abstract class Special extends Creep
+	effect glow
+
+	construct(vec3 pos, int typId, int bounty, vec2 target)
+		super(pos, typId, bounty, target)
+		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
+		active = true
+		
+	override function onDeath(unit killer)
+		if glow != null
+			glow.destr()
+		super.onDeath(killer)
+		
+		

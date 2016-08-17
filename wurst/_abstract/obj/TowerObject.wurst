@@ -1,0 +1,119 @@
+package TowerObject
+import public UnitObjEditing
+import Scanner
+import ObjectIds
+
+constant BASE_TOWER_ID = 'hwtw'
+
+public class TowerObject
+	BuildingDefinition bdef
+	string upgrades = ""
+	
+	construct(int newId, string name, string hotkey)
+		bdef = new BuildingDefinition(newId, BASE_TOWER_ID)
+		bdef..setUpgradesTo("")
+		..setHotkey(hotkey)
+		..setName(name)
+		..setTooltipBasic( "|r[|cffFFCC00" + hotkey.toUpperCase() + "|r] Build |cff669999" + name )
+		..setRepairGoldCost(0)
+		..setRepairLumberCost(0)
+		..setSightRadiusDay(1100)
+		..setSightRadiusNight(700)
+		..setNormalAbilities("")
+		..setUpgradesUsed("")
+		
+	function setTooltip(string description, string pros, string cons)
+		var tooltip = "|cffA0A0A0" + description + "|r|n"
+		if pros.length() > 0
+			tooltip += "|cff7FB83EPros:|r|n"
+			let sc = new Scanner(pros, ",")
+			for token in sc
+				tooltip += "    |cff7FB83E+|r " + token + "|n"
+		if cons.length() > 0 
+			tooltip += "|cffEA3525Cons:|r|n"
+			let sc = new Scanner(cons, ",")
+			for token in sc
+				tooltip += "    |cffEA3525-|r " + token + "|n"
+		
+		bdef.setTooltipExtended(tooltip)
+			
+		
+		
+		
+	function setDefense(int hitpoints, real regen, int armor)
+		bdef..setHitPointsMaximumBase(hitpoints)
+		..setHitPointsRegenerationRate(regen)
+		..setDefenseBase(armor)
+		
+	function setCost(int gold, int lumber, int buildtime, int repairtime)
+		bdef..setGoldCost(gold)..setLumberCost(lumber)
+		..setBuildTime(buildtime)..setRepairTime(repairtime)
+		
+	function setArt(string model, string icon, real scale, color col, string reqAnimNames)
+		if model.length() > 1
+			bdef.setModelFile(model)
+		if icon.length() > 1
+			bdef.setIconGameInterface(icon)
+		if scale > 0
+			bdef.setScalingValue(scale)
+		bdef..setTintingColorRed(col.red)
+		..setTintingColorGreen(col.green)
+		..setTintingColorBlue(col.blue)
+		if reqAnimNames.length() > 1
+			bdef.setRequiredAnimationNames(reqAnimNames)
+	
+	boolean canAir = false
+	function setAttack(AttackType atype, int dmg, int range, real rate, int speed, string missileFx, real arc, boolean canAir)
+		bdef..setAttacksEnabled(1)
+		..setAttack1AttackType(atype)
+		..setAttack1CooldownTime(rate)
+		..setAttack1DamageBase(dmg)
+		..setAttack1Range(range)
+		..setAcquisitionRange(range+50.)
+		..setAttack1ProjectileSpeed(speed)
+		..setAttack1ProjectileArt(missileFx)
+		..setAttack1ProjectileArc(arc)
+		..setAttack1AnimationBackswingPoint(0.3)
+		..setAttack1AnimationDamagePoint(0.5)
+		..setAttack1DamageNumberofDice(1)
+		..setAttack1DamageSidesperDie(2)
+		..setAttack1MaximumNumberofTargets(1)
+		..setAttack1RangeMotionBuffer(250)
+		this.canAir = canAir
+		if canAir
+			bdef.setAttack1TargetsAllowed("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1TargetsAllowed("debris,ground,item,ward")
+			
+	function setSplash(int fullRad, int mediumRad, int smallRad, real medFac, real smallFac)
+		bdef..setAttack1AreaofEffectFullDamage(fullRad)
+		..setAttack1AreaofEffectMediumDamage(mediumRad)
+		..setAttack1AreaofEffectSmallDamage(smallRad)
+		..setAttack1DamageFactorMedium(medFac)
+		..setAttack1DamageFactorSmall(smallFac)
+		..setAttack1WeaponType(WeaponType.Artillery)
+		if canAir
+			bdef.setAttack1AreaofEffectTargets("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1AreaofEffectTargets("debris,ground,item,ward")
+		
+	
+	function setBounce(int targets, real lossFactor)
+		bdef..setAttack1MaximumNumberofTargets(targets)
+		..setAttack1AreaofEffectFullDamage(500)
+		..setAttack1DamageLossFactor(lossFactor)
+		..setAttack1WeaponType(WeaponType.MissileBounce)
+		if canAir
+			bdef.setAttack1AreaofEffectTargets("air,debris,ground,item,ward")
+		else
+			bdef.setAttack1AreaofEffectTargets("debris,ground,item,ward")
+		
+	
+	function addUpgrade(int newId)
+		if upgrades.length() > 0
+			upgrades += ","
+		upgrades += idInteger2IdString(newId)
+		bdef.setUpgradesTo(upgrades)
+		
+	function setButtonPosition(int x, int y)
+		bdef..setButtonPositionX(x)..setButtonPositionY(y)

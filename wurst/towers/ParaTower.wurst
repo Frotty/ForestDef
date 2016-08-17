@@ -1,5 +1,5 @@
 package ParaTower
-import Tower
+import ATower
 import PresetBuffs
 
 class ParaBuff extends NormalBuff
@@ -12,8 +12,8 @@ class ParaBuff extends NormalBuff
 		if getDamage() > victim.actor.getHP()
 			
 
-class ParaTower extends Tower
+class ParaTower extends ATower
 	int level = 1
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)

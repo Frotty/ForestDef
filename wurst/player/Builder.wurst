@@ -10,9 +10,13 @@ public class Builder extends UnitEntity
 		if first
 			IssueImmediateOrder( actor, "repairon" )
 		owner.selectSingle(actor)
+		actor..addAbility(GHOST_ID)..addAbility('AInv')..addAbility('Ahrp')
+		
 		if id == FAT_ID
 			actor.setTimeScale(0.25)
 		if GetLocalPlayer() == owner
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
 		new WarningBuff(this, 999999)
+		
+	

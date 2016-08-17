@@ -128,6 +128,7 @@ abstract public class UnitEntity extends Entity
 
 	function onDeath(unit killer)
 		done = true
+		
 			
 	ondestroy
 		if hasBuffs()

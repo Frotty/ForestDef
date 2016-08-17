@@ -1,5 +1,5 @@
 package HealbackTower
-import Tower
+import ATower
 import Projectile
 
 constant real AREA_OF_EFFECT = 50.
@@ -42,10 +42,10 @@ public class HealAttackMissile extends Projectile
 	// 		destroy(this)
 
 
-public class HealbackTower extends Tower
+public class HealbackTower extends ATower
 	int level
 	
-	construct(Tower t)
+	construct(ATower t)
 		super(t)
 		
 	override function onAttack(UnitEntity ud)
@@ -74,7 +74,7 @@ class HealMissile extends Projectile
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u in ENUM_GROUP
 			let ud = u.getUserData() castTo UnitEntity
-			if ud instanceof Wall
+			if ud instanceof AWall
 				ud.actor.setHP(ud.actor.getHP()+healing)
 				destroy(this)
 				//break

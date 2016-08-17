@@ -22,7 +22,7 @@ class Treasure extends UnitEntity
 	construct(unit existing)
 		super(existing.getPos3(), 128, existing)
 
-public function initConds()
+@setup function initConds()
 	gameTime = getTimer()
 	gameTime.start( 16.*60. + 20., function victory )
 	timerdialog td = CreateTimerDialog(gameTime)		

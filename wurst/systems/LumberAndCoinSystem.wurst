@@ -18,7 +18,6 @@ public function shouldSpawnCoin() returns boolean
 	if coinCount >= coinCap
 		coinCount = 0
 		coinCap += 1 + GetRandomInt(-1,2)
-		print("coin yes")
 		return true
 	return false
 

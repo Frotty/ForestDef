@@ -61,7 +61,6 @@ public class Creep extends UnitEntity
 	override function onDeath(unit killer)
 		if dropCoin
 			createItem(COIN_ID, getPos())
-			print("coin created")
 		if killer == null
 			done = true
 			return

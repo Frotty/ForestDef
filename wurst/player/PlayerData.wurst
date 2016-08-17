@@ -7,38 +7,47 @@ import Builder
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
 public boolean bigArena 
-trigger leaveTrig
 
 public class PlayerData
 	player p
 	int kills = 0
 	boolean alive = true
 	Builder builder = null
+	Selector select = null
 	boolean fat
 	
 	construct(player p)
 		this.p = p
 		pDatas[p.getId()] = this
-		leaveTrig.registerPlayerEvent(p, EVENT_PLAYER_LEAVE)
 		allPlayers.add(this)
 
 	ondestroy
 		allPlayers.remove(this)
+		pDatas[p.getId()] = null
 		if builder != null
 			builder.done = true
+		if select != null
+			select.done = true
 		if allPlayers.getSize() > 0
-			let goldSplit = p.getGold() / allPlayers.getSize()
+			let goldSplit = (p.getGold() / allPlayers.getSize()).round()
 			for pd in allPlayers
-				pd.p.addGold(goldSplit.round())
+				pd.p.addGold(goldSplit)
+			
+			let lumberSplit = (p.getLumber() / allPlayers.getSize()).round()
+			for pd in allPlayers
+				pd.p.addGold(lumberSplit)
+		p.setGold(0)
+		p.setLumber(0)
 
 public function initPlayers()
 	allPlayers = new LinkedList<PlayerData>()
+	EventListener.add(EVENT_PLAYER_LEAVE, () -> destroy pDatas[GetTriggerPlayer().getId()])
 	
 	for int i = 0 to 7
 		if players[i].getSlotState() == PLAYER_SLOT_STATE_PLAYING and players[i].getController() == MAP_CONTROL_USER
 			new PlayerData(players[i])
 
-	var gold = 0.
+	real gold
 	if allPlayers.getSize() > 4
 		bigArena = true
 		initCreepStarts(true)
@@ -51,15 +60,9 @@ public function initPlayers()
 	let anglePerP = 360/allPlayers.getSize()
 	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
 	for p in allPlayers
-		new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
+		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
 		current += anglePerP
 		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	
 	createTTEx(middle.toVec3() - vec3(70,0,0), "Item Shop", 15, colorA(225,225,125, 255))
 
-function onLeave()
-	destroy pDatas[GetTriggerPlayer().getId()]
-
-init
-	leaveTrig = CreateTrigger()
-	leaveTrig.addAction(() -> onLeave())

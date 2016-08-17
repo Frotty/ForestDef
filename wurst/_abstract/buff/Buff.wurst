@@ -2,7 +2,6 @@ package Buff
 
 import public Entity
 import LinkedListModule
-import Event
 import Squares
 import TextTagEntity
 

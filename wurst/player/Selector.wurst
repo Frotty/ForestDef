@@ -7,6 +7,8 @@ import Rocket
 import Assets
 import SoundUtils
 import ClosureTimers
+import Wave
+import Interpolation
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
@@ -39,12 +41,22 @@ public class Selector extends UnitEntity
 			
 	ondestroy
 		actor.remove()
-	
-	construct(vec3 pos, player owner)
-		super(pos, 0, createUnit( owner, 'h023', pos, angle(0)))
+
+	vec3 finalPos
+	vec3 mid
+	real p = 0.
+	construct(vec3 ppos, player owner)
+		super(middle.toVec3(), 0, createUnit( owner, 'h023', middle.toVec3(), angle(0)))
+		finalPos = ppos
+		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 148).toVec3()
+		active = true
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
+
+	override function update()
+		p = p.lerp(1, 0.025)
+		setPos(pos.bezier(mid, finalPos, p))
 
 SoundDefinition snd
 	

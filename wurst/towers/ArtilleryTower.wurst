@@ -43,10 +43,9 @@ class ArtilleryMissile extends Projectile
 		
 	ondestroy
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)
-		for u in ENUM_GROUP
+		for u from ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				UnitDamageTarget(getDummy(), u, damage, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)	
-		ENUM_GROUP.clear()
+				getDummy().damageTarget(u, damage, ATTACK_TYPE_SIEGE)	
 		addEffect("Abilities\\Weapons\\FragDriller\\FragDriller.mdl", pos).destr()
 	
 function isUnitTargetable(unit u) returns boolean

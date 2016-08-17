@@ -1,0 +1,45 @@
+package FieldGenerator
+import Entity
+import PresetBuffs
+
+constant SPELL_ID = 'A027'
+constant BUFF_ID = 'AAAA'
+
+enum FieldType
+	TIMED_BUFF
+	TIMED_DEBUFF
+	SHIELD
+
+public function FieldType.toColor() returns colorA
+	switch this
+		case TIMED_BUFF
+			return colorA(55, 245, 55, 255)
+		case TIMED_DEBUFF
+			return colorA(245, 55, 55, 255)
+		case SHIELD
+			return colorA(222, 222, 75, 255)
+	return COLOR_WHITE
+
+
+class ForceField extends FxEntity	
+	FieldType ftype 
+
+
+	construct(unit caster, vec2 position)
+		super(position.toVec3(), 256, caster.getOwner(), angle(0), "war3mapImported\\ForceField.mdx")
+		chooseFieldType()
+
+
+	function chooseFieldType()
+		ftype = GetRandomInt(0, 2) castTo FieldType
+		fx..setTeamcolor(PLAYER_COLOR_LIGHT_GRAY)
+		..setColor(ftype.toColor())
+		..setScale(0.55)
+
+	
+	
+init
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
+		if GetSpellAbilityId() == SPELL_ID
+			new ForceField(GetSpellAbilityUnit(), getSpellTargetPos())
+	end)

@@ -1,5 +1,6 @@
 package Entity
 import public TimerUtils
+import public Event
 import LinkedListModule
 import TerrainUtils
 import PhysicsConstants

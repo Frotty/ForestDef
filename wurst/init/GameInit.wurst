@@ -5,7 +5,7 @@ import UnitSpawnSystem
 import SoundUtils
 import PlayerData
 import GameConditions
-import LumberSystem
+import LumberAndCoinSystem
 import Destroy
 import RevivalSystem
 import AssassinTower

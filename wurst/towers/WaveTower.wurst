@@ -14,7 +14,7 @@ public class WaveTower extends Tower
 		active = false
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 18, owner, level, actor)
+		new WaveMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 22, owner, level, actor)
 		
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
@@ -39,7 +39,7 @@ class WaveMissile extends Projectile
 		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Other.crushingwavemissile )
 		this.tower = tower
 		setSpeed(speed)
-		setAcc(0.985)
+		setAcc(0.975)
 		affected = CreateGroup()
 		this.level = level
 		

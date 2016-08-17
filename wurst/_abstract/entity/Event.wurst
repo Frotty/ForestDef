@@ -53,6 +53,7 @@ public abstract class EventListener
 			
 	
 trigger unitTrig = CreateTrigger()
+trigger leaveTrig = CreateTrigger()
 
 public function eventid.toIntId() returns int
 	var id = eventidToIndex[this.getHandleId()]
@@ -95,7 +96,8 @@ init
 	
 	// Register Actions
 	unitTrig.addAction(function EventListener.generalEventCallback)		
-	
+	leaveTrig.addAction(function EventListener.generalEventCallback)
+
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_START, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_USE_ITEM, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_UPGRADE_FINISH, function EventListener.generalEventCallback)
@@ -107,3 +109,6 @@ init
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, function EventListener.generalEventCallback)
 	registerPlayerUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM, function EventListener.generalEventCallback)
+
+	for i = 0 to bj_MAX_PLAYERS-1
+		leaveTrig.registerPlayerEvent(players[i], EVENT_PLAYER_LEAVE)

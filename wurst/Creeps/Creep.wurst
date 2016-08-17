@@ -5,7 +5,10 @@ import public Wave
 import public TerrainUtils
 import public Bounty
 import public initlater PlayerData
-public constant CREEP_OWNER = Player(9)
+import initlater LumberAndCoinSystem
+
+public constant CREEP_OWNER = players[9]
+
 
 public int array pow2
 	
@@ -31,15 +34,18 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	pv2 *= (-1.25)
 	return vel3 + pv2
 
+
 public class Creep extends UnitEntity
 	int bounty
+	boolean dropCoin
 	
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, 16, createUnit(CREEP_OWNER, typId, pos.toVec2(), angle(0)))
 		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
 		active = false
-		
+		dropCoin = shouldSpawnCoin()
+
 	override function update()
 		if vel.lengthSquared() > 1.5
 			super.update()
@@ -52,7 +58,10 @@ public class Creep extends UnitEntity
 		else
 			active = false
 		
-	override function onDeath(unit killer)	
+	override function onDeath(unit killer)
+		if dropCoin
+			createItem(COIN_ID, getPos())
+			print("coin created")
 		if killer == null
 			done = true
 			return

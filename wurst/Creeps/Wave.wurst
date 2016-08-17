@@ -53,10 +53,11 @@ public class NormalWave
 				t.release()
 				
 		for i = 0 to wave.amount-1
-			for j = 0 to startPosCount
-				new Creep(startPositions[j], id, wave.bounty, middle)			
+			doAfter(i.toReal(), () -> begin
+				for j = 0 to startPosCount
+					new Creep(startPositions[j].offset2d(GetRandomReal(0, 360).asAngleDegrees(), GetRandomReal(-64, 64)), id, wave.bounty, middle)
+			end)			
 		
-						
 					
 public abstract class CreateBoss
 	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
@@ -82,6 +83,7 @@ public class BossWave
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
 				boss.create(startPositions[j], bossId, bounty, middle)
+		destroy boss
 				
 
 public abstract class CreateSpecial
@@ -102,8 +104,11 @@ public class SpecialWave
 	function spawn()
 		print("|cffE62121##|r |cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
 		for i = 0 to amount-1
-			for j = 0 to startPosCount
-				special.create(startPositions[j], specialId, bounty, middle)			
+			doAfter(i.toReal(), () -> begin
+				for j = 0 to startPosCount
+					special.create(startPositions[j].offset2d(GetRandomReal(0, 360).asAngleDegrees(), GetRandomReal(-64, 64)), specialId, bounty, middle)
+			end)
+		doAfter(amount.toReal(), () -> destroy special)
 		
 
 public function initCreepStarts(boolean eight)

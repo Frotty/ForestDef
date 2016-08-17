@@ -8,8 +8,6 @@ class ShieldKitBuff extends NormalShieldBuff
 	
 	construct(UnitEntity victim, real amount)
 		super(victim, 90., 'A01P', amount)
-		//this.setEffect("Abilities\\Spells\\Human\\DivineShield\\DivineShieldTarget.mdl", "origin")
-
 	
 	override function defenseModifier()
 		super.defenseModifier()

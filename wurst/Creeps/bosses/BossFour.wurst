@@ -4,7 +4,7 @@ import ShieldBuff
 import Assets
 
 constant JUMPY_ID = 'A024'
-constant JUMP_DIST = 380*380
+constant JUMP_DIST = 420*420
 
 public class JumpyBuff extends NormalShieldBuff
 
@@ -20,7 +20,7 @@ public class JumpyBuff extends NormalShieldBuff
 		let attacker = GetEventDamageSource()
 		
 		if attacker.getOwner().isEnemyOf(victim.owner) and attacker.getPos3().distanceToSq(victim.getPos()) < JUMP_DIST
-			victim.setTarget(GetEventDamageSource().getPos3(), 4)
+			victim.setTarget(GetEventDamageSource().getPos3(), 8)
 			addEffect(Other.roarcaster, victim.getPos()).destr()
 			this.done = true
 	

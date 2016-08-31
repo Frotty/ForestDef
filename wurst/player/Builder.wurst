@@ -2,6 +2,7 @@ package Builder
 import initlater Selector
 import Entity
 import WarningBuff
+import Sync
 
 public class Builder extends UnitEntity
 
@@ -10,7 +11,7 @@ public class Builder extends UnitEntity
 		if first
 			IssueImmediateOrder( actor, "repairon" )
 		owner.selectSingle(actor)
-		actor..addAbility(GHOST_ID)..addAbility('AInv')..addAbility('Ahrp')
+		actor..addAbility(GHOST_VIS_ID)..addAbility('AInv')..addAbility('Ahrp')
 		
 		if id == FAT_ID
 			actor.setTimeScale(0.25)
@@ -18,5 +19,11 @@ public class Builder extends UnitEntity
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
 		new WarningBuff(this, 999999)
+
+	override function update()
+		super.update()
+		let eyepos = vec2(GetCameraTargetPositionX(), GetCameraTargetPositionY())
+		print(eyepos.toString())
+		setXY(eyepos.toVec3())
 		
 	

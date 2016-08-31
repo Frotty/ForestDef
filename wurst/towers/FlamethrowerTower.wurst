@@ -40,7 +40,7 @@ class FlameMissile extends Projectile
 		setSpeed(speed + GetRandomReal(-1.5, 1.5))
 		setRanged(700)
 		setAcc(1.0175 + GetRandomReal(-0.005, 0.0075))
-		fx.recolor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
+		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)
 		this.level = level
 		silent = true

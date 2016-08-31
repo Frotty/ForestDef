@@ -97,7 +97,7 @@ abstract public class UnitEntity extends Entity
 		return currentBuffs
 		
 	function hasBuffs() returns boolean
-		return currentBuffs != null and currentBuffs.getSize() > 0
+		return currentBuffs != null
 		
 	override function update()
 		updatePos()
@@ -128,7 +128,6 @@ abstract public class UnitEntity extends Entity
 
 	function onDeath(unit killer)
 		done = true
-		
 			
 	ondestroy
 		if hasBuffs()
@@ -175,7 +174,7 @@ abstract public class FxEntity extends Entity
 		
 	override function setPos(vec3 tpos)
 		pos = tpos
-		fx.setPos(tpos.x,tpos.y)
+		fx.setXYZ(tpos)
 		
 	ondestroy
 		if silent

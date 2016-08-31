@@ -20,10 +20,8 @@ public function FieldType.toColor() returns colorA
 			return colorA(222, 222, 75, 255)
 	return COLOR_WHITE
 
-
 class ForceField extends FxEntity	
 	FieldType ftype 
-
 
 	construct(unit caster, vec2 position)
 		super(position.toVec3(), 256, caster.getOwner(), angle(0), "war3mapImported\\ForceField.mdx")
@@ -32,7 +30,7 @@ class ForceField extends FxEntity
 
 	function chooseFieldType()
 		ftype = GetRandomInt(0, 2) castTo FieldType
-		fx..setTeamcolor(PLAYER_COLOR_LIGHT_GRAY)
+		fx..setPlayercolor(PLAYER_COLOR_LIGHT_GRAY)
 		..setColor(ftype.toColor())
 		..setScale(0.55)
 

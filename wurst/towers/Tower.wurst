@@ -7,8 +7,6 @@ import initlater StompingTower
 import initlater ThermoTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower
-import initlater HealbackTower
-import Event
 public constant int BASIC_TOWER_ID = 'h003'
 public constant int BASIC_WALL_ID = 'h000'
 
@@ -44,8 +42,6 @@ public class Tower extends UnitEntity
 				new FlamethrowerTower(this)
 			case ART_TOWER_ID
 				new ArtilleryTower(this)
-			case HEAL_TOWER_ID
-				new HealbackTower(this)
 			case THERMO_TOWER_ID
 				new ThermoTower(this)
 			default

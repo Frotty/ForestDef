@@ -11,6 +11,7 @@ import SpecialThree
 import SpecialFour
 import SpecialFive
 import Boss
+import LumberAndCoinSystem
 
 constant real SPAWN_TIME = 20.0
 
@@ -34,6 +35,9 @@ function onSpawnTime()
 	level++
 	if level > 7
 		level = 1
+
+	if specialWaves.getSize() <= 0 and bossWaves.getSize() <= 0 and normalWaves.getSize() <= 0
+		GetExpiredTimer().destr()
 		
 	
 function initWaves()
@@ -61,13 +65,13 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00G', 'u00H', 'n008', 2, 14 ))
 	normalWaves.add(new NormalWave('u00G', 'u00H', 'n008', 3, 14 ))
 	
-	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 1, 16 ))
-	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 2, 16 ))
-	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 3, 16 ))
+	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 1, 15 ))
+	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 2, 15 ))
+	normalWaves.add(new NormalWave('u00I', 'u00K', 'n009', 3, 15 ))
 	
-	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 1, 17 ))
-	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 2, 17 ))
-	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 3, 17 ))
+	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 1, 16 ))
+	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 2, 16 ))
+	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 3, 16 ))
 	
 	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
 	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
@@ -94,6 +98,9 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
 	
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	
@@ -123,7 +130,7 @@ function initWaves()
 	specialWaves.add(new SpecialWave('u00F', 4, 10, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialThree(startPos, unitId, bounty, middle)
 	end))
-	specialWaves.add(new SpecialWave('u00O', 25, 6, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	specialWaves.add(new SpecialWave('u00O', 25, 2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFour(startPos, unitId, bounty, middle)
 	end))
 	specialWaves.add(new SpecialWave(UNIT_ID_DARKONE, 4, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin

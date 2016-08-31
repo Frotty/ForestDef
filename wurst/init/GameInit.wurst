@@ -15,7 +15,6 @@ import StompingTower
 import TrooperTower
 import EntityManagement
 import TownBell
-import FatCrigges
 import ClosureTimers
 
 function start()
@@ -32,7 +31,6 @@ function start()
 	initMultiboard()
 	initRocket()
 	initTownBell()
-	initFat()
 	GetExpiredTimer().release()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
@@ -50,7 +48,6 @@ function start()
 function spawn()
 	var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
 	var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
-	let dyn = new DynamicSound(snd)
 	snd.play()
 	startSpawn()
 	GetExpiredTimer().release()

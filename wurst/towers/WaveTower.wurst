@@ -22,10 +22,10 @@ public class WaveTower extends Tower
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((85. * level) + 135.)
+	return ((75. * level) + 135.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((6.5 * level))
+	return ((6.0 * level))
 	
 function getKB(int level) returns real//towerlevel
 	return (4.5 + (level*level))
@@ -37,6 +37,7 @@ class WaveMissile extends Projectile
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
 		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Other.crushingwavemissile )
+		setZAngle(angle(0))
 		this.tower = tower
 		setSpeed(speed)
 		setAcc(0.975)

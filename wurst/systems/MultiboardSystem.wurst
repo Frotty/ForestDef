@@ -2,52 +2,35 @@ package MultiboardSystem
 
 import PlayerData
 
-
 public multiboard mboard = CreateMultiboard()
 
 public function initMultiboard()
+	update()
+	mboard.display(true)
+	CreateTimer().startPeriodic(0.5, () -> update())
+	
+function update()
 	mboard.setRowCount(allPlayers.getSize())
 	mboard.setColumnCount(4)
 	mboard.setTitle("Forest Defense")
-	
-	for i=0 to allPlayers.getSize()
-		
-		mboard.getItem(i,0).setStyle(true,false)
-		
-		mboard.getItem(i,0).setValue("|c0000FF00"+allPlayers.get(i).p.getName()+"|r")
-		mboard.getItem(i,0).setWidth(0.05)
-		
-		mboard.getItem(i,1).setValue(allPlayers.get(i).p.getGold().toString())
-		mboard.getItem(i,1).setIcon("UI\\Feedback\\Resources\\ResourceGold.blp")
-		mboard.getItem(i,1).setWidth(0.04)
-		
-		mboard.getItem(i,2).setValue(allPlayers.get(i).p.getLumber().toString())
-		mboard.getItem(i,2).setIcon("UI\\Feedback\\Resources\\ResourceLumber.blp")
-		mboard.getItem(i,2).setWidth(0.04)
-		
-		mboard.getItem(i,3).setValue("0")
-		mboard.getItem(i,3).setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
-		mboard.getItem(i,3).setWidth(0.04)
-		
-	mboard.display(true)
-	var t = CreateTrigger()
-	t..registerTimerEvent(0.1,true)..addAction(function update)
-	
-function update()
-	for int i = 0 to allPlayers.getSize()
-		if GetPlayerSlotState(Player(i)) != PLAYER_SLOT_STATE_PLAYING
-			mboard.getItem(i,0).setValue("|c007d7d7dLEFT|r")
-			mboard.getItem(i,1).setValue("|c007d7d7d-|r")
-			mboard.getItem(i,2).setValue("|c007d7d7d-|r")
-			mboard.getItem(i,3).setValue("|c007d7d7d-|r")
-		
+	var i = 0
+	for pd in allPlayers
+		mboard.getItem(i,0)..setStyle(true,false).setWidth(0.05)
+		if pd.alive
+			mboard.getItem(i,0).setValue(pd.p.getNameColored())
 		else
-			if allPlayers.get(i).alive
-				mboard.getItem(i,0).setValue("|c0000FF00"+allPlayers.get(i).p.getName()+"|r")
-			else 
-				mboard.getItem(i,0).setValue("|c00FF0000"+allPlayers.get(i).p.getName()+"|r")
-				
-			mboard.getItem(i,1).setValue(allPlayers.get(i).p.getGold().toString())
-			mboard.getItem(i,2).setValue(allPlayers.get(i).p.getLumber().toString())
-			mboard.getItem(i,3).setValue(allPlayers.get(i).kills.toString())
-			
+			mboard.getItem(i,0).setValue("|cff636363†"+ pd.p.getName() + "|r")
+		
+		mboard.getItem(i,1)..setValue(pd.p.getGold().toString())
+		..setIcon("UI\\Feedback\\Resources\\ResourceGold.blp")
+		..setWidth(0.035)
+		
+		mboard.getItem(i,2)..setValue(pd.p.getLumber().toString())
+		..setIcon("UI\\Feedback\\Resources\\ResourceLumber.blp")
+		..setWidth(0.025)
+		
+		mboard.getItem(i,3)..setValue(pd.deaths.toString())
+		..setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
+		..setWidth(0.025)
+		
+		i++

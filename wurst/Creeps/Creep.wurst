@@ -6,6 +6,7 @@ import public TerrainUtils
 import public Bounty
 import public initlater PlayerData
 import initlater LumberAndCoinSystem
+import GameTimer
 
 public constant CREEP_OWNER = players[9]
 
@@ -60,16 +61,29 @@ public class Creep extends UnitEntity
 		
 	override function onDeath(unit killer)
 		if dropCoin
-			createItem(COIN_ID, getPos())
+			let itm = createItem(COIN_ID, getPos())
+			itm.setUserData((getElapsedGameTime() / 17.).round())
+			doAfter(45., () -> begin
+				if itm != null and GetWidgetLife(itm) > .405
+					itm.remove()
+			end)
 		if killer == null
 			done = true
 			return
 		var size = allPlayers.getSize()
-		if size > 0 and bounty > 0
-			int killBounty = (bounty div size) + (bounty mod size)
+		if pDatas[killer.getOwner().getId()] == null
+			var killBounty = (bounty div size)
+			if killBounty <= 0
+				killBounty = 1
+			for pd in allPlayers
+				if(pd.p != killer.getOwner())
+					pd.p.addGold(killBounty)
+					showBountyTextTag(killBounty, actor, pd.p)
+		else if size > 0 and bounty > 0
+			let killBounty = (bounty div size) + (bounty mod size)
 			if killBounty < 1
 				return
-			int restBounty = 0
+			var restBounty = 0
 			if size > 1 and bounty-killBounty > 0
 				restBounty = ((bounty-killBounty) / (size - 1.)).round()
 				
@@ -80,6 +94,6 @@ public class Creep extends UnitEntity
 					if(pd.p != killer.getOwner())
 						pd.p.addGold(restBounty)
 						showBountyTextTag(restBounty, actor, pd.p)
-			super.onDeath(killer)
-			actor.setUserData(0)
+		actor.setUserData(0)
+		done = true
 			

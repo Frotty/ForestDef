@@ -20,11 +20,11 @@ public class WarningBuff extends NormalBuff
 	override function defenseModifier()
 		let dmg = getDamage()
 		if startedTime + 15. > currentTime
-			new TextTagEntity(victim.pos-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
+			new TextTagEntity(victim.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
 			addEffect("Abilities\\Spells\\Items\\SpellShieldAmulet\\SpellShieldCaster.mdl", victim.getPos() ).destr()
 			modifyDamage(0)
 		if lastWarning + 1. < currentTime and victim.actor.getHP() - dmg < (victim.actor.getMaxHP()/1.5)
-			new TextTagEntity(victim.pos-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
+			new TextTagEntity(victim.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
 			snd.playForPlayer(victim.owner)
 			lastWarning = currentTime
 		if lastSelect + 5. < currentTime and victim.actor.getHP() - dmg < (victim.actor.getMaxHP()/2.)

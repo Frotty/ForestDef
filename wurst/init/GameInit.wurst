@@ -35,12 +35,13 @@ function start()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
-	if allPlayers.getSize() == 1 and allPlayers.get(0).p.getName() == "Frotty"
+	if allPlayers.getSize() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		allPlayers.get(0).p..addGold(100000)..addLumber(10000)
 		bossWaves.dequeue()
 		getTimer().start( 15., function spawn )
 		Cheat("warpten")
 		Cheat("iseedeadpeople")
+		print("|cffFFCC00>>|r Editor Test Mode activated")
 	else
 		getTimer().start( 50., function spawn )
 	

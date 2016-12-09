@@ -11,7 +11,7 @@ public class SpecialFive extends Special
 	
 	static constant SPAWNTIME = 20
 	static constant SPAWNAMOUNT = 3
-	static constant SPAWNID = 'u00J'
+	static constant SPAWNID = 'u015'
 	real spawntimer = 5
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)

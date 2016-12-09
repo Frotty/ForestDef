@@ -31,18 +31,23 @@ public class Tower extends UnitEntity
 	function onUpgrade()
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
+				this.actor.setEntity(null)
 				new WaveTower(this)
 			case ASSASSIN_TOWER_BASE_ID
 				// new AssassinTower(this)
 			case TOWER_TROOPER_ID
+				this.actor.setEntity(null)
 				new TrooperTower(this)
 			case stompingbasetype[0]
 				// new StompingTower(this)
 			case FLAMETHROWER_ID
+				this.actor.setEntity(null)
 				new FlamethrowerTower(this)
 			case ART_TOWER_ID
+				this.actor.setEntity(null)
 				new ArtilleryTower(this)
 			case THERMO_TOWER_ID
+				this.actor.setEntity(null)
 				new ThermoTower(this)
 			default
 				printLog(Loglevel.TRACE, "upgrade not catched")

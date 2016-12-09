@@ -29,7 +29,7 @@ function update()
 		..setIcon("UI\\Feedback\\Resources\\ResourceLumber.blp")
 		..setWidth(0.025)
 		
-		mboard.getItem(i,3)..setValue(pd.deaths.toString())
+		mboard.getItem(i,3)..setValue(pd.kills.toString())
 		..setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
 		..setWidth(0.025)
 		

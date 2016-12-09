@@ -2,7 +2,12 @@ package Builder
 import initlater Selector
 import Entity
 import WarningBuff
-import Sync
+import TerrainUtils
+import Assets
+import Projectile
+import ClosureTimers
+
+constant TOSS_ID = 'A02B'
 
 public class Builder extends UnitEntity
 
@@ -19,11 +24,57 @@ public class Builder extends UnitEntity
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
 		new WarningBuff(this, 999999)
+		// EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
+			// if GetSpellAbilityId() == TOSS_ID
+			// 	new Ball(getPos(), owner, getSpellTargetPos())
+		// end)
+
+public int array pow2
+	
+init
+	for int i = 0 to 31
+		pow2[i] = R2I(Pow(2, I2R(i)))
+
+public function getPathingNormal(vec2 pos) returns vec2
+	int numberOfTests = 9
+	real radius = 32
+	vec2 addedVecs = vec2(0, 0)
+	for int i = 0 to numberOfTests-1
+		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
+		vec2 testPoint = pos + direction
+		let eff = addEffect(Other.bansheemissile, testPoint)
+		doAfter(1, () -> eff.destr())
+		if isTerrainWalkable(testPoint.x, testPoint.y)
+			addedVecs += direction
+	return addedVecs.setLength(1.) * (-1.)
+	
+public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
+	vec3 nor3 = nor2.toVec3()
+	vec3 pv3 = vel3.project(nor3)
+	vec2 pv2 = pv3.toVec2()
+	pv2 *= (-1.9)
+	return vel3 + pv2
+
+
+class Ball extends FxEntity
+	
+	construct(vec3 pos, player owner, vec2 target)
+		super(pos, 32, owner, pos.angleTo2d(target), Other.fireballmissile)
+		setVel(pos.angleTo2d(target).toVec(10).toVec3())
 
 	override function update()
 		super.update()
-		let eyepos = vec2(GetCameraTargetPositionX(), GetCameraTargetPositionY())
-		print(eyepos.toString())
-		setXY(eyepos.toVec3())
+		if vel.lengthSquared() > 1.5
+			if not isTerrainWalkable(pos.x, pos.y)
+				var normal = getPathingNormal(pos.toVec2())
+				if(normal.lengthSq() == 0)
+					normal = (vel.norm() * -1).toVec2()
+				if(vel.norm().toVec2().dot(normal) < 0)
+					print("bounced " + vel.norm().toVec2().dot(normal).toString())
+					vel = getBounceVec(vel, normal)
+			pos += vel
+			fx.setXYZ(pos)
+		else
+			active = false
+		fx.setXYAngle(pos.angleTo2d(pos+vel))
 		
-	

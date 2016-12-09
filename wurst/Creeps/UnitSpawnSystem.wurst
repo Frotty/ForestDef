@@ -19,7 +19,7 @@ public LinkedList<NormalWave> normalWaves = new LinkedList<NormalWave>()
 public LinkedList<BossWave> bossWaves = new LinkedList<BossWave>()
 LinkedList<SpecialWave> specialWaves = new LinkedList<SpecialWave>()
 
-timer spawnTimer = getTimer()
+public timer spawnTimer = getTimer()
 int level = 1
 	
 		
@@ -142,7 +142,7 @@ public function startSpawn()
 	timer t = CreateTimer()
 	if allPlayers.getSize() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		print("|cffFFCC00>>|r Debug Mode")
-		t.startPeriodic( SPAWN_TIME/4., function onSpawnTime)
+		t.startPeriodic( SPAWN_TIME/2., function onSpawnTime)
 	else
 		t.startPeriodic( SPAWN_TIME, function onSpawnTime)
 	printTimed("|cffFFCC00>>|r Enemies spawn in " + SPAWN_TIME.toInt().toString() + " seconds.", 25)

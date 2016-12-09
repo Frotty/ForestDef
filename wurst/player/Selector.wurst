@@ -9,6 +9,7 @@ import SoundUtils
 import ClosureTimers
 import Wave
 import Interpolation
+import Colors
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
@@ -18,6 +19,7 @@ constant PUDDING_ID = 'I00B'
 constant ENERGY_ID = 'I00C'
 
 public class Selector extends UnitEntity
+	texttag ownerTag
 	
 	static function onCast()
 		let caster = GetSpellAbilityUnit()
@@ -41,14 +43,18 @@ public class Selector extends UnitEntity
 			
 	ondestroy
 		actor.remove()
+		ownerTag.destr()
 
 	vec3 finalPos
 	vec3 mid
 	real p = 0.
+
 	construct(vec3 ppos, player owner)
 		super(middle.toVec3(), 0, createUnit( owner, 'h023', middle.toVec3(), angle(0)))
+		ownerTag = createTTEx(ppos - vec3(20,-25,0), owner.getName(), 12.5, fromPlayerColor(owner.getColor()).withAlpha(255))
+		actor.setVertexColor(fromPlayerColor(owner.getColor()).withAlpha(255))
 		finalPos = ppos
-		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 148).toVec3()
+		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()
 		active = true
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
@@ -57,6 +63,7 @@ public class Selector extends UnitEntity
 	override function update()
 		p = p.lerp(1, 0.025)
 		setPos(pos.bezier(mid, finalPos, p))
+		ownerTag.setPos(pos + vec3(-20,25,0))
 
 SoundDefinition snd
 	

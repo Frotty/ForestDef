@@ -58,6 +58,7 @@ init
 			..setLevel(6)
 			..setCollisionSize(8.)
 			..setShadowImageUnit("")
+			..setSpeedBase(175)
 			
 		// new AbilityDefinitionAuraSlow(ABIL_ID_SLOWBUFFDUMMY)
 		// 	..setArtCaster("Abilities\\Spells\\Human\\slow\\slowtarget.mdl")

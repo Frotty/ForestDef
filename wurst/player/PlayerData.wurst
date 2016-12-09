@@ -26,7 +26,7 @@ public class PlayerData
 		allPlayers.remove(this)
 		pDatas[p.getId()] = null
 		if builder != null
-			builder.actor.kill()
+			builder.done = true
 		if select != null
 			select.done = true
 		if allPlayers.getSize() > 0

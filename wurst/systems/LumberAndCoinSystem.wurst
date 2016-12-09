@@ -18,9 +18,9 @@ public function shouldSpawnCoin() returns boolean
 	coinCount++
 	if coinCount >= coinCap
 		coinCount = 0
-		coinCap += 7 + coinsSpawned
+		coinCap += 3 + (coinsSpawned/2.).round()
 		if bigArena
-			coinCap += 11
+			coinCap += 7
 
 		coinsSpawned++
 		return true
@@ -36,20 +36,22 @@ function getExtraBounty()
 		if killcount >= killcap
 			killcap += 1
 			if bigArena
-				killcap += 1
+				killcap *= 1.5
 
 			killcount = 0
 			for pd in allPlayers
 				pd.p.addLumber(WOOD_BOUNTY)
-				createLumberBountyTextTag(pd.builder.actor, WOOD_BOUNTY)
+				if pd.builder.actor != null and pd.builder.actor.isAlive()
+					createLumberBountyTextTag(pd.builder.actor, WOOD_BOUNTY)
 
 function grantCoins()
 	if GetManipulatedItem().getTypeId() == COIN_ID
 		let gold = GetManipulatedItem().getUserData()
 		for p in allPlayers
 			p.p.addGold(gold)
-			createGoldBountyTextTag(p.builder.actor, gold)
-			flashEffect(Other.resourceeffecttarget, p.builder.getPos())
+			if p.builder.actor != null and p.builder.actor.isAlive()
+				createGoldBountyTextTag(p.builder.actor, gold)
+				flashEffect(Other.resourceeffecttarget, p.builder.getPos())
 			
 public function initLumberSystem()
 	if allPlayers.getSize() <= 2

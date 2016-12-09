@@ -2,6 +2,7 @@ package GameConditions
 import Entity
 import EndBoss
 import PlayerData
+import UnitSpawnSystem
 
 public timer gameTime
 
@@ -9,12 +10,21 @@ function victory()
 	startEndBoss()
 	
 function lose()
-	print("Game over...! " )
-	PauseGame( true )
+	print("|cff666666Game over")
+	for e in Entity
+		e.active = false
+		e.slowTick = false
+		if e instanceof UnitEntity
+			let ue = e castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+
+
 	
 function endGameTimer()
-	print("You lost!")
+	print("|cffFFCC00>> \nThe Magic Treasure has been destroyed.|r\nYou failed!")
 	timer t = CreateTimer()
+	spawnTimer.pause()
 	t.start( 1., function lose )
 	
 class Treasure extends UnitEntity

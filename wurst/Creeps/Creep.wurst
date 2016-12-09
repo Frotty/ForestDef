@@ -18,7 +18,7 @@ init
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 16
+	int numberOfTests = 8
 	real radius = 64
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
@@ -53,7 +53,8 @@ public class Creep extends UnitEntity
 			if isTerrainWalkable(pos.x, pos.y)
 				vel *= (0.975)
 			else
-				vel = getBounceVec(vel, getPathingNormal(pos.toVec2()))
+				let normal = getPathingNormal(pos.toVec2())
+				vel = getBounceVec(vel, normal)
 			pos += vel
 			actor.setXY(pos)
 		else

@@ -15,18 +15,18 @@ public class Reinforcement extends UnitEntity
 		actor.setTimedLife(60)
 
 public function onReinforcements() 
-	let val = (getElapsedGameTime() / 90.).round()
+	let val = (getElapsedGameTime() / 80.).round()
 	let owner = GetManipulatingUnit().getOwner()
-	let toV = min(4, val)
+	let toV = min(6, val)
 	for i = 0 to toV-1
 		let angl = (i* (360./toV)).asAngleDegrees()
 		new Reinforcement(middle.polarOffset(angl, 256), owner, ARCHER_ID, angl)
 		
 	
 	if val >= 4
-		let toVal = min(4, val -3)
+		let toVal = min(6, val -3)
 		for i = 0 to toVal-1
-			let angl = ( -45 + i* (360./toVal)).asAngleDegrees()
+			let angl = ( -15 + i* (360./toVal)).asAngleDegrees()
 			new Reinforcement(middle.polarOffset(angl, 256), owner, PRIEST_ID, angl)
 
 init

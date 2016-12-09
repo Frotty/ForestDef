@@ -31,6 +31,7 @@ class Treasure extends UnitEntity
 
 	construct(unit existing)
 		super(existing.getPos3(), 128, existing)
+		active = false
 
 public function initConds()
 	gameTime = getTimer()

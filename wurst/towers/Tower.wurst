@@ -13,6 +13,7 @@ public constant int BASIC_WALL_ID = 'h000'
 public class Wall extends UnitEntity
 	construct (unit wall)
 		super(vec3(wall.getX(),wall.getY(),0),64,wall)
+		active = false
 
 public class Tower extends UnitEntity
 	

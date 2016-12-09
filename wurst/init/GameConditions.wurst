@@ -24,7 +24,7 @@ function lose()
 function endGameTimer()
 	print("|cffFFCC00>> \nThe Magic Treasure has been destroyed.|r\nYou failed!")
 	timer t = CreateTimer()
-	spawnTimer.pause()
+	stopSpawn()
 	t.start( 1., function lose )
 	
 class Treasure extends UnitEntity

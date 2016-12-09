@@ -20,10 +20,13 @@ public LinkedList<BossWave> bossWaves = new LinkedList<BossWave>()
 LinkedList<SpecialWave> specialWaves = new LinkedList<SpecialWave>()
 
 public timer spawnTimer = getTimer()
+public boolean stopSpawns = false
 int level = 1
 	
 		
-function onSpawnTime()	
+function onSpawnTime()
+	if stopSpawns
+		return
 	if level mod 7 == 0 and specialWaves.getSize() > 0
 		specialWaves.dequeue().spawn()
 	else
@@ -149,3 +152,7 @@ public function startSpawn()
 	
 public function initSpawn()
 	initWaves()
+
+public function stopSpawn()
+	stopSpawns = true
+	spawnTimer.pause()

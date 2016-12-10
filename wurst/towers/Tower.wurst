@@ -24,7 +24,8 @@ public class Tower extends UnitEntity
 	construct(Tower t)
 		super(t.pos, 64, t.actor)
 		active = false
-		destroy t
+
+		t.terminate()
 	
 	function onAttack(UnitEntity _target)
 

@@ -51,7 +51,7 @@ public class Selector extends UnitEntity
 
 	construct(vec3 ppos, player owner)
 		super(middle.toVec3(), 0, createUnit( owner, 'h023', middle.toVec3(), angle(0)))
-		ownerTag = createTTEx(ppos - vec3(20,-25,0), owner.getName(), 12.5, fromPlayerColor(owner.getColor()).withAlpha(255))
+		ownerTag = createTTEx(ppos - vec3(20,25,0), owner.getName(), 12.5, fromPlayerColor(owner.getColor()).withAlpha(255))
 		actor.setVertexColor(fromPlayerColor(owner.getColor()).withAlpha(255))
 		finalPos = ppos
 		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()
@@ -63,7 +63,7 @@ public class Selector extends UnitEntity
 	override function update()
 		p = p.lerp(1, 0.025)
 		setPos(pos.bezier(mid, finalPos, p))
-		ownerTag.setPos(pos + vec3(-20,25,0))
+		ownerTag.setPos(pos - vec3(20,25,0))
 
 SoundDefinition snd
 	

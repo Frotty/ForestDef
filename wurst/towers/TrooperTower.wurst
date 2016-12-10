@@ -12,16 +12,15 @@ trigger tupgradestart
 trigger tupgradecancel
 
 public class Troop extends UnitEntity
-	vec3 staticpos
 	
 	construct (unit troop, angle tangle)
-		super(vec3(troop.getX(),troop.getY(),0),64,troop)
-		staticpos = vec2(actor.getX(), actor.getY()).withZ(168)
+		super(vec3(troop.getX(),troop.getY(),168),64,troop)
 		actor.addAbility(LOCUST_ID)
 		setStaticPos()
+		active = false
 		
 	function setStaticPos()
-		actor.setXYZ(staticpos)
+		actor.setXYZ(pos)
 		
 		
 	ondestroy
@@ -50,7 +49,7 @@ public class TrooperTower extends Tower
 		for int i = 0 to troopcount
 			Troop t = trooperData.loadInt(i) castTo Troop
 			t.actor.hide()
-			destroy t
+			t.terminate()
 		troopcount = trooper_count[level]
 		for int i = 0 to troopcount
 			create_Trooper(i)
@@ -92,8 +91,6 @@ public class TrooperTower extends Tower
 			int id = new Troop(troop, tangle) castTo int
 			trooperData.saveInt(i, id)
 			
-			
-		
 		
 	ondestroy //This tower dies, or the troopers have to be removed.
 		for int i = 0 to troopcount

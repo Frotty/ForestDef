@@ -9,7 +9,7 @@ class Spawn extends Special
 
 public class SpecialFive extends Special
 	
-	static constant SPAWNTIME = 20
+	static constant SPAWNTIME = 25
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u015'
 	real spawntimer = 5
@@ -28,6 +28,7 @@ public class SpecialFive extends Special
 			..queueAnimation("Stand Work Gold")
 			doAfter(6, () -> begin
 				this.actor.unpause()
+				spawntimer -= 6.
 			end)
 			
 			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)

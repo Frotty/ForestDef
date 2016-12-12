@@ -88,17 +88,17 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
 	
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 10 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
 	
 	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
 	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
 	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
 	
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 8 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
 	
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))

@@ -22,7 +22,7 @@ function lose()
 
 	
 function endGameTimer()
-	print("|cffFFCC00>> \nThe Magic Treasure has been destroyed.|r\nYou failed!")
+	print("|cffFFCC00>> The Magic Treasure has been destroyed.|r\nYou failed!")
 	timer t = CreateTimer()
 	stopSpawn()
 	t.start( 1., function lose )

@@ -9,7 +9,7 @@ class Spawn extends Special
 
 public class SpecialFive extends Special
 	
-	static constant SPAWNTIME = 25
+	static constant SPAWNTIME = 20
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u015'
 	real spawntimer = 5
@@ -33,7 +33,7 @@ public class SpecialFive extends Special
 			
 			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
 			for i = 1 to SPAWNAMOUNT
-				doAfter((i-1).toReal() * 2, ()-> begin
+				doAfter((i-1).toReal() * 1.5, ()-> begin
 					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
 					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
 				end)

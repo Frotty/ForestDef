@@ -10,7 +10,7 @@ constant PRIEST_ID = 'n00N'
 public class Reinforcement extends UnitEntity
 
 	construct(vec2 pos, player owne, int id, angle angl)
-		super(pos.toVec3(), 8, createUnit(owne, id, pos, angl))
+		super(createUnit(owne, id, pos, angl))
 		flashEffect(Other.massteleporttarget, pos)
 		actor.setTimedLife(60)
 

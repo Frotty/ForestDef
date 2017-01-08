@@ -16,7 +16,6 @@ public class Troop extends UnitEntity
 	construct (vec2 pos, player owner)
 		super(createUnit(owner, TROOP_ID, pos, angle(0)))
 		actor.addAbility(LOCUST_ID)
-		active = false
 		actor.setPropWindow(0.)
 		
 	function setStaticPos(vec3 pos)
@@ -74,7 +73,7 @@ public class TrooperTower extends Tower
 		// Make into circle
 		let angleV = 360. / troops.getSize()
 		var angleD = 0.
-		let tz = 160.+getTerrainZ(pos.x,pos.y)
+		let tz = 160.
 		for troop in troops
 			let tPos = pos.toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST)
 			troop.actor..setVertexColor(COLOR_WHITE)

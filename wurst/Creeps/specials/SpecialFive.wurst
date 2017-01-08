@@ -16,18 +16,16 @@ public class SpecialFive extends Special
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		active = true
-		actor.addAbility('ACua')
 
 	override function update()
 		spawntimer += ANIMATION_PERIOD
 		if spawntimer >= SPAWNTIME
 			spawntimer = 0
-			this.actor..pause()
+			this.actor..setPropWindow(0)
 			..setAnimation("Stand Work Gold")
 			..queueAnimation("Stand Work Gold")
 			doAfter(6, () -> begin
-				this.actor.unpause()
+				this.actor.setPropWindow(GetUnitDefaultPropWindow(actor))
 				spawntimer -= 6.
 			end)
 			

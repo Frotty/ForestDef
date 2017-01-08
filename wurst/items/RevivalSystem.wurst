@@ -13,6 +13,7 @@ public function initRevivalSystem()
 		if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
 			pDatas[owner.getId()].alive = false
 			pDatas[owner.getId()].deaths++
+			pDatas[owner.getId()].builder = null
 			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
 	end)
 	

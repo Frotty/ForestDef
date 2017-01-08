@@ -1,34 +1,31 @@
 package ShieldKit
-import ShieldBuff
+import PresetBuffs
 import Entity
 import TextTagEntity
 import GameConditions
 
-class ShieldKitBuff extends NormalShieldBuff
+class ShieldKitBuff extends ShieldBuff
 	
-	construct(UnitEntity victim, real amount)
-		super(victim, 90., 'A01P', amount)
+	construct(real amount)
+		super(90., 'A01P', amount)
 	
 	override function defenseModifier()
 		super.defenseModifier()
 		if blockAmount > 0
-			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
+			new TextTagEntity(target.getPos(), vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
 								blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 
 	ondestroy
-		if applied
-			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
+
+		new TextTagEntity(target.getPos(), vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
 								"Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
-		else
-			new TextTagEntity(victim.pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)),
-								"added " + blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 							
 		
 
 function repair()
 	if GetSpellAbilityId() == 'A00D'
 		let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
-		new ShieldKitBuff(data, 200 + (gameTime.getElapsed() * 2))		
+		new ShieldKitBuff(200 + (gameTime.getElapsed() * 2)).apply(data)		
 	
 public function initShieldKit()
 	trigger instarep = CreateTrigger(  )

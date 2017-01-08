@@ -1,6 +1,5 @@
 package Builder
 import initlater Selector
-import Entity
 import WarningBuff
 import TerrainUtils
 import Assets
@@ -12,7 +11,7 @@ constant TOSS_ID = 'A02B'
 public class Builder extends UnitEntity
 
 	construct(vec3 pos, player owner, int id, boolean first)
-		super(pos, 0, createUnit( owner, id, pos, angle(0)))
+		super(createUnit( owner, id, pos, angle(0)))
 		if first
 			IssueImmediateOrder( actor, "repairon" )
 		owner.selectSingle(actor)
@@ -23,8 +22,7 @@ public class Builder extends UnitEntity
 		if GetLocalPlayer() == owner
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
-		new WarningBuff(this, 999999)
-		active = false
+		new WarningBuff().apply(this)
 		// EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
 			// if GetSpellAbilityId() == TOSS_ID
 			// 	new Ball(getPos(), owner, getSpellTargetPos())
@@ -60,22 +58,19 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 class Ball extends FxEntity
 	
 	construct(vec3 pos, player owner, vec2 target)
-		super(pos, 32, owner, pos.angleTo2d(target), Other.fireballmissile)
+		super(owner, pos, 32, pos.angleTo2d(target), Other.fireballmissile)
 		setVel(pos.angleTo2d(target).toVec(10).toVec3())
 
 	override function update()
 		super.update()
-		if vel.lengthSquared() > 1.5
-			if not isTerrainWalkable(pos.x, pos.y)
-				var normal = getPathingNormal(pos.toVec2())
-				if(normal.lengthSq() == 0)
-					normal = (vel.norm() * -1).toVec2()
-				if(vel.norm().toVec2().dot(normal) < 0)
-					print("bounced " + vel.norm().toVec2().dot(normal).toString())
-					vel = getBounceVec(vel, normal)
-			pos += vel
-			fx.setXYZ(pos)
-		else
-			active = false
+		if not isTerrainWalkable(pos.x, pos.y)
+			var normal = getPathingNormal(pos.toVec2())
+			if(normal.lengthSq() == 0)
+				normal = (vel.norm() * -1).toVec2()
+			if(vel.norm().toVec2().dot(normal) < 0)
+				print("bounced " + vel.norm().toVec2().dot(normal).toString())
+				vel = getBounceVec(vel, normal)
+		pos += vel
+		fx.setXYZ(pos)
 		fx.setXYAngle(pos.angleTo2d(pos+vel))
 		

@@ -1,6 +1,6 @@
 package FieldGenerator
 import FxEntity
-import PresetBuffs
+import Buff
 
 import SoundUtils
 
@@ -26,7 +26,7 @@ class ForceField extends FxEntity
 	FieldType ftype 
 
 	construct(unit caster, vec2 position)
-		super(position.toVec3(), 256, caster.getOwner(), angle(0), "war3mapImported\\ForceField.mdx")
+		super(caster.getOwner(), position.toVec3(), angle(0), "war3mapImported\\ForceField.mdx")
 		chooseFieldType()
 
 

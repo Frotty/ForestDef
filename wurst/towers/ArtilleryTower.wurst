@@ -37,7 +37,7 @@ class ArtilleryMissile extends Projectile
 	
 	override function update()
 		if pos.z < getTerrainZ(pos.x, pos.y)
-			done = true
+			terminate()
 			return			
 		super.update()
 		

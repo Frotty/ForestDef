@@ -17,12 +17,11 @@ public class Rocket extends PhysicsProjectile
 		setXYAngle(startPos.angleTo2d(targetPos))
 		setSpeed(GetRandomReal(2,4))
 		vel.z = GetRandomReal(9,13)
-		setMass(45)
 		
 	override function update()
 		super.update()
 		if vel.z <= 0
-			done = true
+			terminate()
 			
 	ondestroy
 		new TextTagEntity(getPos(), vec3(0,0,15), "HELP!", 25, 2, colorA(255,50,50,255))
@@ -37,25 +36,24 @@ class Shrapnell extends PhysicsProjectile
 	construct(vec3 startPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DruidoftheTalonMissile\\DruidoftheTalonMissile.mdl", 0 castTo OnExpireEvent )
 		setXYAngle(GetRandomReal(0,360).asAngleDegrees())
-		setSpeed(GetRandomReal(4,9))
+		setSpeed(GetRandomReal(6,12))
 		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(GetRandomReal(0.5,2))
-		vel.z = GetRandomReal(1,5)
-		setMass(GetRandomReal(1,5))
+		vel.z = GetRandomReal(5,14)
 		initialTime = GetRandomReal(2,4)
 		setTimed(initialTime)
 		
 	
 		
 	override function update()
-		super.update()
 		var col = fx.getColor()
 		col.alpha = bezier_3(255, 200, -5, time/initialTime).toInt()
 		fx.setColor(col)
+		super.update()
 	
 public function initRocket()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> begin
 		if GetSpellAbilityId() == ROCKET_SPELL_ID
-			new Rocket(GetSpellAbilityUnit().getPos3(), vec2(GetSpellTargetX(),GetSpellTargetY()))
+			new Rocket(GetSpellAbilityUnit().getPos3Real() + vec3(0,0,90), vec2(GetSpellTargetX(),GetSpellTargetY()))
 	end)
 	

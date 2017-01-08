@@ -13,11 +13,10 @@ public abstract class Boss extends Creep
 		if typId == 'n003'
 			snd.play()
 			
-			
-	override function onDeath(unit killer)
+
+	override function onDeath()
 		for p in allPlayers
 			p.p.addLumber(1)
 		if glow != null
 			glow.destr()
-		super.onDeath(killer)
-	
+		super.onDeath()

@@ -1,5 +1,4 @@
 package Selector
-import Event
 import Entity
 import Builder
 import PlayerData
@@ -9,7 +8,6 @@ import SoundUtils
 import ClosureTimers
 import Wave
 import Interpolation
-import Colors
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
@@ -21,53 +19,53 @@ constant ENERGY_ID = 'I00C'
 public class Selector extends UnitEntity
 	texttag ownerTag
 	
-	static function onCast()
-		let caster = GetSpellAbilityUnit()
-		let id = GetSpellAbilityId()
-		let data = caster.getUserData() castTo UnitEntity
-		if data instanceof Selector
-			if id == FAT_SPELL_ID
-				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), FAT_ID, true)
-				pDatas[data.owner.getId()].fat = true
-				pDatas[data.owner.getId()].builder.actor.addItem(PUDDING_ID)
-				if data.owner.getName() == "curryking" or data.owner.getName() == "crigges" or data.owner.getName().toLowerCase() == "waterknight"
-					let eff = addEffect(Other.plaguecloudtarget, pDatas[data.owner.getId()].builder.getPos())
-					doAfter(5, () -> eff.destr())
-					snd.playForPlayer(data.owner)
-			else if id == SLIM_SPELL_ID
-				pDatas[data.owner.getId()].builder = new Builder(caster.getPos3(), caster.getOwner(), SLIM_ID, true)
-				pDatas[data.owner.getId()].fat = false
-				pDatas[data.owner.getId()].builder.actor.addItem(ENERGY_ID)
-			data.done = true
-			pDatas[data.owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
-			
-	ondestroy
-		actor.remove()
-		ownerTag.destr()
-
 	vec3 finalPos
 	vec3 mid
 	real p = 0.
 
 	construct(vec3 ppos, player owner)
-		super(middle.toVec3(), 0, createUnit( owner, 'h023', middle.toVec3(), angle(0)))
+		super(createUnit(owner, 'h023', middle.toVec3(), angle(0)))
 		ownerTag = createTTEx(ppos - vec3(20,25,0), owner.getName(), 12.5, fromPlayerColor(owner.getColor()).withAlpha(255))
 		actor.setVertexColor(fromPlayerColor(owner.getColor()).withAlpha(255))
 		finalPos = ppos
 		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()
-		active = true
 		if GetLocalPlayer() == owner
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
+			let id = GetSpellAbilityId()
+			if id == FAT_SPELL_ID
+				pDatas[owner.getId()].builder = new Builder(actor.getPos3Zero(), actor.getOwner(), FAT_ID, true)
+				pDatas[owner.getId()].fat = true
+				pDatas[owner.getId()].builder.actor.addItem(PUDDING_ID)
+				if owner.getName() == "curryking" or owner.getName() == "crigges" or owner.getName().toLowerCase() == "waterknight"
+					let eff = addEffect(Other.plaguecloudtarget, pDatas[owner.getId()].builder.getPos())
+					doAfter(5, () -> eff.destr())
+					snd.playForPlayer(owner)
+			else if id == SLIM_SPELL_ID
+				pDatas[owner.getId()].builder = new Builder(actor.getPos3Zero(), actor.getOwner(), SLIM_ID, true)
+				pDatas[owner.getId()].fat = false
+				pDatas[owner.getId()].builder.actor.addItem(ENERGY_ID)
+			terminate()
+			pDatas[owner.getId()].builder.actor.addItem(ROCKET_ITEM_ID)
+		end)
+
 	override function update()
+		if p > 0.990
+			deactivate()
+			return
 		p = p.lerp(1, 0.025)
-		setPos(pos.bezier(mid, finalPos, p))
+		pos = pos.bezier(mid, finalPos, p)
+		actor.setPos(pos.toVec2())
 		ownerTag.setPos(pos - vec3(20,25,0))
+
+	ondestroy
+		actor.remove()
+		ownerTag.destr()
 
 SoundDefinition snd
 	
 init
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> Selector.onCast())
 	snd = new SoundDefinition("Units\\Creeps\\Ogre\\OgrePissed5.wav", false)
 	

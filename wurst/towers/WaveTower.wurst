@@ -11,10 +11,9 @@ public class WaveTower extends Tower
 	
 	construct(Tower t)
 		super(t)
-		active = false
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(pos.withTerrainZ(32),ud.getPos().toVec2(), 22, owner, level, actor)
+		new WaveMissile(pos.withTerrainZ(32), ud.getPos().toVec2(), 22, owner, level, actor)
 		
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
@@ -45,9 +44,8 @@ class WaveMissile extends Projectile
 		this.level = level
 		
 	override function update()
-		super.update()
 		if(getVel().lengthSquared() < 16)
-			done = true
+			terminate()
 			return
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u from ENUM_GROUP
@@ -55,7 +53,7 @@ class WaveMissile extends Projectile
 				let data = (u.getUserData() castTo UnitEntity)
 				if IsUnitInGroup(u, affected)
 					getDummy().damageTarget(u, getDOT(level), ATTACK_TYPE_PIERCE)
-				else if data != null and data instanceof Creep
+				else if data != null and data instanceof Creep and not data.done
 					GroupAddUnit(affected, u)
 					getDummy().damageTarget(u, getBlowDamage(level))
 					let upos = data.getPos()
@@ -67,7 +65,8 @@ class WaveMissile extends Projectile
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect(Other.gryphonridermissiletarget, u.getPos() ).destr()
-
+		super.update()	
+		
 	ondestroy
 		affected.clear()
 		DestroyGroup(affected)

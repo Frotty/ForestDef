@@ -12,8 +12,7 @@ function victory()
 function lose()
 	print("|cff666666Game over")
 	for e in Entity
-		e.active = false
-		e.slowTick = false
+		e.deactivate()
 		if e instanceof UnitEntity
 			let ue = e castTo UnitEntity
 			ue.actor.setTimeScale(0)
@@ -30,8 +29,7 @@ function endGameTimer()
 class Treasure extends UnitEntity
 
 	construct(unit existing)
-		super(existing.getPos3(), 128, existing)
-		active = false
+		super(existing)
 
 public function initConds()
 	gameTime = getTimer()

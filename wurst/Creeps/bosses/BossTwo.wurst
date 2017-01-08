@@ -1,23 +1,28 @@
 package BossTwo
 import Boss
-import ShieldBuff
+import PresetBuffs
+import ObjectGen
+import String
 
+public int buffAbil
 constant TENTACLE_ID = 'u00W'
-constant TENTACLE_BUFF_ID = 'A020'
 
-public class SludgeBuff extends NormalShieldBuff
+@objgen function genBuff()
+	buffAbil = createBuffObject("Tentacolous", "The boss spawns tentacles when it loses hitpoints", "ReplaceableTextures\\CommandButtons\\BTNTentacle.blp")
+
+public class SludgeBuff extends ShieldBuff
 	private color currentCol = color(155,255,155)
 	private color nextCol = color(155,255,155)
 	private real dmgHold = 0
 
-	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId, 6500)
+	construct(real dur, int abilId)
+		super(dur, abilId, 6500)
 		currentCol = color(155,255,155)
 		
 	override function update()
 		super.update()
 		currentCol = currentCol.lerp(nextCol, 0.35)
-		victim.actor.setVertexColor(currentCol)
+		target.actor.setVertexColor(currentCol)
 		
 	override function attackModifier()
 		
@@ -26,7 +31,7 @@ public class SludgeBuff extends NormalShieldBuff
 		if dmgHold > 500
 			dmgHold -= 500
 			nextCol = color(GetRandomInt(25,255),GetRandomInt(25,255),GetRandomInt(25,255))
-			new Tentacle(victim.getPos().offset2d(victim.actor.getFacingAngle() + angle(GetRandomReal(-0.75, 0.75)), GetRandomReal(64, 188))).actor.issueImmediateOrder("stop")
+			new Tentacle(target.getPos().offset2d(target.actor.getFacingAngle() + angle(GetRandomReal(-0.75, 0.75)), GetRandomReal(64, 188))).actor.issueImmediateOrder("stop")
 
 public class Tentacle extends Creep
 	
@@ -39,5 +44,5 @@ public class BossTwo extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new SludgeBuff(this, 99999, TENTACLE_BUFF_ID)
+		new SludgeBuff(99999, buffAbil).apply(this)
 

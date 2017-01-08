@@ -11,19 +11,20 @@ public constant int BASIC_TOWER_ID = 'h003'
 public constant int BASIC_WALL_ID = 'h000'
 
 public class Wall extends UnitEntity
+
 	construct (unit wall)
-		super(vec3(wall.getX(),wall.getY(),0),64,wall)
-		active = false
+		super(wall)
+
+	override function update()
+		super.update()
 
 public class Tower extends UnitEntity
 	
 	construct (unit tower)
-		super(vec3(tower.getX(),tower.getY(),0),64,tower)
-		active = false
+		super(tower)
 			
 	construct(Tower t)
-		super(t.pos, 64, t.actor)
-		active = false
+		super(t.actor)
 
 		t.terminate()
 	
@@ -72,7 +73,7 @@ init
 	end)
 	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
 		let damager = GetEventDamageSource()
-		if damager.getUserData() > 0
+		if damager.getEntity() != null and GetTriggerUnit().isAlive()
 			let e = damager.getUserData() castTo UnitEntity
 			if e instanceof Tower
 				let t = e castTo Tower

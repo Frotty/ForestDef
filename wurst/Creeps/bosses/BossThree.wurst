@@ -5,10 +5,15 @@ import Assets
 
 constant PUDGE_POWER_ID = 'A021'
 
+int pudgeBuffAbil
+
+@objgen function genBuff()
+	pudgeBuffAbil = createBuffObject("Percentage Power", "Deals 30% of max hp of the target in additional damage", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
+
 public class PudgePowerBuff extends NormalBuff
 
-	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId, true)
+	construct(real duration, int abilId)
+		super(duration, abilId)
 		
 	override function update()
 		super.update()
@@ -18,7 +23,7 @@ public class PudgePowerBuff extends NormalBuff
 		if target.getOwner() != players[8]
 			addEffect(Other.hcanceldeath, target.getPos()).destr()
 			modifyDamageBy(target.getMaxHP() * 0.30)
-			createTTEx(target.getPos3(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255))
+			createTTEx(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255))
 		
 	override function defenseModifier()
 
@@ -26,5 +31,4 @@ public class BossThree extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new PudgePowerBuff(this, 99999, PUDGE_POWER_ID)
-		
+		new PudgePowerBuff(9999, pudgeBuffAbil).apply(this)

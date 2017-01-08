@@ -1,15 +1,15 @@
 package BossFour
 import Boss
-import ShieldBuff
+import PresetBuffs
 import Assets
 
 constant JUMPY_ID = 'A024'
 constant JUMP_DIST = 420*420
 
-public class JumpyBuff extends NormalShieldBuff
+public class JumpyBuff extends ShieldBuff
 
-	construct(UnitEntity victim, real dur, int abilId)
-		super(victim, dur, abilId, 6500)
+	construct(real dur, int abilId)
+		super(dur, abilId, 6500)
 		
 	override function update()
 		super.update()
@@ -19,16 +19,16 @@ public class JumpyBuff extends NormalShieldBuff
 	override function defenseModifier()
 		let attacker = GetEventDamageSource()
 		
-		if attacker.getOwner().isEnemyOf(victim.owner) and attacker.getPos3().distanceToSq(victim.getPos()) < JUMP_DIST
-			victim.setTarget(GetEventDamageSource().getPos3(), 8)
-			addEffect(Other.roarcaster, victim.getPos()).destr()
-			this.done = true
+		if attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
+			target.setTarget(GetEventDamageSource().getPos3Real(), 8)
+			addEffect(Other.roarcaster, target.getPos()).destr()
+			done = true
 	
 public class BossFour extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new JumpyBuff(this, 55555, JUMPY_ID)
+		new JumpyBuff(55555, JUMPY_ID).apply(this)
 		
 	override function update()
 		super.update()

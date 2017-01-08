@@ -6,30 +6,35 @@ import GameTimer
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
+public int warningBuffAbil
+
+@objgen function genBuff()
+	warningBuffAbil = createBuffObject("|cff00ff00Warning", "Be cautious", "ReplaceableTextures\\CommandButtons\\BTNWellSpring.blp")
+
 public class WarningBuff extends NormalBuff
 	real startedTime
 	real lastWarning
 	real lastSelect
 	
-	construct(UnitEntity victim, int abilId)
-		super(victim, 9999999, abilId, true)
+	construct()
+		super(9999, warningBuffAbil)
 		startedTime = currentTime
 		lastWarning = currentTime
 		lastSelect = currentTime
 		
 	override function defenseModifier()
 		let dmg = getDamage()
+		let pos = target.getPos()
 		if startedTime + 15. > currentTime
-			new TextTagEntity(victim.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
-			addEffect("Abilities\\Spells\\Items\\SpellShieldAmulet\\SpellShieldCaster.mdl", victim.getPos() ).destr()
+			new TextTagEntity(target.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
+			addEffect("Abilities\\Spells\\Items\\SpellShieldAmulet\\SpellShieldCaster.mdl", target.getPos() ).destr()
 			modifyDamage(0)
-		if lastWarning + 1. < currentTime and victim.actor.getHP() - dmg < (victim.actor.getMaxHP()/1.5)
-			new TextTagEntity(victim.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
-			snd.playForPlayer(victim.owner)
+		if lastWarning + 1. < currentTime and target.actor.getHP() - dmg < (target.actor.getMaxHP()/1.5)
+			new TextTagEntity(target.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
+			snd.playForPlayer(target.owner)
 			lastWarning = currentTime
-		if lastSelect + 5. < currentTime and victim.actor.getHP() - dmg < (victim.actor.getMaxHP()/2.)
-			victim.owner.selectSingle(victim.actor)
+		if lastSelect + 5. < currentTime and target.actor.getHP() - dmg < (target.actor.getMaxHP()/2.)
+			PanCameraToTimedForPlayer(target.owner, pos.x, pos.y, 0.25)
+			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
 		
-	override function attackModifier()	
-			

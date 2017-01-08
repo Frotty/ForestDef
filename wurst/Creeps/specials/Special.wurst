@@ -16,17 +16,13 @@ public abstract class Special extends Creep
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
-		active = true
-		
-	override function onDeath(unit killer)
+	
+	override function onDeath()
 		if glow != null
 			glow.destr()
-		super.onDeath(killer)
+		super.onDeath()
 
-init
-	create_DarkOne()
-
-@compiletime function create_DarkOne()
+@objgen function create_DarkOne()
 	UNIT_ID_DARKONE = UNIT_ID_GEN.next()
 	ABIL_ID_SLOWBUFFDUMMY = ABIL_ID_GEN.next()
 	ABIL_ID_BOUNDBUFFDUMMY = ABIL_ID_GEN.next()
@@ -55,7 +51,7 @@ init
 			..setArmorType(ArmorType.Unarmored)
 			..setDefenseBase(7)
 			..setLevel(6)
-			..setCollisionSize(8.)
+			..setCollisionSize(0)
 			..setShadowImageUnit("")
 			..setSpeedBase(175)
 			

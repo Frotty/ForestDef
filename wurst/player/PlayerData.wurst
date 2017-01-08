@@ -26,15 +26,15 @@ public class PlayerData
 		allPlayers.remove(this)
 		pDatas[p.getId()] = null
 		if builder != null
-			builder.done = true
+			builder.actor.remove()
 		if select != null
-			select.done = true
+			select.actor.remove()
 		if allPlayers.getSize() > 0
-			let goldSplit = (p.getGold() / allPlayers.getSize()).round()
+			let goldSplit = (p.getGold() / allPlayers.getSize() * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(goldSplit)
 			
-			let lumberSplit = (p.getLumber() / allPlayers.getSize()).round()
+			let lumberSplit = (p.getLumber() / allPlayers.getSize() * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(lumberSplit)
 		p.setGold(0)
@@ -59,7 +59,7 @@ public function initPlayers()
 		gold = 490
 	
 	let anglePerP = 360/allPlayers.getSize()
-	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP
+	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP + GetRandomInt(0, 4) * 90
 	for p in allPlayers
 		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
 		current += anglePerP

@@ -18,10 +18,9 @@ public class Projectile extends FxEntity
 	private real maxTime = 0
 	
 	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
-		super(pos, radius, owner, xyAngle, fxpath)
+		super(owner, pos, radius, xyAngle, fxpath)
 		startpos = pos
 		setXYAngle(xyAngle)
-		active = false
 				
 	function setRanged(real maxDistance)
 		this.maxDist = maxDistance*maxDistance
@@ -33,8 +32,7 @@ public class Projectile extends FxEntity
 	
 	function setSpeed(real speed)
 		this.speed = speed
-		vel = vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.)
-		active = true
+		setVel(vec3(xyAngle.cos()*speed, xyAngle.sin()*speed, 0.))
 		
 	function setAcc(real factor)
 		this.acc = factor
@@ -52,13 +50,13 @@ public class Projectile extends FxEntity
 	override function update()
 		vel *= acc
 		pos += vel
-		setPos()
+		setPos(pos)
 		if timed
 			time += ANIMATION_PERIOD
 			if time >= maxTime
-				done = true
+				terminate()
 				return
 		if ranged
 			if startpos.distanceToSq(pos) > maxDist
-				done = true
+				terminate()
 		

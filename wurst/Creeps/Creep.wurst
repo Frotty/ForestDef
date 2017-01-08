@@ -39,28 +39,17 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 public class Creep extends UnitEntity
 	int bounty
 	boolean dropCoin
-	
+
 	construct(vec3 pos, int typId, int bounty, vec2 target)
-		super(pos, 16, createUnit(CREEP_OWNER, typId, pos.toVec2(), angle(0)))
+		super(createUnit(CREEP_OWNER, typId, pos.toVec2(), angle(0)), pos, 16)
 		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
-		active = false
 		dropCoin = shouldSpawnCoin()
 
-	override function update()
-		if vel.lengthSquared() > 1.5
-			super.update()
-			if isTerrainWalkable(pos.x, pos.y)
-				vel *= (0.975)
-			else
-				let normal = getPathingNormal(pos.toVec2())
-				vel = getBounceVec(vel, normal)
-			pos += vel
-			actor.setXY(pos)
-		else
-			active = false
-		
-	override function onDeath(unit killer)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
+
+	function onDeath()
+		let killer = GetKillingUnit()
 		if dropCoin
 			let itm = createItem(COIN_ID, getPos())
 			itm.setUserData((getElapsedGameTime() / 17.).round())
@@ -68,33 +57,39 @@ public class Creep extends UnitEntity
 				if itm != null and GetWidgetLife(itm) > .405
 					itm.remove()
 			end)
-		if killer == null
-			done = true
-			return
-		var size = allPlayers.getSize()
-		if pDatas[killer.getOwner().getId()] == null
-			var killBounty = (bounty div size)
-			if killBounty <= 0
-				killBounty = 1
-			for pd in allPlayers
-				if(pd.p != killer.getOwner())
-					pd.p.addGold(killBounty)
-					showBountyTextTag(killBounty, actor, pd.p)
-		else if size > 0 and bounty > 0
-			let killBounty = (bounty div size) + (bounty mod size)
-			if killBounty < 1
-				return
-			var restBounty = 0
-			if size > 1 and bounty-killBounty > 0
-				restBounty = ((bounty-killBounty) / (size - 1.)).round()
-				
-			killer.getOwner().addGold(killBounty)
-			showBountyTextTag(killBounty, actor, killer.getOwner())
-			if restBounty > 0
+		if killer != null
+			var size = allPlayers.getSize()
+			if pDatas[killer.getOwner().getId()] == null
+				var killBounty = (bounty div size)
+				if killBounty <= 0
+					killBounty = 1
 				for pd in allPlayers
 					if(pd.p != killer.getOwner())
-						pd.p.addGold(restBounty)
-						showBountyTextTag(restBounty, actor, pd.p)
-		actor.setUserData(0)
-		done = true
+						pd.p.addGold(killBounty)
+						showBountyTextTag(killBounty, actor, pd.p)
+			else if size > 0 and bounty > 0
+				var killBounty = (bounty div size) + (bounty mod size)
+				if killBounty < 1
+					killBounty = 1
+				var restBounty = 0
+				if size > 1 and bounty-killBounty > 0
+					restBounty = ((bounty-killBounty) / (size - 1.)).round()
+					
+				killer.getOwner().addGold(killBounty)
+				showBountyTextTag(killBounty, actor, killer.getOwner())
+				if restBounty > 0
+					for pd in allPlayers
+						if(pd.p != killer.getOwner())
+							pd.p.addGold(restBounty)
+							showBountyTextTag(restBounty, actor, pd.p)
+
+	override function update()
+		if isTerrainWalkable(pos.x, pos.y)
+			vel *= (0.975)
+		else
+			let normal = getPathingNormal(pos.toVec2())
+			vel = getBounceVec(vel, normal)
+		super.update()
+		
+		
 			

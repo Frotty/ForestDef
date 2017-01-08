@@ -65,5 +65,5 @@ public function initPlayers()
 		current += anglePerP
 		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	
-	createTTEx(middle.toVec3() - vec3(80,0,0), "Item Shop", 17.5, colorA(225,225,125, 255))
+	createTTEx(middle.toVec3() - vec3(80,0,0), "Item Shop", 17.5)
 

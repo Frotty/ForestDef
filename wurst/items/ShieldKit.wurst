@@ -4,10 +4,15 @@ import Entity
 import TextTagEntity
 import GameConditions
 
+public buffTuple buffAbil
+
+@objgen function genBuff()
+	buffAbil = createBuffObject("Shielder", "This unit is protected by a shield that absorbs damage", "ReplaceableTextures\\CommandButtons\\BTNHolyShield.blp")
+
 class ShieldKitBuff extends ShieldBuff
 	
 	construct(real amount)
-		super(90., 'A01P', amount)
+		super(90.,buffAbil, amount)
 	
 	override function defenseModifier()
 		super.defenseModifier()

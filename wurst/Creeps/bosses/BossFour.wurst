@@ -3,13 +3,18 @@ import Boss
 import PresetBuffs
 import Assets
 
-constant JUMPY_ID = 'A024'
+
+buffTuple jumpyBuffId
+
+@objgen function genBuff()
+	jumpyBuffId = createBuffObject("Unrelaxed", "Jumps when aggrevated", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
+
 constant JUMP_DIST = 420*420
 
 public class JumpyBuff extends ShieldBuff
 
-	construct(real dur, int abilId)
-		super(dur, abilId, 6500)
+	construct(real dur)
+		super(dur, jumpyBuffId, 6500)
 		
 	override function update()
 		super.update()
@@ -28,7 +33,7 @@ public class BossFour extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new JumpyBuff(55555, JUMPY_ID).apply(this)
+		new JumpyBuff(55555).apply(this)
 		
 	override function update()
 		super.update()

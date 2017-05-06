@@ -6,7 +6,7 @@ import GameTimer
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
-public int warningBuffAbil
+public buffTuple warningBuffAbil
 
 @objgen function genBuff()
 	warningBuffAbil = createBuffObject("|cff00ff00Warning", "Be cautious", "ReplaceableTextures\\CommandButtons\\BTNWellSpring.blp")

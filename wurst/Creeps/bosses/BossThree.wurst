@@ -5,15 +5,15 @@ import Assets
 
 constant PUDGE_POWER_ID = 'A021'
 
-int pudgeBuffAbil
+buffTuple pudgeBuffAbil
 
 @objgen function genBuff()
 	pudgeBuffAbil = createBuffObject("Percentage Power", "Deals 30% of max hp of the target in additional damage", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
 
 public class PudgePowerBuff extends NormalBuff
 
-	construct(real duration, int abilId)
-		super(duration, abilId)
+	construct(real duration)
+		super(duration, pudgeBuffAbil)
 		
 	override function update()
 		super.update()
@@ -31,4 +31,4 @@ public class BossThree extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new PudgePowerBuff(9999, pudgeBuffAbil).apply(this)
+		new PudgePowerBuff(9999).apply(this)

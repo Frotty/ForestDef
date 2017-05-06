@@ -4,7 +4,7 @@ import PresetBuffs
 import ObjectGen
 import String
 
-public int buffAbil
+public buffTuple buffAbil
 constant TENTACLE_ID = 'u00W'
 
 @objgen function genBuff()
@@ -15,8 +15,8 @@ public class SludgeBuff extends ShieldBuff
 	private color nextCol = color(155,255,155)
 	private real dmgHold = 0
 
-	construct(real dur, int abilId)
-		super(dur, abilId, 6500)
+	construct(real dur)
+		super(dur, buffAbil, 6500)
 		currentCol = color(155,255,155)
 		
 	override function update()
@@ -44,5 +44,5 @@ public class BossTwo extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new SludgeBuff(99999, buffAbil).apply(this)
+		new SludgeBuff(99999).apply(this)
 

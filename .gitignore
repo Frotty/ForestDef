@@ -1,5 +1,5 @@
-*.w3x
+/_build
 wurst.dependencies
+.vscode/settings.json
+*.w3x
 objectEditingOutput/
-wurst/compiled.j.txt
-compiled.j.txt

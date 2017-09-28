@@ -5,7 +5,7 @@ public class BossFive extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		doAfter(1, () -> actor.issueImmediateOrder("locustswarm"))
-		doAfter(2, () -> actor.issuePointOrder("attack", target))
+		doAfter(10, () -> actor.issueImmediateOrder("locustswarm"))
+		doAfter(11, () -> actor.issuePointOrder("attack", target))
 
 	

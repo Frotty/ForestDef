@@ -24,7 +24,7 @@ public class JumpyBuff extends ShieldBuff
 	override function defenseModifier()
 		let attacker = GetEventDamageSource()
 		
-		if attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
+		if target.actor.getFlyHeight() <= 4 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
 			target.setTarget(GetEventDamageSource().getPos3Real(), 8)
 			addEffect(Other.roarcaster, target.getPos()).destr()
 			done = true
@@ -37,4 +37,6 @@ public class BossFour extends Boss
 		
 	override function update()
 		super.update()
+		if actor.getFlyHeight() > 2
+			vel -= gravity
 		actor.setXYZReal(pos)

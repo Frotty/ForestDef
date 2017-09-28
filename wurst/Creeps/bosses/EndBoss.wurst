@@ -5,13 +5,12 @@ constant ENBOSS_ID = 'n00L'
 
 var bosscount = 0
 
-
-
 public class EndBoss extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 		bosscount++
+		actor.setHP(actor.getHP()/4.)
 
 	ondestroy
 		bosscount++

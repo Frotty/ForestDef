@@ -1,7 +1,6 @@
 package ArtilleryTower
 import Tower
 import Projectile
-import TerrainUtils
 import ClosureTimers
 
 constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD

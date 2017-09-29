@@ -1,8 +1,5 @@
 package FieldGenerator
 import FxEntity
-import Buff
-
-import SoundUtils
 
 constant SPELL_ID = 'A027'
 constant BUFF_ID = 'AAAA'

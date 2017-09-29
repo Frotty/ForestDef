@@ -21,6 +21,7 @@ public class PlayerData
 		this.p = p
 		pDatas[p.getId()] = this
 		allPlayers.add(this)
+		SetPlayerTechMaxAllowed(p, 'h028', 0)
 
 	ondestroy
 		allPlayers.remove(this)

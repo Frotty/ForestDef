@@ -11,7 +11,6 @@ import SpecialThree
 import SpecialFour
 import SpecialFive
 import Boss
-import LumberAndCoinSystem
 
 constant real SPAWN_TIME = 20.0
 
@@ -146,11 +145,9 @@ public function startSpawn()
 	if allPlayers.getSize() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		print("|cffFFCC00>>|r Fast Spawn")
 		normalWaves.dequeue()
-		normalWaves.dequeue()
-		normalWaves.dequeue()
 		bossWaves.dequeue()
-		specialWaves.dequeue()
-		specialWaves.dequeue()
+		bossWaves.dequeue()
+		bossWaves.dequeue()
 		specialWaves.dequeue()
 		t.startPeriodic( SPAWN_TIME/2., function onSpawnTime)
 	else

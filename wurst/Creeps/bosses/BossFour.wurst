@@ -9,7 +9,7 @@ buffTuple jumpyBuffId
 @objgen function genBuff()
 	jumpyBuffId = createBuffObject("Unrelaxed", "Jumps when aggrevated", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
 
-constant JUMP_DIST = 420*420
+constant JUMP_DIST = 470*470
 
 public class JumpyBuff extends ShieldBuff
 
@@ -24,10 +24,10 @@ public class JumpyBuff extends ShieldBuff
 	override function defenseModifier()
 		let attacker = GetEventDamageSource()
 		
-		if target.actor.getFlyHeight() <= 4 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
+		if target.actor.getFlyHeight() <= 1 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
+			and attacker.getPos3Real().distanceToSq(target.getPos()) > 64
 			target.setTarget(GetEventDamageSource().getPos3Real(), 8)
 			addEffect(Other.roarcaster, target.getPos()).destr()
-			done = true
 	
 public class BossFour extends Boss
 
@@ -37,6 +37,6 @@ public class BossFour extends Boss
 		
 	override function update()
 		super.update()
-		if actor.getFlyHeight() > 2
-			vel -= gravity
+		if actor.getFlyHeight() > 1
+			vel += gravity
 		actor.setXYZReal(pos)

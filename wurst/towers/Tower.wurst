@@ -67,6 +67,10 @@ init
 			new Wall(u)
 	end)
 	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
+		// Make Last Level tier 1 wall available
+		let u = GetTriggerUnit()
+		if u.getTypeId() == 'h00S' or u.getTypeId() == 'h00T'
+			SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
 		if data != null and data instanceof Tower
 			(data castTo Tower).onUpgrade()

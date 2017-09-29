@@ -14,8 +14,8 @@ public class BossOne extends Boss
 			, Other.illidanmissile, (vec2 pos, player owner) -> new Creep(pos.toVec3(), 'u00V', 12, middle) )
 			pj.setTimed(GetRandomReal(1.5,3.5))
 			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(4.5,9)))
-			pj.restitution = 0.525
-			pj.surfaceFriction = 0.725
+			pj.restitution = 0.575
+			pj.surfaceFriction = 0.625
 		super.onDeath()
 		
 	

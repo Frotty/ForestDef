@@ -1,8 +1,6 @@
 package BossTwo
 import Boss
 import PresetBuffs
-import ObjectGen
-import String
 
 public buffTuple buffAbil
 constant TENTACLE_ID = 'u00W'

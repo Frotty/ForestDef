@@ -1,6 +1,5 @@
 package TextTagEntity
 import Entity
-import PhysicsConstants
 import public Colors
 
 public class TextTagEntity extends Entity

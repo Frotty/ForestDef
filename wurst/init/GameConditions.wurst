@@ -11,20 +11,24 @@ function victory()
 	
 function lose()
 	print("|cff666666Game over")
+	var ea = Entity.firstInactive
+	while ea != null
+		if ea instanceof UnitEntity
+			let ue = ea castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+		ea = ea.next
 	for e in Entity
-		e.deactivate()
+		print("entity itr")
 		if e instanceof UnitEntity
 			let ue = e castTo UnitEntity
 			ue.actor.setTimeScale(0)
 			ue.actor.pause()
 
-
-	
 function endGameTimer()
 	print("|cffFFCC00>> The Magic Treasure has been destroyed.|r\nYou failed!")
-	timer t = CreateTimer()
+	getTimer().start(1., function lose)
 	stopSpawn()
-	t.start( 1., function lose )
 	
 class Treasure extends UnitEntity
 
@@ -42,7 +46,9 @@ public function initConds()
 	if bigArena
 		TriggerRegisterUnitEvent( tr, gg_unit_h00E_0007 , EVENT_UNIT_DEATH )
 		new Treasure(gg_unit_h00E_0007)
+		gg_unit_h00E_0008.remove()
 	else
 		TriggerRegisterUnitEvent( tr, gg_unit_h00E_0008 , EVENT_UNIT_DEATH )
 		new Treasure(gg_unit_h00E_0008)
+		gg_unit_h00E_0007.remove()
 	TriggerAddAction( tr, function endGameTimer )

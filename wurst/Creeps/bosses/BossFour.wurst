@@ -2,17 +2,15 @@ package BossFour
 import Boss
 import PresetBuffs
 import Assets
+import GameTimer
 
 
-buffTuple jumpyBuffId
-
-@objgen function genBuff()
-	jumpyBuffId = createBuffObject("Unrelaxed", "Jumps when aggrevated", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp")
+buffTuple jumpyBuffId = compiletime(createBuffObject("Hyper Aggression", "Jumps towards any attacker. 5 second cooldown.", "BTNCriticalStrike.blp"))
 
 constant JUMP_DIST = 470*470
 
 public class JumpyBuff extends ShieldBuff
-
+	real lastCast = 0
 	construct(real dur)
 		super(dur, jumpyBuffId, 6500)
 		
@@ -25,9 +23,10 @@ public class JumpyBuff extends ShieldBuff
 		let attacker = GetEventDamageSource()
 		
 		if target.actor.getFlyHeight() <= 1 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
-			and attacker.getPos3Real().distanceToSq(target.getPos()) > 64
-			target.setTarget(GetEventDamageSource().getPos3Real(), 8)
+			and attacker.getPos3Real().distanceToSq(target.getPos()) > 48 and lastCast + 5. < getElapsedGameTime()
+			target.setTarget(GetEventDamageSource().getPos3Real(), 9)
 			addEffect(Other.roarcaster, target.getPos()).destr()
+			lastCast = getElapsedGameTime()
 	
 public class BossFour extends Boss
 
@@ -36,7 +35,7 @@ public class BossFour extends Boss
 		new JumpyBuff(55555).apply(this)
 		
 	override function update()
-		super.update()
 		if actor.getFlyHeight() > 1
 			vel += gravity
+		super.update()
 		actor.setXYZReal(pos)

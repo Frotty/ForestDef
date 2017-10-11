@@ -7,8 +7,12 @@ import initlater StompingTower
 import initlater ThermoTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower
-public constant int BASIC_TOWER_ID = 'h003'
-public constant int BASIC_WALL_ID = 'h000'
+import ClosureTimers
+import Buff
+
+public constant BASIC_TOWER_ID = 'h003'
+public constant BASIC_WALL_ID = 'h000'
+public constant STOPPER_QUICKBUILD_ID = 'h028'
 
 public class Wall extends UnitEntity
 
@@ -25,11 +29,13 @@ public class Tower extends UnitEntity
 			
 	construct(Tower t)
 		super(t.actor)
-
-		t.terminate()
+		let that = this
+		doAfter(0.01, () -> begin
+			t.transferBuffs(that)
+			t.terminate()
+		end)
 	
 	function onAttack(UnitEntity _target)
-
 
 	function onUpgrade()
 		switch actor.getTypeId()
@@ -63,17 +69,18 @@ init
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
 			new Tower(u)
-		else if id == BASIC_WALL_ID
+		else if id == BASIC_WALL_ID or id == STOPPER_QUICKBUILD_ID
 			new Wall(u)
 	end)
 	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
-		// Make Last Level tier 1 wall available
+		// Make Last Level of tier 1 wall available
 		let u = GetTriggerUnit()
 		if u.getTypeId() == 'h00S' or u.getTypeId() == 'h00T'
 			SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
 		let data = GetTriggerUnit().getUserData() castTo UnitEntity
 		if data != null and data instanceof Tower
-			(data castTo Tower).onUpgrade()
+			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
+			
 	end)
 	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
 		let damager = GetEventDamageSource()

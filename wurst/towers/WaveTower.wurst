@@ -3,7 +3,7 @@ import Tower
 import Boss
 import Assets 
 
-constant real AREA_OF_EFFECT = 200.
+constant real AREA_OF_EFFECT = 192.
 public constant int FIRST_WAVE_ID = 'h01N'
 
 public class WaveTower extends Tower
@@ -21,13 +21,13 @@ public class WaveTower extends Tower
 
 	
 function getBlowDamage(int level) returns real//towerlevel
-	return ((75. * level) + 135.)
+	return ((75. * level) + 125.)
 	
 function getDOT(int level) returns real//towerlevel
-	return ((6.0 * level))
+	return ((4.5 * level))
 	
 function getKB(int level) returns real//towerlevel
-	return (4.5 + (level*level))
+	return (4.85 + (level*level))
 	
 class WaveMissile extends Projectile
 	int level

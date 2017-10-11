@@ -9,7 +9,7 @@ public constant COIN_ID = 'I00F'
 var killcount = 0
 var killcap = 18.
 
-var coinCount = 0
+var coinCount = GetRandomInt(-2, 2)
 var coinCap = 17
 var coinsSpawned = 0
 
@@ -59,6 +59,6 @@ public function initLumberSystem()
 		WOOD_BOUNTY = 2
 	if bigArena
 		killcap = 36
-		coinCap = 54 + GetRandomInt(-4,4)
+		coinCap = 54 + GetRandomInt(-6,6)
 	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> getExtraBounty())
 	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> grantCoins())

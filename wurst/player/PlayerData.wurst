@@ -27,9 +27,9 @@ public class PlayerData
 		allPlayers.remove(this)
 		pDatas[p.getId()] = null
 		if builder != null
-			builder.actor.remove()
+			builder.terminate()
 		if select != null
-			select.actor.remove()
+			select.terminate()
 		if allPlayers.getSize() > 0
 			let goldSplit = (p.getGold() / allPlayers.getSize() * 1.15).round()
 			for pd in allPlayers

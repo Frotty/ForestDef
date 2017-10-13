@@ -1,8 +1,8 @@
 package Frentity_config
 
-@config public constant DYNAMIC_Z = true
+@config public constant DYNAMIC_Z = false
 /** Kills actors attached to Entities instead of removing them, when the entity is destroyed */
-@config public constant KILL_ACTORS = false
+@config public constant KILL_ACTORS = true
 /** Disables damage between allied units */
 @config public constant DISABLE_TEAMATTACK = true
 /** Shows a note when a teamattack occurs */

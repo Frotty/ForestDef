@@ -62,7 +62,7 @@ public function initPlayers()
 	let anglePerP = 360/allPlayers.getSize()
 	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP + GetRandomInt(0, 4) * 90
 	for p in allPlayers
-		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 250.).toVec3(), p.p)
+		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 285.).toVec3(), p.p)
 		current += anglePerP
 		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	

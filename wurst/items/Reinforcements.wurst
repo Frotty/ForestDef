@@ -15,7 +15,7 @@ public class Reinforcement extends UnitEntity
 		actor.setTimedLife(60)
 
 public function onReinforcements() 
-	let val = (getElapsedGameTime() / 80.).round()
+	let val = (getElapsedGameTime() / 80.).round() + 1
 	let owner = GetManipulatingUnit().getOwner()
 	let toV = min(6, val)
 	for i = 0 to toV-1

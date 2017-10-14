@@ -5,9 +5,9 @@ import Assets
 import GameTimer
 
 
-buffTuple jumpyBuffId = compiletime(createBuffObject("Hyper Aggression", "Jumps towards any attacker. 5 second cooldown.", "BTNCriticalStrike.blp"))
+buffTuple jumpyBuffId = compiletime(createBuffObject("Hyper Aggression", "Jumps towards any attacker. 4 second cooldown.", "BTNCriticalStrike.blp"))
 
-constant JUMP_DIST = 470*470
+constant JUMP_DIST = 480*480
 
 public class JumpyBuff extends ShieldBuff
 	real lastCast = 0
@@ -23,7 +23,7 @@ public class JumpyBuff extends ShieldBuff
 		let attacker = GetEventDamageSource()
 		
 		if target.actor.getFlyHeight() <= 1 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
-			and attacker.getPos3Real().distanceToSq(target.getPos()) > 48 and lastCast + 5. < getElapsedGameTime()
+			and attacker.getPos3Real().distanceToSq(target.getPos()) > 42 and lastCast + 4. < getElapsedGameTime()
 			target.setTarget(GetEventDamageSource().getPos3Real(), 9)
 			addEffect(Other.roarcaster, target.getPos()).destr()
 			lastCast = getElapsedGameTime()

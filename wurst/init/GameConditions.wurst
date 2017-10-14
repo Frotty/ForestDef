@@ -19,7 +19,6 @@ function lose()
 			ue.actor.pause()
 		ea = ea.next
 	for e in Entity
-		print("entity itr")
 		if e instanceof UnitEntity
 			let ue = e castTo UnitEntity
 			ue.actor.setTimeScale(0)
@@ -37,7 +36,7 @@ class Treasure extends UnitEntity
 
 public function initConds()
 	gameTime = getTimer()
-	gameTime.start( 16.*60. + 20., function victory )
+	gameTime.start(16.*60. + 20., function victory)
 	timerdialog td = CreateTimerDialog(gameTime)		
 	TimerDialogSetTitle( td, "Until Finale: " )
 	TimerDialogDisplay( td, true )

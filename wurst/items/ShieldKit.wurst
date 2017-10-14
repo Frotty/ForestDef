@@ -20,10 +20,13 @@ class ShieldKitBuff extends ShieldBuff
 	override function defenseModifier()
 		super.defenseModifier()
 		if blockAmount > 0
-			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)), blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
+			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(8,12)), blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 
 	override function onEnd()
-		new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(7,11)), "Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
+		if duration == 90.
+			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(8,12)), "Shield applied" , 13, 2., colorA(255, 204, 12, 255))
+		else
+			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(8,12)), "Shield collapsed" , 13, 2., colorA(255, 204, 12, 255))
 		
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> begin

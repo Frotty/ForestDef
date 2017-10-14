@@ -1,5 +1,6 @@
 package Builder
 import initlater Selector
+import initlater PlayerData
 import WarningBuff
 import Assets
 import Projectile
@@ -32,6 +33,9 @@ public class Builder extends UnitEntity
 			vel += gravity
 		super.update()
 		actor.setXYZReal(pos)
+
+	ondestroy
+		pDatas[owner.getId()].builder = null
 
 
 public function getPathingNormal(vec2 pos) returns vec2

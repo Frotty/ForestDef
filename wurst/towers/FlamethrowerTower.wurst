@@ -8,10 +8,10 @@ public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
 function getDamage(int level) returns real
-	return 6 + 4.5 * level
+	return 7. + 4.75 * level
 	
 function getSpeed(int level) returns real
-	return 5.75 + level * 1.5
+	return 6.25 + level * 1.5
 
 public class FlamethrowerTower extends Tower
 	int level = 1
@@ -38,7 +38,7 @@ class FlameMissile extends Projectile
 		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.175,0.175)).asAngleRadians(), FX_PATH )
 		fx.setScale(0.2)
 		setSpeed(speed + GetRandomReal(-1.5, 1.5))
-		setRanged(700)
+		setRanged(712)
 		setAcc(1.0175 + GetRandomReal(-0.005, 0.0075))
 		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)

@@ -12,6 +12,7 @@ public class ThermoTower extends Tower
 	construct(Tower t)
 		super(t)
 		isHot = true
+		
 	override function onAttack(UnitEntity ud)
 		if isHot
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0

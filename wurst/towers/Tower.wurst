@@ -19,50 +19,45 @@ public class Wall extends UnitEntity
 	construct (unit wall)
 		super(wall)
 
-	override function update()
-		super.update()
 
 public class Tower extends UnitEntity
 	
 	construct (unit tower)
 		super(tower)
 			
-	construct(Tower t)
-		super(t.actor)
-		let that = this
-		doAfter(0.01, () -> begin
-			t.transferBuffs(that)
-			t.terminate()
-		end)
+	construct(Tower oldTower)
+		super(oldTower.actor)
+		oldTower.transferBuffs(this)
+		oldTower.terminate()
 	
 	function onAttack(UnitEntity _target)
 
+	/** Called on every upgrade of this tower.
+		If this tower has been upgraded to another tier,
+		the old tower is terminated and replaced through the new Tower */
 	function onUpgrade()
 		switch actor.getTypeId()
 			case FIRST_WAVE_ID
 				this.actor.setEntity(null)
 				new WaveTower(this)
-			case ASSASSIN_TOWER_BASE_ID
-				// new AssassinTower(this)
 			case TOWER_TROOPER_ID
 				this.actor.setEntity(null)
 				new TrooperTower(this)
-			case stompingbasetype[0]
-				// new StompingTower(this)
 			case FLAMETHROWER_ID
 				this.actor.setEntity(null)
 				new FlamethrowerTower(this)
 			case ART_TOWER_ID
 				this.actor.setEntity(null)
 				new ArtilleryTower(this)
-			case THERMO_TOWER_ID
-				this.actor.setEntity(null)
-				new ThermoTower(this)
 			default
 				printLog(Loglevel.TRACE, "upgrade not catched")
-		actor.issueImmediateOrderById(OrderId("stop"))
-	
-	
+		actor.issueImmediateOrder("stop")	
+
+/** Checks if the upgrade unlocks techtree */
+function checkTech(unit u) 
+	if u.getTypeId() == 'h00S' or u.getTypeId() == 'h00T'
+		SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
+
 init
 	EventListener.add(EVENT_PLAYER_UNIT_CONSTRUCT_START, () -> begin
 		let u = GetConstructingStructure()
@@ -75,9 +70,8 @@ init
 	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
 		// Make Last Level of tier 1 wall available
 		let u = GetTriggerUnit()
-		if u.getTypeId() == 'h00S' or u.getTypeId() == 'h00T'
-			SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
-		let data = GetTriggerUnit().getUserData() castTo UnitEntity
+		checkTech(u)
+		let data = u.getEntity()
 		if data != null and data instanceof Tower
 			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
 			
@@ -85,8 +79,8 @@ init
 	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
 		let damager = GetEventDamageSource()
 		if damager.getEntity() != null and GetTriggerUnit().isAlive()
-			let e = damager.getUserData() castTo UnitEntity
+			let e = damager.getEntity()
 			if e instanceof Tower
 				let t = e castTo Tower
-				t.onAttack(GetTriggerUnit().getUserData() castTo UnitEntity)
+				t.onAttack(GetTriggerUnit().getEntity() castTo UnitEntity)
 	end)

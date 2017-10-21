@@ -31,11 +31,10 @@ public class Troop extends UnitEntity
 
 public class TrooperTower extends Tower
 	LinkedList<Troop> troops = new LinkedList<Troop>()
-	int level
+	int level = 0
 	
 	construct (Tower t)
 		super(t)
-		level = 0
 		addTrooper()
 		addTrooper()
 		addTrooper()
@@ -85,8 +84,7 @@ public class TrooperTower extends Tower
 		
 	ondestroy
 		for trooper in troops
-			if(trooper != null)
-				trooper.terminate()
+			trooper.terminate()
 		destroy troops
 	
 			

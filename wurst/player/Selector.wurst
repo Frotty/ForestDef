@@ -60,6 +60,7 @@ public class Selector extends UnitEntity
 		pos = pos.bezier3(mid, finalPos, p)
 		actor.setPos(pos.toVec2())
 		ownerTag.tt.setPos(pos - vec3(20,25,0))
+		owner.selectSingle(actor)
 
 	ondestroy
 		actor.remove()

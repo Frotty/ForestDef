@@ -25,11 +25,6 @@ public class PlayerData
 
 	ondestroy
 		allPlayers.remove(this)
-		pDatas[p.getId()] = null
-		if builder != null
-			builder.terminate()
-		if select != null
-			select.terminate()
 		if allPlayers.getSize() > 0
 			let goldSplit = (p.getGold() / allPlayers.getSize() * 1.15).round()
 			for pd in allPlayers
@@ -38,8 +33,14 @@ public class PlayerData
 			let lumberSplit = (p.getLumber() / allPlayers.getSize() * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(lumberSplit)
+		if builder != null
+			builder.terminate()
+		if select != null
+			select.terminate()
+		pDatas[p.getId()] = null
 		p.setGold(0)
 		p.setLumber(0)
+		printTimed(p.getNameColored() + " has left! Resources are distributed to the remaining players.", 10.)
 
 public function initPlayers()
 	allPlayers = new LinkedList<PlayerData>()
@@ -48,7 +49,6 @@ public function initPlayers()
 	for int i = 0 to 7
 		if players[i].getSlotState() == PLAYER_SLOT_STATE_PLAYING and players[i].getController() == MAP_CONTROL_USER
 			new PlayerData(players[i])
-
 	real gold
 	if allPlayers.getSize() > 4
 		bigArena = true

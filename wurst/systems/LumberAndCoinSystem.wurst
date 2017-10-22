@@ -9,7 +9,7 @@ public constant COIN_ID = 'I00F'
 var killcount = 0
 var killcap = 18.
 
-var coinCount = GetRandomInt(-2, 2)
+var coinCount = GetRandomInt(-2, 3)
 var coinCap = 17
 var coinsSpawned = 0
 
@@ -17,7 +17,7 @@ public function shouldSpawnCoin() returns boolean
 	coinCount++
 	if coinCount >= coinCap
 		coinCount = 0
-		coinCap += 3 + (coinsSpawned/2.).round()
+		coinCap += 3 + GetRandomInt(-2, 2) + (coinsSpawned/3.).round()
 		if bigArena
 			coinCap += 3
 
@@ -35,7 +35,8 @@ function getExtraBounty()
 		if killcount >= killcap
 			killcap += 1
 			if bigArena
-				killcap *= 1.25
+				killcap += 3
+				killcap *= 1.15
 
 			killcount = 0
 			for pd in allPlayers

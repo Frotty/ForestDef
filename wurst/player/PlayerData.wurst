@@ -26,11 +26,11 @@ public class PlayerData
 	ondestroy
 		allPlayers.remove(this)
 		if allPlayers.getSize() > 0
-			let goldSplit = (p.getGold() / allPlayers.getSize() * 1.15).round()
+			let goldSplit = ((p.getGold() / allPlayers.getSize()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(goldSplit)
 			
-			let lumberSplit = (p.getLumber() / allPlayers.getSize() * 1.15).round()
+			let lumberSplit = ((p.getLumber() / allPlayers.getSize()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(lumberSplit)
 		if builder != null
@@ -40,7 +40,7 @@ public class PlayerData
 		pDatas[p.getId()] = null
 		p.setGold(0)
 		p.setLumber(0)
-		printTimed(p.getNameColored() + " has left! Resources are distributed to the remaining players.", 10.)
+		printTimed(p.getNameColored() + " has left! Their resources have been distributed.", 10.)
 
 public function initPlayers()
 	allPlayers = new LinkedList<PlayerData>()

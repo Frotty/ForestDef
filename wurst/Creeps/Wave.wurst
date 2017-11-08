@@ -2,6 +2,8 @@ package Wave
 import initlater Boss
 
 vec3 array startPositions
+rect array spawnRects
+
 int startPosCount
 public vec2 middle
 
@@ -27,12 +29,10 @@ public class NormalWave
 		this.amount = amount
 		this.bounty = bounty
 		
-		
 	function spawn()
 		var t = getTimer()
 		t.setData(this castTo int)
 		t.start(0.1, function NormalWave.spawnCallback)
-		
 		
 	static function spawnCallback()
 		var t = GetExpiredTimer()
@@ -55,7 +55,7 @@ public class NormalWave
 		for i = 0 to wave.amount-1
 			doAfter(i.toReal(), () -> begin
 				for j = 0 to startPosCount
-					new Creep(startPositions[j].offset2d(GetRandomReal(0, 360).asAngleDegrees(), GetRandomReal(-64, 64)), id, wave.bounty, middle)
+					new Creep(spawnRects[j].randomPoint().toVec3(), id, wave.bounty, middle)
 			end)			
 		
 					
@@ -82,7 +82,7 @@ public class BossWave
 		print("|cffE62121## Attention:|r Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
-				boss.create(startPositions[j], bossId, bounty, middle)
+				boss.create(spawnRects[j].randomPoint().toVec3(), bossId, bounty, middle)
 		destroy boss
 				
 
@@ -106,7 +106,7 @@ public class SpecialWave
 		for i = 0 to amount-1
 			doAfter(i.toReal(), () -> begin
 				for j = 0 to startPosCount
-					special.create(startPositions[j].offset2d(GetRandomReal(0, 360).asAngleDegrees(), GetRandomReal(-64, 64)), specialId, bounty, middle)
+					special.create(spawnRects[j].randomPoint().toVec3(), specialId, bounty, middle)
 			end)
 		doAfter(amount.toReal(), () -> destroy special)
 		
@@ -115,20 +115,33 @@ public function initCreepStarts(boolean eight)
 	if(eight)
 		startPosCount = 7
 		startPositions[0] = vec3(7300.,3400.,0)
+		spawnRects[0] = gg_rct_bigLeftTop
 		startPositions[1] = vec3(11100,4200,0)
+		spawnRects[1] = gg_rct_bigTopLeft
 		startPositions[2] = vec3(14000.,4100.,0)
+		spawnRects[2] = gg_rct_bigTopRight
 		startPositions[3] = vec3(17000.,1000.,0)
+		spawnRects[3] = gg_rct_bigRightTop
 		startPositions[4] = vec3(16000.,-2000.,0)
+		spawnRects[4] = gg_rct_bigRightBot
 		startPositions[5] = vec3(14000,-4000.,0)
+		spawnRects[5] = gg_rct_bigBotRight
 		startPositions[6] = vec3(10000.,-4100.,0)
+		spawnRects[6] = gg_rct_bigBotLeft
 		startPositions[7] = vec3(7000.,-600.,0)
+		spawnRects[7] = gg_rct_bigLeftBot
 		middle = vec2( gg_unit_h00E_0007.getX(), gg_unit_h00E_0007.getY() )
 	else
 		startPosCount = 3
+		
 		startPositions[0] = vec3(2549.,-700.,0)
+		spawnRects[0] = gg_rct_smallBot
 		startPositions[1] = vec3(-380,1200.,0)
+		spawnRects[1] = gg_rct_smallLeft
 		startPositions[2] = vec3(3600.,4100.,0)
+		spawnRects[2] = gg_rct_smallTop
 		startPositions[3] = vec3(4324.,2261.,0)
+		spawnRects[3] = gg_rct_smallRight
 		middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )
 	
 	

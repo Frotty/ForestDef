@@ -30,7 +30,6 @@ public class Builder extends UnitEntity
 		actor.setXYZReal(pos)
 
 	ondestroy
-		error("wtd")
 		pDatas[owner.getId()].builder = null
 
 

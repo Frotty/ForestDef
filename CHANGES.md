@@ -1,12 +1,21 @@
 0.18o
+[LIST]
+[*] =Fixes=
 [*] Supercharge item no longer changes repair auto-cast state.
-[*] Slightly reduced restock delay of all consumable items
-[*] Slightly increase effectiveness of reinforcements early and late game
 [*] Lumber dispersion is now disabled when there is only one player left
 [*] Fix builders not getting selected after pick
-[*] Builders now don't lose their items and controlgroup upon death anymore and are revived at the caster's position
-[*] Reduced selection scale for some creeps
 [*] Readded original start sound effects
+[*] Stop final wave timer when builders have lost
+[*] =Changes=
+[*] Builders now don't lose their items and controlgroup upon death anymore and are revived at the caster's position
+[*] Slightly reduced restock delay of all consumable items
+[*] Slightly increase effectiveness of reinforcements early and late game
+[*] Slightly increased jump distance and decreased jump speed for fourth boss
+[*] Reduced selection scale for some creeps
+[*] Creeps now spawn slightly random on each side instead of a fixed point
+[/LIST]
 
 0.18n
-[*] Initial Release
+[LIST]
+[*] Initial Release on THW
+[/LIST]

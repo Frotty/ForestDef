@@ -3,7 +3,6 @@ import PresetBuffs
 import SoundUtils
 import TextTagEntity
 import GameTimer
-import ClosureTimers
 import initlater PlayerData
 import initlater Selector
 import Assets
@@ -47,15 +46,14 @@ public class WarningBuff extends NormalBuff
 			lastSelect = currentTime
 
 		if dmg > target.actor.getHP()
-			print("prevent death")
 			modifyDamage(0)
 			if not dead
+				dead = true
 				let u = target.actor
 				let fat = pDatas[target.owner.getId()].fat
 				u..setHP(1.)
 				..setOwner(DUMMY_PLAYER, false)
 				..addAbility('Avul')
-				..setAnimation("death")
 				..pause()
 				..hide()..setTimeScale(0.0001)
 				createUnit(originalOwner, fat ? FAT_ID : SLIM_ID, u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
@@ -73,7 +71,8 @@ public class WarningBuff extends NormalBuff
 			..setTimeScale(fat ? 0.25 : 1.0)
 			..setHP(99999)
 			..show()
-			..setAnimation("birth")
+			..setAnimation("stand")
+			..queueAnimation("stand")
 			..removeAbility('Avul')
 			..setOwner(originalOwner, false)
 			target.owner..selectSingle(target.actor)

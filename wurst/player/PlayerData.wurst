@@ -3,6 +3,7 @@ import Wave
 import PhysicsProjectile
 import initlater Selector
 import Builder
+import ClosureTimers
 
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
@@ -15,7 +16,7 @@ public class PlayerData
 	int deaths = 0
 	Builder builder = null
 	Selector select = null
-	boolean fat
+	boolean fat = false
 	
 	construct(player p)
 		this.p = p
@@ -67,4 +68,3 @@ public function initPlayers()
 		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
 	
 	createTTEx(middle.toVec3() - vec3(80,0,0), "Item Shop", 17.5)
-

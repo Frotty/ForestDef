@@ -5,36 +5,32 @@ import WarningBuff
 import Assets
 import Projectile
 import ClosureTimers
+import ErrorHandling
 
 constant TOSS_ID = 'A02B'
 
 public class Builder extends UnitEntity
 
-	construct(vec3 pos, player owner, int id, boolean first)
-		super(createUnit( owner, id, pos, angle(0)))
-		if first
-			IssueImmediateOrder( actor, "repairon" )
-		owner.selectSingle(actor)
+	construct(vec3 pos, PlayerData owner, int id)
+		super(createUnit(owner.p, id, pos, angle(0)))
 		actor..addAbility(GHOST_VIS_ID)..addAbility('AInv')..addAbility('Ahrp')
 		
 		if id == FAT_ID
 			actor.setTimeScale(0.25)
-		if GetLocalPlayer() == owner
+		if GetLocalPlayer() == owner.p
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 			
+		actor.issueImmediateOrder("repairon")
+		owner.p.selectSingle(actor)
 		new WarningBuff().apply(this)
-		// EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
-			// if GetSpellAbilityId() == TOSS_ID
-			// 	new Ball(getPos(), owner, getSpellTargetPos())
-		// end)
 	
-	override function update()
 		if actor.getFlyHeight() > 1
 			vel += gravity
 		super.update()
 		actor.setXYZReal(pos)
 
 	ondestroy
+		error("wtd")
 		pDatas[owner.getId()].builder = null
 
 
@@ -63,6 +59,7 @@ class Ball extends FxEntity
 	construct(vec3 pos, player owner, vec2 target)
 		super(owner, pos, 32, pos.angleTo2d(target), Other.fireballmissile)
 		setVel(pos.angleTo2d(target).toVec(10).toVec3())
+		
 
 	override function update()
 		super.update()

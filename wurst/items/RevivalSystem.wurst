@@ -1,32 +1,24 @@
 package RevivalSystem
 import PlayerData
 import Event
-import Wave
+import Buff
+import ClosureTimers
 import Builder
 import Selector
+import PresetBuffs
 
-		
+
 public function initRevivalSystem()
-	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> begin
-		let u = GetTriggerUnit()
-		let owner = u.getOwner()
-		if u.getTypeId() == FAT_ID or u.getTypeId() == SLIM_ID
-			pDatas[owner.getId()].alive = false
-			pDatas[owner.getId()].deaths++
-			pDatas[owner.getId()].builder = null
-			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
-	end)
-	
 	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> begin
 		if GetItemTypeId(GetManipulatedItem()) == 'I007'
+			let reviver = pDatas[GetTriggerPlayer().getId()]
+			let revPos = reviver.builder.getPos().toVec2()
 			var s = ""
 			for pd in allPlayers
 				if not pd.alive
 					s += " " + pd.p.getNameColored()
-					if pd.fat
-						pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, FAT_ID, false)
-					else
-						pd.builder = new Builder(middle.toVec3().polarProject(50, GetRandomReal(0,1).asAngleRadians(), angle(0)), pd.p, SLIM_ID, false)
+					pd.builder.actor.setPos(revPos.polarOffset(GetRandomReal(0,1).asAngleRadians(), 64))
+					pd.builder.getBuffs().forEach((Buff b) -> b.refresh())
 					addEffect("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor.getPos() ).destr()
 					printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
 					pd.alive = true

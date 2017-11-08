@@ -1,31 +1,19 @@
 package SuperCharge
 import Event
-import TimerUtils
-import TypeCasting
+import Assets
+import ClosureTimers
 
 constant ITEM_ABILITY_ID = 'A01M'
 constant REPAIR_ID = 'Ahrp'
-constant SUPERREPAIR_ID = 'A01L'
 
 function charge()
 	let target = GetSpellTargetUnit()
-	if (GetSpellAbilityId() == ITEM_ABILITY_ID )
-		target.getOwner().setAbilityAvailable(SUPERREPAIR_ID, false)
-		target.removeAbility(REPAIR_ID)
-		target.addAbility(SUPERREPAIR_ID)
-		target.getOwner().setAbilityAvailable(SUPERREPAIR_ID, true)
-		addEffect("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl", target.getPos())
-		timer tim = getTimer()
-		tim.start(15. ,  function swapBack)
-		tim.setData(unitToIndex(target))
-	
-function swapBack()
-	let u = unitFromIndex(GetExpiredTimer().getData())
-	u.getOwner().setAbilityAvailable(REPAIR_ID, false)
-	u..removeAbility(SUPERREPAIR_ID)
-	..addAbility(REPAIR_ID)
-	u.getOwner().setAbilityAvailable(REPAIR_ID, true)
-	u.issueImmediateOrder("repairon")
+	if (GetSpellAbilityId() == ITEM_ABILITY_ID)
+		target.setAbilityLevel(REPAIR_ID, 2)
+		flashEffect(Other.manaflareboltimpact, target.getPos())
+		doAfter(15., () -> begin
+			target.setAbilityLevel(REPAIR_ID, 1)
+		end)
 	
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> charge())

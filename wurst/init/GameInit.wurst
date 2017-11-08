@@ -41,7 +41,8 @@ function start()
 		print("|cffFFCC00>>|r Editor Test Mode activated")
 	else
 		getTimer().start( 50., function spawn )
-	
+
+var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)	
 function spawn()
 	var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
 	var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
@@ -49,12 +50,22 @@ function spawn()
 	startSpawn()
 	GetExpiredTimer().release()
 	doAfter(7.75, () -> begin 
-		var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)
-		snd2.play()
-		doAfter(0.55, () -> snd2.play())
-		doAfter(13.25, () -> snd3.play())
+		let instance1 = snd2.play()
+		doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
+			pitch *= 0.99925
+			instance1.snd.setPitch(pitch)
+		end)
+		doAfter(0.55, () -> begin
+			let instance2 = snd2.play()
+			doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
+				instance2.snd.setPitch(pitch)
+			end)
+		end)
+		doAfter(14.25, () -> snd3.play())
+		
 	end)
 
+real pitch = 1.01
 init
 	getTimer().start( 0.025, function start )
 

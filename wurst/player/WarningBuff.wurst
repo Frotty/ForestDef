@@ -3,6 +3,10 @@ import PresetBuffs
 import SoundUtils
 import TextTagEntity
 import GameTimer
+import ClosureTimers
+import initlater PlayerData
+import initlater Selector
+import Assets
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
@@ -12,6 +16,9 @@ public class WarningBuff extends NormalBuff
 	real startedTime
 	real lastWarning
 	real lastSelect
+
+	boolean dead = false
+	player originalOwner
 	
 	construct()
 		super(9999, warningBuffAbil)
@@ -19,6 +26,10 @@ public class WarningBuff extends NormalBuff
 		lastWarning = currentTime
 		lastSelect = currentTime
 		
+	override function apply(UnitEntity target) 
+		super.apply(target)
+		originalOwner = target.owner
+	
 	override function defenseModifier()
 		let dmg = getDamage()
 		let pos = target.getPos()
@@ -34,4 +45,40 @@ public class WarningBuff extends NormalBuff
 			PanCameraToTimedForPlayer(target.owner, pos.x, pos.y, 0.25)
 			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
+
+		if dmg > target.actor.getHP()
+			print("prevent death")
+			modifyDamage(0)
+			if not dead
+				let u = target.actor
+				let fat = pDatas[target.owner.getId()].fat
+				u..setHP(1.)
+				..setOwner(DUMMY_PLAYER, false)
+				..addAbility('Avul')
+				..setAnimation("death")
+				..pause()
+				..hide()..setTimeScale(0.0001)
+				createUnit(originalOwner, fat ? FAT_ID : SLIM_ID, u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
+				let owner = target.owner
+				pDatas[owner.getId()].alive = false
+				pDatas[owner.getId()].deaths++
+				printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
+		
+	override function refresh(boolean forceRefresh)
+		super.refresh(forceRefresh)
+		if dead
+			let fat = pDatas[target.owner.getId()].fat
+			target.actor
+			..unpause()
+			..setTimeScale(fat ? 0.25 : 1.0)
+			..setHP(99999)
+			..show()
+			..setAnimation("birth")
+			..removeAbility('Avul')
+			..setOwner(originalOwner, false)
+			target.owner..selectSingle(target.actor)
+			..panCamToTimed(target.actor, 0.)
+			flashEffect(Other.revivehuman, target.actor.getPos())
+			dead = false
+
 		

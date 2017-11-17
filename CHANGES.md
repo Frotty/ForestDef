@@ -1,4 +1,10 @@
-0.18o
+0.18r
+[LIST]
+[*] Removed unused imports
+[*] Use colored nametags for selection
+[/LIST]
+
+0.18q
 [LIST]
 [*] =Fixes=
 [*] Supercharge item no longer changes repair auto-cast state.

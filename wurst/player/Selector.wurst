@@ -25,7 +25,7 @@ public class Selector extends UnitEntity
 
 	construct(vec3 ppos, player owner)
 		super(createUnit(owner, 'h023', middle.toVec3(), angle(0)))
-		ownerTag = createFText(ppos - vec3(20,25,0), owner.getName(), 12.5)
+		ownerTag = createFText(ppos - vec3(20,25,0), owner.getNameColored(), 12.5)
 		actor.setVertexColor(fromPlayerColor(owner.getColor()).withAlpha(255))
 		finalPos = ppos
 		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()

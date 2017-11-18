@@ -1,3 +1,10 @@
+0.18s
+[LIST]
+[*] Adjust rocket visuals
+[*] Fix final win message
+[*] 
+[/LIST]
+
 0.18r
 [LIST]
 [*] Removed unused imports

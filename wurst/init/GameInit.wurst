@@ -52,7 +52,7 @@ function spawn()
 	doAfter(7.75, () -> begin 
 		let instance1 = snd2.play()
 		doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
-			pitch *= 0.99925
+			pitch *= 0.99905
 			instance1.snd.setPitch(pitch)
 		end)
 		doAfter(0.55, () -> begin

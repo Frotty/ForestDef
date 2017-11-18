@@ -13,7 +13,7 @@ public class EndBoss extends Boss
 		actor.setHP(actor.getHP()/4.)
 
 	ondestroy
-		bosscount++
+		bosscount--
 		if bosscount <= 0
 			onVictory()
 

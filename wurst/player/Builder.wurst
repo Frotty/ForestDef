@@ -40,7 +40,7 @@ public function getPathingNormal(vec2 pos) returns vec2
 	for int i = 0 to numberOfTests-1
 		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
 		vec2 testPoint = pos + direction
-		let eff = addEffect(Other.bansheemissile, testPoint)
+		let eff = addEffect(Abilities.bansheeMissile, testPoint)
 		doAfter(1, () -> eff.destr())
 		if isTerrainWalkable(testPoint.x, testPoint.y)
 			addedVecs += direction
@@ -56,7 +56,7 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 class Ball extends FxEntity
 	
 	construct(vec3 pos, player owner, vec2 target)
-		super(owner, pos, 32, pos.angleTo2d(target), Other.fireballmissile)
+		super(owner, pos, 32, pos.angleTo2d(target), Abilities.fireBallMissile)
 		setVel(pos.angleTo2d(target).toVec(10).toVec3())
 		
 

@@ -35,7 +35,7 @@ class WaveMissile extends Projectile
 	unit tower
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
-		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Other.crushingwavemissile )
+		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Abilities.crushingWaveMissile )
 		setZAngle(angle(0))
 		this.tower = tower
 		setSpeed(speed)
@@ -64,7 +64,7 @@ class WaveMissile extends Projectile
 						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
-					addEffect(Other.gryphonridermissiletarget, u.getPos() ).destr()
+					addEffect(Abilities.gryphonRiderMissileTarget, u.getPos() ).destr()
 		super.update()	
 		
 	ondestroy

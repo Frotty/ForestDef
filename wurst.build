@@ -1,6 +1,5 @@
-!!file.WurstProjectConfig
-dependencies: ['https://github.com/wurstscript/wurstStdlib2', 'https://github.com/Frotty/Frentity']
 projectName: ForestDef2
-buildMapAuthor: Frotty
+dependencies: ['https://github.com/wurstscript/wurstStdlib2', 'https://github.com/Frotty/Frentity']
 buildMapName: Forest Defense 0.18r
 buildMapFileName: Forest_Defense_0.18r
+buildMapAuthor: Frotty

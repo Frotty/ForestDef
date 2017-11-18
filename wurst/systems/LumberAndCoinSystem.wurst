@@ -60,7 +60,7 @@ function grantCoins()
 			p.p.addGold(gold)
 			if p.builder.actor != null and p.builder.actor.isAlive()
 				createGoldBountyTextTag(p.builder.actor, gold)
-				flashEffect(Other.resourceeffecttarget, p.builder.getPos())
+				flashEffect(Abilities.resourceEffectTarget, p.builder.getPos())
 			
 public function initLumberSystem()
 	if allPlayers.getSize() <= 2

@@ -41,7 +41,7 @@ public class Selector extends UnitEntity
 				pd.fat = true
 				pd.builder.actor.addItem(PUDDING_ID)
 				if owner.getName() == "curryking" or owner.getName() == "crigges" or owner.getName().toLowerCase() == "waterknight"
-					let eff = addEffect(Other.plaguecloudtarget, pd.builder.getPos())
+					let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
 					doAfter(5, () -> eff.destr())
 					snd.playForPlayer(owner)
 			else if id == SLIM_SPELL_ID

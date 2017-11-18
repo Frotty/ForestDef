@@ -4,7 +4,8 @@ import TextTagEntity
 import GameTimer
 import Assets
 
-public buffTuple buffAbil = compiletime(createBuffObject("Shield Kit", "This unit is protected by a shield that absorbs damage", "BTNDivineIntervention.blp", Other.divineshieldtarget))
+public buffTuple buffAbil = compiletime(createBuffObject("Shield Kit", "This unit is protected by a shield that absorbs damage", 
+			"BTNDivineIntervention.blp", Abilities.divineShieldTarget))
 
 class ShieldKitBuff extends ShieldBuff
 	vec3 pos

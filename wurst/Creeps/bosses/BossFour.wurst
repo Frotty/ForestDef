@@ -25,7 +25,7 @@ public class JumpyBuff extends ShieldBuff
 		if target.actor.getFlyHeight() <= 1 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
 			and attacker.getPos3Real().distanceToSq(target.getPos()) > 42 and lastCast + 4. < getElapsedGameTime()
 			target.setTarget(GetEventDamageSource().getPos3Real(), 8)
-			addEffect(Other.roarcaster, target.getPos()).destr()
+			addEffect(Abilities.roarCaster, target.getPos()).destr()
 			lastCast = getElapsedGameTime()
 	
 public class BossFour extends Boss

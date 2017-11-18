@@ -77,7 +77,7 @@ public class WarningBuff extends NormalBuff
 			..setOwner(originalOwner, false)
 			target.owner..selectSingle(target.actor)
 			..panCamToTimed(target.actor, 0.)
-			flashEffect(Other.revivehuman, target.actor.getPos())
+			flashEffect(Abilities.reviveHuman, target.actor.getPos())
 			dead = false
 
 		

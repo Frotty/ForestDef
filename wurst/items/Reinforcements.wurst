@@ -11,7 +11,7 @@ public class Reinforcement extends UnitEntity
 
 	construct(vec2 pos, player owne, int id, angle angl)
 		super(createUnit(owne, id, pos, angl))
-		flashEffect(Other.massteleporttarget, pos)
+		flashEffect(Abilities.massTeleportTarget, pos)
 		actor.setTimedLife(60)
 
 public function onReinforcements() 

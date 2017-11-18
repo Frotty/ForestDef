@@ -10,7 +10,7 @@ function charge()
 	let target = GetSpellTargetUnit()
 	if (GetSpellAbilityId() == ITEM_ABILITY_ID)
 		target.setAbilityLevel(REPAIR_ID, 2)
-		flashEffect(Other.manaflareboltimpact, target.getPos())
+		flashEffect(Abilities.manaFlareBoltImpact, target.getPos())
 		doAfter(15., () -> begin
 			target.setAbilityLevel(REPAIR_ID, 1)
 		end)

@@ -18,7 +18,7 @@ public class PudgePowerBuff extends NormalBuff
 	override function attackModifier()
 		var target = GetTriggerUnit()
 		if target.getOwner() != players[8]
-			addEffect(Other.hcanceldeath, target.getPos()).destr()
+			addEffect(Objects.hCancelDeath, target.getPos()).destr()
 			modifyDamageBy(target.getMaxHP() * 0.30)
 			createTTEx(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255))
 		

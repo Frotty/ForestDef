@@ -6,6 +6,7 @@ import initlater TrooperTower
 import initlater StompingTower
 import initlater ThermoTower
 import initlater FlamethrowerTower
+import initlater Healback
 import initlater ArtilleryTower
 import ClosureTimers
 import Buff
@@ -49,6 +50,9 @@ public class Tower extends UnitEntity
 			case ART_TOWER_ID
 				this.actor.setEntity(null)
 				new ArtilleryTower(this)
+			case HEALBACK_TOWER_ID
+				this.actor.setEntity(null)
+				new HealbackTower(this)
 			default
 				printLog(Loglevel.TRACE, "upgrade not catched")
 		actor.issueImmediateOrder("stop")	

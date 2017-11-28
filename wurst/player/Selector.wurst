@@ -11,10 +11,15 @@ import Interpolation
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
+public constant ELVEN_ID = 'h029'
 public constant FAT_SPELL_ID = 'A01Y'
 public constant SLIM_SPELL_ID = 'A01X'
+public constant ELVEN_SPELL_ID = 'A01L'
 constant PUDDING_ID = 'I00B'
 constant ENERGY_ID = 'I00C'
+constant ROCK_ID = 'I00D'
+
+let snd = new SoundDefinition("Units\\Creeps\\Ogre\\OgrePissed5.wav", false)
 
 public class Selector extends UnitEntity
 	FText ownerTag
@@ -38,16 +43,17 @@ public class Selector extends UnitEntity
 			let pd = pDatas[owner.getId()]
 			if id == FAT_SPELL_ID
 				pd.builder = new Builder(actor.getPos3Zero(), pd, FAT_ID)
-				pd.fat = true
 				pd.builder.actor.addItem(PUDDING_ID)
-				if owner.getName() == "curryking" or owner.getName() == "crigges" or owner.getName().toLowerCase() == "waterknight"
+				if owner.getName().toLowerCase() == "cokemonkey11" or owner.getName().toLowerCase() == "waterknight"
 					let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
 					doAfter(5, () -> eff.destr())
 					snd.playForPlayer(owner)
 			else if id == SLIM_SPELL_ID
 				pd.builder = new Builder(actor.getPos3Zero(), pd, SLIM_ID)
-				pd.fat = false
 				pd.builder.actor.addItem(ENERGY_ID)
+			else if id == ELVEN_SPELL_ID
+				pd.builder = new Builder(actor.getPos3Zero(), pd, ELVEN_ID)
+				pd.builder.actor.addItem(ROCK_ID)
 			terminate()
 			pd.select = null
 			pd.builder.actor.addItem(ROCKET_ITEM_ID)
@@ -68,4 +74,4 @@ public class Selector extends UnitEntity
 		destroy ownerTag
 		pDatas[owner.getId()].select = null
 
-SoundDefinition snd = new SoundDefinition("Units\\Creeps\\Ogre\\OgrePissed5.wav", false)
+

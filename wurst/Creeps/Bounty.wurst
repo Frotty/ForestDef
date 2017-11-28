@@ -2,7 +2,7 @@ package Bounty
 import FText
 
 //TEXTTAG CONFIGURATION
-constant TEXTTAG_TEXTSIZE  = 0.024  //The size of the texttag text.
+constant TEXTTAG_TEXTSIZE  = 0.024/0.0023  //The size of the texttag text.
 constant TEXTTAG_VELOCITY  = .03//Texttag's velocity.
 constant TEXTTAG_LIFESPAN  = 3.  //Texttag's lifespan.
 constant TEXTTAG_FADEPOINT = 2.  //Texttag's fading point.

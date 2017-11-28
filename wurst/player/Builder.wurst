@@ -10,7 +10,6 @@ import ErrorHandling
 constant TOSS_ID = 'A02B'
 
 public class Builder extends UnitEntity
-
 	construct(vec3 pos, PlayerData owner, int id)
 		super(createUnit(owner.p, id, pos, angle(0)))
 		actor..addAbility(GHOST_VIS_ID)..addAbility('AInv')..addAbility('Ahrp')

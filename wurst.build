@@ -1,5 +1,5 @@
 projectName: ForestDef2
 dependencies: ['https://github.com/wurstscript/wurstStdlib2', 'https://github.com/Frotty/Frentity']
-buildMapName: Forest Defense 0.18r
-buildMapFileName: Forest_Defense_0.18r
+buildMapName: Forest Defense 0.18s
+buildMapFileName: Forest_Defense_0.18s
 buildMapAuthor: Frotty

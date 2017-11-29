@@ -66,8 +66,8 @@ public class HealbackTower extends Tower
 
 
 
-constant real HEALBACK_RADIUS = 12.
-constant string HEALBACK_EFFECT = "Abilities\\Spells\\Human\\Heal\\HealTarget.mdl"
+constant real HEALBACK_RADIUS = 32.
+constant string HEALBACK_EFFECT = "Abilities\\Spells\\Orc\\EtherealForm\\SpiritWalkerChange.mdl"
 constant string HEALBACK_MISSILE_EFFECT = "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl"
 
 public class HealbackMissile extends Projectile
@@ -78,15 +78,12 @@ public class HealbackMissile extends Projectile
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos()), HEALBACK_MISSILE_EFFECT)
 		this.heal = heal
 		this.target = target
-		setSpeed(30.)
-		setZAngle((-20).asAngleDegrees())
-		vel.z = -getSpeed() * 0.3
 
 	override function update()
+		super.update()
 		if (pos.distanceTo2d(target.pos) < HEALBACK_RADIUS)
 			onReachTarget()
 			terminate()
-		super.update()
  
 	function onReachTarget()
 		if (this.target != null and this.target.actor.isAlive())

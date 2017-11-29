@@ -1,0 +1,90 @@
+package HealbackTower
+import Tower
+import Projectile
+import PlayerData
+
+public constant int HEALBACK_TOWER_ID = 'h01K'
+
+public class HealbackTower extends Tower
+	real range = 800.
+	real healRatio = 0.5
+	int level = 1
+
+	construct(Tower t)
+		super(t)
+
+	function getHealFromDamage(real damage) returns real
+		return damage * healRatio
+	
+	function getNearestBuilding(vec2 source) returns Entity
+		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, this.range, Filter(() -> begin
+			var u = GetFilterUnit()
+			var viable = true
+			// filter structureds
+			if not IsUnitType(u, UNIT_TYPE_STRUCTURE) or not u.isAlive()
+				viable = false
+			
+			// filter player owner
+			if viable and pDatas[u.getOwner().getId()] == null
+				viable = false
+			
+			// filter if wall or tower building
+			if viable
+				var e = u.getEntity()
+				if not (e instanceof Wall or e instanceof Tower)
+					viable = false
+			return viable
+		end))
+		unit nearest = null
+		var nearestDist = 999999.
+		for u from ENUM_GROUP
+			let dist = source.distanceTo(u.getPos())
+			if dist < nearestDist
+				nearestDist = dist
+				nearest = u
+
+		if nearest == null
+			Log.info("No Healback Target")
+		let entity = nearest.getEntity()
+		return entity
+
+	override function onUpgrade()
+		level++
+
+	function launchHealback(UnitEntity attacked, real damage)
+		// Find nearest friendly building
+		var creepPos = attacked.getPos()
+		real heal = this.getHealFromDamage(damage)
+		UnitEntity target = this.getNearestBuilding(creepPos.toVec2()) castTo UnitEntity
+		if not target == null
+			new HealbackMissile(creepPos, owner, heal, target)
+
+	override function onAttack(UnitEntity target)
+		var damage = getDamage()
+		launchHealback(target, damage)
+
+
+
+constant real HEALBACK_RADIUS = 12.
+constant string HEALBACK_EFFECT = "Abilities\\Spells\\Human\\Heal\\HealTarget.mdl"
+constant string HEALBACK_MISSILE_EFFECT = "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl"
+
+public class HealbackMissile extends Projectile
+	real heal
+	UnitEntity target
+
+	construct(vec3 pos, player owner, real heal, UnitEntity target)
+		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos()), HEALBACK_MISSILE_EFFECT)
+		this.heal = heal
+		this.target = target
+
+	override function update()
+		super.update()
+		if (pos.distanceTo2d(target.pos) < HEALBACK_RADIUS)
+			onReachTarget()
+			terminate()
+ 
+	function onReachTarget()
+		if (this.target != null and this.target.actor.isAlive())
+			addEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50)).destr()
+			this.target.actor.addHP(this.heal)

@@ -6,7 +6,6 @@ import initlater TrooperTower
 import initlater StompingTower
 import initlater HealbackTower
 import initlater FlamethrowerTower
-import initlater Healback
 import initlater ArtilleryTower
 import ClosureTimers
 import Buff

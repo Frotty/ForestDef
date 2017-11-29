@@ -66,7 +66,7 @@ public class HealbackTower extends Tower
 
 
 constant real HEALBACK_RADIUS = 32.
-constant string HEALBACK_EFFECT = "Abilities\\Spells\\Orc\\EtherealForm\\SpiritWalkerChange.mdl"
+constant string HEALBACK_EFFECT = "Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl"
 constant string HEALBACK_MISSILE_EFFECT = "Abilities\\Weapons\\FaerieDragonMissile\\FaerieDragonMissile.mdl"
 
 public class HealbackMissile extends Projectile
@@ -78,6 +78,7 @@ public class HealbackMissile extends Projectile
 		this.heal = heal
 		this.target = target
 		this.setTarget(target.getPos(), 30.)
+		this.fx.setColor(colorA(255, 255, 255, 168))
 
 	override function update()
 		super.update()

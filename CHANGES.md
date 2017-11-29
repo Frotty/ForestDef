@@ -2,7 +2,7 @@
 [LIST]
 [*] Adjust rocket visuals
 [*] Fix final win message
-[*] 
+[*] Slightly buff archer attacks
 [/LIST]
 
 0.18r

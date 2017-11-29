@@ -7,8 +7,12 @@ import ClosureTimers
 
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
-public boolean bigArena 
-
+public boolean bigArena
+public enum BuilderType
+	SLIM
+	FAT
+	ELVEN
+	
 public class PlayerData
 	player p
 	int kills = 0
@@ -16,7 +20,7 @@ public class PlayerData
 	int deaths = 0
 	Builder builder = null
 	Selector select = null
-	boolean fat = false
+	BuilderType btype
 	
 	construct(player p)
 		this.p = p

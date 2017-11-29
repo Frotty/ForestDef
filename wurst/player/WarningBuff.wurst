@@ -50,13 +50,12 @@ public class WarningBuff extends NormalBuff
 			if not dead
 				dead = true
 				let u = target.actor
-				let fat = pDatas[target.owner.getId()].fat
 				u..setHP(1.)
 				..setOwner(DUMMY_PLAYER, false)
 				..addAbility('Avul')
 				..pause()
 				..hide()..setTimeScale(0.0001)
-				createUnit(originalOwner, fat ? FAT_ID : SLIM_ID, u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
+				createUnit(originalOwner, target.actor.getTypeId(), u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
 				let owner = target.owner
 				pDatas[owner.getId()].alive = false
 				pDatas[owner.getId()].deaths++
@@ -65,10 +64,10 @@ public class WarningBuff extends NormalBuff
 	override function refresh(boolean forceRefresh)
 		super.refresh(forceRefresh)
 		if dead
-			let fat = pDatas[target.owner.getId()].fat
+			let bty = pDatas[target.owner.getId()].btype
 			target.actor
 			..unpause()
-			..setTimeScale(fat ? 0.25 : 1.0)
+			..setTimeScale(bty == BuilderType.FAT ? 0.25 : 1.0)
 			..setHP(99999)
 			..show()
 			..setAnimation("stand")

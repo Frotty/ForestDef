@@ -4,6 +4,7 @@ import Boss
 constant ENBOSS_ID = 'n00L'
 
 var bosscount = 0
+constant m = new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3")
 
 public class EndBoss extends Boss
 
@@ -46,6 +47,3 @@ class Music
 		this.duration = GetSoundFileDuration(path) / 1000.
 		this.name = path.substring(path.lastIndexOf("\\") + 1, path.lastIndexOf("."))
 		
-Music m
-init
-	m = new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3")

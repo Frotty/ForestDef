@@ -1,8 +1,6 @@
 package TrooperTower
-import TerrainUtils
 import Tower
 import public Entity
-import LinkedList 
 
 constant DUMMY_DIST = 15.
 public constant TOWER_TROOPER_ID = 'h01E'

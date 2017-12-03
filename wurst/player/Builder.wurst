@@ -5,7 +5,6 @@ import WarningBuff
 import Assets
 import Projectile
 import ClosureTimers
-import ErrorHandling
 
 constant TOSS_ID = 'A02B'
 

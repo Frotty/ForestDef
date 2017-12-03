@@ -1,9 +1,7 @@
 package Tower
 import public Entity
 import initlater WaveTower
-import initlater AssassinTower
 import initlater TrooperTower
-import initlater StompingTower
 import initlater HealbackTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower

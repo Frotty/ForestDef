@@ -4,7 +4,6 @@ import SoundUtils
 import TextTagEntity
 import GameTimer
 import initlater PlayerData
-import initlater Selector
 import Assets
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)

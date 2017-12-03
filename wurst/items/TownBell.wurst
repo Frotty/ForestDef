@@ -10,6 +10,8 @@ constant TOWER_ID = 'h025'
 constant DUMMY_ID = 'h00D'
 constant SPELL_DURATION = 30.0
 
+constant snd = new SoundDefinition(Sounds.humanCallToArmsWhat1, false)
+
 player lastRinger
 int usages = 0
 
@@ -37,12 +39,7 @@ public function onTownBell()
 	
 	usages++
 			
-
-
-SoundDefinition snd
-
 public function initTownBell()
-	snd = new SoundDefinition("Abilities\\Spells\\Human\\CallToArms\\HumanCallToArmsWhat1.wav", false)
 	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
 			GetManipulatedItem().remove()

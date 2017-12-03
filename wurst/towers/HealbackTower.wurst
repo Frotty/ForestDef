@@ -90,7 +90,6 @@ public class HealbackBuff extends NormalBuff
 			target.newBuffs()
 		for bff in target.getBuffs()
 			if bff.typeId == this.typeId
-				bff.duration = duration
 				var healBuff = bff castTo HealbackBuff
 				healBuff.addHit(this.damage)
 				this.target = null

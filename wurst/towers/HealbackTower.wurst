@@ -10,18 +10,14 @@ import BuffObjEditing
 import ObjectIds
 import TextTagEntity
 
-public constant int HEALBACK_TOWER_ID = 'h01K'
+public constant int HEALBACK_TOWER_ID = 'h02A'
 public constant real HEALBACK_RANGE = 800.
 
 public class HealbackTower extends Tower
-	real healRatio = 0.5
 	int level = 1
 
 	construct(Tower t)
 		super(t)
-
-	function getHealFromDamage(real damage) returns real
-		return damage * healRatio
 	
 	static function getNearestBuilding(vec2 source) returns Entity
 		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, HEALBACK_RANGE, Filter(() -> begin
@@ -40,6 +36,9 @@ public class HealbackTower extends Tower
 				var e = u.getEntity()
 				if not (e instanceof Wall or e instanceof Tower)
 					viable = false
+				// filter out full hp
+				if u.getHP() == u.getMaxHP()
+					viable = false
 			return viable
 		end))
 		unit nearest = null
@@ -51,7 +50,7 @@ public class HealbackTower extends Tower
 				nearest = u
 
 		if nearest == null
-			Log.info("No Healback Target")
+			Log.debug("No Healback Target")
 		let entity = nearest.getEntity()
 		return entity
 
@@ -60,14 +59,15 @@ public class HealbackTower extends Tower
 
 	function launchHealback(UnitEntity attacked, real damage)
 		var creepPos = attacked.getPos()
-		real heal = this.getHealFromDamage(damage)
 		UnitEntity target = HealbackTower.getNearestBuilding(creepPos.toVec2()) castTo UnitEntity
 		if not target == null
-			new HealbackMissile(creepPos, owner, heal, target)
+			new HealbackMissile(creepPos, owner, damage, target)
 
 	override function onAttack(UnitEntity target)
 		var damage = getDamage()
-		new HealbackBuff(target, damage)
+		if damage > 0
+			// new HealbackBuff(target, damage)
+			launchHealback(target, damage)
 
 public constant HEALBACK_DURATION = 3.
 public buffTuple healbackBuffAbil = compiletime(createBuffObjectWithAttachmentPoint("Holy Presence", "This unit is being drained by a holy presence. Holy damage dealt to it will be healed back to allies", 

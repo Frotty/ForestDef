@@ -13,13 +13,25 @@ import TextTagEntity
 public constant int HEALBACK_TOWER_ID = 'h02A'
 public constant real HEALBACK_RANGE = 800.
 
+tuple HealbackTarget(UnitEntity e, real distance)
+
 public class HealbackTower extends Tower
 	int level = 1
+	real multiplier = 1.
+	int missileCount = 1
 
 	construct(Tower t)
 		super(t)
+
+	static function getMultiplier(int level) returns real
+		real array multipliers = [2, 1.8, 3, 4.5]
+		return multipliers[level - 1]
 	
-	static function getNearestBuilding(vec2 source) returns Entity
+	static function getMissileCount(int level) returns int
+		int array multipliers = [1, 2, 2, 3]
+		return multipliers[level - 1]
+	
+	static function getNearestBuilding(vec2 source, int count) returns LinkedList<UnitEntity>
 		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, HEALBACK_RANGE, Filter(() -> begin
 			var u = GetFilterUnit()
 			var viable = true
@@ -41,33 +53,59 @@ public class HealbackTower extends Tower
 					viable = false
 			return viable
 		end))
-		unit nearest = null
+
 		var nearestDist = 999999.
+		var nearest = new LinkedList<UnitEntity>()
 		for u from ENUM_GROUP
 			let dist = source.distanceTo(u.getPos())
-			if dist < nearestDist
-				nearestDist = dist
-				nearest = u
+			if (nearest.getSize() < count )
+				// Add units, keep whichever distance is bigger.
+				nearestDist = dist > nearestDist ? dist : nearestDist
+				nearest.push(u.getEntity() castTo UnitEntity)
+			if (dist < nearestDist)
+				// Need to find the farthest from the near units.
+				// Need to find the farthest distance after that unit is removed (secondFarthest)
+				var farthestIndex = 0
+				var farthest = source.distanceTo(nearest.get(farthestIndex).getPos().toVec2())
+				var secondFarthest = -1.
+				for i = 1 to nearest.getSize() - 1
+					var current = source.distanceTo(nearest.get(i).getPos().toVec2())
+					if current > farthest
+						farthestIndex = i
+						secondFarthest = farthest
+						farthest = current
+					else if secondFarthest < 0 or current > secondFarthest
+						secondFarthest = current
 
-		if nearest == null
-			Log.debug("No Healback Target")
-		let entity = nearest.getEntity()
-		return entity
+				// Remove farthest unit, set distance to new farthest. Add new unit.
+				nearest.removeAt(farthestIndex)
+				nearestDist = dist > secondFarthest ? dist : secondFarthest
+				nearest.push(u.getEntity() castTo UnitEntity)
+
+		var targets = new LinkedList<UnitEntity>()
+		var foundCount = nearest.getSize()
+		if (foundCount > 0)
+			for i = 0 to count
+				targets.push(nearest.get(i mod foundCount))
+		return targets
 
 	override function onUpgrade()
 		level++
+		multiplier = HealbackTower.getMultiplier(level)
+		missileCount = HealbackTower.getMissileCount(level)
 
 	function launchHealback(UnitEntity attacked, real damage)
 		var creepPos = attacked.getPos()
-		UnitEntity target = HealbackTower.getNearestBuilding(creepPos.toVec2()) castTo UnitEntity
-		if not target == null
+
+		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), this.missileCount)
+		for target in targets
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 
 	override function onAttack(UnitEntity target)
 		var damage = getDamage()
 		if damage > 0
 			// new HealbackBuff(target, damage)
-			launchHealback(target, damage)
+			launchHealback(target, damage * this.multiplier)
 
 public constant HEALBACK_DURATION = 3.
 public buffTuple healbackBuffAbil = compiletime(createBuffObjectWithAttachmentPoint("Holy Presence", "This unit is being drained by a holy presence. Holy damage dealt to it will be healed back to allies", 
@@ -106,9 +144,9 @@ public class HealbackBuff extends NormalBuff
 
 	function triggerHealback()
 		var currentPos = this.target.getPos()
-		UnitEntity target = HealbackTower.getNearestBuilding(currentPos.toVec2()) castTo UnitEntity
-		if not target == null
-			new HealbackMissile(currentPos, this.target.owner, this.getHeal(), target)
+		var targets = HealbackTower.getNearestBuilding(currentPos.toVec2(), 1)
+		if not targets.getSize() >= 1
+			new HealbackMissile(currentPos, this.target.owner, this.getHeal(), targets.get(0))
 		this.hitCount = 0
 		this.damage = 0
 

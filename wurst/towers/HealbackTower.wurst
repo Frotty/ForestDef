@@ -11,7 +11,9 @@ import ObjectIds
 import TextTagEntity
 
 public constant int HEALBACK_TOWER_ID = 'h02A'
-public constant real HEALBACK_RANGE = 800.
+constant real array HEALBACK_MULTIPLIERS = [2, 1.5, 2, 4]
+constant int array HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
+constant real array HEALBACK_RANGES = [800., 850., 1000., 1100.]
 
 tuple HealbackTarget(UnitEntity e, real distance)
 
@@ -19,20 +21,25 @@ public class HealbackTower extends Tower
 	int level = 1
 	real multiplier = 1.
 	int missileCount = 1
+	real healbackRange = 800.
 
 	construct(Tower t)
 		super(t)
+		multiplier = HealbackTower.getMultiplier(level)
+		missileCount = HealbackTower.getMissileCount(level)
+		healbackRange = HealbackTower.getRange(level)
 
 	static function getMultiplier(int level) returns real
-		real array multipliers = [2, 1.8, 3, 4.5]
-		return multipliers[level - 1]
+		return HEALBACK_MULTIPLIERS[level - 1]
 	
 	static function getMissileCount(int level) returns int
-		int array multipliers = [1, 2, 2, 3]
-		return multipliers[level - 1]
+		return HEALBACK_MISSILE_COUNTS[level - 1]
+
+	static function getRange(int level) returns real
+		return HEALBACK_RANGES[level - 1]
 	
-	static function getNearestBuilding(vec2 source, int count) returns LinkedList<UnitEntity>
-		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, HEALBACK_RANGE, Filter(() -> begin
+	static function getNearestBuilding(vec2 source, int count, real range) returns LinkedList<UnitEntity>
+		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, range, Filter(() -> begin
 			var u = GetFilterUnit()
 			var viable = true
 			// filter structureds
@@ -93,11 +100,12 @@ public class HealbackTower extends Tower
 		level++
 		multiplier = HealbackTower.getMultiplier(level)
 		missileCount = HealbackTower.getMissileCount(level)
+		healbackRange = HealbackTower.getRange(level)
 
 	function launchHealback(UnitEntity attacked, real damage)
 		var creepPos = attacked.getPos()
 
-		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), this.missileCount)
+		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), this.missileCount, this.healbackRange)
 		for target in targets
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 
@@ -106,55 +114,6 @@ public class HealbackTower extends Tower
 		if damage > 0
 			// new HealbackBuff(target, damage)
 			launchHealback(target, damage * this.multiplier)
-
-public constant HEALBACK_DURATION = 3.
-public buffTuple healbackBuffAbil = compiletime(createBuffObjectWithAttachmentPoint("Holy Presence", "This unit is being drained by a holy presence. Holy damage dealt to it will be healed back to allies", 
-			"BTNHolyBolt.blp", Abilities.procMissile, "chest"))
-
-public class HealbackBuff extends NormalBuff
-	int hitCount
-	real damage
-
-	construct(UnitEntity target, real damage)
-		super(HEALBACK_DURATION, healbackBuffAbil)
-		this.hitCount = 1
-		this.damage = damage
-		this.apply(target)
-
-	override function apply(UnitEntity target)
-		this.target = target
-		if not target.hasBuffs()
-			target.newBuffs()
-		for bff in target.getBuffs()
-			if bff.typeId == this.typeId
-				var healBuff = bff castTo HealbackBuff
-				healBuff.addHit(this.damage)
-				this.target = null
-				terminate()
-				return
-		target.addBuff(this)
-		refresh()
-
-	function addHit(real damage)
-		this.hitCount ++
-		this.damage += damage
-		
-	function getHeal() returns real
-		return damage
-
-	function triggerHealback()
-		var currentPos = this.target.getPos()
-		var targets = HealbackTower.getNearestBuilding(currentPos.toVec2(), 1)
-		if not targets.getSize() >= 1
-			new HealbackMissile(currentPos, this.target.owner, this.getHeal(), targets.get(0))
-		this.hitCount = 0
-		this.damage = 0
-
-	override function onEnd()
-		if this.target != null and hitCount > 0
-			triggerHealback()
-		super.onEnd()
-
 
 constant real HEALBACK_RADIUS = 32.
 constant string HEALBACK_EFFECT = Abilities.vampiricAuraTarget

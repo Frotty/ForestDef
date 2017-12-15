@@ -10,18 +10,18 @@ import BuffObjEditing
 import ObjectIds
 import TextTagEntity
 
-public constant int HEALBACK_TOWER_ID = 'h02A'
-constant real array HEALBACK_MULTIPLIERS = [2, 1.5, 2, 4]
-constant int array HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
-constant real array HEALBACK_RANGES = [800., 850., 1000., 1100.]
+public constant HEALBACK_TOWER_ID = 'h02A'
+constant HEALBACK_MULTIPLIERS = [2., 1.5, 2., 4.]
+constant HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
+constant HEALBACK_RANGES = [800., 850., 1000., 1100.]
 
 tuple HealbackTarget(UnitEntity e, real distance)
 
 public class HealbackTower extends Tower
-	int level = 1
-	real multiplier = 1.
-	int missileCount = 1
-	real healbackRange = 800.
+	var level = 1
+	var multiplier = 1.
+	var missileCount = 1
+	var healbackRange = 800.
 
 	construct(Tower t)
 		super(t)
@@ -103,11 +103,13 @@ public class HealbackTower extends Tower
 		healbackRange = HealbackTower.getRange(level)
 
 	function launchHealback(UnitEntity attacked, real damage)
-		var creepPos = attacked.getPos()
+		var creepPos = attacked.actor.getPos3Real()
 
 		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), this.missileCount, this.healbackRange)
 		for target in targets
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
+
+		destroy targets
 
 	override function onAttack(UnitEntity target)
 		var damage = getDamage()
@@ -127,7 +129,7 @@ public class HealbackMissile extends Projectile
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), HEALBACK_MISSILE_EFFECT)
 		this.heal = heal
 		this.target = target
-		this.setTarget(target.getPos().add(0, 0, 32), 20.)
+		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 18.)
 		fx.setColor(colorA(215, 255, 215, 168))
 
 	override function update()
@@ -139,7 +141,7 @@ public class HealbackMissile extends Projectile
  
 	function onReachTarget()
 		if (this.target != null and this.target.actor.isAlive())
-			addEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50)).destr()
+			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))
 			this.target.actor.addHP(this.heal)
 			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), this.heal.toInt().toString() , 8, 1., colorA(223, 255, 52, 255))
 

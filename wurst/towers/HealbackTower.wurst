@@ -117,9 +117,9 @@ public class HealbackTower extends Tower
 			// new HealbackBuff(target, damage)
 			launchHealback(target, damage * this.multiplier)
 
-constant real HEALBACK_RADIUS = 32.
-constant string HEALBACK_EFFECT = Abilities.vampiricAuraTarget
-constant string HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
+constant HEALBACK_RADIUS = 32.
+constant HEALBACK_EFFECT = Abilities.vampiricAuraTarget
+constant HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
 
 public class HealbackMissile extends Projectile
 	real heal

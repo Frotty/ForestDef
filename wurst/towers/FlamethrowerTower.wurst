@@ -7,10 +7,10 @@ public constant real AOE_RADIUS = 48.
 public constant int FLAMETHROWER_ID = 'h01C'
 
 function getDamage(int level) returns real
-	return 7. + 4.75 * level
+	return 9. + 5.75 * level
 	
 function getSpeed(int level) returns real
-	return 6.25 + level * 1.5
+	return 6.45 + level * 1.55
 
 public class FlamethrowerTower extends Tower
 	int level = 1
@@ -18,8 +18,7 @@ public class FlamethrowerTower extends Tower
 		super(t)
 		
 	override function onAttack(UnitEntity ud)
-		for i = 0 to level
-			new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
+		new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
 			
 			
 	override function onUpgrade()
@@ -34,11 +33,11 @@ class FlameMissile extends Projectile
 	group affected
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
-		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.175,0.175)).asAngleRadians(), FX_PATH )
+		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.025,0.025)).asAngleRadians(), FX_PATH )
 		fx.setScale(0.2)
-		setSpeed(speed + GetRandomReal(-1.5, 1.5))
-		setRanged(712)
-		setAcc(1.0175 + GetRandomReal(-0.005, 0.0075))
+		setSpeed(speed + GetRandomReal(-0.5, 0.5))
+		setRanged(712 + GetRandomReal(-5, 5))
+		setAcc(1.0195 + GetRandomReal(-0.0025, 0.0075))
 		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
 		fx.setScale(0.75)
 		this.level = level

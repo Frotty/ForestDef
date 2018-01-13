@@ -16,6 +16,7 @@ public class EndBoss extends Boss
 		super(pos, typId, bounty, target)
 		doPeriodically(this.castInterval, (CallbackPeriodic cb) -> begin
 			print("Casting Blockade")
+			// switch to random ability, add conditions for 
 			this.tryCastTowerBlockade()
 		end)
 

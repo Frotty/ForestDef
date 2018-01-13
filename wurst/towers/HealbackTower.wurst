@@ -3,31 +3,20 @@ import Assets
 import Tower
 import Projectile
 import PlayerData
-import PresetBuffs
-import ObjectIdGenerator
-import AbilityObjEditing
-import BuffObjEditing
-import ObjectIds
 import TextTagEntity
 
-public constant int HEALBACK_TOWER_ID = 'h02A'
-constant real array HEALBACK_MULTIPLIERS = [2, 1.5, 2, 4]
-constant int array HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
-constant real array HEALBACK_RANGES = [800., 850., 1000., 1100.]
+public constant HEALBACK_TOWER_ID = 'h02A'
+constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.85]
+constant HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
+constant HEALBACK_RANGES = [850., 875., 925., 975.]
 
 tuple HealbackTarget(UnitEntity e, real distance)
 
 public class HealbackTower extends Tower
-	int level = 1
-	real multiplier = 1.
-	int missileCount = 1
-	real healbackRange = 800.
+	var level = 1
 
 	construct(Tower t)
 		super(t)
-		multiplier = HealbackTower.getMultiplier(level)
-		missileCount = HealbackTower.getMissileCount(level)
-		healbackRange = HealbackTower.getRange(level)
 
 	static function getMultiplier(int level) returns real
 		return HEALBACK_MULTIPLIERS[level - 1]
@@ -38,7 +27,11 @@ public class HealbackTower extends Tower
 	static function getRange(int level) returns real
 		return HEALBACK_RANGES[level - 1]
 	
+	static constant nearEntities = new LinkedList<EntityWithDist>()
+	static var statSource = ZERO2
+	static Comparator<EntityWithDist> comparator = (EntityWithDist e1, EntityWithDist e2) -> e1.distSq - e2.distSq
 	static function getNearestBuilding(vec2 source, int count, real range) returns LinkedList<UnitEntity>
+		statSource = source
 		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, range, Filter(() -> begin
 			var u = GetFilterUnit()
 			var viable = true
@@ -58,55 +51,29 @@ public class HealbackTower extends Tower
 				// filter out full hp
 				if u.getHP() == u.getMaxHP()
 					viable = false
-			return viable
+			if viable
+				nearEntities.add(new EntityWithDist(u.getEntity() castTo UnitEntity, statSource.distanceToSq(u.getPos())))
 		end))
 
-		var nearestDist = 999999.
-		var nearest = new LinkedList<UnitEntity>()
-		for u from ENUM_GROUP
-			let dist = source.distanceTo(u.getPos())
-			if (nearest.getSize() < count )
-				// Add units, keep whichever distance is bigger.
-				nearestDist = dist > nearestDist ? dist : nearestDist
-				nearest.push(u.getEntity() castTo UnitEntity)
-			if (dist < nearestDist)
-				// Need to find the farthest from the near units.
-				// Need to find the farthest distance after that unit is removed (secondFarthest)
-				var farthestIndex = 0
-				var farthest = source.distanceTo(nearest.get(farthestIndex).getPos().toVec2())
-				var secondFarthest = -1.
-				for i = 1 to nearest.getSize() - 1
-					var current = source.distanceTo(nearest.get(i).getPos().toVec2())
-					if current > farthest
-						farthestIndex = i
-						secondFarthest = farthest
-						farthest = current
-					else if secondFarthest < 0 or current > secondFarthest
-						secondFarthest = current
-
-				// Remove farthest unit, set distance to new farthest. Add new unit.
-				nearest.removeAt(farthestIndex)
-				nearestDist = dist > secondFarthest ? dist : secondFarthest
-				nearest.push(u.getEntity() castTo UnitEntity)
-
+		nearEntities.sortWith(comparator)
+		
 		var targets = new LinkedList<UnitEntity>()
-		var foundCount = nearest.getSize()
-		if (foundCount > 0)
-			for i = 0 to count
-				targets.push(nearest.get(i mod foundCount))
-		destroy nearest
+		nearEntities.forEach((EntityWithDist e) -> begin
+			if targets.size() < count
+				targets.add(e.ue) 
+			destroy e
+		end)
+		
+		nearEntities.clear()
 		return targets
 
 	override function onUpgrade()
 		level++
-		multiplier = HealbackTower.getMultiplier(level)
-		missileCount = HealbackTower.getMissileCount(level)
-		healbackRange = HealbackTower.getRange(level)
 
 	function launchHealback(UnitEntity attacked, real damage)
-		var creepPos = attacked.getPos()
+		var creepPos = attacked.actor.getPos3Real()
 
-		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), this.missileCount, this.healbackRange)
+		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), getMissileCount(level), getRange(level))
 		for target in targets
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 		destroy targets
@@ -115,11 +82,18 @@ public class HealbackTower extends Tower
 		var damage = getDamage()
 		if damage > 0
 			// new HealbackBuff(target, damage)
-			launchHealback(target, damage * this.multiplier)
+			launchHealback(target, damage * getMultiplier(level))
 
-constant real HEALBACK_RADIUS = 32.
-constant string HEALBACK_EFFECT = Abilities.vampiricAuraTarget
-constant string HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
+class EntityWithDist
+	UnitEntity ue
+	int distSq
+	construct(UnitEntity ue, real dist)
+		this.ue = ue
+		this.distSq = dist.toInt()
+
+constant HEALBACK_RADIUS = 32.
+constant HEALBACK_EFFECT = Abilities.vampiricAuraTarget
+constant HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
 
 public class HealbackMissile extends Projectile
 	real heal
@@ -127,9 +101,10 @@ public class HealbackMissile extends Projectile
 
 	construct(vec3 pos, player owner, real heal, UnitEntity target)
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), HEALBACK_MISSILE_EFFECT)
+		fx.setColor(colorA(0, 255, 0, 255))
 		this.heal = heal
 		this.target = target
-		this.setTarget(target.getPos().add(0, 0, 32), 20.)
+		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 19.5)
 		fx.setColor(colorA(215, 255, 215, 168))
 
 	override function update()
@@ -141,31 +116,6 @@ public class HealbackMissile extends Projectile
  
 	function onReachTarget()
 		if (this.target != null and this.target.actor.isAlive())
-			addEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50)).destr()
+			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))
 			this.target.actor.addHP(this.heal)
-			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), this.heal.toInt().toString() , 8, 1., colorA(223, 255, 52, 255))
-
-
-/** Creates an ability based on Tornado aura that allows to display a buff without side effects */
-public function createBuffObjectWithAttachmentPoint(string name, string tooltip, string iconpath, string effectPath, string attachmentPoint) returns buffTuple
-	let abilId = ABIL_ID_GEN.next()
-	let buffId = BUFF_ID_GEN.next()
-
-	if compiletime
-		new BuffDefinition(buffId, 'Basl')
-			..setName(1, name)
-			..setTooltipNormal(1, name)
-			..setTooltipNormalExtended(1, tooltip)
-			..setIcon(iconpath)
-
-		new AbilityDefinitionAuraSlow(abilId)
-			..setName("Aura Dummy: " + name)
-			..setMovementSpeedFactor(1, 0)
-			..setBuffs(1, int2fourchar(buffId))
-			..presetIcon(iconpath)
-			..setArtTarget("")
-			..setTargetsAllowed(1, "self")
-			..setArtTarget(effectPath)
-			..setTargetAttachmentPoint(attachmentPoint)
-		
-	return buffTuple(abilId, buffId)
+			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(7,9)), this.heal.toInt().toString() , 8, .75, colorA(223, 255, 52, 255))

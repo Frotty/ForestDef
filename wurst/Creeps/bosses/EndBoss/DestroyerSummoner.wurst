@@ -1,9 +1,8 @@
 package DestroyerSummoner
-import FText
 import Creep
 
-constant int SUMMONER_ID = 'bubi'
-constant int DESTROYER_ID = 'keki'
+constant int SUMMONER_ID = 'u016'
+constant int DESTROYER_ID = 'n00L'
 constant int SUMMONER_BOUNTY = 99
 constant int DESTROYER_BOUNTY = 666
 constant int DESTROYER_SUMMON_COUNT = 4

@@ -1,10 +1,10 @@
 package Wave
 import initlater Boss
 
-vec3 array startPositions
-rect array spawnRects
+public vec3 array startPositions
+public rect array spawnRects
 
-int startPosCount
+public int startPosCount
 public vec2 middle
 
 enum creeptype
@@ -133,7 +133,6 @@ public function initCreepStarts(boolean eight)
 		middle = vec2( gg_unit_h00E_0007.getX(), gg_unit_h00E_0007.getY() )
 	else
 		startPosCount = 3
-		
 		startPositions[0] = vec3(2549.,-700.,0)
 		spawnRects[0] = gg_rct_smallBot
 		startPositions[1] = vec3(-380,1200.,0)

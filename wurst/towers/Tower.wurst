@@ -52,7 +52,13 @@ public class Tower extends UnitEntity
 				new HealbackTower(this)
 			default
 				printLog(Loglevel.TRACE, "upgrade not catched")
-		actor.issueImmediateOrder("stop")	
+		actor.issueImmediateOrder("stop")
+
+	function pause()
+		this.actor.pause()
+	
+	function unpause()
+		this.actor.unpause()
 
 /** Checks if the upgrade unlocks techtree */
 function checkTech(unit u) 

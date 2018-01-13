@@ -1,0 +1,85 @@
+package TowerBlockade
+import Tower
+import Projectile
+import Creep
+import Assets
+import PresetBuffs
+
+buffTuple blockadeBuff = compiletime(createBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
+constant real BLOCKADE_DURATION = 120.
+public constant real BLOCKADE_MISSILE_TIME = 5
+constant int BLOCKADE_UNIT = 'u016'
+trigger blockadeDeathTrigger
+
+
+public class TowerBlockadeMissile extends Projectile
+	real heal
+	UnitEntity target
+
+	construct(vec3 pos, player owner, UnitEntity target)
+		super(pos, 0., owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), Abilities.deathCoilMissile)
+		let speed = pos.distanceTo(target.getPos()) / (BLOCKADE_MISSILE_TIME * ANIMATION_PERIOD)
+		this.setTarget(target.getPos().add(0, 0, 64), speed)
+		this.setTimed(BLOCKADE_MISSILE_TIME)
+		fx.setColor(colorA(215, 255, 215, 168))
+
+	override function update()
+		super.update()
+		vel += gravity
+
+
+public class TowerBlockadeBuff extends NormalBuff
+	BlockadeShip blockadeUnit
+	effect blockadeEffect
+
+	construct(Tower target)
+		super(BLOCKADE_DURATION, blockadeBuff)
+		this.apply(target)
+
+	override function apply(UnitEntity target)
+		this.target = target
+		if not target.hasBuffs()
+			target.newBuffs()
+		for bff in target.getBuffs()
+			if bff.typeId == this.typeId
+				bff.duration = duration
+				this.target = null
+				terminate()
+				return
+		var targetPos = target.getPos()
+		blockadeUnit = new BlockadeShip(createUnit(CREEP_OWNER, BLOCKADE_UNIT, targetPos, angle(0)), this)
+		blockadeEffect = addEffect(Abilities.howlTarget, targetPos)
+		target.addBuff(this)
+		target.actor.issueImmediateOrder("stop")
+		(target castTo Tower).pause()
+		refresh()
+		
+	override function attackModifier()
+		
+	override function terminate()
+		blockadeEffect.destr()
+		if blockadeUnit != null and blockadeUnit.actor.isAlive()
+			destroy blockadeUnit
+		super.terminate()
+
+	static function onBlockadeUnitDeath()
+		var triggerBuff = GetTriggerUnit().getUserData() castTo TowerBlockadeBuff
+		if triggerBuff != null
+			triggerBuff.terminate()
+		
+	ondestroy
+		(target castTo Tower).unpause()
+		blockadeUnit.remove()
+
+class BlockadeShip extends UnitEntity
+	TowerBlockadeBuff blockadeBuff
+	construct(unit actor, TowerBlockadeBuff blockadeBuff)
+		super(actor)
+		this.blockadeBuff = blockadeBuff
+
+	ondestroy
+		if actor.isAlive()
+			blockadeBuff.terminate()
+
+init
+	blockadeDeathTrigger = CreateTrigger()..addAction(function TowerBlockadeBuff.onBlockadeUnitDeath)

@@ -1,0 +1,82 @@
+package DestroyerSummoner
+import FText
+import Creep
+
+constant int SUMMONER_ID = 'bubi'
+constant int DESTROYER_ID = 'keki'
+constant int SUMMONER_BOUNTY = 99
+constant int DESTROYER_BOUNTY = 666
+constant int DESTROYER_SUMMON_COUNT = 4
+constant int DESTROYER_SUMMON_TIME = 15
+constant real updatePeriod = 1.
+
+public class FinalBossSummoning
+	real castPercent = 0
+	LinkedList<DestroyerSummoner> summoners
+	bool castingActive = false
+	
+	texttag summonText
+	
+	construct()
+		summoners = new LinkedList<DestroyerSummoner>()
+		summonText = CreateTextTag()
+		summonText..setPos(middle.x, middle.y, 100)..setText("0%", 12)..setVisibility(false)
+		doPeriodically(updatePeriod, (CallbackPeriodic cb) -> this.update())
+
+	function update()
+		var castingCount = 0
+		for summoner in summoners
+			if summoner.casting
+				castingCount++
+				if not summoner.actor.isAlive()
+					summoners.remove(summoner)
+		if castingCount >= DESTROYER_SUMMON_COUNT
+			castingActive = true
+			castPercent += (DESTROYER_SUMMON_TIME / updatePeriod)
+		else
+			castingActive = false
+			castPercent -= (DESTROYER_SUMMON_TIME * 3 / updatePeriod)
+			if castPercent < 0
+				castPercent = 0
+		if castPercent >= 100
+			castPercent = 100
+			summonDestroyer()
+		else
+			this.updateAnimation()
+
+	function updateAnimation()
+		summonText.setText(castPercent.toInt().toString() + "%", 12)
+		if castingActive
+			summonText.setColor(PercentTo255(castPercent), 255 - PercentTo255(castPercent), 0, 255)
+		else
+			summonText.setColor(100 + castPercent.toInt(), 200 - castPercent.toInt(), 50, 200)
+
+	function summonDestroyer()
+		new Creep(middle.polarOffset(angle(6.28), 300.).toVec3(), DESTROYER_ID, DESTROYER_BOUNTY, middle)
+		destroy this
+
+	ondestroy
+		destroy summoners
+		summonText.destr()
+
+public class DestroyerSummoner extends Creep
+	boolean casting
+	// which position to stand in once casting
+	int position
+	construct(vec3 pos, int position)
+		super(pos, SUMMONER_ID, SUMMONER_BOUNTY, middle)
+		this.position = position
+		
+	override function update()
+		super.update()
+		if (pos.distanceTo2d(middle) < 120.)
+			startCasting()
+
+	function startCasting()
+		casting = true
+		setPos(middle.polarOffset(angle(this.position * 6.28 / DESTROYER_SUMMON_COUNT), 100.).toVec3().add(0, 0, 100))
+		actor.setAnimation("spell channel")
+
+	override function onDeath()
+		super.onDeath()
+		casting = false

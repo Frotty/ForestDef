@@ -6,7 +6,7 @@ import UnitSpawnSystem
 
 public timer gameTime
 
-function victory()
+public function victory()
 	startEndBoss()
 	
 function lose()

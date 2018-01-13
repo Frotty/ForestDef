@@ -1,0 +1,11 @@
+package TowerObject
+import UnitObjEditing
+
+public class TowerDefinition
+	BuildingDefinition def
+
+	construct(int newId, string model)
+		def = new BuildingDefinition(newId, 'hwtw')
+		def..setSightRadiusNight(700)
+		..setSightRadiusDay(1100)
+		..setModelFile(model)

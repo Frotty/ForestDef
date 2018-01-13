@@ -3,15 +3,10 @@ import Assets
 import Tower
 import Projectile
 import PlayerData
-import PresetBuffs
-import ObjectIdGenerator
-import AbilityObjEditing
-import BuffObjEditing
-import ObjectIds
 import TextTagEntity
 
 public constant HEALBACK_TOWER_ID = 'h02A'
-constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.75]
+constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.85]
 constant HEALBACK_MISSILE_COUNTS = [1, 2, 2, 3]
 constant HEALBACK_RANGES = [850., 875., 925., 975.]
 
@@ -107,9 +102,10 @@ public class HealbackMissile extends Projectile
 
 	construct(vec3 pos, player owner, real heal, UnitEntity target)
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), HEALBACK_MISSILE_EFFECT)
+		fx.setColor(colorA(0, 255, 0, 255))
 		this.heal = heal
 		this.target = target
-		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 18.)
+		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 19.5)
 		fx.setColor(colorA(215, 255, 215, 168))
 
 	override function update()
@@ -123,29 +119,4 @@ public class HealbackMissile extends Projectile
 		if (this.target != null and this.target.actor.isAlive())
 			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))
 			this.target.actor.addHP(this.heal)
-			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), this.heal.toInt().toString() , 8, 1., colorA(223, 255, 52, 255))
-
-
-/** Creates an ability based on Tornado aura that allows to display a buff without side effects */
-public function createBuffObjectWithAttachmentPoint(string name, string tooltip, string iconpath, string effectPath, string attachmentPoint) returns buffTuple
-	let abilId = ABIL_ID_GEN.next()
-	let buffId = BUFF_ID_GEN.next()
-
-	if compiletime
-		new BuffDefinition(buffId, 'Basl')
-			..setName(1, name)
-			..setTooltipNormal(1, name)
-			..setTooltipNormalExtended(1, tooltip)
-			..setIcon(iconpath)
-
-		new AbilityDefinitionAuraSlow(abilId)
-			..setName("Aura Dummy: " + name)
-			..setMovementSpeedFactor(1, 0)
-			..setBuffs(1, int2fourchar(buffId))
-			..presetIcon(iconpath)
-			..setArtTarget("")
-			..setTargetsAllowed(1, "self")
-			..setArtTarget(effectPath)
-			..setTargetAttachmentPoint(attachmentPoint)
-		
-	return buffTuple(abilId, buffId)
+			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(7,9)), this.heal.toInt().toString() , 8, .75, colorA(223, 255, 52, 255))

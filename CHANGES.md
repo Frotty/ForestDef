@@ -1,8 +1,11 @@
 0.18t
 [LIST]
 [*] New Tower: "Healback Tower"
-[*] Flamethrower has been changes to reduce fps hit
-[*] New catapult special missile visual 
+[*] Flamethrower has been changed to reduce fps impact
+[*] New catapult special missile visual
+[*] Living wall attack range decreased
+[*] Glaive damage slightly reduced
+[*] Improve creep spawn balance and terrain fidelity on big arena
 [/LIST]
 
 0.18s

@@ -4,6 +4,7 @@ import Projectile
 import Creep
 import Assets
 import PresetBuffs
+import TextTagEntity
 
 buffTuple blockadeBuff = compiletime(createBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
 constant real BLOCKADE_DURATION = 120.
@@ -34,6 +35,7 @@ public class TowerBlockadeBuff extends NormalBuff
 
 	construct(Tower target)
 		super(BLOCKADE_DURATION, blockadeBuff)
+		new TextTagEntity(target.getPos(), vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), "Blockaded!", 8, 1., colorA(145, 80, 12, 255))
 		this.apply(target)
 
 	override function apply(UnitEntity target)

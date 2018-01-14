@@ -1,6 +1,5 @@
 package EndBoss
 import TowerBlockade
-import TextTagEntity
 import Tower
 import Buff
 import Boss
@@ -8,17 +7,61 @@ import Boss
 constant ENDBOSS_ID = 'n00P'
 
 constant m = new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3")
+constant finalBossMaxHp = 1000
+constant castInterval = 10.
+constant stageTwoPercentage = .33
+constant stageThreePercentage = .10
 
 public class EndBoss extends Boss
-	var castInterval = 30.
+	int stage = 1
+	int castCounter = 0
+	timer castTimer
+	LinkedList<string> abilities = new LinkedList<string>()
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		doPeriodically(this.castInterval, (CallbackPeriodic cb) -> begin
-			print("Casting Blockade")
-			// switch to random ability, add conditions for 
-			this.tryCastTowerBlockade()
-		end)
+		abilities.add("blockade")
+		abilities.add("destroyerSummoner")
+		castTimer = getTimer()
+		castTimer.setData(this castTo int)
+		castTimer.startPeriodic(castInterval, function EndBoss.onCastTimer)
+
+	override function update()
+		super.update()
+		let percentage = actor.getHP() / finalBossMaxHp
+		if stage == 1 and percentage < stageTwoPercentage
+			stage = 2
+			abilities.remove("blockade")
+			abilities.add("raiseDead")
+			abilities.add("shield")
+		if stage == 2 and percentage < stageThreePercentage
+			stage = 3
+			abilities.remove("shiled")
+			abilities.add("batteringRam")
+
+	static function onCastTimer()
+		let boss = GetExpiredTimer().getData() castTo EndBoss
+		boss.castCounter++
+		switch boss.stage
+			case 1
+				if boss.castCounter mod 3 == 0
+					boss.castAbility()
+			case 2
+				if boss.castCounter mod 2 == 0
+					boss.castAbility()
+			case 3
+				boss.castAbility()
+
+	function castAbility()
+		let abilName = abilities.get(GetRandomInt(0, abilities.size() - 1))
+		print("Final Boss Casting - " + abilName)
+		switch abilName
+			case "blockade"
+				tryCastTowerBlockade()
+			case "destroyerSummoner"
+				castDestroyerSummoner()
+			default
+				print("Ability not implemented :)))")
 
 	function tryCastTowerBlockade()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 1000., Filter(() -> begin
@@ -41,13 +84,18 @@ public class EndBoss extends Boss
 		actor.setAnimation("spell")
 		doAfter(BLOCKADE_MISSILE_TIME, () -> begin
 			new TowerBlockadeBuff(tower)
-			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), "Blockaded!", 8, 1., colorA(145, 80, 12, 255))
 		end)
 
-	// TODO function castDestroyerSummoner()
+	function castDestroyerSummoner()
+		// TODO global destroyer summoning
+
 	// TODO function castShield()
-	// TODO function castWave()
+	// TODO function castRaiseDead()
 	// TODO function switchPlaces()
+
+	ondestroy
+		destroy this.abilities
+		castTimer.destr()
 
 public class EndBossFight
 	LinkedList<EndBoss> bosses

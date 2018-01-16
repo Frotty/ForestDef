@@ -38,7 +38,7 @@ function start()
 		Cheat("warpten")
 		Cheat("iseedeadpeople")
 		print("|cffFFCC00>>|r Editor Test Mode activated")
-		victory()
+		doAfter(4., () -> victory())
 	else
 		getTimer().start( 50., function spawn )
 		

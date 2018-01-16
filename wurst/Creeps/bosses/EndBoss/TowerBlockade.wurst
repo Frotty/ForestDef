@@ -3,7 +3,7 @@ import Tower
 import Projectile
 import Creep
 import Assets
-import PresetBuffs
+import public PresetBuffs
 import TextTagEntity
 
 buffTuple blockadeBuff = compiletime(createBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
@@ -65,19 +65,25 @@ public class TowerBlockadeBuff extends NormalBuff
 		super.terminate()
 
 	static function onBlockadeUnitDeath()
-		var triggerBuff = GetTriggerUnit().getUserData() castTo TowerBlockadeBuff
-		if triggerBuff != null
-			triggerBuff.terminate()
+		var buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
+		if buffUnit != null
+			buffUnit.terminateBuff()
 		
 	ondestroy
-		(target castTo Tower).unpause()
-		blockadeUnit.remove()
+		if target != null
+			(target castTo Tower).unpause()
+		if blockadeUnit != null
+			blockadeUnit.remove()
 
 class BlockadeShip extends UnitEntity
 	TowerBlockadeBuff blockadeBuff
 	construct(unit actor, TowerBlockadeBuff blockadeBuff)
 		super(actor)
 		this.blockadeBuff = blockadeBuff
+		blockadeDeathTrigger.registerUnitEvent(actor, EVENT_UNIT_DEATH)
+
+	function terminateBuff()
+		blockadeBuff.terminate()
 
 	ondestroy
 		if actor.isAlive()

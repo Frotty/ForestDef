@@ -80,6 +80,16 @@ public class TrooperTower extends Tower
 			troop.setStaticPos(tPos.withZ(tz))
 			angleD += angleV
 		
+	override function pause()
+		super.pause()
+		for troop in this.troops
+			troop.actor.pause()
+
+	override function unpause()
+		super.unpause()
+		for troop in this.troops
+			troop.actor.unpause()
+
 	ondestroy
 		for trooper in troops
 			trooper.terminate()

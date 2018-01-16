@@ -43,9 +43,9 @@ function getExtraBounty()
 				pd.p.addLumber(WOOD_BOUNTY)
 				if pd.builder.actor != null and pd.builder.actor.isAlive()
 					createLumberBountyTextTag(pd.builder.actor, WOOD_BOUNTY)
-				if pd.p.getLumber() > 20 and allPlayers.getSize() > 1
- 					let val = (pd.p.getLumber() / allPlayers.getSize()).toInt()
-					let remainder = pd.p.getLumber() mod allPlayers.getSize()
+				if pd.p.getLumber() > 20 and allPlayers.size() > 1
+ 					let val = (pd.p.getLumber() / allPlayers.size()).toInt()
+					let remainder = pd.p.getLumber() mod allPlayers.size()
 					pd.p.setLumber(remainder)
 					for p2 in allPlayers
 						p2.p.addLumber(val)
@@ -63,7 +63,7 @@ function grantCoins()
 				flashEffect(Abilities.resourceEffectTarget, p.builder.getPos())
 			
 public function initLumberSystem()
-	if allPlayers.getSize() <= 2
+	if allPlayers.size() <= 2
 		WOOD_BOUNTY = 2
 	if bigArena
 		killcap = 36

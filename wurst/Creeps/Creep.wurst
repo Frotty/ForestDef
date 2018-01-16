@@ -58,7 +58,7 @@ public class Creep extends UnitEntity
 					itm.remove()
 			end)
 		if killer != null
-			var size = allPlayers.getSize()
+			var size = allPlayers.size()
 			if pDatas[killer.getOwner().getId()] == null
 				var killBounty = (bounty div size)
 				if killBounty <= 0

@@ -30,6 +30,7 @@ public class HealbackTower extends Tower
 	static constant nearEntities = new LinkedList<EntityWithDist>()
 	static var statSource = ZERO2
 	static Comparator<EntityWithDist> comparator = (EntityWithDist e1, EntityWithDist e2) -> e1.distSq - e2.distSq
+	
 	static function getNearestBuilding(vec2 source, int count, real range) returns LinkedList<UnitEntity>
 		statSource = source
 		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, range, Filter(() -> begin

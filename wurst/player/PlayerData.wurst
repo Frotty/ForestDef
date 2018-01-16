@@ -3,6 +3,7 @@ import Wave
 import PhysicsProjectile
 import initlater Selector
 import Builder
+import initlater GameConditions
 
 public LinkedList<PlayerData> allPlayers
 public PlayerData array pDatas
@@ -44,7 +45,8 @@ public class PlayerData
 		pDatas[p.getId()] = null
 		p.setGold(0)
 		p.setLumber(0)
-		printTimed(p.getNameColored() + " has left! Their resources have been distributed.", 10.)
+		if not gameOver
+			printTimed(p.getNameColored() + " has left! Their resources have been distributed.", 10.)
 
 public function initPlayers()
 	allPlayers = new LinkedList<PlayerData>()

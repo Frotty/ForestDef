@@ -3,7 +3,7 @@ import Tower
 import Projectile
 import Creep
 import Assets
-import public PresetBuffs
+import public Buff
 import TextTagEntity
 
 buffTuple blockadeBuff = compiletime(createBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
@@ -29,7 +29,7 @@ public class TowerBlockadeMissile extends Projectile
 		vel += gravity
 
 
-public class TowerBlockadeBuff extends NormalBuff
+public class TowerBlockadeBuff extends Buff
 	BlockadeShip blockadeUnit
 	effect blockadeEffect
 
@@ -55,9 +55,7 @@ public class TowerBlockadeBuff extends NormalBuff
 		target.actor.issueImmediateOrder("stop")
 		(target castTo Tower).pause()
 		refresh()
-		
-	override function attackModifier()
-		
+
 	override function terminate()
 		blockadeEffect.destr()
 		if blockadeUnit != null and blockadeUnit.actor.isAlive()

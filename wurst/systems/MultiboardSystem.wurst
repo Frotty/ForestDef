@@ -10,7 +10,7 @@ public function initMultiboard()
 	CreateTimer().startPeriodic(0.5, () -> update())
 	
 function update()
-	mboard.setRowCount(allPlayers.getSize())
+	mboard.setRowCount(allPlayers.size())
 	mboard.setColumnCount(4)
 	mboard.setTitle("Forest Defense")
 	var i = 0

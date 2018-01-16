@@ -26,19 +26,19 @@ int level = 1
 function onSpawnTime()
 	if stopSpawns
 		return
-	if level mod 7 == 0 and specialWaves.getSize() > 0
+	if level mod 7 == 0 and specialWaves.size() > 0
 		specialWaves.dequeue().spawn()
 	else
-		if normalWaves.getSize() > 0
+		if normalWaves.size() > 0
 			normalWaves.dequeue().spawn()
-		if level mod 4 == 0 and bossWaves.getSize() > 0
+		if level mod 4 == 0 and bossWaves.size() > 0
 			bossWaves.dequeue().spawn()
 		
 	level++
 	if level > 7
 		level = 1
 
-	if specialWaves.getSize() <= 0 and bossWaves.getSize() <= 0 and normalWaves.getSize() <= 0
+	if specialWaves.size() <= 0 and bossWaves.size() <= 0 and normalWaves.size() <= 0
 		GetExpiredTimer().destr()
 		
 	
@@ -142,7 +142,7 @@ function initWaves()
 
 public function startSpawn()
 	timer t = CreateTimer()
-	if allPlayers.getSize() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
+	if allPlayers.size() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		print("|cffFFCC00>>|r Fast Spawn")
 		// normalWaves.dequeue()
 		bossWaves.dequeue()

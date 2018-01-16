@@ -68,7 +68,7 @@ public class TrooperTower extends Tower
 	function addTrooper()
 		troops.add(new Troop(pos.toVec2(), owner))
 		// Make into circle
-		let angleV = 360. / troops.getSize()
+		let angleV = 360. / troops.size()
 		var angleD = 0.
 		let tz = 160.
 		for troop in troops

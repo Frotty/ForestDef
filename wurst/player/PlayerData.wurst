@@ -29,12 +29,12 @@ public class PlayerData
 
 	ondestroy
 		allPlayers.remove(this)
-		if allPlayers.getSize() > 0
-			let goldSplit = ((p.getGold() / allPlayers.getSize()) * 1.15).round()
+		if allPlayers.size() > 0
+			let goldSplit = ((p.getGold() / allPlayers.size()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(goldSplit)
 			
-			let lumberSplit = ((p.getLumber() / allPlayers.getSize()) * 1.15).round()
+			let lumberSplit = ((p.getLumber() / allPlayers.size()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(lumberSplit)
 		if builder != null
@@ -54,7 +54,7 @@ public function initPlayers()
 		if players[i].getSlotState() == PLAYER_SLOT_STATE_PLAYING and players[i].getController() == MAP_CONTROL_USER
 			new PlayerData(players[i])
 	real gold
-	if allPlayers.getSize() > 4
+	if allPlayers.size() > 4
 		bigArena = true
 		initCreepStarts(true)
 		gold = 1245
@@ -63,11 +63,11 @@ public function initPlayers()
 		initCreepStarts(false)
 		gold = 490
 	
-	let anglePerP = 360/allPlayers.getSize()
-	var current = GetRandomInt(0, allPlayers.getSize()) * anglePerP + GetRandomInt(0, 4) * 90
+	let anglePerP = 360/allPlayers.size()
+	var current = GetRandomInt(0, allPlayers.size()) * anglePerP + GetRandomInt(0, 4) * 90
 	for p in allPlayers
 		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 285.).toVec3(), p.p)
 		current += anglePerP
-		p.p.addGold((gold/allPlayers.getSize()).toInt())	 
+		p.p.addGold((gold/allPlayers.size()).toInt())	 
 	
 	createTTEx(middle.toVec3() - vec3(80,0,0), "Item Shop", 17.5)

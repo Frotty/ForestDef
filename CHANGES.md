@@ -6,6 +6,8 @@
 [*] Living wall attack range decreased
 [*] Glaive damage slightly reduced
 [*] Improve creep spawn balance and terrain fidelity on big arena
+[*] Prevent builders from permanently dying yet showing alive on multiboard
+[*] Some reference leaks have been fixed that caused fps issues on low end machines
 [/LIST]
 
 0.18s

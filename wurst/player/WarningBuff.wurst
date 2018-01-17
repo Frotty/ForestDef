@@ -44,12 +44,12 @@ public class WarningBuff extends NormalBuff
 			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
 
-		if dmg > target.actor.getHP()
+		if dmg >= target.actor.getHP() + .405
 			modifyDamage(0)
 			if not dead
 				dead = true
 				let u = target.actor
-				u..setHP(1.)
+				u..setHP(9999.)
 				..setOwner(DUMMY_PLAYER, false)
 				..addAbility('Avul')
 				..pause()
@@ -67,7 +67,7 @@ public class WarningBuff extends NormalBuff
 			target.actor
 			..unpause()
 			..setTimeScale(bty == BuilderType.FAT ? 0.25 : 1.0)
-			..setHP(99999)
+			..setHP(9999.)
 			..show()
 			..setAnimation("stand")
 			..queueAnimation("stand")

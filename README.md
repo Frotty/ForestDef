@@ -1,3 +1,5 @@
+[![Build Status](http://peeeq.de/hudson/job/ForestDef/badge/icon)](http://peeeq.de/hudson/job/ForestDef/) 
+
 Forest Defense
 =========
 

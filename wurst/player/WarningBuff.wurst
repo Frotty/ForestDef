@@ -44,7 +44,7 @@ public class WarningBuff extends NormalBuff
 			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
 
-		if dmg >= target.actor.getHP() + .405
+		if dmg >= target.actor.getHP() + 1.0
 			modifyDamage(0)
 			if not dead
 				dead = true

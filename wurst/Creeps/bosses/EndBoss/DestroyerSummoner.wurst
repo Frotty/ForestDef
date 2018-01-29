@@ -20,7 +20,7 @@ public class FinalBossSummoning
 		summoners = new LinkedList<DestroyerSummoner>()
 		summonText = CreateTextTag()
 		summonText..setPos(middle.x, middle.y, 100)..setText("0%", 12)..setVisibility(false)
-		doPeriodically(updatePeriod, (CallbackPeriodic cb) -> this.update())
+		doPeriodically(updatePeriod, (CallbackPeriodic _cb) -> this.update())
 
 	function update()
 		var castingCount = 0

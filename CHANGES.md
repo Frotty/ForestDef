@@ -1,4 +1,4 @@
-0.18t
+0.18w
 [LIST]
 [*] New Tower: "Healback Tower"
 [*] Flamethrower has been changed to reduce fps impact

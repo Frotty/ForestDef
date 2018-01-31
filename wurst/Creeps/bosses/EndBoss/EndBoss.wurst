@@ -1,5 +1,6 @@
 package EndBoss
 import TowerBlockade
+import DestroyerSummoner
 import Tower
 import Boss
 
@@ -10,6 +11,8 @@ constant finalBossMaxHp = 1000
 constant castInterval = 10.
 constant stageTwoPercentage = .33
 constant stageThreePercentage = .10
+
+public EndBossFight currentEndBossFight
 
 public class EndBoss extends Boss
 	int stage = 1
@@ -86,7 +89,7 @@ public class EndBoss extends Boss
 		end)
 
 	function castDestroyerSummoner()
-		// TODO global destroyer summoning
+		currentEndBossFight.createDestroyerSummoner(this)
 
 	// TODO function castShield()
 	// TODO function castRaiseDead()
@@ -98,14 +101,20 @@ public class EndBoss extends Boss
 
 public class EndBossFight
 	LinkedList<EndBoss> bosses
+	FinalBossSummoning destroyerSummoning
 
 	construct()
 		PlayMusic(m.path)
 		PlaySoundBJ(gg_snd_AirBargeDeath1)
 		print("|cffE62121 Prepare for your end!")
 		bosses = new LinkedList<EndBoss>()
+		destroyerSummoning = new FinalBossSummoning()
 		for j = 0 to 0 //startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle))
+
+	function createDestroyerSummoner(EndBoss castingBoss)
+		let summoner = new DestroyerSummoner(castingBoss.getPos(), bosses.indexOf(castingBoss))
+		destroyerSummoning.addSummoner(summoner)
 
 	ondestroy
 		destroy bosses
@@ -116,7 +125,7 @@ let bossWave = new BossWave(ENDBOSS_ID, 1, 175, gg_snd_AirBargeDeath1, (vec3 sta
 
 public function startEndBoss()
 	printTimed("    |cffFFC519Beat the final boss to win!", 25)
-	new EndBossFight()
+	currentEndBossFight = new EndBossFight()
 
 public function onVictory()
 	printTimed("|cffFFCC00>> |cffFFA53ACongratulations, you won!|r\n        |cff7B7B7BThe game will end in 20 seconds.", 25)

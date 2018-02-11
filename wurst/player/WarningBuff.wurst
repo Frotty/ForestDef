@@ -17,6 +17,7 @@ public class WarningBuff extends NormalBuff
 
 	boolean dead = false
 	player originalOwner
+	EventListener listener
 	
 	construct()
 		super(9999, warningBuffAbil)
@@ -27,6 +28,7 @@ public class WarningBuff extends NormalBuff
 	override function apply(UnitEntity target) 
 		super.apply(target)
 		originalOwner = target.owner
+		listener = EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
 	
 	override function defenseModifier()
 		let dmg = getDamage()
@@ -45,7 +47,7 @@ public class WarningBuff extends NormalBuff
 			lastSelect = currentTime
 
 		if dmg >= target.actor.getHP() + 1.0
-			modifyDamage(0)
+			modifyDamage(-1)
 			if not dead
 				dead = true
 				let u = target.actor
@@ -59,7 +61,22 @@ public class WarningBuff extends NormalBuff
 				pDatas[owner.getId()].alive = false
 				pDatas[owner.getId()].deaths++
 				printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
-		
+
+	function onDeath()
+		if not dead
+			dead = true
+			let u = target.actor
+			u..setHP(9999.)
+			..setOwner(DUMMY_PLAYER, false)
+			..addAbility('Avul')
+			..pause()
+			..hide()..setTimeScale(0.0001)
+			createUnit(originalOwner, target.actor.getTypeId(), u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
+			let owner = target.owner
+			pDatas[owner.getId()].alive = false
+			pDatas[owner.getId()].deaths++
+			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
+	
 	override function refresh(boolean forceRefresh)
 		super.refresh(forceRefresh)
 		if dead

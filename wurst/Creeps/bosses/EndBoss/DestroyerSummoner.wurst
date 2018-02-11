@@ -5,9 +5,9 @@ constant int SUMMONER_ID = 'u016'
 constant int DESTROYER_ID = 'n00L'
 constant int SUMMONER_BOUNTY = 99
 constant int DESTROYER_BOUNTY = 666
-constant int DESTROYER_SUMMON_COUNT = 4
-constant int DESTROYER_SUMMON_TIME = 15
-constant real updatePeriod = 1.
+public constant int DESTROYER_SUMMON_COUNT = 2
+constant int DESTROYER_SUMMON_TIME = 30
+constant real updatePeriod = .5
 
 public class FinalBossSummoning
 	real castPercent = 0
@@ -19,22 +19,25 @@ public class FinalBossSummoning
 	construct()
 		summoners = new LinkedList<DestroyerSummoner>()
 		summonText = CreateTextTag()
-		summonText..setPos(middle.x, middle.y, 100)..setText("0%", 12)..setVisibility(false)
-		doPeriodically(updatePeriod, (CallbackPeriodic _cb) -> this.update())
+		summonText..setPos(middle.x, middle.y, 100)..setText("0%", 12)
+		summonText.setVisibility(false)
+		doPeriodically(updatePeriod, (CallbackPeriodic cb) -> this.update())
 
 	function update()
 		var castingCount = 0
 		for summoner in summoners
+			if summoner.getPos().distanceTo2d(middle) < 220. and not summoner.casting
+				summoner.startCasting(castingCount)
 			if summoner.casting
 				castingCount++
 				if not summoner.actor.isAlive()
 					summoners.remove(summoner)
 		if castingCount >= DESTROYER_SUMMON_COUNT
 			castingActive = true
-			castPercent += (DESTROYER_SUMMON_TIME / updatePeriod)
+			castPercent += (updatePeriod * 100 / DESTROYER_SUMMON_TIME)
 		else
 			castingActive = false
-			castPercent -= (DESTROYER_SUMMON_TIME * 3 / updatePeriod)
+			castPercent -= (updatePeriod * 100 / (3 * DESTROYER_SUMMON_TIME))
 			if castPercent < 0
 				castPercent = 0
 		if castPercent >= 100
@@ -44,17 +47,23 @@ public class FinalBossSummoning
 			this.updateAnimation()
 
 	function updateAnimation()
+		summonText.setVisibility(true)
 		summonText.setText(castPercent.toInt().toString() + "%", 12)
 		if castingActive
 			summonText.setColor(PercentTo255(castPercent), 255 - PercentTo255(castPercent), 0, 255)
 		else
 			summonText.setColor(100 + castPercent.toInt(), 200 - castPercent.toInt(), 50, 200)
 
+	function addSummoner(DestroyerSummoner summoner)
+		summoners.add(summoner)
+
 	function summonDestroyer()
 		new Creep(middle.polarOffset(angle(6.28), 300.).toVec3(), DESTROYER_ID, DESTROYER_BOUNTY, middle)
 		destroy this
 
 	ondestroy
+		for DestroyerSummoner s in summoners
+			s.actor.kill()
 		destroy summoners
 		summonText.destr()
 
@@ -62,19 +71,18 @@ public class DestroyerSummoner extends Creep
 	boolean casting
 	// which position to stand in once casting
 	int position
+
 	construct(vec3 pos, int position)
 		super(pos, SUMMONER_ID, SUMMONER_BOUNTY, middle)
 		this.position = position
-		
-	override function update()
-		super.update()
-		if (pos.distanceTo2d(middle) < 120.)
-			startCasting()
 
-	function startCasting()
+	function startCasting(int summonPos)
+		sleeps = true
 		casting = true
-		setPos(middle.polarOffset(angle(this.position * 6.28 / DESTROYER_SUMMON_COUNT), 100.).toVec3().add(0, 0, 100))
-		actor.setAnimation("spell channel")
+		print("startCasting")
+		setPos(middle.polarOffset(angle(summonPos * 6.28 / DESTROYER_SUMMON_COUNT), 200.).toVec3().add(0, 0, 100))
+		actor.setFacing(pos.angleTo2d(middle))
+		actor.setAnimation("attack spell")
 
 	override function onDeath()
 		super.onDeath()

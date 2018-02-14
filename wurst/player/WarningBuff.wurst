@@ -65,13 +65,11 @@ public class WarningBuff extends NormalBuff
 	function onDeath()
 		if not dead
 			dead = true
-			let u = target.actor
-			u..setHP(9999.)
-			..setOwner(DUMMY_PLAYER, false)
+			let u = createUnit(originalOwner, target.actor.getTypeId(), target.actor.getPos(), target.actor.getFacingAngle())..setXY(target.actor.getPos())
+			u..setOwner(DUMMY_PLAYER, false)
 			..addAbility('Avul')
 			..pause()
 			..hide()..setTimeScale(0.0001)
-			createUnit(originalOwner, target.actor.getTypeId(), u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
 			let owner = target.owner
 			pDatas[owner.getId()].alive = false
 			pDatas[owner.getId()].deaths++

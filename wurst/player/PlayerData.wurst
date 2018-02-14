@@ -5,7 +5,7 @@ import initlater Selector
 import Builder
 import initlater GameConditions
 
-public LinkedList<PlayerData> allPlayers
+public constant allPlayers = new LinkedList<PlayerData>()
 public PlayerData array pDatas
 public boolean bigArena
 public enum BuilderType
@@ -49,7 +49,6 @@ public class PlayerData
 			printTimed(p.getNameColored() + " has left! Their resources have been distributed.", 10.)
 
 public function initPlayers()
-	allPlayers = new LinkedList<PlayerData>()
 	EventListener.add(EVENT_PLAYER_LEAVE, () -> destroy pDatas[GetTriggerPlayer().getId()])
 	
 	for int i = 0 to 7

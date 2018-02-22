@@ -22,8 +22,8 @@ public class EndBoss extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		abilities.add("blockade")
-		// abilities.add("destroyerSummoner")
+		// abilities.add("blockade")
+		abilities.add("destroyerSummoner")
 		castTimer = getTimer()
 		castTimer.setData(this castTo int)
 		castTimer.startPeriodic(castInterval, function EndBoss.onCastTimer)

@@ -54,7 +54,7 @@ function getExtraBounty()
 function grantCoins()
 	if GetManipulatedItem().getTypeId() == COIN_ID
 		let gold = GetManipulatedItem().getUserData()
-		flashEffect("UI\\Feedback\\GoldCredit\\GoldCredit.mdl", GetManipulatingUnit().getPos())
+		flashEffect(UI.goldCredit, GetManipulatingUnit().getPos())
 		printTimed("|cffFFCC00>> " + GetManipulatingUnit().getOwner().getNameColored() + " picked up a coin!", 10.)
 		for p in allPlayers
 			p.p.addGold(gold)

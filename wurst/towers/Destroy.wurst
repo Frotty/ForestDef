@@ -1,10 +1,11 @@
 package Destroy
 import Event
+import Assets
 
 function destroyTower()
 	if GetSpellAbilityId() == 'A00E'
 		KillUnit( GetTriggerUnit() )
-		DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Charm\\CharmTarget.mdl",GetTriggerUnit().getX(), GetTriggerUnit().getY()))
+		DestroyEffect(AddSpecialEffect(Abilities.charmTarget,GetTriggerUnit().getX(), GetTriggerUnit().getY()))
 	
 public function initDestroy()
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> destroyTower())

@@ -2,6 +2,7 @@ package ArtilleryTower
 import Tower
 import Projectile
 import ClosureTimers
+import Assets
 
 constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant int ART_TOWER_ID = 'h01O'
@@ -27,7 +28,7 @@ class ArtilleryMissile extends Projectile
 	real damage
 	
 	construct(vec3 pos, real radius, player owner, angle targetangle, real damage)
-		super( pos, radius, owner, targetangle, "Abilities\\Weapons\\CannonTowerMissile\\CannonTowerMissile.mdl")
+		super( pos, radius, owner, targetangle, Abilities.cannonTowerMissile)
 		setSpeed(MISSILE_SPEED + GetRandomReal(-10,6))
 		setZAngle((-45).asAngleDegrees())
 		vel.z = -getSpeed()
@@ -45,7 +46,7 @@ class ArtilleryMissile extends Projectile
 		for u from ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
 				getDummy().damageTarget(u, damage, ATTACK_TYPE_SIEGE)	
-		addEffect("Abilities\\Weapons\\FragDriller\\FragDriller.mdl", pos).destr()
+		addEffect(Abilities.fragDriller, pos).destr()
 	
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)

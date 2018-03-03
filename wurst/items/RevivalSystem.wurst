@@ -1,6 +1,7 @@
 package RevivalSystem
 import PlayerData
 import Buff
+import Assets
 
 public function initRevivalSystem()
 	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> begin
@@ -13,7 +14,7 @@ public function initRevivalSystem()
 					s += " " + pd.p.getNameColored()
 					pd.builder.actor.setPos(revPos.polarOffset(GetRandomReal(0,1).asAngleRadians(), 64))
 					pd.builder.getBuffs().forEach((Buff b) -> b.refresh())
-					addEffect("Abilities\\Spells\\NightElf\\ReviveNightElf\\ReviveNightElf.mdl", pd.builder.actor.getPos() ).destr()
+					addEffect(Abilities.reviveNightElf, pd.builder.actor.getPos() ).destr()
 					printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
 					pd.alive = true
 			if s.length() > 0

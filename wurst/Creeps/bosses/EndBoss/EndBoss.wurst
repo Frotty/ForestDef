@@ -22,8 +22,8 @@ public class EndBoss extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		abilities.add("blockade")
-		// abilities.add("destroyerSummoner")
+		// abilities.add("blockade")
+		abilities.add("destroyerSummoner")
 		castTimer = getTimer()
 		castTimer.setData(this castTo int)
 		castTimer.startPeriodic(castInterval, function EndBoss.onCastTimer)
@@ -46,7 +46,7 @@ public class EndBoss extends Boss
 		boss.castCounter++
 		switch boss.stage
 			case 1
-				if boss.castCounter mod 3 == 0
+				if boss.castCounter mod 1 == 0
 					boss.castAbility()
 			case 2
 				if boss.castCounter mod 2 == 0
@@ -103,24 +103,35 @@ public class EndBossFight
 	LinkedList<EndBoss> bosses
 	FinalBossSummoning destroyerSummoning
 
+	boolean summoningComplete = false
+
 	construct()
 		PlayMusic(m.path)
 		PlaySoundBJ(gg_snd_AirBargeDeath1)
 		print("|cffE62121 Prepare for your end!")
 		bosses = new LinkedList<EndBoss>()
-		destroyerSummoning = new FinalBossSummoning()
+		destroyerSummoning = new FinalBossSummoning(this)
 		for j = 0 to 0 //startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle))
 
 	function createDestroyerSummoner(EndBoss castingBoss)
-		let summoner = new DestroyerSummoner(castingBoss.getPos(), bosses.indexOf(castingBoss))
-		destroyerSummoning.addSummoner(summoner)
+		if not summoningComplete
+			let summoner = new DestroyerSummoner(castingBoss.getPos())
+			destroyerSummoning.addSummoner(summoner)
+
+	function endDestroyerSummoning()
+		summoningComplete = true
+		for boss in bosses
+			boss.abilities.remove("destroyerSummoner")
+		destroy destroyerSummoning
 
 	ondestroy
+		if not summoningComplete
+			endDestroyerSummoning()
 		destroy bosses
 		onVictory()
 
-	
+
 let bossWave = new BossWave(ENDBOSS_ID, 1, 175, gg_snd_AirBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> new EndBoss(startPos, unitId, bounty, middle))
 
 public function startEndBoss()

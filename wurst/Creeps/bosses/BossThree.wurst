@@ -2,6 +2,7 @@ package BossThree
 import Boss
 import PresetBuffs
 import Assets
+import Builder
 
 constant PUDGE_POWER_ID = 'A021'
 
@@ -19,8 +20,9 @@ public class PudgePowerBuff extends NormalBuff
 		var target = GetTriggerUnit()
 		if target.getOwner() != players[8]
 			addEffect(Objects.hCancelDeath, target.getPos()).destr()
-			modifyDamageBy(target.getMaxHP() * 0.30)
-			createFText(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255), localPlayer)
+			if not target.getEntity() instanceof Builder
+				modifyDamageBy(target.getMaxHP() * 0.30)
+				createFText(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255), localPlayer)
 		
 	override function defenseModifier()
 

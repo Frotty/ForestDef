@@ -22,7 +22,7 @@ public class EndBoss extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		// abilities.add("blockade")
+		abilities.add("blockade")
 		abilities.add("destroyerSummoner")
 		castTimer = getTimer()
 		castTimer.setData(this castTo int)
@@ -56,7 +56,7 @@ public class EndBoss extends Boss
 
 	function castAbility()
 		let abilName = abilities.get(GetRandomInt(0, abilities.size() - 1))
-		print("Final Boss Casting - " + abilName)
+		// print("Final Boss Casting - " + abilName)
 		switch abilName
 			case "blockade"
 				tryCastTowerBlockade()

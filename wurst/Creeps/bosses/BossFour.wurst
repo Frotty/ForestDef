@@ -4,8 +4,7 @@ import PresetBuffs
 import Assets
 import GameTimer
 
-
-buffTuple jumpyBuffId = compiletime(createBuffObject("Hyper Aggression", "Jumps towards any attacker. 4 second cooldown.", "BTNCriticalStrike.blp"))
+buffTuple jumpyBuffId = compiletime(createDummyBuffObject("Hyper Aggression", "Jumps towards any attacker. 4 second cooldown.", "BTNCriticalStrike.blp"))
 
 constant JUMP_DIST = 496*496
 

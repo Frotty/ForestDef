@@ -8,7 +8,7 @@ import Assets
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
-public buffTuple warningBuffAbil = compiletime(createBuffObject("|cff00ff00Warning", "Be cautious", "BTNWellSpring.blp"))
+public buffTuple warningBuffAbil = compiletime(createDummyBuffObject("|cff00ff00Warning", "Be cautious", "BTNWellSpring.blp"))
 
 public class WarningBuff extends NormalBuff
 	real startedTime

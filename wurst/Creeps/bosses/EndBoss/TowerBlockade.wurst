@@ -6,7 +6,7 @@ import Assets
 import public Buff
 import TextTagEntity
 
-buffTuple blockadeBuff = compiletime(createBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
+buffTuple blockadeBuff = compiletime(createDummyBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
 constant real BLOCKADE_DURATION = 120.
 public constant real BLOCKADE_MISSILE_TIME = 5
 constant int BLOCKADE_UNIT = 'u017'

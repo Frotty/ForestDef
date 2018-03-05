@@ -6,7 +6,7 @@ import Builder
 
 constant PUDGE_POWER_ID = 'A021'
 
-buffTuple pudgeBuffAbil = compiletime(createBuffObject("Percentage Power", "Deals 30% of max hp of the target in additional damage", "BTNCriticalStrike.blp"))
+buffTuple pudgeBuffAbil = compiletime(createDummyBuffObject("Percentage Power", "Deals 30% of max hp of the target in additional damage", "BTNCriticalStrike.blp"))
 
 public class PudgePowerBuff extends NormalBuff
 

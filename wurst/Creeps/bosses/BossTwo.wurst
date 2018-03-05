@@ -2,7 +2,7 @@ package BossTwo
 import Boss
 import PresetBuffs
 
-public buffTuple buffAbil = compiletime(createBuffObject("Tentacolous", "The boss spawns tentacles when it loses hitpoints", "ReplaceableTextures\\CommandButtons\\BTNTentacle.blp"))
+public buffTuple buffAbil = compiletime(createDummyBuffObject("Tentacolous", "The boss spawns tentacles when it loses hitpoints", "ReplaceableTextures\\CommandButtons\\BTNTentacle.blp"))
 constant TENTACLE_ID = 'u00W'
 
 public class SludgeBuff extends ShieldBuff

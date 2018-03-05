@@ -8,7 +8,7 @@ constant ENDBOSS_ID = 'n00P'
 
 constant m = new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3")
 constant finalBossMaxHp = 1000
-constant castInterval = 10.
+constant castInterval = 8.
 constant stageTwoPercentage = .33
 constant stageThreePercentage = .10
 
@@ -33,23 +33,23 @@ public class EndBoss extends Boss
 		let percentage = actor.getHP() / finalBossMaxHp
 		if stage == 1 and percentage < stageTwoPercentage
 			stage = 2
-			abilities.remove("blockade")
-			abilities.add("raiseDead")
-			abilities.add("shield")
+	// 		abilities.remove("blockade")
+	// 		abilities.add("raiseDead")
+	// 		abilities.add("shield")
 		if stage == 2 and percentage < stageThreePercentage
 			stage = 3
-			abilities.remove("shiled")
-			abilities.add("batteringRam")
+	// 		abilities.remove("shiled")
+	// 		abilities.add("batteringRam")
 
 	static function onCastTimer()
 		let boss = GetExpiredTimer().getData() castTo EndBoss
 		boss.castCounter++
 		switch boss.stage
 			case 1
-				if boss.castCounter mod 1 == 0
+				if boss.castCounter mod (1 * startPosCount) == 0
 					boss.castAbility()
 			case 2
-				if boss.castCounter mod 2 == 0
+				if boss.castCounter mod (2 * startPosCount) == 0
 					boss.castAbility()
 			case 3
 				boss.castAbility()
@@ -111,7 +111,7 @@ public class EndBossFight
 		print("|cffE62121 Prepare for your end!")
 		bosses = new LinkedList<EndBoss>()
 		destroyerSummoning = new FinalBossSummoning(this)
-		for j = 0 to 0 //startPosCount
+		for j = 0 to startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle))
 
 	function createDestroyerSummoner(EndBoss castingBoss)

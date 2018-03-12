@@ -2,9 +2,11 @@ package WaveTower
 import Tower
 import Boss
 import Assets 
+import GroupUtils
+import ClosureForGroups
 
-constant real AREA_OF_EFFECT = 192.
-public constant int FIRST_WAVE_ID = 'h01N'
+public constant FIRST_WAVE_ID = 'h01N'
+constant AREA_OF_EFFECT = 192.
 
 public class WaveTower extends Tower
 	int level = 1
@@ -13,7 +15,7 @@ public class WaveTower extends Tower
 		super(t)
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(pos.withTerrainZ(32), ud.getPos().toVec2(), 22, owner, level, actor)
+		new WaveMissile(pos.withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
 		
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
@@ -30,37 +32,37 @@ function getKB(int level) returns real//towerlevel
 	return (4.85 + (level*level))
 	
 class WaveMissile extends Projectile
+	let affected = getGroup()
 	int level
-	group affected
 	unit tower
 	
 	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
-		super( pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Abilities.crushingWaveMissile )
+		super(pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Abilities.crushingWaveMissile )
 		setZAngle(angle(0))
 		this.tower = tower
 		setSpeed(speed)
 		setAcc(0.975)
-		affected = CreateGroup()
 		this.level = level
 		
 	override function update()
 		if(getVel().lengthSquared() < 16)
 			terminate()
 			return
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
-		for u from ENUM_GROUP
-			if u.isAliveTrick() and not IsUnitType(u, UNIT_TYPE_FLYING)
-				let data = (u.getUserData() castTo UnitEntity)
-				if IsUnitInGroup(u, affected)
+		
+		forUnitsInRange(pos.toVec2(), AREA_OF_EFFECT) u -> 
+			if u.isAliveTrick() and not u.isType(UNIT_TYPE_FLYING)
+				let data = u.getEntity()
+				if affected.contains(u)
 					getDummy().damageTarget(u, getDOT(level), ATTACK_TYPE_PIERCE)
 				else if data != null and data instanceof Creep and not data.done
-					GroupAddUnit(affected, u)
+					let cd = data castTo Creep
+					affected.addUnit(u)
 					getDummy().damageTarget(u, getBlowDamage(level))
 					let upos = data.getPos()
 					let ang = pos.angleTo2d(upos)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
 					if data instanceof Boss
-						var speedPerc = 0.25 + (data.actor.getMoveSpeed() / 522)
+						var speedPerc = 0.25 + (cd.actor.getMoveSpeed() / 522) * 0.75
 						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
@@ -68,8 +70,7 @@ class WaveMissile extends Projectile
 		super.update()	
 		
 	ondestroy
-		affected.clear()
-		DestroyGroup(affected)
+		affected.release()
 
 
 

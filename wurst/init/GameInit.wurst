@@ -32,9 +32,9 @@ function start()
 	PlaySoundBJ(gg_snd_H01Uther03)
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
-	if allPlayers.size() == 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
+	if allPlayers.size() <= 2 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		allPlayers.forEach((PlayerData pd) -> pd.p..addGold(100000)..addLumber(10000))
-		getTimer().start( 15., function spawn )
+		getTimer().start( 35., function spawn )
 		Cheat("warpten")
 		Cheat("iseedeadpeople")
 		print("|cffFFCC00>>|r Editor Test Mode activated")
@@ -52,7 +52,7 @@ function spawn()
 	doAfter(7.75, () -> begin 
 		let instance1 = snd2.play()
 		doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
-			pitch *= 0.99902
+			pitch *= 0.99802
 			instance1.snd.setPitch(pitch)
 		end)
 		doAfter(0.55, () -> begin

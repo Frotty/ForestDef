@@ -20,7 +20,6 @@ public class FlamethrowerTower extends Tower
 	override function onAttack(UnitEntity ud)
 		new FlameMissile(pos.withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
 			
-			
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
 		level++

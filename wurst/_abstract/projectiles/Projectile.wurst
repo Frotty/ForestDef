@@ -1,5 +1,6 @@
 package Projectile
 import public FxEntity
+import ErrorHandling
 
 public class Projectile extends FxEntity
 	// Angles
@@ -50,13 +51,17 @@ public class Projectile extends FxEntity
 	override function update()
 		vel *= acc
 		pos += vel
-		setPos(pos)
-		if timed
-			time += ANIMATION_PERIOD
-			if time >= maxTime
-				terminate()
-				return
-		if ranged
-			if startpos.distanceToSq(pos) > maxDist
-				terminate()
+		if not pos.inBounds()
+			terminate()
+			error("projectile out of bounds")
+		else
+			setPos(pos)
+			if timed
+				time += ANIMATION_PERIOD
+				if time >= maxTime
+					terminate()
+					return
+			if ranged
+				if startpos.distanceToSq(pos) > maxDist
+					terminate()
 		

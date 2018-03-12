@@ -85,9 +85,10 @@ init
 	end)
 	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
 		let damager = GetEventDamageSource()
-		if damager.getEntity() != null and GetTriggerUnit().isAlive()
+		let damaged = GetTriggerUnit()
+		if damager != damaged and damager.getEntity() != null and GetTriggerUnit().isAlive()
 			let e = damager.getEntity()
 			if e instanceof Tower
 				let t = e castTo Tower
-				t.onAttack(GetTriggerUnit().getEntity() castTo UnitEntity)
+				t.onAttack(damaged.getEntity() castTo UnitEntity)
 	end)

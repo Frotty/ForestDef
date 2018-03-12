@@ -10,7 +10,7 @@ var killcount = 0
 var killcap = 18.
 
 var coinCount = GetRandomInt(-2, 3)
-var coinCap = 17
+var coinCap = 16
 var coinsSpawned = 0
 
 public function shouldSpawnCoin() returns boolean

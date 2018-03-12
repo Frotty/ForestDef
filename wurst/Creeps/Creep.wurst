@@ -7,6 +7,8 @@ import public Bounty
 import public initlater PlayerData
 import initlater LumberAndCoinSystem
 import GameTimer
+import MapBounds
+import ErrorHandling
 
 public constant CREEP_OWNER = players[9]
 
@@ -84,12 +86,16 @@ public class Creep extends UnitEntity
 							showBountyTextTag(restBounty, actor, pd.p)
 
 	override function update()
-		if isTerrainWalkable(pos.x, pos.y)
-			vel *= (0.975)
+		if not pos.inBounds()
+			terminate()
+			error("creep out of bounds")
 		else
-			let normal = getPathingNormal(pos.toVec2())
-			vel = getBounceVec(vel, normal)
-		super.update()
+			if isTerrainWalkable(pos.x, pos.y)
+				vel *= (0.975)
+			else
+				let normal = getPathingNormal(pos.toVec2())
+				vel = getBounceVec(vel, normal)
+			super.update()
 		
 		
 			

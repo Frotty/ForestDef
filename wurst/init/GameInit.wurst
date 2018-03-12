@@ -49,21 +49,17 @@ function spawn()
 	snd.play()
 	startSpawn()
 	GetExpiredTimer().release()
-	doAfter(7.75, () -> begin 
+	doAfter(7.75) -> 
 		let instance1 = snd2.play()
-		doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
+		doPeriodicallyTimed(0.3, 10) cb -> 
 			pitch *= 0.99802
 			instance1.snd.setPitch(pitch)
-		end)
-		doAfter(0.55, () -> begin
+		doAfter(0.55) -> 
 			let instance2 = snd2.play()
-			doPeriodicallyTimed(0.3, 10, (CallbackCounted cb) -> begin
+			doPeriodicallyTimed(0.3, 10) cb -> 
 				instance2.snd.setPitch(pitch)
-			end)
-		end)
 		doAfter(14.25, () -> snd3.play())
-		
-	end)
+
 
 
 init

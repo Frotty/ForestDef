@@ -2,8 +2,8 @@ package HealbackTower
 import Assets
 import Tower
 import Projectile
-import PlayerData
 import TextTagEntity
+import Creep
 
 public constant HEALBACK_TOWER_ID = 'h02A'
 constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.85]
@@ -81,7 +81,7 @@ public class HealbackTower extends Tower
 
 	override function onAttack(UnitEntity target)
 		var damage = getDamage()
-		if damage > 0
+		if damage > 0 and target.owner == CREEP_OWNER
 			// new HealbackBuff(target, damage)
 			launchHealback(target, damage * getMultiplier(level))
 

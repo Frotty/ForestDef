@@ -1,14 +1,34 @@
 package TrooperTower
 import Tower
 import public Entity
+import TerrainUtils
 
 constant DUMMY_DIST = 15.
 public constant TOWER_TROOPER_ID = 'h01E'
 constant TROOP_ID = 'h01F'
+constant TROOPG_ID = 'h01F'
 
 trigger tupgradestart
 trigger tupgradecancel
 
+
+public class TroopGround extends UnitEntity
+
+	construct (vec3 pos, player owner)
+		super(createUnit(owner, TROOPG_ID, pos, angle(0)))
+		actor.setXYZReal(pos)
+		
+	function setStaticPos(vec3 pos)
+		this.pos = pos
+		actor.setXYZReal(this.pos)
+
+	override function update()
+		if getTerrainZ(pos.x, pos.y) < pos.z
+			pos += gravity
+			actor.setXYZReal(pos)
+		else
+			deactivate()
+		
 public class Troop extends UnitEntity
 
 	construct (vec2 pos, player owner)
@@ -18,14 +38,11 @@ public class Troop extends UnitEntity
 		
 	function setStaticPos(vec3 pos)
 		this.pos = pos
-		actor.setXYZ(this.pos)
+		actor.setXYZReal(this.pos)
 		
 	ondestroy
-		if not IsUnitHidden(actor)
-			SetUnitExploded(actor, true)
 		actor.setEntity(null)
-		SetUnitFlyHeight(actor, 0.,0.) //on the ground...
-		KillUnit(actor)
+		actor.remove()
 
 public class TrooperTower extends Tower
 	LinkedList<Troop> troops = new LinkedList<Troop>()
@@ -95,6 +112,7 @@ public class TrooperTower extends Tower
 	ondestroy
 		for trooper in troops
 			trooper.terminate()
+			new TroopGround(trooper.pos, trooper.owner)
 		destroy troops
 	
 			

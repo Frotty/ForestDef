@@ -1,10 +1,11 @@
 package LumberAndCoinSystem
 import Creep
-import StandardTextTags
+import GameTimer
 import Assets
 
 var WOOD_BOUNTY = 1
 public constant COIN_ID = 'I00F'
+public constant WOOD_ID = 'I00H'
 
 var killcount = 0
 var killcap = 18.
@@ -39,10 +40,13 @@ function getExtraBounty()
 				killcap *= 1.15
 
 			killcount = 0
+			let itm = createItem(WOOD_ID, GetDyingUnit().getPos())
+			doAfter(45., () -> begin
+				if itm != null and itm.getLife() > .405
+					itm.remove()
+			end)
+
 			for pd in allPlayers
-				pd.p.addLumber(WOOD_BOUNTY)
-				if pd.builder.actor != null and pd.builder.actor.isAlive()
-					createLumberBountyTextTag(pd.builder.actor, WOOD_BOUNTY)
 				if pd.p.getLumber() > 20 and allPlayers.size() > 1
  					let val = (pd.p.getLumber() / allPlayers.size()).toInt()
 					let remainder = pd.p.getLumber() mod allPlayers.size()
@@ -51,16 +55,38 @@ function getExtraBounty()
 						p2.p.addLumber(val)
 					printTimedToPlayer("Due to inactivity your lumber has been dispersed among teammates!", 10, pd.p)
 
-function grantCoins()
-	if GetManipulatedItem().getTypeId() == COIN_ID
-		let gold = GetManipulatedItem().getUserData()
+function grantCoinsAndLumber()
+	let itm = GetManipulatedItem()
+	if itm.getTypeId() == COIN_ID
+		let gold = itm.getUserData()
 		flashEffect(UI.goldCredit, GetManipulatingUnit().getPos())
 		printTimed("|cffFFCC00>> " + GetManipulatingUnit().getOwner().getNameColored() + " picked up a coin!", 10.)
 		for p in allPlayers
 			p.p.addGold(gold)
 			if p.builder.actor != null and p.builder.actor.isAlive()
-				createGoldBountyTextTag(p.builder.actor, gold)
+				createFText(p.builder.getPos() - vec2(16,0), "+" + gold.toString(), 0.024 / 0.0023)
+					..setDynamic(vec2(0., .03), 3.)
+					.tt..setFadepoint(2.)
+						..setColor(255, 220, 0, 255)
 				flashEffect(Abilities.resourceEffectTarget, p.builder.getPos())
+	if itm.getTypeId() == WOOD_ID
+		flashEffect(Objects.entBirthTarget, GetManipulatingUnit().getPos())
+		printTimed("|cffFFCC00>> " + GetManipulatingUnit().getOwner().getNameColored() + " picked up a lumber bundle!", 10.)
+		for pd in allPlayers
+			pd.p.addLumber(WOOD_BOUNTY)
+			if pd.builder.actor != null and pd.builder.actor.isAlive()
+				createFText(pd.builder.getPos() - vec2(16,0), "+" + WOOD_BOUNTY.toString(), 0.024 / 0.0023)
+					..setDynamic(vec2(0., .03), 3.)
+					.tt..setFadepoint(2.)
+						..setColor(0, 200, 80, 255)
+			if pd.p.getLumber() > 20 and allPlayers.size() > 1
+				let val = (pd.p.getLumber() / allPlayers.size()).toInt()
+				let remainder = pd.p.getLumber() mod allPlayers.size()
+				pd.p.setLumber(remainder)
+				for p2 in allPlayers
+					p2.p.addLumber(val)
+				printTimedToPlayer("Due to inactivity your lumber has been dispersed among teammates!", 10, pd.p)
+		
 			
 public function initLumberSystem()
 	if allPlayers.size() <= 2
@@ -69,4 +95,4 @@ public function initLumberSystem()
 		killcap = 36
 		coinCap = 54 + GetRandomInt(-6,6)
 	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> getExtraBounty())
-	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> grantCoins())
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> grantCoinsAndLumber())

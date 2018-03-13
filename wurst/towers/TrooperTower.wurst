@@ -38,6 +38,8 @@ public class TrooperTower extends Tower
 		addTrooper()
 		tupgradestart.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_START)
 		tupgradecancel.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_CANCEL)
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
+			terminate()
 			
 	override function onUpgrade()
 		level++

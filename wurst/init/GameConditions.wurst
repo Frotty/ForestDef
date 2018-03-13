@@ -3,34 +3,15 @@ import Entity
 import EndBoss
 import PlayerData
 import UnitSpawnSystem
+import EndGame
 
 public timer gameTime
 
-public function victory()
-	startEndBoss()
-
-public var gameOver = false
-	
-function lose()
-	print("|cff666666Game over")
-	var ea = Entity.firstInactive
-	while ea != null
-		if ea instanceof UnitEntity
-			let ue = ea castTo UnitEntity
-			ue.actor.setTimeScale(0)
-			ue.actor.pause()
-		ea = ea.next
-	for e in Entity
-		if e instanceof UnitEntity
-			let ue = e castTo UnitEntity
-			ue.actor.setTimeScale(0)
-			ue.actor.pause()
-	gameOver = true
 
 function endGameTimer()
 	print("|cffFFCC00>> The Magic Treasure has been destroyed.|r\nYou failed!")
 	gameTime.pause()
-	getTimer().start(1., function lose)
+	getTimer().start(1., function loseGame)
 	stopSpawn()
 	
 class Treasure extends UnitEntity
@@ -40,7 +21,7 @@ class Treasure extends UnitEntity
 
 public function initConds()
 	gameTime = getTimer()
-	gameTime.start(16.*60. + 20., function victory)
+	gameTime.start(16.*60. + 20., function startEndBoss)
 	timerdialog td = CreateTimerDialog(gameTime)		
 	TimerDialogSetTitle( td, "Until Finale: " )
 	TimerDialogDisplay( td, true )

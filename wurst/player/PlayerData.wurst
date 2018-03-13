@@ -3,7 +3,7 @@ import Wave
 import PhysicsProjectile
 import initlater Selector
 import Builder
-import initlater GameConditions
+import initlater EndGame
 
 public constant allPlayers = new LinkedList<PlayerData>()
 public PlayerData array pDatas

@@ -102,7 +102,7 @@ public class FinalBossSummoning
 		endBossFightRef.endDestroyerSummoning()
 
 	ondestroy
-		for DestroyerSummoner s in summoners 	
+		for DestroyerSummoner s in summoners
 			new Fx(s.pos, angle(0), Abilities.aIamTarget).hiddenDestroy()
 			s.actor.kill()
 		destroy summoners

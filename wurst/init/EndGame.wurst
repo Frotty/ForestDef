@@ -1,0 +1,36 @@
+package EndGame
+import Entity
+
+public var gameOver = false
+
+public function loseGame()
+	print("|cff666666Game over")
+	var ea = Entity.firstInactive
+	while ea != null
+		if ea instanceof UnitEntity
+			let ue = ea castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+		ea = ea.next
+	for e in Entity
+		if e instanceof UnitEntity
+			let ue = e castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+	gameOver = true
+
+public function winGame()
+	print("|cff666666Victory!")
+	var ea = Entity.firstInactive
+	while ea != null
+		if ea instanceof UnitEntity
+			let ue = ea castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+		ea = ea.next
+	for e in Entity
+		if e instanceof UnitEntity
+			let ue = e castTo UnitEntity
+			ue.actor.setTimeScale(0)
+			ue.actor.pause()
+	gameOver = true

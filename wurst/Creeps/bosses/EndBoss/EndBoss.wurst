@@ -3,6 +3,7 @@ import TowerBlockade
 import DestroyerSummoner
 import Tower
 import Boss
+import EndGame
 
 constant ENDBOSS_ID = 'n00P'
 
@@ -19,14 +20,16 @@ public class EndBoss extends Boss
 	int castCounter = 0
 	timer castTimer
 	LinkedList<string> abilities = new LinkedList<string>()
+	EndBossFight bossFight
 
-	construct(vec3 pos, int typId, int bounty, vec2 target)
+	construct(vec3 pos, int typId, int bounty, vec2 target, EndBossFight bossFight)
 		super(pos, typId, bounty, target)
 		abilities.add("blockade")
 		abilities.add("destroyerSummoner")
 		castTimer = getTimer()
 		castTimer.setData(this castTo int)
 		castTimer.startPeriodic(castInterval, function EndBoss.onCastTimer)
+		this.bossFight = bossFight
 
 	override function update()
 		super.update()
@@ -94,6 +97,10 @@ public class EndBoss extends Boss
 	// TODO function castRaiseDead()
 	// TODO function switchPlaces()
 
+	override function onDeath()
+		super.onDeath()
+		bossFight.onBossDeath(this)
+
 	ondestroy
 		destroy this.abilities
 		castTimer.destr()
@@ -111,7 +118,7 @@ public class EndBossFight
 		bosses = new LinkedList<EndBoss>()
 		destroyerSummoning = new FinalBossSummoning(this)
 		for j = 0 to startPosCount
-			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle))
+			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle, this))
 
 	function createDestroyerSummoner(EndBoss castingBoss)
 		if not summoningComplete
@@ -119,19 +126,21 @@ public class EndBossFight
 			destroyerSummoning.addSummoner(summoner)
 
 	function endDestroyerSummoning()
-		summoningComplete = true
-		for boss in bosses
-			boss.abilities.remove("destroyerSummoner")
-		destroy destroyerSummoning
+		if not summoningComplete
+			summoningComplete = true
+			for boss in bosses
+				boss.abilities.remove("destroyerSummoner")
+			destroy destroyerSummoning
+
+	function onBossDeath(EndBoss b)
+		bosses.remove(b)
+		if bosses.size() == 0
+			destroy this
 
 	ondestroy
-		if not summoningComplete
-			endDestroyerSummoning()
+		endDestroyerSummoning()
 		destroy bosses
 		onVictory()
-
-
-let bossWave = new BossWave(ENDBOSS_ID, 1, 175, gg_snd_AirBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> new EndBoss(startPos, unitId, bounty, middle))
 
 public function startEndBoss()
 	printTimed("    |cffFFC519Beat the final boss to win!", 25)
@@ -139,12 +148,11 @@ public function startEndBoss()
 
 public function onVictory()
 	printTimed("|cffFFCC00>> |cffFFA53ACongratulations, you won!|r\n        |cff7B7B7BThe game will end in 20 seconds.", 25)
+	winGame()
 	doAfter(20, () -> begin
 		for pd in allPlayers
 			CustomVictoryBJ(pd.p, true, false)
 	end)
-
-
 
 class Music
 	int spellid

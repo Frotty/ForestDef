@@ -36,7 +36,6 @@ class ForceField extends FxEntity
 	
 	
 init
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST) ->
 		if GetSpellAbilityId() == SPELL_ID
 			new ForceField(GetSpellAbilityUnit(), getSpellTargetPos())
-	end)

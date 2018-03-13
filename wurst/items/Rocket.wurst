@@ -51,8 +51,7 @@ class Shrapnell extends PhysicsProjectile
 		super.update()
 	
 public function initRocket()
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
 		if GetSpellAbilityId() == ROCKET_SPELL_ID
 			new Rocket(GetSpellAbilityUnit().getPos3Real() + vec3(0,0,90), vec2(GetSpellTargetX(),GetSpellTargetY()))
-	end)
 	

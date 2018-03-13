@@ -83,7 +83,7 @@ init
 			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
 			
 	end)
-	EventListener.add(EVENT_UNIT_DAMAGED, () -> begin
+	EventListener.add(EVENT_UNIT_DAMAGED) ->
 		let damager = GetEventDamageSource()
 		let damaged = GetTriggerUnit()
 		if damager != damaged and damager.getEntity() != null and damaged.isAlive()
@@ -94,4 +94,3 @@ init
 					t.onAttack(damaged.getEntity() castTo UnitEntity)
 				else
 					t.actor.issueImmediateOrder("stop")
-	end)

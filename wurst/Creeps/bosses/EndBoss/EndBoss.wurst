@@ -84,9 +84,8 @@ public class EndBoss extends Boss
 	function castTowerBlockade(Tower tower)
 		actor.setAnimation("spell")
 		// new TowerBlockadeMissile(pos, owner, tower) // causes instant crash
-		doAfter(BLOCKADE_MISSILE_TIME, () -> begin
+		doAfter(BLOCKADE_MISSILE_TIME) ->
 			new TowerBlockadeBuff(tower)
-		end)
 
 	function castDestroyerSummoner()
 		currentEndBossFight.createDestroyerSummoner(this)

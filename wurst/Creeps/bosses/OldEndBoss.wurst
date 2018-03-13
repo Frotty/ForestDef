@@ -28,10 +28,9 @@ public function startEndBoss()
 
 public function onVictory()
 	printTimed("|cffFFCC00>> |cffFFA53ACongratulations, you won!|r\n        |cff7B7B7BThe game will end in 20 seconds.", 25)
-	doAfter(20, () -> begin
+	doAfter(20) ->
 		for pd in allPlayers
 			CustomVictoryBJ(pd.p, true, false)
-	end)
 
 
 

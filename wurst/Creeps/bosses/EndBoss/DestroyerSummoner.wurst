@@ -95,10 +95,9 @@ public class FinalBossSummoning
 		let summonPos = middle.polarOffset(angle(animationLoop * 6.28), 200.)
 		let destroyerFx = new Fx(summonPos, angle(0), Abilities.markOfChaosTarget)
 		let middleFx = new Fx(middle, angle(0), Abilities.markOfChaosTarget)..setScale(2)
-		doAfter(2., () -> begin
+		doAfter(2.) ->
 			destroy destroyerFx
 			destroy middleFx
-		end)
 		new Creep(summonPos.toVec3(), DESTROYER_ID, DESTROYER_BOUNTY, middle)
 		endBossFightRef.endDestroyerSummoning()
 

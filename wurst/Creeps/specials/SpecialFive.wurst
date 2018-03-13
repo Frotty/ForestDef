@@ -24,14 +24,12 @@ public class SpecialFive extends Special
 			this.actor..setPropWindow(0)
 			..setAnimation("Stand Work Gold")
 			..queueAnimation("Stand Work Gold")
-			doAfter(6, () -> begin
+			doAfter(6) ->
 				this.actor.setPropWindow(GetUnitDefaultPropWindow(actor))
 				spawntimer -= 6.
-			end)
 			
 			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
 			for i = 1 to SPAWNAMOUNT
-				doAfter((i-1).toReal() * 1.5, ()-> begin
+				doAfter((i-1).toReal() * 1.5) ->
 					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
 					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
-				end)

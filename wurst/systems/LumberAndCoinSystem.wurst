@@ -41,10 +41,9 @@ function getExtraBounty()
 
 			killcount = 0
 			let itm = createItem(WOOD_ID, GetDyingUnit().getPos())
-			doAfter(45., () -> begin
+			doAfter(45.) ->
 				if itm != null and itm.getLife() > .405
 					itm.remove()
-			end)
 
 			for pd in allPlayers
 				if pd.p.getLumber() > 20 and allPlayers.size() > 1

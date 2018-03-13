@@ -29,8 +29,7 @@ public function onReinforcements()
 			new Reinforcement(middle.polarOffset(angl, 256), owner, PRIEST_ID, angl)
 
 init
-	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM) ->
 		if GetManipulatedItem().getTypeId() == ITEM_ID
 			GetManipulatedItem().remove()
 			onReinforcements()
-	end)

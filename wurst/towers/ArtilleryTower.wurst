@@ -58,10 +58,10 @@ function checkSpell()
 		vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
 		angle a = at.getPos().angleTo2d(target)
 		if at.pos.distanceTo2d(target) > 2950
-			nullTimer(() -> begin 
+			nullTimer() -> 
 				at.actor..issueImmediateOrderById(OrderId("stop"))
 				..removeAbility(SPELL_ID).addAbility(SPELL_ID)
-			end)
+
 		for int i = 0 to 3+at.level*3
 			let startPos = vec2(GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.), GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.))
 			new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+at.level*50, at.owner, a, 250.+(at.level*225))

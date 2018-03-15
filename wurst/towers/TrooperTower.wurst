@@ -18,13 +18,10 @@ public class TroopGround extends UnitEntity
 		super(createUnit(owner, TROOPG_ID, pos, angle(0)))
 		actor.setXYZReal(pos)
 		
-	function setStaticPos(vec3 pos)
-		this.pos = pos
-		actor.setXYZReal(this.pos)
-
 	override function update()
 		if getTerrainZ(pos.x, pos.y) < pos.z
-			pos += gravity
+			vel += gravity
+			pos += vel
 			actor.setXYZReal(pos)
 		else
 			deactivate()
@@ -41,7 +38,10 @@ public class Troop extends UnitEntity
 		actor.setXYZReal(this.pos)
 		
 	ondestroy
+		if not IsUnitHidden(actor)
+			SetUnitExploded(actor, true)
 		actor.setEntity(null)
+		KillUnit(actor)
 		actor.remove()
 
 public class TrooperTower extends Tower
@@ -111,8 +111,8 @@ public class TrooperTower extends Tower
 
 	ondestroy
 		for trooper in troops
-			trooper.terminate()
 			new TroopGround(trooper.pos, trooper.owner)
+			trooper.terminate()
 		destroy troops
 	
 			

@@ -18,30 +18,27 @@ int usages = 0
 public function onTownBell() 
 	snd.play()
 	lastRinger = GetManipulatingUnit().getOwner()
-	forUnitsOfPlayer(players[8], (unit u) -> begin
+	forUnitsOfPlayer(players[8]) u ->
 		if u.getTypeId() == DUMMY_ID
 			let pos = u.getPos()
 			let facing = u.getFacingAngle()
 			addEffect(Abilities.avatarCaster, pos).destr()
 			u.remove()
 			createUnit(lastRinger, TOWER_ID, pos, facing)
-	end)
-	doAfter(SPELL_DURATION, () -> begin
-		forUnitsOfPlayer(lastRinger, (unit u) -> begin
+			
+	doAfter(SPELL_DURATION) ->
+		forUnitsOfPlayer(lastRinger) u ->
 			if u.getTypeId() == TOWER_ID
 				let pos = u.getPos()
 				let facing = u.getFacingAngle()
 				addEffect(UI.goldCredit, pos).destr()
 				u.remove()
 				createUnit(players[8], DUMMY_ID, pos, facing)
-		end)
-	end)
 	
 	usages++
 			
 public function initTownBell()
-	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM) ->
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
 			GetManipulatedItem().remove()
 			onTownBell()
-	end)

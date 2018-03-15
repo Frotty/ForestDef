@@ -69,10 +69,10 @@ public class EndBoss extends Boss
 				print("Ability not implemented :)))")
 
 	function tryCastTowerBlockade()
-		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 3072., Filter(() -> begin
+		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, 3072., Filter() ->
 			var u = GetFilterUnit()
 			return IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
-		end))
+
 		for tower in ENUM_GROUP
 			let towerEntity = tower.getUserData() castTo UnitEntity
 			var hasBuff = false
@@ -149,10 +149,9 @@ public function startEndBoss()
 public function onVictory()
 	printTimed("|cffFFCC00>> |cffFFA53ACongratulations, you won!|r\n        |cff7B7B7BThe game will end in 20 seconds.", 25)
 	winGame()
-	doAfter(20, () -> begin
+	doAfter(20) ->
 		for pd in allPlayers
 			CustomVictoryBJ(pd.p, true, false)
-	end)
 
 class Music
 	int spellid

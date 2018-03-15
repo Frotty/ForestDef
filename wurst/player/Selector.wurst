@@ -38,7 +38,7 @@ public class Selector extends UnitEntity
 			SelectUnit( actor, true )
 			PanCameraToTimed(actor.getX(), actor.getY(), 0)
 
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST, () -> begin
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST) ->
 			let id = GetSpellAbilityId()
 			let pd = pDatas[owner.getId()]
 			if id == FAT_SPELL_ID
@@ -57,7 +57,6 @@ public class Selector extends UnitEntity
 			terminate()
 			pd.select = null
 			pd.builder.actor.addItem(ROCKET_ITEM_ID)
-		end)
 
 	override function update()
 		if p > 0.990

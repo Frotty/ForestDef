@@ -4,7 +4,7 @@ import Buff
 import Assets
 
 public function initRevivalSystem()
-	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM) ->
 		if GetItemTypeId(GetManipulatedItem()) == 'I007'
 			let reviver = pDatas[GetTriggerPlayer().getId()]
 			let revPos = reviver.builder.getPos().toVec2()
@@ -20,5 +20,4 @@ public function initRevivalSystem()
 			if s.length() > 0
 				s += "."
 				printTimed("|cffFFCC00>>|r " + GetTriggerPlayer().getNameColored() + " |cff21C55Ahas revived the following players:|r " + s, 15)
-	end)
 	

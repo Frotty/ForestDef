@@ -55,10 +55,10 @@ public class Creep extends UnitEntity
 		if dropCoin
 			let itm = createItem(COIN_ID, getPos())
 			itm.setUserData((getElapsedGameTime() / 17.).round())
-			doAfter(45., () -> begin
+			doAfter(45.) ->
 				if itm != null and GetWidgetLife(itm) > .405
 					itm.remove()
-			end)
+
 		if killer != null
 			var size = allPlayers.size()
 			if pDatas[killer.getOwner().getId()] == null

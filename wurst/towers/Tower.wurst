@@ -55,10 +55,10 @@ public class Tower extends UnitEntity
 		actor.issueImmediateOrder("stop")
 
 	function pause()
-		this.actor.pause()
+		actor.pause()
 	
 	function unpause()
-		this.actor.unpause()
+		actor.unpause()
 
 /** Checks if the upgrade unlocks techtree */
 function checkTech(unit u) 
@@ -66,15 +66,15 @@ function checkTech(unit u)
 		SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
 
 init
-	EventListener.add(EVENT_PLAYER_UNIT_CONSTRUCT_START, () -> begin
+	EventListener.add(EVENT_PLAYER_UNIT_CONSTRUCT_START) ->
 		let u = GetConstructingStructure()
 		let id = u.getTypeId()
 		if id == BASIC_TOWER_ID
 			new Tower(u)
 		else if id == BASIC_WALL_ID or id == STOPPER_QUICKBUILD_ID
 			new Wall(u)
-	end)
-	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH, () -> begin
+
+	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH) ->
 		// Make Last Level of tier 1 wall available
 		let u = GetTriggerUnit()
 		checkTech(u)
@@ -82,7 +82,7 @@ init
 		if data != null and data instanceof Tower
 			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
 			
-	end)
+
 	EventListener.add(EVENT_UNIT_DAMAGED) ->
 		let damager = GetEventDamageSource()
 		let damaged = GetTriggerUnit()

@@ -21,7 +21,7 @@ public class Wall extends UnitEntity
 public class Tower extends UnitEntity
 	
 	construct (unit tower)
-		super(tower)
+		super(tower, tower.getPos3Real())
 			
 	construct(Tower oldTower)
 		super(oldTower.actor)
@@ -91,6 +91,6 @@ init
 			if e instanceof Tower
 				let t = e castTo Tower
 				if damaged.getEntity() != null
-					t.onAttack(damaged.getEntity() castTo UnitEntity)
+					t.onAttack(damaged.getEntity())
 				else
 					t.actor.issueImmediateOrder("stop")

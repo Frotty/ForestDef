@@ -34,7 +34,5 @@ public class BossFour extends Boss
 		new JumpyBuff(55555).apply(this)
 		
 	override function update()
-		if actor.getFlyHeight() > 1
-			vel += gravity
 		super.update()
 		actor.setXYZReal(pos)

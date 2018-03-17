@@ -23,8 +23,6 @@ public class Builder extends UnitEntity
 		owner.p.selectSingle(actor)
 		new WarningBuff().apply(this)
 	
-		if actor.getFlyHeight() > 1
-			vel += gravity
 		super.update()
 		actor.setXYZReal(pos)
 		

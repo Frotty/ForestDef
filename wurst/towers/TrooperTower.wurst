@@ -1,12 +1,11 @@
 package TrooperTower
 import Tower
 import public Entity
-import TerrainUtils
 
 constant DUMMY_DIST = 15.
 public constant TOWER_TROOPER_ID = 'h01E'
 constant TROOP_ID = 'h01F'
-constant TROOPG_ID = 'h01F'
+constant TROOPG_ID = 'h02D'
 
 trigger tupgradestart
 trigger tupgradecancel
@@ -16,26 +15,15 @@ public class TroopGround extends UnitEntity
 
 	construct (vec3 pos, player owner)
 		super(createUnit(owner, TROOPG_ID, pos, angle(0)))
-		actor.setXYZReal(pos)
-		
-	override function update()
-		if getTerrainZ(pos.x, pos.y) < pos.z
-			vel += gravity
-			pos += vel
-			actor.setXYZReal(pos)
-		else
-			deactivate()
+		setXY(pos)
 		
 public class Troop extends UnitEntity
 
-	construct (vec2 pos, player owner)
+	construct (vec3 pos, player owner)
 		super(createUnit(owner, TROOP_ID, pos, angle(0)))
+		deactivate()
 		actor.addAbility(LOCUST_ID)
 		actor.setPropWindow(0.)
-		
-	function setStaticPos(vec3 pos)
-		this.pos = pos
-		actor.setXYZReal(this.pos)
 		
 	ondestroy
 		if not IsUnitHidden(actor)
@@ -45,7 +33,7 @@ public class Troop extends UnitEntity
 		actor.remove()
 
 public class TrooperTower extends Tower
-	LinkedList<Troop> troops = new LinkedList<Troop>()
+	let troops = new LinkedList<Troop>()
 	int level = 0
 	
 	construct (Tower t)
@@ -68,35 +56,30 @@ public class TrooperTower extends Tower
 			troop.actor.issueTargetOrder("smart", target.actor)
 			
 	static function onUpgradeStart()
-		var e = GetTriggerUnit().getUserData()
-		if e != 0
-			TrooperTower t = e castTo TrooperTower
-			for troop in t.troops
-				troop.actor.setVertexColor(COLOR_BLACK)
-				troop.actor.pause()
+		let t = GetTriggerUnit().getEntity() castTo TrooperTower
+		for troop in t.troops
+			troop.actor.setVertexColor(COLOR_BLACK)
+			troop.actor.pause()
 			
 	static function onUpgradeCancel()
-		var e = GetTriggerUnit().getUserData()
-		if e != 0
-			TrooperTower t = e castTo TrooperTower
-			for troop in t.troops
-				troop.actor.setVertexColor(COLOR_WHITE)
-				troop.actor.unpause()
-				troop.setStaticPos(troop.pos)
+		let t = GetTriggerUnit().getEntity() castTo TrooperTower
+		for troop in t.troops
+			troop.actor.setVertexColor(COLOR_WHITE)
+			troop.actor.unpause()
+			troop.setXY(troop.pos)
 			
 	function addTrooper()
-		troops.add(new Troop(pos.toVec2(), owner))
+		troops.add(new Troop(pos + vec3(0,0,160), owner))
 		// Make into circle
 		let angleV = 360. / troops.size()
 		var angleD = 0.
-		let tz = 160.
 		for troop in troops
-			let tPos = pos.toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST)
+			let tpos = getPos().toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST).withZ(troop.pos.z)
 			troop.actor..setVertexColor(COLOR_WHITE)
 			..unpause()
 			..setFacing(angleD.asAngleDegrees())
 			..addAbility(LOCUST_ID)
-			troop.setStaticPos(tPos.withZ(tz))
+			troop.setXY(tpos)
 			angleD += angleV
 		
 	override function pause()

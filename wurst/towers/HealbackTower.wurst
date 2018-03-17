@@ -4,6 +4,7 @@ import Tower
 import Projectile
 import TextTagEntity
 import Creep
+import ClosureForGroups
 
 public constant HEALBACK_TOWER_ID = 'h02A'
 constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.95]
@@ -29,12 +30,11 @@ public class HealbackTower extends Tower
 	
 	static constant nearEntities = new LinkedList<EntityWithDist>()
 	static var statSource = ZERO2
-	static Comparator<EntityWithDist> comparator = (EntityWithDist e1, EntityWithDist e2) -> e1.distSq - e2.distSq
+	static Comparator<EntityWithDist> comparator = (e1, e2) -> e1.distSq - e2.distSq
 	
 	static function getNearestBuilding(vec2 source, int count, real range) returns LinkedList<UnitEntity>
 		statSource = source
-		GroupEnumUnitsInRange(ENUM_GROUP, source.x, source.y, range, Filter(() -> begin
-			var u = GetFilterUnit()
+		forUnitsInRange(source, range) u ->
 			var viable = true
 			// filter structureds
 			if not IsUnitType(u, UNIT_TYPE_STRUCTURE) or not u.isAlive()
@@ -53,8 +53,7 @@ public class HealbackTower extends Tower
 				if u.getHP() == u.getMaxHP()
 					viable = false
 			if viable
-				nearEntities.add(new EntityWithDist(u.getEntity() castTo UnitEntity, statSource.distanceToSq(u.getPos())))
-		end))
+				nearEntities.add(new EntityWithDist(u.getEntity(), statSource.distanceToSq(u.getPos())))
 
 		nearEntities.sortWith(comparator)
 		
@@ -109,13 +108,12 @@ public class HealbackMissile extends Projectile
 
 	override function update()
 		super.update()
-		vel += gravity
-		if (pos.distanceTo2d(target.pos) < HEALBACK_RADIUS)
+		if pos.distanceTo2d(target.pos) < HEALBACK_RADIUS
 			onReachTarget()
 			terminate()
  
 	function onReachTarget()
-		if (this.target != null and this.target.actor.isAlive())
+		if this.target != null and this.target.actor.isAlive()
 			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))
 			this.target.actor.addHP(this.heal)
 			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(7,9)), this.heal.toInt().toString(), 8, .75, colorA(223, 255, 52, 255))

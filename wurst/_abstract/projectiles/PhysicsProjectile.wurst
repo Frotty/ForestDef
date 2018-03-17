@@ -12,6 +12,7 @@ public class PhysicsProjectile extends Projectile
 		super(pos, radius, owner, xyAngle, fxpath)
 		setXYAngle(xyAngle)
 		oe = onEvent
+		gravity = defaultGravity
 		
 	override function update()
 		physicsUpdate(this)

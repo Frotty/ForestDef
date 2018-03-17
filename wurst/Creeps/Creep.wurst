@@ -8,6 +8,7 @@ import public initlater PlayerData
 import initlater LumberAndCoinSystem
 import GameTimer
 import MapBounds
+import UnitIndexer
 import ErrorHandling
 
 public constant CREEP_OWNER = players[9]

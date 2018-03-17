@@ -4,19 +4,33 @@ import Projectile
 import ClosureTimers
 import Assets
 
-constant real MISSILE_SPEED = 1000 * ANIMATION_PERIOD
-public constant int ART_TOWER_ID = 'h01O'
-constant int SPELL_ID = 'A01T'
-trigger castTrigger
+constant MISSILE_SPEED = 1000 * ANIMATION_PERIOD
+public constant ART_TOWER_ID = 'h01O'
+constant SPELL_ID = 'A01T'
 
 public class ArtilleryTower extends Tower
 	int level = 1
 	
 	construct(Tower t)
 		super(t)
-		castTrigger.registerUnitEvent(actor, EVENT_UNIT_SPELL_EFFECT)
-		actor.setPropWindow(0.)
-		actor..addAbility(SPELL_ID)
+		actor..setPropWindow(0.)
+		..addAbility(SPELL_ID)
+
+		registerSpell()
+
+	function registerSpell()
+		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
+			if GetSpellAbilityId() == SPELL_ID
+				if pos.distanceTo2d(getSpellTargetPos()) > 2950
+					nullTimer() -> 
+						actor..issueImmediateOrderById(OrderId("stop"))
+						..removeAbility(SPELL_ID)..addAbility(SPELL_ID)
+						
+				let a = pos.angleTo2d(getSpellTargetPos())
+				for i = 0 to 3 + level * 3
+					let startPos = getSpellTargetPos() + vec2(GetRandomReal(-200.,200.), GetRandomReal(-200.,200.))
+					new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+ level * 50, owner, a, 250.+(level*225))
+
 		
 	override function onUpgrade()
 		level++
@@ -52,21 +66,3 @@ function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
 	
 	
-function checkSpell()
-	if GetSpellAbilityId() == SPELL_ID
-		ArtilleryTower at = GetTriggerUnit().getUserData() castTo ArtilleryTower
-		vec2 target = vec2(GetSpellTargetX(),GetSpellTargetY())
-		angle a = at.getPos().angleTo2d(target)
-		if at.pos.distanceTo2d(target) > 2950
-			nullTimer() -> 
-				at.actor..issueImmediateOrderById(OrderId("stop"))
-				..removeAbility(SPELL_ID).addAbility(SPELL_ID)
-
-		for int i = 0 to 3+at.level*3
-			let startPos = vec2(GetRandomReal(GetSpellTargetX()-200.,GetSpellTargetX()+200.), GetRandomReal(GetSpellTargetY()-200.,GetSpellTargetY()+200.))
-			new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+at.level*50, at.owner, a, 250.+(at.level*225))
-
-public function initArtilleryTower()
-	castTrigger = CreateTrigger()
-	castTrigger.addAction(function checkSpell)
-

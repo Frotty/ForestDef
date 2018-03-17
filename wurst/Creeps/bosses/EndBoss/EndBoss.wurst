@@ -74,14 +74,14 @@ public class EndBoss extends Boss
 			return IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
 		end))
 		for tower in ENUM_GROUP
-			let towerEntity = tower.getUserData() castTo UnitEntity
+			let towerEntity = tower.getEntity()
 			var hasBuff = false
 			if towerEntity.hasBuffs()
 				for bff in towerEntity.getBuffs()
 					if bff instanceof TowerBlockadeBuff
 						hasBuff = true
 			if not hasBuff
-				castTowerBlockade(tower.getUserData() castTo Tower)
+				castTowerBlockade(towerEntity castTo Tower)
 				return
 
 	function castTowerBlockade(Tower tower)

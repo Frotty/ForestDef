@@ -26,7 +26,6 @@ public class TowerBlockadeMissile extends Projectile
 
 	override function update()
 		super.update()
-		vel += gravity
 
 
 public class TowerBlockadeBuff extends Buff

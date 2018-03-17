@@ -58,7 +58,6 @@ public class NormalWave
 					new Creep(spawnRects[j].randomPoint().toVec3(), id, wave.bounty, middle)
 		
 
-public function foo(int bossId, int amount, int bounty, sound s, CreateBoss boss)		
 public abstract class CreateBoss
 	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
 

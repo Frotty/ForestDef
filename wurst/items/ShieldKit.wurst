@@ -32,5 +32,5 @@ class ShieldKitBuff extends ShieldBuff
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
 		if GetSpellAbilityId() == 'A00D'
-			let data = GetSpellTargetUnit().getUserData() castTo UnitEntity
+			let data = GetSpellTargetUnit().getEntity()
 			new ShieldKitBuff(200. + (getElapsedGameTime() * 2.)).apply(data)

@@ -98,7 +98,7 @@ public class FinalBossSummoning
 		doAfter(2.) ->
 			destroy destroyerFx
 			destroy middleFx
-		new Creep(summonPos.toVec3(), DESTROYER_ID, DESTROYER_BOUNTY, middle)
+		new Creep(summonPos.toVec3(), DESTROYER_ID, DESTROYER_BOUNTY, middle, summonPos.angleTo(middle))
 		endBossFightRef.endDestroyerSummoning()
 
 	ondestroy
@@ -115,7 +115,7 @@ public class DestroyerSummoner extends Creep
 	boolean casting  = false
 
 	construct(vec3 pos)
-		super(pos, SUMMONER_ID, SUMMONER_BOUNTY, middle)
+		super(pos, SUMMONER_ID, SUMMONER_BOUNTY, middle, pos.angleTo2d(middle))
 		destroy new Fx(pos, angle(0), Abilities.feralspiritdone)..setZ(180)..setScale(1.5)
 
 	override function onDeath()

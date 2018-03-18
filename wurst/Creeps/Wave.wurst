@@ -55,7 +55,8 @@ public class NormalWave
 		for i = 0 to wave.amount-1
 			doAfter(i.toReal()) ->
 				for j = 0 to startPosCount
-					new Creep(spawnRects[j].randomPoint().toVec3(), id, wave.bounty, middle)
+					let spoint = spawnRects[j].randomPoint().toVec3()
+					new Creep(spoint, id, wave.bounty, middle, spoint.angleTo2d(middle))
 		
 
 public abstract class CreateBoss

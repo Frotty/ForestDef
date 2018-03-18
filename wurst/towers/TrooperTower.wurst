@@ -14,13 +14,13 @@ trigger tupgradecancel
 public class TroopGround extends UnitEntity
 
 	construct (vec3 pos, player owner)
-		super(createUnit(owner, TROOPG_ID, pos, angle(0)))
+		super(createUnitZ(owner, TROOPG_ID, pos, angle(0)))
 		setXY(pos)
 		
 public class Troop extends UnitEntity
 
 	construct (vec3 pos, player owner)
-		super(createUnit(owner, TROOP_ID, pos, angle(0)))
+		super(createUnitZ(owner, TROOP_ID, pos, angle(0)))
 		deactivate()
 		actor.addAbility(LOCUST_ID)
 		actor.setPropWindow(0.)
@@ -69,12 +69,12 @@ public class TrooperTower extends Tower
 			troop.setXY(troop.pos)
 			
 	function addTrooper()
-		troops.add(new Troop(pos + vec3(0,0,160), owner))
+		troops.add(new Troop(pos, owner))
 		// Make into circle
 		let angleV = 360. / troops.size()
 		var angleD = 0.
 		for troop in troops
-			let tpos = getPos().toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST).withZ(troop.pos.z)
+			let tpos = getPos().toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST).withZ(getTerrainZ(pos.toVec2()) + 160)
 			troop.actor..setVertexColor(COLOR_WHITE)
 			..unpause()
 			..setFacing(angleD.asAngleDegrees())

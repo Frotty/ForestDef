@@ -1,3 +1,20 @@
+0.19n
+[LIST]
+[*] Troopers now fall down and continue fighting when the TrooperTower dies
+[*] The fourth boss no longer gets stuck in midair
+[*] Fixed critical error from healback missiles
+[*] Now using active icon for destroy spell
+[/LIST]
+
+0.19e
+[LIST]
+[*] rebalance infernal boss and later waves
+[*] slightly adjust terrain of small area
+[*] fixed more bugs related to builders dying and not reviving
+[*] balanced healback tower
+[*] revamped last boss
+[/LIST]
+
 0.18w
 [LIST]
 [*] New Tower: "Healback Tower"

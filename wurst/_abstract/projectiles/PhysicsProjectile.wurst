@@ -1,8 +1,9 @@
 package PhysicsProjectile
 import public Projectile
 import public PhysicsEntity
+
 public abstract class OnExpireEvent
-	abstract function onExpire(vec2 pos, player owner)
+	abstract function onExpire(PhysicsProjectile projectile)
 
 public class PhysicsProjectile extends Projectile
 	use PhysicsModule
@@ -22,7 +23,7 @@ public class PhysicsProjectile extends Projectile
 		
 	ondestroy
 		if oe != null
-			oe.onExpire(pos.toVec2(), owner)
+			oe.onExpire(this)
 			destroy oe
 			
 

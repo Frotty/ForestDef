@@ -46,6 +46,9 @@ public class Projectile extends FxEntity
 	function setXYAngle(angle xyA)
 		this.xyAngle = xyA
 		fx.setXYAngle(xyA)
+
+	function getXYAngle() returns angle
+		return xyAngle
 		
 	function setZAngle(angle zA)
 		fx.setZAngle(zA)

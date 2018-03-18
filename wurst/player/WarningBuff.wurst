@@ -28,7 +28,9 @@ public class WarningBuff extends NormalBuff
 	override function apply(UnitEntity target) 
 		super.apply(target)
 		originalOwner = target.owner
-		listener = EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
+		listener = EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
+			if not done
+				onDeath()
 	
 	override function defenseModifier()
 		let dmg = getDamage()
@@ -93,4 +95,5 @@ public class WarningBuff extends NormalBuff
 			flashEffect(Abilities.reviveHuman, target.actor.getPos())
 			dead = false
 
-		
+	ondestroy
+		destroy listener

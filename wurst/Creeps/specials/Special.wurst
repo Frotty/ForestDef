@@ -13,7 +13,7 @@ public abstract class Special extends Creep
 	effect glow
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
-		super(pos, typId, bounty, target)
+		super(pos, typId, bounty, target, pos.angleTo2d(target))
 		glow = actor.addEffect("war3mapImported\\GeneralHeroGlow.mdx", "origin")
 	
 	override function onDeath()

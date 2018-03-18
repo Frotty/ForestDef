@@ -10,7 +10,7 @@ Following are the default enabled arguments:
 
 Optimization arguments (default disabled):
 
-inline
+-inline
 -opt
 -localOptimizations
 

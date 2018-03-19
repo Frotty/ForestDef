@@ -17,7 +17,6 @@ public class WarningBuff extends NormalBuff
 
 	boolean dead = false
 	player originalOwner
-	EventListener listener
 	
 	construct()
 		super(9999, warningBuffAbil)
@@ -28,7 +27,7 @@ public class WarningBuff extends NormalBuff
 	override function apply(UnitEntity target) 
 		super.apply(target)
 		originalOwner = target.owner
-		listener = EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
+		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
 			if not done
 				onDeath()
 	
@@ -94,6 +93,3 @@ public class WarningBuff extends NormalBuff
 			..panCamToTimed(target.actor, 0.)
 			flashEffect(Abilities.reviveHuman, target.actor.getPos())
 			dead = false
-
-	ondestroy
-		destroy listener

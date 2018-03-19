@@ -25,9 +25,9 @@ class ShieldKitBuff extends ShieldBuff
 
 	override function onEnd()
 		if duration == 90.
-			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield applied" , 13, 1.25, colorA(255, 204, 12, 255))
+			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield applied" , 13, 1.55, colorA(255, 204, 12, 255))
 		else
-			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield collapsed" , 13, 1.25, colorA(255, 204, 12, 255))
+			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield collapsed" , 13, 1.55, colorA(255, 204, 12, 255))
 		
 init
 	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->

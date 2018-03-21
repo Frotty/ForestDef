@@ -95,21 +95,27 @@ constant HEALBACK_EFFECT = Abilities.vampiricAuraTarget
 constant HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
 
 public class HealbackMissile extends Projectile
-	real heal
-	UnitEntity target
+	private real heal
+	private UnitEntity target
+	private vec3 startPos
+	private real distanceToTravelSq
 
 	construct(vec3 pos, player owner, real heal, UnitEntity target)
-		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), HEALBACK_MISSILE_EFFECT)
+		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos()), HEALBACK_MISSILE_EFFECT)
 		fx.setColor(colorA(0, 255, 0, 255))
 		this.heal = heal
 		this.target = target
-		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 19.25)
+		startPos = pos
+		this.distanceToTravelSq = (target.getPos()).distanceToSq(startPos)
+		this.setTarget(target.actor.getPos3Real().add(0, 0, 32.), 19.25)
 		fx.setColor(colorA(215, 255, 215, 168))
 		setRanged(2000.)
 
 	override function update()
 		super.update()
-		if pos.distanceTo2d(target.pos) < HEALBACK_RADIUS
+		if not pos.inBounds()
+			terminate()
+		if startPos.distanceToSq(pos) > distanceToTravelSq
 			onReachTarget()
 			terminate()
  

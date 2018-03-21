@@ -1,9 +1,10 @@
-0.19n
+0.19o
 [LIST]
 [*] Troopers now fall down and continue fighting when the TrooperTower dies
-[*] The fourth boss no longer gets stuck in midair
-[*] Fixed critical error from healback missiles
+[*] The fourth boss no longer gets stuck in midair and is overall more dynamic
+[*] Fixed critical error from healback missiles near end of game
 [*] Now using active icon for destroy spell
+[*] Nerfed infernal boss a bit
 [/LIST]
 
 0.19e

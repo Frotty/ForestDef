@@ -105,6 +105,7 @@ public class HealbackMissile extends Projectile
 		this.target = target
 		this.setTarget(target.actor.getPos3Real().add(0, 0, 32), 19.25)
 		fx.setColor(colorA(215, 255, 215, 168))
+		setRanged(2000.)
 
 	override function update()
 		super.update()

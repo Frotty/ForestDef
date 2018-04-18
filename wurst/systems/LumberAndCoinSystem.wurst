@@ -37,7 +37,7 @@ function getExtraBounty()
 			killcap += 1
 			if bigArena
 				killcap += 3
-				killcap *= 1.15
+				killcap *= 1.05
 
 			killcount = 0
 			let itm = createItem(WOOD_ID, GetDyingUnit().getPos())
@@ -91,7 +91,7 @@ public function initLumberSystem()
 	if allPlayers.size() <= 2
 		WOOD_BOUNTY = 2
 	if bigArena
-		killcap = 36
+		killcap = 32
 		coinCap = 54 + GetRandomInt(-6,6)
 	EventListener.add(EVENT_PLAYER_UNIT_DEATH, () -> getExtraBounty())
 	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM, () -> grantCoinsAndLumber())

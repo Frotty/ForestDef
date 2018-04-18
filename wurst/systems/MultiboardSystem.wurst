@@ -1,10 +1,14 @@
 package MultiboardSystem
-
+import ClosureTimers
 import PlayerData
 
-public multiboard mboard = CreateMultiboard()
+init
+	doAfter(0.25) ->
+		initMultiboard()
 
+multiboard mboard
 public function initMultiboard()
+	mboard = CreateMultiboard()
 	update()
 	mboard.display(true)
 	CreateTimer().startPeriodic(0.5, () -> update())
@@ -15,7 +19,7 @@ function update()
 	mboard.setTitle("Forest Defense")
 	var i = 0
 	for pd in allPlayers
-		mboard.getItem(i,0)..setStyle(true,false).setWidth(0.05)
+		mboard.getItem(i,0)..setStyle(true,false)..setWidth(0.05)
 		if pd.alive
 			mboard.getItem(i,0).setValue(pd.p.getNameColored())
 		else
@@ -31,6 +35,6 @@ function update()
 		
 		mboard.getItem(i,3)..setValue(pd.kills.toString())
 		..setIcon("ReplaceableTextures\\CommandButtons\\BTNSacrifice.blp")
-		..setWidth(0.025)
+		..setWidth(0.035)
 		
 		i++

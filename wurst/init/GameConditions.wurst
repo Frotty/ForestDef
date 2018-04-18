@@ -4,6 +4,7 @@ import EndBoss
 import PlayerData
 import UnitSpawnSystem
 import EndGame
+import ClosureTimers
 
 public timer gameTime
 
@@ -22,9 +23,10 @@ class Treasure extends UnitEntity
 public function initConds()
 	gameTime = getTimer()
 	gameTime.start(16.*60. + 20., function startEndBoss)
-	timerdialog td = CreateTimerDialog(gameTime)		
-	TimerDialogSetTitle( td, "Until Finale: " )
-	TimerDialogDisplay( td, true )
+	doAfter(0.5) ->
+		timerdialog td = CreateTimerDialog(gameTime)		
+		TimerDialogSetTitle( td, "Until Finale: " )
+		TimerDialogDisplay( td, true )
 	print( "|cffFFCC00>> Visit our discord server: discord.gg/yr3ZyYQ")
 	print( "|cffFFCC00>> You have one minute to build up defenses..")
 	trigger tr = CreateTrigger()

@@ -19,7 +19,7 @@ public function shouldSpawnCoin() returns boolean
 		coinCount = 0
 		coinCap += 3 + GetRandomInt(-2, 2) + (coinsSpawned/3.).round()
 		if bigArena
-			coinCap += 3
+			coinCap += 2
 
 		coinsSpawned++
 		return true
@@ -36,7 +36,7 @@ function getExtraBounty()
 			killcap += 1
 			if bigArena
 				killcap += 3
-				killcap *= 1.05
+				killcap *= 1.025
 
 			killcount = 0
 			let itm = createItem(WOOD_ID, GetDyingUnit().getPos())

@@ -59,10 +59,14 @@ public function initPlayers()
 		bigArena = true
 		initCreepStarts(true)
 		gold = 1245
+		CameraSetupApplyForceDuration(gg_cam_Camera_003, true, 0.)
+		CameraSetupApplyForceDuration(gg_cam_Camera_004, true, 1.5)
 	else
 		bigArena = false
 		initCreepStarts(false)
 		gold = 490
+		CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.)
+		CameraSetupApplyForceDuration(gg_cam_Camera_002, true, 1.5)
 	
 	let anglePerP = 360/allPlayers.size()
 	var current = GetRandomInt(0, allPlayers.size()) * anglePerP + GetRandomInt(0, 4) * 90

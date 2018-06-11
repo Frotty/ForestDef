@@ -84,16 +84,12 @@ public class Creep extends UnitEntity
 							showBountyTextTag(restBounty, actor, pd.p)
 
 	override function update()
-		if not pos.inBounds()
-			terminate()
-			error("creep out of bounds")
+		if isTerrainWalkable(pos.x, pos.y)
+			vel *= (0.975)
 		else
-			if isTerrainWalkable(pos.x, pos.y)
-				vel *= (0.975)
-			else
-				let normal = getPathingNormal(pos.toVec2())
-				vel = getBounceVec(vel, normal)
-			super.update()
+			let normal = getPathingNormal(pos.toVec2())
+			vel = getBounceVec(vel, normal)
+		super.update()
 		
 		
 			

@@ -13,7 +13,7 @@ public class ArtilleryTower extends Tower
 	
 	construct(Tower t)
 		super(t)
-		actor..setPropWindow(0.)
+		actor..setPropWindow(0 .fromDeg())
 		..addAbility(SPELL_ID)
 
 		registerSpell()
@@ -35,7 +35,7 @@ public class ArtilleryTower extends Tower
 	override function onUpgrade()
 		level++
 		actor..addAbility(SPELL_ID)..setAbilityLevel(SPELL_ID, level)
-		..setPropWindow(0.)
+		..setPropWindow(0 .fromDeg())
 		..issueImmediateOrderById(OrderId("stop"))
 		
 class ArtilleryMissile extends Projectile

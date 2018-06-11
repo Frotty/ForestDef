@@ -31,7 +31,7 @@ public class Selector extends UnitEntity
 	construct(vec3 ppos, player owner)
 		super(createUnit(owner, 'h023', middle.toVec3(), angle(0)))
 		ownerTag = createFText(ppos - vec3(20,25,0), owner.getNameColored(), 12.5)
-		actor.setVertexColor(fromPlayerColor(owner.getColor()).withAlpha(255))
+		actor.setVertexColor(owner.getColor().toColor().withAlpha(255))
 		finalPos = ppos
 		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()
 		if GetLocalPlayer() == owner
@@ -43,20 +43,20 @@ public class Selector extends UnitEntity
 			let pd = pDatas[owner.getId()]
 			if id == FAT_SPELL_ID
 				pd.builder = new Builder(actor.getPos3Zero(), pd, FAT_ID)
-				pd.builder.actor.addItem(PUDDING_ID)
+				pd.builder.actor.addItemById(PUDDING_ID)
 				if owner.getName().toLowerCase() == "cokemonkey11" or owner.getName().toLowerCase() == "waterknight"
 					let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
 					doAfter(5, () -> eff.destr())
 					snd.playForPlayer(owner)
 			else if id == SLIM_SPELL_ID
 				pd.builder = new Builder(actor.getPos3Zero(), pd, SLIM_ID)
-				pd.builder.actor.addItem(ENERGY_ID)
+				pd.builder.actor.addItemById(ENERGY_ID)
 			else if id == ELVEN_SPELL_ID
 				pd.builder = new Builder(actor.getPos3Zero(), pd, ELVEN_ID)
-				pd.builder.actor.addItem(ROCK_ID)
+				pd.builder.actor.addItemById(ROCK_ID)
 			terminate()
 			pd.select = null
-			pd.builder.actor.addItem(ROCKET_ITEM_ID)
+			pd.builder.actor.addItemById(ROCKET_ITEM_ID)
 
 	override function update()
 		if p > 0.990

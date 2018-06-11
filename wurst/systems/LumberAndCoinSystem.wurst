@@ -1,6 +1,5 @@
 package LumberAndCoinSystem
 import Creep
-import GameTimer
 import Assets
 
 var WOOD_BOUNTY = 1

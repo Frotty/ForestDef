@@ -23,7 +23,7 @@ public class Troop extends UnitEntity
 		super(createUnitZ(owner, TROOP_ID, pos, angle(0)))
 		deactivate()
 		actor.addAbility(LOCUST_ID)
-		actor.setPropWindow(0.)
+		actor.setPropWindow(0 .fromDeg())
 		
 	ondestroy
 		if not IsUnitHidden(actor)

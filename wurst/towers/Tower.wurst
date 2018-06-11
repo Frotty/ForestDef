@@ -5,8 +5,8 @@ import initlater TrooperTower
 import initlater HealbackTower
 import initlater FlamethrowerTower
 import initlater ArtilleryTower
-import ClosureTimers
 import Buff
+import ClosureTimers
 
 public constant BASIC_TOWER_ID = 'h003'
 public constant BASIC_WALL_ID = 'h000'
@@ -16,7 +16,6 @@ public class Wall extends UnitEntity
 
 	construct (unit wall)
 		super(wall)
-
 
 public class Tower extends UnitEntity
 	
@@ -75,7 +74,6 @@ init
 			new Wall(u)
 
 	EventListener.add(EVENT_PLAYER_UNIT_UPGRADE_FINISH) ->
-		// Make Last Level of tier 1 wall available
 		let u = GetTriggerUnit()
 		checkTech(u)
 		let data = u.getEntity()

@@ -32,7 +32,7 @@ public class Tentacle extends Creep
 	
 	construct(vec3 pos)
 		super(pos, TENTACLE_ID, 6, middle, GetRandomReal(0, PI2).fromRad())
-		actor.setPropWindow(0)
+		actor.setPropWindow(0 .fromDeg())
 
 public class BossTwo extends Boss
 

@@ -8,4 +8,5 @@ public class BossFive extends Boss
 		doAfter(10, () -> actor.issueImmediateOrder("locustswarm"))
 		doAfter(11, () -> actor.issuePointOrder("attack", target))
 
+
 	

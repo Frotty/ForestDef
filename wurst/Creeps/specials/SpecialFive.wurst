@@ -12,7 +12,7 @@ public class SpecialFive extends Special
 	static constant SPAWNTIME = 20
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u015'
-	real spawntimer = 5
+	real spawntimer = 25
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
@@ -21,11 +21,11 @@ public class SpecialFive extends Special
 		spawntimer += ANIMATION_PERIOD
 		if spawntimer >= SPAWNTIME
 			spawntimer = 0
-			this.actor..setPropWindow(0)
+			this.actor..setPropWindow(0 .fromDeg())
 			..setAnimation("Stand Work Gold")
 			..queueAnimation("Stand Work Gold")
 			doAfter(6) ->
-				this.actor.setPropWindow(GetUnitDefaultPropWindow(actor))
+				this.actor.setPropWindow(actor.getDefaultPropWindow())
 				spawntimer -= 6.
 			
 			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)

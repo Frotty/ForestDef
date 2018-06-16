@@ -26,6 +26,7 @@ public class WarningBuff extends NormalBuff
 		
 	override function apply(UnitEntity target) 
 		super.apply(target)
+		startedTime = currentTime
 		originalOwner = target.owner
 		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
 			if not done
@@ -93,3 +94,4 @@ public class WarningBuff extends NormalBuff
 			..panCamToTimed(target.actor, 0.)
 			flashEffect(Abilities.reviveHuman, target.actor.getPos())
 			dead = false
+			startedTime = currentTime

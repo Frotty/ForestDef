@@ -46,6 +46,8 @@ public class Creep extends UnitEntity
 		this.bounty = bounty
 		dropCoin = shouldSpawnCoin()
 
+		// Apply timed life to prevent blocking and creeps getting stuck
+		actor.setTimedLife(7.5 * 60.)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
 
 	function onDeath()
@@ -57,7 +59,7 @@ public class Creep extends UnitEntity
 				if itm != null and GetWidgetLife(itm) > .405
 					itm.remove()
 
-		if killer != null
+		if killer != null and killer.getOwner() != owner
 			var size = allPlayers.size()
 			if pDatas[killer.getOwner().getId()] == null
 				var killBounty = (bounty div size)

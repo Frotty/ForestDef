@@ -42,13 +42,14 @@ public class Creep extends UnitEntity
 	construct(vec3 pos, int typId, int bounty, vec2 target, angle ang)
 		super(createUnit(CREEP_OWNER, typId, pos.toVec2(), ang), pos, 16)
 		actor.setAnimation("birth")
-		actor.issuePointOrder("attack", target)
 		this.bounty = bounty
 		dropCoin = shouldSpawnCoin()
 
 		// Apply timed life to prevent blocking and creeps getting stuck
 		actor.setTimedLife(7.5 * 60.)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
+		doAfter(GetRandomReal(0.01, 0.2)) ->
+			actor.issuePointOrder("attack", target)
 
 	function onDeath()
 		let killer = GetKillingUnit()

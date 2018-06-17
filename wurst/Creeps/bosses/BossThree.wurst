@@ -19,7 +19,8 @@ public class PudgePowerBuff extends NormalBuff
 	override function attackModifier()
 		var target = GetTriggerUnit()
 		if target.getOwner() != players[8]
-			addEffect(Objects.hCancelDeath, target.getPos()).destr()
+			flashEffect(Objects.hCancelDeath, target.getPos())
+			flashEffect(Objects.demonSmallDeathExplode, target.getPos())
 			if not target.getEntity() instanceof Builder
 				modifyDamageBy(target.getMaxHP() * 0.30)
 				createFText(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255), localPlayer)
@@ -31,3 +32,8 @@ public class BossThree extends Boss
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 		new PudgePowerBuff(9999).apply(this)
+
+	override function onDeath()
+		super.onDeath()
+		flashEffect(Objects.demonLargeDeathExplode, getPos())
+

@@ -132,10 +132,10 @@ function initWaves()
 	specialWaves.add(new SpecialWave('u00F', 4, 10, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialThree(startPos, unitId, bounty, middle)
 	end))
-	specialWaves.add(new SpecialWave('u00O', 25, 2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	specialWaves.add(new SpecialWave('u00O', 25, 4, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFour(startPos, unitId, bounty, middle)
 	end))
-	specialWaves.add(new SpecialWave(UNIT_ID_DARKONE, 4, 20, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	specialWaves.add(new SpecialWave(UNIT_ID_DARKONE, 4, 65, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFive(startPos, unitId, bounty, middle)
 	end))
 	

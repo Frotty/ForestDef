@@ -9,10 +9,10 @@ class Spawn extends Special
 
 public class SpecialFive extends Special
 	
-	static constant SPAWNTIME = 20
+	static constant SPAWNTIME = 35
 	static constant SPAWNAMOUNT = 3
 	static constant SPAWNID = 'u015'
-	real spawntimer = 25
+	var spawntimer = 5.
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
@@ -26,10 +26,9 @@ public class SpecialFive extends Special
 			..queueAnimation("Stand Work Gold")
 			doAfter(6) ->
 				this.actor.setPropWindow(actor.getDefaultPropWindow())
-				spawntimer -= 6.
 			
-			var ppos = getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
+			var ppos = this.getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
 			for i = 1 to SPAWNAMOUNT
 				doAfter((i-1).toReal() * 1.5) ->
-					let spawn = new Spawn(ppos.toVec3(),SPAWNID,0,middle)
+					let spawn = new Spawn(ppos.toVec3(), SPAWNID, 0, middle)
 					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())

@@ -2,6 +2,7 @@ package Special
 import Creep
 import AbilityObjEditing
 import ObjectIdGenerator
+import Assets
 
 public constant UNIT_ID_DARKONE = compiletime(UNIT_ID_GEN.next())
 public constant ABIL_ID_SLOWBUFFDUMMY = compiletime(ABIL_ID_GEN.next())
@@ -24,14 +25,14 @@ public abstract class Special extends Creep
 @compiletime function create_DarkOne()
 	new UnitDefinition(UNIT_ID_DARKONE,'nska')
 		..setNormalAbilities("")
-		..setIconGameInterface("ReplaceableTextures\\CommandButtons\\BTNAcolyte.blp")
-		..setModelFile("units\\undead\\Acolyte\\Acolyte.mdl")
+		..setIconGameInterface(Icons.bTNAcolyte)
+		..setModelFile(Units.acolyte1)
 		..setAttack1DamageBase(75)
 		..setScalingValue(1.25)
 		..setTintingColorRed(35)
 		..setTintingColorGreen(20)
 		..setTintingColorBlue(20)
-		..setAttack1ProjectileArt("Abilities\\Weapons\\AvengerMissile\\AvengerMissile.mdl")
+		..setAttack1ProjectileArt(Abilities.avengerMissile)
 		..setUnitSoundSet("Acolyte")
 		..setHitPointsMaximumBase(5000)
 		..setHitPointsRegenerationRate(2.5)

@@ -1,3 +1,24 @@
+0.19x
+[LIST]
+[*] This update features a lot of rebalancing to make late game obtainable and the 5+ arena more fun
+[*] Acolyte special now spawns units in front of itself instead of at lane spawn. Also spawn has been more randomized
+[*] Buffed the fallen down troopers, as this mainly happens late game
+[*] Stun traps' lumber cost has been reduced to 5
+[*] Final boss and infernal have been nerfed
+[*] All enemy units now have a timed life of 7.5 minutes to prevent stacking and getting stuck
+[*] Fix respawn protection for revived builders
+[*] Builder selector is now automatically selected and camera centered, to prevent confusion in case it got deselected
+[/LIST]
+
+0.19r
+[LIST]
+[*] Amazing new final boss with custom abilities by kari!
+[*] Reduced Acolyte zombie spam
+[*] Improved intro
+[*] Increased coin and lumber drops in late game
+[*] Improved performance
+[/LIST]
+
 0.19o
 [LIST]
 [*] Troopers now fall down and continue fighting when the TrooperTower dies

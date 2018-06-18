@@ -1,5 +1,5 @@
 package Destroy
-import Event
+import ClosureEvents
 import Assets
 
 function destroyTower()

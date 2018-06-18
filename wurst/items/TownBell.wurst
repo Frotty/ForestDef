@@ -1,5 +1,5 @@
 package TownBell
-import Event
+import ClosureEvents
 import ClosureForGroups
 import ClosureTimers
 import Assets

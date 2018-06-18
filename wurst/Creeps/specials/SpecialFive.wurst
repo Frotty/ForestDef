@@ -10,17 +10,18 @@ class Spawn extends Special
 public class SpecialFive extends Special
 	
 	static constant SPAWNTIME = 35
-	static constant SPAWNAMOUNT = 3
+	static constant SPAWNAMOUNT = 2
 	static constant SPAWNID = 'u015'
-	var spawntimer = 5.
+	var spawntimer = 5  + GetRandomInt(-4, 4)
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
 
-	override function update()
-		spawntimer += ANIMATION_PERIOD
+	override function slowUpdate()
+		super.slowUpdate()
+		spawntimer += 1
 		if spawntimer >= SPAWNTIME
-			spawntimer = 0
+			spawntimer = GetRandomInt(-4, 4)
 			this.actor..setPropWindow(0 .fromDeg())
 			..setAnimation("Stand Work Gold")
 			..queueAnimation("Stand Work Gold")

@@ -4,7 +4,7 @@ dependencies:
 - "https://github.com/wurstscript/wurstStdlib2"
 - "https://github.com/frotty/frentity"
 buildMapData:
-  name: "Forest Defense 0.19v"
-  fileName: "Forest Defense 0.19v"
+  name: "Forest Defense 0.19w"
+  fileName: "Forest Defense 0.19w"
   author: "Frotty"
   playerCount: 8

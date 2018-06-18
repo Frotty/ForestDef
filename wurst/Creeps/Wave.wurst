@@ -66,19 +66,19 @@ public class BossWave
 	int bossId
 	int amount
 	int bounty
-	sound s
+	SoundDefinition s
 	string info
 	CreateBoss boss
 	
-	construct(int bossId, int amount, int bounty, sound s, CreateBoss boss)
+	construct(int bossId, int amount, int bounty, string s, CreateBoss boss)
 		this.bossId = bossId
 		this.amount = amount
 		this.bounty = bounty
-		this.s = s
+		this.s = new SoundDefinition(s, false)
 		this.boss = boss
 		
 	function spawn()
-		PlaySoundBJ(s)
+		s.play()
 		print("|cffE62121## Attention:|r Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount

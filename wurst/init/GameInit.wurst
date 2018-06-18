@@ -12,6 +12,7 @@ import TrooperTower
 import EntityManagement
 import TownBell
 import ClosureTimers
+import Sounds
 
 function start()
 	initPlayers()
@@ -25,7 +26,7 @@ function start()
 	initRocket()
 	initTownBell()
 	GetExpiredTimer().release()
-	PlaySoundBJ(gg_snd_H01Uther03)
+	new SoundDefinition(Sounds.h01Uther03, false).play()
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
 	if allPlayers.size() <= 2 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
@@ -59,6 +60,7 @@ function spawn()
 
 
 init
+	CameraSetupApplyForceDuration(gg_cam_Camera_003, true, 0.)
 	getTimer().start(0.025, function start)
 
 

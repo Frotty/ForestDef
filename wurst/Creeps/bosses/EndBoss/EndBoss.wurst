@@ -4,6 +4,7 @@ import DestroyerSummoner
 import Tower
 import Boss
 import EndGame
+import Sounds
 
 constant ENDBOSS_ID = 'n00P'
 
@@ -113,7 +114,7 @@ public class EndBossFight
 
 	construct()
 		PlayMusic(m.path)
-		PlaySoundBJ(gg_snd_AirBargeDeath1)
+		new SoundDefinition(Sounds.airBargeDeath1, false).play()
 		print("|cffE62121 Prepare for your end!")
 		bosses = new LinkedList<EndBoss>()
 		destroyerSummoning = new FinalBossSummoning(this)

@@ -8,6 +8,7 @@ import SoundUtils
 import ClosureTimers
 import Wave
 import Interpolation
+import Camera
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'
@@ -31,32 +32,37 @@ public class Selector extends UnitEntity
 	construct(vec3 ppos, player owner)
 		super(createUnit(owner, 'h023', middle.toVec3(), angle(0)))
 		ownerTag = createFText(ppos - vec3(20,25,0), owner.getNameColored(), 12.5)
-		actor.setVertexColor(owner.getColor().toColor().withAlpha(255))
+		actor..setVertexColor(owner.getColor().toColor().withAlpha(255))
+		..setPropWindow(angle(0.))
 		finalPos = ppos
-		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).asAngleDegrees(), 168).toVec3()
-		if GetLocalPlayer() == owner
-			SelectUnit( actor, true )
-			PanCameraToTimed(actor.getX(), actor.getY(), 0)
+		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).fromDeg(), 168).toVec3()
+		
+		owner..select(actor)
+		..panCameraToTimed(actor.getPos(), 0.)
 
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_CAST) ->
-			let id = GetSpellAbilityId()
+		EventListener.onCast(actor) id ->
 			let pd = pDatas[owner.getId()]
-			if id == FAT_SPELL_ID
-				pd.builder = new Builder(actor.getPos3Zero(), pd, FAT_ID)
-				pd.builder.actor.addItemById(PUDDING_ID)
-				if owner.getName().toLowerCase() == "cokemonkey11" or owner.getName().toLowerCase() == "waterknight"
-					let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
-					doAfter(5, () -> eff.destr())
-					snd.playForPlayer(owner)
-			else if id == SLIM_SPELL_ID
-				pd.builder = new Builder(actor.getPos3Zero(), pd, SLIM_ID)
-				pd.builder.actor.addItemById(ENERGY_ID)
-			else if id == ELVEN_SPELL_ID
-				pd.builder = new Builder(actor.getPos3Zero(), pd, ELVEN_ID)
-				pd.builder.actor.addItemById(ROCK_ID)
-			terminate()
-			pd.select = null
+			switch id
+				case FAT_SPELL_ID
+					pd.builder = new Builder(actor.getPos3Zero(), pd, FAT_ID)
+					pd.builder.actor.addItemById(PUDDING_ID)
+					if owner.getName().toLowerCase() == "cokemonkey11" or owner.getName().toLowerCase() == "waterknight"
+						let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
+						doAfter(5, () -> eff.destr())
+						snd.playForPlayer(owner)
+				case SLIM_SPELL_ID
+					pd.builder = new Builder(actor.getPos3Zero(), pd, SLIM_ID)
+					pd.builder.actor.addItemById(ENERGY_ID)
+				case ELVEN_SPELL_ID
+					pd.builder = new Builder(actor.getPos3Zero(), pd, ELVEN_ID)
+					pd.builder.actor.addItemById(ROCK_ID)
 			pd.builder.actor.addItemById(ROCKET_ITEM_ID)
+			terminate()
+
+	override function slowUpdate()
+		super.slowUpdate()
+		owner.panCameraToTimed(getPos(), 0.)
+		owner.selectSingle(actor)
 
 	override function update()
 		if p > 0.990
@@ -64,7 +70,7 @@ public class Selector extends UnitEntity
 			return
 		p = p.lerp(1, 0.025)
 		pos = pos.bezier3(mid, finalPos, p)
-		actor.setPos(pos.toVec2())
+		actor.setXY(pos.toVec2())
 		ownerTag.tt.setPos(pos - vec3(20,25,0))
 		owner.selectSingle(actor)
 

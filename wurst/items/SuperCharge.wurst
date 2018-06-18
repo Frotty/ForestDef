@@ -1,5 +1,5 @@
 package SuperCharge
-import Event
+import ClosureEvents
 import Assets
 import ClosureTimers
 

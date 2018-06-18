@@ -11,6 +11,7 @@ import SpecialThree
 import SpecialFour
 import SpecialFive
 import Boss
+import Assets
 
 constant real SPAWN_TIME = 20.0
 
@@ -106,20 +107,19 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
 	
-	
-	bossWaves.add(new BossWave('n003', 1, 85, gg_snd_SkeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.add(new BossWave('n003', 1, 85, Sounds.skeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.add(new BossWave('n004', 1, 100, gg_snd_DuneWormDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.add(new BossWave('n004', 1, 100, Sounds.duneWormDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossTwo(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.add(new BossWave('n007', 1, 125, gg_snd_AbominationPissed5, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.add(new BossWave('n007', 1, 125, Sounds.abominationPissed5, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossThree(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.add(new BossWave('n00B', 1, 150, gg_snd_HydraDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.add(new BossWave('n00B', 1, 150, Sounds.hydraDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFour(startPos, unitId, bounty, middle)
 	end))
-	bossWaves.add(new BossWave('n00E', 1, 175, gg_snd_AirBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
+	bossWaves.add(new BossWave('n00E', 1, 175, Sounds.airBargeDeath1, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossFive(startPos, unitId, bounty, middle)
 	end))
 	

@@ -4,6 +4,7 @@ import PhysicsProjectile
 import initlater Selector
 import Builder
 import initlater EndGame
+import Camera
 
 public constant allPlayers = new LinkedList<PlayerData>()
 public PlayerData array pDatas
@@ -43,8 +44,8 @@ public class PlayerData
 		if select != null
 			select.terminate()
 		pDatas[p.getId()] = null
-		p.setGold(0)
-		p.setLumber(0)
+		p..setGold(0)
+		..setLumber(0)
 		if not gameOver
 			printTimed(p.getNameColored() + " has left! Their resources have been distributed.", 10.)
 
@@ -59,14 +60,14 @@ public function initPlayers()
 		bigArena = true
 		initCreepStarts(true)
 		gold = 1245
-		CameraSetupApplyForceDuration(gg_cam_Camera_003, true, 0.)
-		CameraSetupApplyForceDuration(gg_cam_Camera_004, true, 1.5)
+		gg_cam_Camera_003.applyForceDuration(true, 0.)
+		gg_cam_Camera_004.applyForceDuration(true, 1.5)
 	else
 		bigArena = false
 		initCreepStarts(false)
 		gold = 490
-		CameraSetupApplyForceDuration(gg_cam_Camera_001, true, 0.)
-		CameraSetupApplyForceDuration(gg_cam_Camera_002, true, 1.5)
+		gg_cam_Camera_001.applyForceDuration(true, 0.)
+		gg_cam_Camera_002.applyForceDuration(true, 1.5)
 	
 	let anglePerP = 360/allPlayers.size()
 	var current = GetRandomInt(0, allPlayers.size()) * anglePerP + GetRandomInt(0, 4) * 90

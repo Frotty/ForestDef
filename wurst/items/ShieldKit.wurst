@@ -30,7 +30,6 @@ class ShieldKitBuff extends ShieldBuff
 			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield collapsed" , 13, 1.55, colorA(255, 204, 12, 255))
 		
 init
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
-		if GetSpellAbilityId() == 'A00D'
-			let data = GetSpellTargetUnit().getEntity()
-			new ShieldKitBuff(200. + (getElapsedGameTime() * 2.)).apply(data)
+	EventListener.onTargetCast('A00D') (caster, target) ->
+		let data = target.getEntity()
+		new ShieldKitBuff(200. + (getElapsedGameTime() * 2.)).apply(data)

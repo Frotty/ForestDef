@@ -1,11 +1,8 @@
 package Destroy
 import ClosureEvents
 import Assets
-
-function destroyTower()
-	if GetSpellAbilityId() == 'A00E'
-		KillUnit( GetTriggerUnit() )
-		DestroyEffect(AddSpecialEffect(Abilities.charmTarget,GetTriggerUnit().getX(), GetTriggerUnit().getY()))
 	
 public function initDestroy()
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_CAST, () -> destroyTower())
+	EventListener.onCast('A00E') caster ->
+		caster.kill()
+		flashEffect(Abilities.charmTarget, caster.getPos())

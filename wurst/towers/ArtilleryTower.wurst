@@ -19,8 +19,8 @@ public class ArtilleryTower extends Tower
 		registerSpell()
 
 	function registerSpell()
-		EventListener.add(actor, EVENT_PLAYER_UNIT_SPELL_EFFECT) ->
-			if GetSpellAbilityId() == SPELL_ID
+		EventListener.onCast(actor) id ->
+			if id == SPELL_ID
 				if pos.distanceTo2d(getSpellTargetPos()) > 2950
 					nullTimer() -> 
 						actor..issueImmediateOrderById(OrderId("stop"))

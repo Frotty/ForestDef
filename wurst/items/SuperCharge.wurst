@@ -6,14 +6,10 @@ import ClosureTimers
 constant ITEM_ABILITY_ID = 'A01M'
 constant REPAIR_ID = 'Ahrp'
 
-function charge()
-	let target = GetSpellTargetUnit()
-	if (GetSpellAbilityId() == ITEM_ABILITY_ID)
+init
+	EventListener.onTargetCast(ITEM_ABILITY_ID) (caster, target) ->
 		target.setAbilityLevel(REPAIR_ID, 2)
 		flashEffect(Abilities.manaFlareBoltImpact, target.getPos())
 		doAfter(15.) ->
 			target.setAbilityLevel(REPAIR_ID, 1)
-	
-init
-	EventListener.add(EVENT_PLAYER_UNIT_SPELL_EFFECT, () -> charge())
 

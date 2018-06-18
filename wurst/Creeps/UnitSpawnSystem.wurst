@@ -15,15 +15,14 @@ import Assets
 
 constant real SPAWN_TIME = 20.0
 
-public LinkedList<NormalWave> normalWaves = new LinkedList<NormalWave>()
-public LinkedList<BossWave> bossWaves = new LinkedList<BossWave>()
-LinkedList<SpecialWave> specialWaves = new LinkedList<SpecialWave>()
+public constant normalWaves = new LinkedList<NormalWave>()
+public constant bossWaves = new LinkedList<BossWave>()
+constant specialWaves = new LinkedList<SpecialWave>()
 
-public timer spawnTimer = getTimer()
-public boolean stopSpawns = false
-int level = 1
+public constant spawnTimer = getTimer()
+public var stopSpawns = false
+var level = 1
 	
-		
 function onSpawnTime()
 	if stopSpawns
 		return
@@ -76,36 +75,34 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 2, 16 ))
 	normalWaves.add(new NormalWave('u00J', 'u00L', 'n00A', 3, 16 ))
 	
+	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 1, 16 ))
+	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 2, 16 ))
 	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
-	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
-	normalWaves.add(new NormalWave('u00N', 'u00M', 'n00D', 3, 16 ))
 	
-	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
-	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 1, 14 ))
+	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 2, 14 ))
 	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
 	
-	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
-	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
-	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 12 ))
+	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
+	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
+	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 14 ))
 	
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
 	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
 	
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 10 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 10 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 4, 12 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 4, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 12 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 12 ))
 
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 8 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 10 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 10 ))
 	
 	bossWaves.add(new BossWave('n003', 1, 85, Sounds.skeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)

@@ -107,7 +107,7 @@ public class EndBoss extends Boss
 		castTimer.destr()
 
 public class EndBossFight
-	LinkedList<EndBoss> bosses
+	LinkedList<EndBoss> bosses = new LinkedList<EndBoss>()
 	FinalBossSummoning destroyerSummoning
 
 	boolean summoningComplete = false
@@ -116,7 +116,6 @@ public class EndBossFight
 		PlayMusic(m.path)
 		new SoundDefinition(Sounds.airBargeDeath1, false).play()
 		print("|cffE62121 Prepare for your end!")
-		bosses = new LinkedList<EndBoss>()
 		destroyerSummoning = new FinalBossSummoning(this)
 		for j = 0 to startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle, this))

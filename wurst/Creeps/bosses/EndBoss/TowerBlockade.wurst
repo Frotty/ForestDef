@@ -6,12 +6,10 @@ import Assets
 import public Buff
 import TextTagEntity
 
-buffTuple blockadeBuff = compiletime(createDummyBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
-constant real BLOCKADE_DURATION = 120.
-public constant real BLOCKADE_MISSILE_TIME = 5
-constant int BLOCKADE_UNIT = 'u017'
-trigger blockadeDeathTrigger
-
+constant blockadeBuff = compiletime(createDummyBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
+constant BLOCKADE_DURATION = 120.
+public constant BLOCKADE_MISSILE_TIME = 5.
+constant BLOCKADE_UNIT = 'u017'
 
 public class TowerBlockadeMissile extends Projectile
 	real heal
@@ -61,10 +59,6 @@ public class TowerBlockadeBuff extends Buff
 			destroy blockadeUnit
 		super.terminate()
 
-	static function onBlockadeUnitDeath()
-		var buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
-		if buffUnit != null
-			buffUnit.terminateBuff()
 		
 	ondestroy
 		if target != null
@@ -74,10 +68,15 @@ public class TowerBlockadeBuff extends Buff
 
 class BlockadeShip extends UnitEntity
 	TowerBlockadeBuff blockadeBuff
+
 	construct(unit actor, TowerBlockadeBuff blockadeBuff)
 		super(actor)
 		this.blockadeBuff = blockadeBuff
-		blockadeDeathTrigger.registerUnitEvent(actor, EVENT_UNIT_DEATH)
+
+		EventListener.add(actor, EVENT_UNIT_DEATH) ->
+			var buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
+			if buffUnit != null
+				buffUnit.terminateBuff()
 
 	function terminateBuff()
 		blockadeBuff.terminate()
@@ -85,6 +84,3 @@ class BlockadeShip extends UnitEntity
 	ondestroy
 		if actor.isAlive()
 			blockadeBuff.terminate()
-
-init
-	blockadeDeathTrigger = CreateTrigger()..addAction(function TowerBlockadeBuff.onBlockadeUnitDeath)

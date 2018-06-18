@@ -4,32 +4,29 @@ import Creep
 import Assets
 import Fx
 
-constant int SUMMONER_ID = 'u016'
-constant int DESTROYER_ID = 'n00Q'
-constant int SUMMON_CASTING_EFFECT_ABIL = 'A02J'
-constant int SUMMONER_BOUNTY = 99
-constant int DESTROYER_BOUNTY = 666
-constant real DESTROYER_SUMMON_TIME = 30.
-constant real updatePeriod = .05
-constant real animationLoopPeriod = 45.
+constant SUMMONER_ID = 'u016'
+constant DESTROYER_ID = 'n00Q'
+constant SUMMON_CASTING_EFFECT_ABIL = 'A02J'
+constant SUMMONER_BOUNTY = 99
+constant DESTROYER_BOUNTY = 666
+constant DESTROYER_SUMMON_TIME = 30.
+constant updatePeriod = .05
+constant animationLoopPeriod = 45.
 
 public class FinalBossSummoning
 	real castPercent = 0
 	real animationLoop = 0.
 	int castingCount = 0
-	LinkedList<DestroyerSummoner> summoners
-	Fx summoningEffect
+	LinkedList<DestroyerSummoner> summoners = new LinkedList<DestroyerSummoner>()
+	Fx summoningEffect = null
 	CallbackPeriodic updateCb
-	FText summonText
-	boolean fxExists = false
+	FText summonText = createFText(middle.toVec3(), "0%", 12.)
 	EndBossFight endBossFightRef
 	
 	construct(EndBossFight endBossFightRef)
-		summoners = new LinkedList<DestroyerSummoner>()
-		summonText = createFText(middle.toVec3(), "0%", 12.)
+		this.endBossFightRef = endBossFightRef
 		summonText.tt.setVisibility(false)
 		updateCb = doPeriodically(updatePeriod, (CallbackPeriodic cb) -> this.update())
-		this.endBossFightRef = endBossFightRef
 
 	function update()
 		var newCastingCount = 0
@@ -57,16 +54,14 @@ public class FinalBossSummoning
 		animationLoop = (animationLoop + updatePeriod / animationLoopPeriod) % 1.
 		if (castingCount > 0 or castPercent > 0)
 			let percentComp = PercentTo255(castPercent)
-			if not fxExists
-				fxExists = true
+			if summoningEffect == null
 				summoningEffect = new Fx(PLAYER_COLOR_LIGHT_GRAY, middle.toVec3(), angle(0), Abilities.voodooAura)..setColor(colorA(255, 255, 255, 0))
 			summoningEffect..setScale(1.2 + castPercent / 75.)..setColor(colorA(63 + (percentComp * 3. / 4.).toInt(), 0, 0, percentComp))
-			summonText.tt.setVisibility(true)
-			summonText.tt.setText(castPercent.toInt().toString() + "%", 12)
-			summonText.tt.setColor(percentComp, 255 - percentComp, 0, 255)
+			summonText.tt..setVisibility(true)
+			..setText(castPercent.toInt().toString() + "%", 12)
+			..setColor(percentComp, 255 - percentComp, 0, 255)
 		else
-			if fxExists
-				fxExists = false
+			if summoningEffect != null
 				destroy summoningEffect
 			summonText.tt.setVisibility(false)
 		var i = 0
@@ -108,7 +103,7 @@ public class FinalBossSummoning
 		destroy summoners
 		destroy updateCb
 		destroy summonText
-		if fxExists
+		if summoningEffect != null
 			destroy summoningEffect
 
 public class DestroyerSummoner extends Creep

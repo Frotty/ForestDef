@@ -2,9 +2,10 @@ package Boss
 import public Creep
 import public SoundUtils
 import public PhysicsProjectile
+import Sounds
 
 public abstract class Boss extends Creep
-	static SoundDefinition snd = new SoundDefinition("Units\\Undead\\Abomination\\AbominationAlternateDeath1.wav", false)
+	static SoundDefinition snd = new SoundDefinition(Sounds.abominationAlternateDeath1, false)
 	effect glow
 	
 	construct(vec3 pos, int typId, int bounty, vec2 target)

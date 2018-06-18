@@ -12,8 +12,8 @@ public class BossOne extends Boss
 		for i = 0 to 5
 			var pj = new PhysicsProjectile(actor.getPos3Real() + vec3(0,0,64), 16, owner, GetRandomReal(0,1).asAngleRadians()
 			, Abilities.illidanMissile, projectile -> new Creep(projectile.getPos(), 'u00V', 12, middle, projectile.getXYAngle()) )
-			pj.setTimed(GetRandomReal(1.25,3.5))
-			pj.setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(4.5,9)))
+			..setTimed(GetRandomReal(1.25,3.5))
+			..setVel(vec3(GetRandomReal(-6,6),GetRandomReal(-6,6),GetRandomReal(4.5,9)))
 			pj.restitution = 0.595
 			pj.surfaceFriction = 0.605
 		super.onDeath()

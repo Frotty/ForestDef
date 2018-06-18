@@ -4,14 +4,14 @@ import PresetBuffs
 import Assets
 import GameTimer
 
-buffTuple jumpyBuffId = compiletime(createDummyBuffObject("Hyper Aggression", "Jumps towards any attacker. 4 second cooldown.", Icons.bTNAvengingWatcher))
+constant jumpyBuff = compiletime(createDummyBuffObject("Hyper Aggression", "Jumps towards any attacker. 4 second cooldown.", Icons.bTNAvengingWatcher))
 
 constant JUMP_DIST = 512*512
 
 public class JumpyBuff extends ShieldBuff
 	real lastCast = 0
 	construct(real dur)
-		super(dur, jumpyBuffId, 6500)
+		super(dur, jumpyBuff, 6500)
 		
 	override function update()
 		super.update()

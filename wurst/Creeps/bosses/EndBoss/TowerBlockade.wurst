@@ -73,7 +73,7 @@ class BlockadeShip extends UnitEntity
 		super(actor)
 		this.blockadeBuff = blockadeBuff
 
-		EventListener.add(actor, EVENT_UNIT_DEATH) ->
+		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
 			var buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
 			if buffUnit != null
 				buffUnit.terminateBuff()

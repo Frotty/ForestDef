@@ -9,7 +9,8 @@ constant jumpyBuff = compiletime(createDummyBuffObject("Hyper Aggression", "Jump
 constant JUMP_DIST = 512*512
 
 public class JumpyBuff extends ShieldBuff
-	real lastCast = 0
+	var lastCast = 0.
+	
 	construct(real dur)
 		super(dur, jumpyBuff, 6500)
 		

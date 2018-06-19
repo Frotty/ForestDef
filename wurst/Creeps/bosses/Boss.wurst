@@ -5,7 +5,7 @@ import public PhysicsProjectile
 import Sounds
 
 public abstract class Boss extends Creep
-	static SoundDefinition snd = new SoundDefinition(Sounds.abominationAlternateDeath1, false)
+	static constant snd = new SoundDefinition(Sounds.abominationAlternateDeath1, false)
 	effect glow
 	
 	construct(vec3 pos, int typId, int bounty, vec2 target)

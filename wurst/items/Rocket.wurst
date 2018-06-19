@@ -3,11 +3,12 @@ import PhysicsProjectile
 import Interpolation
 import TextTagEntity
 import SoundUtils
+import Sounds
 
 public constant ROCKET_ITEM_ID = 'I000'
 public constant ROCKET_SPELL_ID = 'A01Z'
 
-constant UNDER_ATTACK_SOUND = new SoundDefinition("Sound\\Dialogue\\GenericWarnings\\GenericWarningUnitAttack1.mp3", false)
+constant UNDER_ATTACK_SOUND = new SoundDefinition(Sounds.genericWarningUnitAttack1, false)
 
 public class Rocket extends PhysicsProjectile
 	

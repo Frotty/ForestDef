@@ -4,10 +4,12 @@
 [*] Acolyte special now spawns units in front of itself instead of at lane spawn. Also spawn has been more randomized
 [*] Buffed the fallen down troopers, as this mainly happens late game
 [*] Stun traps' lumber cost has been reduced to 5
-[*] Final boss and infernal have been nerfed
-[*] All enemy units now have a timed life of 7.5 minutes to prevent stacking and getting stuck
+[*] Final boss and infernal HP have been nerfed
+[*] All enemy units now have a timed life of 5 minutes to prevent stacking and getting stuck
 [*] Fix respawn protection for revived builders
 [*] Builder selector is now automatically selected and camera centered, to prevent confusion in case it got deselected
+[*] Slightly increased fat builder movespeed, slightly decreased the elven builder movespeed 
+[*] 
 [/LIST]
 
 0.19r

@@ -12,7 +12,6 @@ import TrooperTower
 import EntityManagement
 import TownBell
 import ClosureTimers
-import Sounds
 
 function start()
 	initPlayers()

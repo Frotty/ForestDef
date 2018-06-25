@@ -15,7 +15,7 @@ public class WaveTower extends Tower
 		super(t)
 		
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(getPos().withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
+		new WaveMissile(getPos().toVec2().withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
 		
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))

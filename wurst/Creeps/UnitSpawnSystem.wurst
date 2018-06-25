@@ -11,7 +11,6 @@ import SpecialThree
 import SpecialFour
 import SpecialFive
 import Boss
-import Assets
 
 constant real SPAWN_TIME = 20.0
 
@@ -81,28 +80,28 @@ function initWaves()
 	
 	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 1, 14 ))
 	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 2, 14 ))
-	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 3, 14 ))
+	normalWaves.add(new NormalWave('u00S', 'u00P', 'n00F', 2, 14 ))
 	
+	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 1, 14 ))
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
-	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 3, 14 ))
 	
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 1, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 1, 12 ))
 	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 3, 12 ))
 	
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 1, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 1, 12 ))
 	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 4, 12 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 4, 12 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 12 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 12 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 12 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 12 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 12 ))
 
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 10 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 4, 10 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 2, 10 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 2, 10 ))
 	
 	bossWaves.add(new BossWave('n003', 1, 85, Sounds.skeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)

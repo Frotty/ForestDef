@@ -23,7 +23,7 @@ public function getPathingNormal(vec2 pos) returns vec2
 	for int i = 1 to numberOfTests
 		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
 		vec2 testPoint = pos + direction
-		if isTerrainWalkable(testPoint.x, testPoint.y)
+		if testPoint.isTerrainWalkable()
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
 	
@@ -46,7 +46,7 @@ public class Creep extends UnitEntity
 		dropCoin = shouldSpawnCoin()
 
 		// Apply timed life to prevent blocking and creeps getting stuck
-		actor.setTimedLife(7.5 * 60.)
+		actor.setTimedLife(5.15 * 60.)
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH, () -> onDeath())
 		doAfter(GetRandomReal(0.01, 0.2)) ->
 			actor.issuePointOrder("attack", target)
@@ -87,7 +87,7 @@ public class Creep extends UnitEntity
 							showBountyTextTag(restBounty, actor, pd.p)
 
 	override function update()
-		if isTerrainWalkable(pos.x, pos.y)
+		if pos.toVec2().isTerrainWalkable()
 			vel *= (0.975)
 		else
 			let normal = getPathingNormal(pos.toVec2())

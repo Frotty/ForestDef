@@ -74,7 +74,7 @@ public class TrooperTower extends Tower
 		let angleV = 360. / troops.size()
 		var angleD = 0.
 		for troop in troops
-			let tpos = getPos().toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST).withZ(getTerrainZ(pos.toVec2()) + 160)
+			let tpos = getPos().toVec2().polarOffset(angleD.asAngleDegrees(), DUMMY_DIST).withZ(pos.getTerrainZ() + 160.)
 			troop.actor..setVertexColor(COLOR_WHITE)
 			..unpause()
 			..setFacing(angleD.asAngleDegrees())

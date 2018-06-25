@@ -2,7 +2,6 @@ package Boss
 import public Creep
 import public SoundUtils
 import public PhysicsProjectile
-import Sounds
 
 public abstract class Boss extends Creep
 	static constant snd = new SoundDefinition(Sounds.abominationAlternateDeath1, false)

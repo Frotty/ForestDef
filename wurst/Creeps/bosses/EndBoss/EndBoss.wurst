@@ -4,7 +4,6 @@ import DestroyerSummoner
 import Tower
 import Boss
 import EndGame
-import Sounds
 
 constant ENDBOSS_ID = 'n00P'
 

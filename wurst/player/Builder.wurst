@@ -41,7 +41,7 @@ public function getPathingNormal(vec2 pos) returns vec2
 		vec2 testPoint = pos + direction
 		let eff = addEffect(Abilities.bansheeMissile, testPoint)
 		doAfter(1, () -> eff.destr())
-		if isTerrainWalkable(testPoint.x, testPoint.y)
+		if testPoint.isTerrainWalkable()
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
 	
@@ -61,7 +61,7 @@ class Ball extends FxEntity
 
 	override function update()
 		super.update()
-		if not isTerrainWalkable(pos.x, pos.y)
+		if not pos.toVec2().isTerrainWalkable()
 			var normal = getPathingNormal(pos.toVec2())
 			if(normal.lengthSq() == 0)
 				normal = (vel.norm() * -1).toVec2()

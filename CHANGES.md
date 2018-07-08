@@ -1,7 +1,7 @@
-0.19x
+0.20c
 [LIST]
 [*] This update features a lot of rebalancing to make late game obtainable and the 5+ arena more fun
-[*] Acolyte special now spawns units in front of itself instead of at lane spawn. Also spawn has been more randomized
+[*] Acolyte special now spawns units in front of itself and has reduced range. Also spawning has been more randomized
 [*] Buffed the fallen down troopers, as this mainly happens late game
 [*] Stun traps' lumber cost has been reduced to 5
 [*] Final boss and infernal HP have been nerfed
@@ -9,6 +9,11 @@
 [*] Fix respawn protection for revived builders
 [*] Builder selector is now automatically selected and camera centered, to prevent confusion in case it got deselected
 [*] Slightly increased fat builder movespeed, slightly decreased the elven builder movespeed 
+[*] Reinforcements now no longer have collision and thus don't block builders
+[*] Boss spawn sounds have been fixed
+[*] Coin and lumber spawns have been adjusted to spawn less overall, but more in lategame than before
+[*] Healbacktower now gains some HP on each upgrade
+[*] Magic trease healing range has been slightly increased
 [*] 
 [/LIST]
 

@@ -86,22 +86,22 @@ function initWaves()
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
 	normalWaves.add(new NormalWave('u00T', 'u00Q', 'n00G', 2, 14 ))
 	
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 1, 12 ))
-	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 1, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
+	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
 	normalWaves.add(new NormalWave('u00U', 'u00R', 'n00H', 2, 12 ))
 	
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 1, 12 ))
-	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 1, 12 ))
 	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 2, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 12 ))
+	normalWaves.add(new NormalWave('u00X', 'u010', 'n00I', 3, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 12 ))
-	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 3, 12 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 2, 12 ))
+	normalWaves.add(new NormalWave('u00Y', 'u011', 'n00J', 2, 12 ))
 	
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 12 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 3, 12 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 1, 12 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 1, 12 ))
 
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 2, 10 ))
-	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 2, 10 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 1, 10 ))
+	normalWaves.add(new NormalWave('u00Z', 'u012', 'n00K', 1, 10 ))
 	
 	bossWaves.add(new BossWave('n003', 1, 85, Sounds.skeletonWhat2, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new BossOne(startPos, unitId, bounty, middle)
@@ -138,7 +138,7 @@ function initWaves()
 
 public function startSpawn()
 	timer t = CreateTimer()
-	if allPlayers.size() <= 2 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
+	if allPlayers.size() <= 1 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		print("|cffFFCC00>>|r Fast Spawn")
 		// normalWaves.dequeue()
 		// normalWaves.dequeue()

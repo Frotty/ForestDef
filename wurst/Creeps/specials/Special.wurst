@@ -28,6 +28,7 @@ public abstract class Special extends Creep
 		..setIconGameInterface(Icons.bTNAcolyte)
 		..setModelFile(Units.acolyte1)
 		..setAttack1DamageBase(75)
+		..setAttack1Range(450)
 		..setScalingValue(1.25)
 		..setTintingColorRed(35)
 		..setTintingColorGreen(20)

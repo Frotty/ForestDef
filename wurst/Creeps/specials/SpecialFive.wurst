@@ -19,17 +19,18 @@ public class SpecialFive extends Special
 
 	override function slowUpdate()
 		super.slowUpdate()
-		spawntimer += 1
-		if spawntimer >= SPAWNTIME
-			spawntimer = GetRandomInt(-4, 4)
-			this.actor..setPropWindow(0 .fromDeg())
-			..setAnimation("Stand Work Gold")
-			..queueAnimation("Stand Work Gold")
-			doAfter(6) ->
-				this.actor.setPropWindow(actor.getDefaultPropWindow())
-			
-			var ppos = this.getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
-			for i = 1 to SPAWNAMOUNT
-				doAfter((i-1).toReal() * 1.5) ->
-					let spawn = new Spawn(ppos.toVec3(), SPAWNID, 0, middle)
-					flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())
+		if actor.isAlive()
+			spawntimer += 1
+			if spawntimer >= SPAWNTIME
+				spawntimer = GetRandomInt(-4, 4)
+				this.actor..setPropWindow(0 .fromDeg())
+				..setAnimation("Stand Work Gold")
+				..queueAnimation("Stand Work Gold")
+				doAfter(6) ->
+					this.actor.setPropWindow(actor.getDefaultPropWindow())
+				
+				var ppos = this.getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
+				for i = 1 to SPAWNAMOUNT
+					doAfter((i-1).toReal() * 1.5) ->
+						let spawn = new Spawn(ppos.toVec3(), SPAWNID, 0, middle)
+						flashEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", spawn.getPos())

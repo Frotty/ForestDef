@@ -41,29 +41,27 @@ public class TrooperTower extends Tower
 		addTrooper()
 		addTrooper()
 		addTrooper()
-		tupgradestart.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_START)
-		tupgradecancel.registerUnitEvent(actor,EVENT_UNIT_UPGRADE_CANCEL)
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
-			terminate()
+		EventListener.add(actor, EVENT_UNIT_UPGRADE_START) ->
+			onUpgradeStart()
+		EventListener.add(actor, EVENT_UNIT_UPGRADE_CANCEL) ->
+			onUpgradeCancel()
 			
 	override function onUpgrade()
 		level++
 		addTrooper()
 		actor.issueImmediateOrder("stop")
 	
-	override function onAttack(UnitEntity target)
+	override function onAttack(UnitEntity target, Damage damage)
 		for troop in troops
 			troop.actor.issueTargetOrder("smart", target.actor)
 			
-	static function onUpgradeStart()
-		let t = GetTriggerUnit().getEntity() castTo TrooperTower
-		for troop in t.troops
+	function onUpgradeStart()
+		for troop in troops
 			troop.actor.setVertexColor(COLOR_BLACK)
 			troop.actor.pause()
 			
-	static function onUpgradeCancel()
-		let t = GetTriggerUnit().getEntity() castTo TrooperTower
-		for troop in t.troops
+	function onUpgradeCancel()
+		for troop in troops
 			troop.actor.setVertexColor(COLOR_WHITE)
 			troop.actor.unpause()
 			troop.setXY(troop.pos)
@@ -98,7 +96,3 @@ public class TrooperTower extends Tower
 			trooper.terminate()
 		destroy troops
 	
-			
-public function initTrooperTower()
-	tupgradestart = CreateTrigger()..addAction(function TrooperTower.onUpgradeStart)
-	tupgradecancel = CreateTrigger()..addAction(function TrooperTower.onUpgradeCancel)

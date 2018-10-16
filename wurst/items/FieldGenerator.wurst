@@ -1,5 +1,6 @@
 package FieldGenerator
 import FxEntity
+import ClosureForGroups
 
 constant SPELL_ID = 'A027'
 constant BUFF_ID = 'AAAA'
@@ -35,5 +36,8 @@ class ForceField extends FxEntity
 
 	
 init
-	EventListener.onPointCast(SPELL_ID) (caster, target) ->
-		new ForceField(caster, target)
+	// EventListener.onPointCast(SPELL_ID) (caster, target) ->
+	// 	new ForceField(caster, target)
+
+	forUnitsInRange(ZERO2, 128) u ->
+		u.addHP(100)

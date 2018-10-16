@@ -134,7 +134,7 @@ function initWaves()
 	specialWaves.add(new SpecialWave(UNIT_ID_DARKONE, 4, 65, (vec3 startPos, int unitId, int bounty, vec2 middle) -> begin
 		new SpecialFive(startPos, unitId, bounty, middle)
 	end))
-	
+
 
 public function startSpawn()
 	timer t = CreateTimer()

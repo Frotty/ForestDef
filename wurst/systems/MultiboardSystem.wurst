@@ -12,7 +12,8 @@ public function initMultiboard()
 	update()
 	mboard.display(true)
 	CreateTimer().startPeriodic(0.5, () -> update())
-	
+
+
 function update()
 	mboard.setRowCount(allPlayers.size())
 	mboard.setColumnCount(4)

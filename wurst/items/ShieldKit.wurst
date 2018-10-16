@@ -18,8 +18,8 @@ class ShieldKitBuff extends ShieldBuff
 		super.apply(ue)
 		pos = ue.getPos()
 
-	override function defenseModifier()
-		super.defenseModifier()
+	override function defenseModifier(Damage dmg)
+		super.defenseModifier(dmg)
 		if blockAmount > 0
 			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(8,12)), blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 

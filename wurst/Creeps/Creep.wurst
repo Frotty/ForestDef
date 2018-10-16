@@ -17,11 +17,11 @@ init
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 8
-	real radius = 64
+	let numberOfTests = 8
+	var radius = 64.
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
-		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
+		vec2 direction = vec2(0,0).polarOffset((i * 2 * bj_PI/numberOfTests).asAngleRadians(), radius)
 		vec2 testPoint = pos + direction
 		if testPoint.isTerrainWalkable()
 			addedVecs += direction

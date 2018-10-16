@@ -14,11 +14,12 @@ public class WaveTower extends Tower
 	construct(Tower t)
 		super(t)
 		
-	override function onAttack(UnitEntity ud)
+	override function onAttack(UnitEntity ud, Damage damage)
 		new WaveMissile(getPos().toVec2().withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
 		
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
+		Log.info("Mori is weeb")
 		level++
 
 	
@@ -69,10 +70,8 @@ class WaveMissile extends Projectile
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect(Abilities.gryphonRiderMissileTarget, u.getPos() ).destr()
-		
-		
+
+
 	ondestroy
 		affected.release()
-
-
 

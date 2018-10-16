@@ -17,10 +17,8 @@ public class JumpyBuff extends ShieldBuff
 	override function update()
 		super.update()
 		
-	override function attackModifier()
-		
-	override function defenseModifier()
-		let attacker = GetEventDamageSource()
+	override function defenseModifier(Damage dmg)
+		let attacker = dmg.source
 		
 		if target.actor.getFlyHeight() <= 1 and attacker.getOwner().isEnemyOf(target.owner) and attacker.getPos3Real().distanceToSq(target.getPos()) < JUMP_DIST
 			and attacker.getPos3Real().distanceToSq(target.getPos()) > 42 and lastCast + 4. < getElapsedGameTime()

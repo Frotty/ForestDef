@@ -77,11 +77,10 @@ public class HealbackTower extends Tower
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 		destroy targets
 
-	override function onAttack(UnitEntity target)
-		var damage = getDamage()
-		if damage > 0 and target.owner == CREEP_OWNER
+	override function onAttack(UnitEntity target, Damage damage)
+		if damage.amount > 0 and target.owner == CREEP_OWNER
 			// new HealbackBuff(target, damage)
-			launchHealback(target, damage * getMultiplier(level))
+			launchHealback(target, damage.amount * getMultiplier(level))
 
 class EntityWithDist
 	UnitEntity ue

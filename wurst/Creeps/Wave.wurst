@@ -140,6 +140,7 @@ public function initCreepStarts(boolean eight)
 		spawnRects[2] = gg_rct_smallTop
 		startPositions[3] = vec3(4324.,2261.,0)
 		spawnRects[3] = gg_rct_smallRight
+		error("Something went wrong!")
 		middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )
 	
 	

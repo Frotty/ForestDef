@@ -13,7 +13,7 @@ public class ThermoTower extends Tower
 		super(t)
 		isHot = true
 		
-	override function onAttack(UnitEntity ud)
+	override function onAttack(UnitEntity ud, Damage damage)
 		if isHot
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
 				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)

@@ -19,17 +19,16 @@ public class ArtilleryTower extends Tower
 		registerSpell()
 
 	function registerSpell()
-		EventListener.onCast(actor) id ->
-			if id == SPELL_ID
-				if pos.distanceTo2d(getSpellTargetPos()) > 2950
-					nullTimer() -> 
-						actor..issueImmediateOrderById(OrderId("stop"))
-						..removeAbility(SPELL_ID)..addAbility(SPELL_ID)
-						
-				let a = pos.angleTo2d(getSpellTargetPos())
-				for i = 0 to 3 + level * 3
-					let startPos = getSpellTargetPos() + vec2(GetRandomReal(-200.,200.), GetRandomReal(-200.,200.))
-					new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+ level * 50, owner, a, 250.+(level*225))
+		EventListener.onCast(actor, SPELL_ID) id ->
+			if pos.distanceTo2d(getSpellTargetPos()) > 2950
+				nullTimer() -> 
+					actor..issueImmediateOrderById(OrderId("stop"))
+					..removeAbility(SPELL_ID)..addAbility(SPELL_ID)
+					
+			let a = pos.angleTo2d(getSpellTargetPos())
+			for i = 0 to 3 + level * 3
+				let startPos = getSpellTargetPos() + vec2(GetRandomReal(-200.,200.), GetRandomReal(-200.,200.))
+				new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+ level * 50, owner, a, 250.+(level*225))
 
 		
 	override function onUpgrade()

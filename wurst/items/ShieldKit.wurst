@@ -4,7 +4,7 @@ import TextTagEntity
 import GameTimer
 import Assets
 
-public buffTuple buffAbil = compiletime(createDummyBuffObject("Shield Kit", "This unit is protected by a shield that absorbs damage", 
+public buffTuple buffAbil = compiletime(createDummyBuffObject("Shield Kit", "This unit is protected by a shield that absorbs damage",
 			"BTNDivineIntervention.blp", Abilities.divineShieldTarget))
 
 class ShieldKitBuff extends ShieldBuff
@@ -14,12 +14,12 @@ class ShieldKitBuff extends ShieldBuff
 		super(90., buffAbil, amount)
 		Log.debug("ShieldKit created, dur: " + duration.toString() + " amount: " + amount.toString())
 
-	override function apply(UnitEntity ue) 
+	override function apply(UnitEntity ue)
 		super.apply(ue)
 		pos = ue.getPos()
 
-	override function defenseModifier(Damage dmg)
-		super.defenseModifier(dmg)
+	override function defenseModifier()
+		super.defenseModifier()
 		if blockAmount > 0
 			new TextTagEntity(pos, vec3(GetRandomReal(-2, 2),0, GetRandomReal(8,12)), blockAmount.toInt().toString() , 10, 1., colorA(255, 204, 12, 255))
 
@@ -28,7 +28,7 @@ class ShieldKitBuff extends ShieldBuff
 			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield applied" , 13, 1.55, colorA(255, 204, 12, 255))
 		else
 			new TextTagEntity(pos, vec3(0,0, GetRandomReal(9,12)), "Shield collapsed" , 13, 1.55, colorA(255, 204, 12, 255))
-		
+
 init
 	EventListener.onTargetCast('A00D') (caster, target) ->
 		let data = target.getEntity()

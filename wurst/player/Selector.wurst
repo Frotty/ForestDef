@@ -24,7 +24,7 @@ let snd = new SoundDefinition("Units\\Creeps\\Ogre\\OgrePissed5.wav", false)
 
 public class Selector extends UnitEntity
 	FText ownerTag
-	
+
 	vec3 finalPos
 	vec3 mid
 	real p = 0.
@@ -36,7 +36,7 @@ public class Selector extends UnitEntity
 		..setPropWindow(angle(0.))
 		finalPos = ppos
 		mid = middle.polarOffset(middle.angleTo(finalPos.toVec2()) + (48).fromDeg(), 168).toVec3()
-		
+
 		owner..select(actor)
 		..panCameraToTimed(actor.getPos(), 0.)
 
@@ -49,7 +49,7 @@ public class Selector extends UnitEntity
 					if owner.getName().toLowerCase() == "cokemonkey11" or owner.getName().toLowerCase() == "waterknight"
 						let eff = addEffect(Abilities.plagueCloudCaster, pd.builder.getPos())
 						doAfter(5, () -> eff.destr())
-						snd.playForPlayer(owner)
+						// snd.playForPlayer(owner)
 				case SLIM_SPELL_ID
 					pd.builder = new Builder(actor.getPos3Zero(), pd, SLIM_ID)
 					pd.builder.actor.addItemById(ENERGY_ID)

@@ -18,20 +18,20 @@ public class Wall extends UnitEntity
 		super(wall)
 
 public class Tower extends UnitEntity
-	
+
 	construct (unit tower)
 		super(tower, tower.getPos3Real())
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
 			terminate()
-			
+
 	construct(Tower oldTower)
 		super(oldTower.actor)
 		oldTower.transferBuffs(this)
 		oldTower.terminate()
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
 			terminate()
-	
-	function onAttack(UnitEntity _target, Damage _damage)
+
+	function onAttack(UnitEntity _target)
 
 	/** Called on every upgrade of this tower.
 		If this tower has been upgraded to another tier,
@@ -59,12 +59,12 @@ public class Tower extends UnitEntity
 
 	function pause()
 		actor.pause()
-	
+
 	function unpause()
 		actor.unpause()
 
 /** Checks if the upgrade unlocks techtree */
-function checkTech(unit u) 
+function checkTech(unit u)
 	if u.getTypeId() == 'h00S' or u.getTypeId() == 'h00T'
 		SetPlayerTechMaxAllowed(u.getOwner(), 'h028', -1)
 
@@ -83,16 +83,16 @@ init
 		let data = u.getEntity()
 		if data != null and data instanceof Tower
 			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
-			
 
-	addDamageModifier() damage ->
-		let damager = damage.source
-		let damaged = damage.target
+
+	EventListener.add(EVENT_UNIT_DAMAGED) ->
+		let damager = GetEventDamageSource()
+		let damaged = GetTriggerUnit()
 		if damager != damaged and damager.getEntity() != null and damaged.isAlive()
 			let e = damager.getEntity()
 			if e instanceof Tower
 				let t = e castTo Tower
 				if damaged.getEntity() != null
-					t.onAttack(damaged.getEntity(), damage)
+					t.onAttack(damaged.getEntity())
 				else
 					t.actor.issueImmediateOrder("stop")

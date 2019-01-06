@@ -15,8 +15,8 @@ constant snd = new SoundDefinition(Sounds.humanCallToArmsWhat1, false)
 player lastRinger
 int usages = 0
 
-public function onTownBell() 
-	snd.play()
+public function onTownBell()
+	// snd.play()
 	lastRinger = GetManipulatingUnit().getOwner()
 	forUnitsOfPlayer(players[8]) u ->
 		if u.getTypeId() == DUMMY_ID
@@ -25,7 +25,7 @@ public function onTownBell()
 			addEffect(Abilities.avatarCaster, pos).destr()
 			u.remove()
 			createUnit(lastRinger, TOWER_ID, pos, facing)
-			
+
 	doAfter(SPELL_DURATION) ->
 		forUnitsOfPlayer(lastRinger) u ->
 			if u.getTypeId() == TOWER_ID
@@ -34,9 +34,9 @@ public function onTownBell()
 				addEffect(UI.goldCredit, pos).destr()
 				u.remove()
 				createUnit(players[8], DUMMY_ID, pos, facing)
-	
+
 	usages++
-			
+
 public function initTownBell()
 	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM) ->
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID

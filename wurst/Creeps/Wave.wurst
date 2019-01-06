@@ -16,10 +16,10 @@ public class NormalWave
 	int meleeId
 	int mageId
 	int rangedId
-	
+
 	int amount
 	int bounty
-	
+
 	creeptype typ = creeptype.MELEE
 
 	construct(int meleeId,int mageId,int rangedId, int amount, int bounty)
@@ -28,16 +28,18 @@ public class NormalWave
 		this.rangedId = rangedId
 		this.amount = amount
 		this.bounty = bounty
-		
+
 	function spawn()
 		var t = getTimer()
 		t.setData(this castTo int)
 		t.start(0.1, function NormalWave.spawnCallback)
-		
+
 	static function spawnCallback()
 		var t = GetExpiredTimer()
 		var wave = t.getData() castTo NormalWave
 		int id = 0
+		var destroyWave = false
+
 		switch wave.typ
 			case creeptype.MELEE
 				id = wave.meleeId
@@ -49,15 +51,18 @@ public class NormalWave
 				t.start(0.8, function NormalWave.spawnCallback)
 			case creeptype.RANGED
 				id = wave.rangedId
-				destroy wave
+				destroyWave = true
 				t.release()
-				
-		for i = 0 to wave.amount-1
+
+		for i = 0 to wave.amount - 1
 			doAfter(i.toReal()) ->
 				for j = 0 to startPosCount
 					let spoint = spawnRects[j].randomPoint().toVec3()
 					new Creep(spoint, id, wave.bounty, middle, spoint.angleTo2d(middle))
-		
+
+		if destroyWave
+			destroy wave
+
 
 public abstract class CreateBoss
 	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
@@ -69,22 +74,22 @@ public class BossWave
 	SoundDefinition s
 	string info
 	CreateBoss boss
-	
+
 	construct(int bossId, int amount, int bounty, string s, CreateBoss boss)
 		this.bossId = bossId
 		this.amount = amount
 		this.bounty = bounty
 		this.s = new SoundDefinition(s, false)
 		this.boss = boss
-		
+
 	function spawn()
-		s.play()
+		// s.play()
 		print("|cffE62121## Attention:|r Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount
 				boss.create(spawnRects[j].randomPoint().toVec3(), bossId, bounty, middle)
 		destroy boss
-				
+
 
 public abstract class CreateSpecial
 	abstract function create(vec3 startPos, int unitId, int bounty, vec2 middle)
@@ -100,7 +105,7 @@ public class SpecialWave
 		this.amount = amount
 		this.bounty = bounty
 		this.special = special
-		
+
 	function spawn()
 		print("|cffE62121##|r |cff087BB5B|r|cff0C79B1r|r|cff1077ADa|r|cff1475A9c|r|cff1873A5e|r |cff206F9Dy|r|cff246D99o|r|cff286B95u|r|cff2C6991r|r|cff30678Ds|r|cff346589e|r|cff386385l|r|cff3C6181v|r|cff405F7De|r|cff445D79s|r|cff485B75:|r |cff50576DS|r|cff545569p|r|cff585365e|r|cff5C5161c|r|cff604F5Di|r|cff644D59a|r|cff684B55l|r|cff6C4951s|r |cff744549a|r|cff784345r|r|cff7C4141e|r |cff843D39c|r|cff883B35o|r|cff8C3931m|r|cff90372Di|r|cff943529n|r|cff983325g|r|cff9C3121!|r")
 		for i = 0 to amount-1
@@ -108,7 +113,7 @@ public class SpecialWave
 				for j = 0 to startPosCount
 					special.create(spawnRects[j].randomPoint().toVec3(), specialId, bounty, middle)
 		doAfter(amount.toReal(), () -> destroy special)
-		
+
 
 public function initCreepStarts(boolean eight)
 	if(eight)
@@ -140,8 +145,7 @@ public function initCreepStarts(boolean eight)
 		spawnRects[2] = gg_rct_smallTop
 		startPositions[3] = vec3(4324.,2261.,0)
 		spawnRects[3] = gg_rct_smallRight
-		error("Something went wrong!")
 		middle = vec2( gg_unit_h00E_0008.getX(), gg_unit_h00E_0008.getY() )
-	
-	
-	
+
+
+

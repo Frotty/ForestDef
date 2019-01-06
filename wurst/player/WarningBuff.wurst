@@ -17,39 +17,38 @@ public class WarningBuff extends NormalBuff
 
 	boolean dead = false
 	player originalOwner
-	
+
 	construct()
 		super(9999, warningBuffAbil)
 		startedTime = currentTime
 		lastWarning = currentTime
 		lastSelect = currentTime
-		
-	override function apply(UnitEntity target) 
+
+	override function apply(UnitEntity target)
 		super.apply(target)
 		startedTime = currentTime
 		originalOwner = target.owner
 		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
 			if not done
 				onDeath()
-	
-	override function defenseModifier(Damage dmg)
+
+	override function defenseModifier()
 		let pos = target.getPos()
 		if startedTime + 15. > currentTime
 			new TextTagEntity(target.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
 			addEffect(Abilities.spellShieldCaster, target.getPos() ).destr()
-			dmg.amount = 0
-		if lastWarning + 1. < currentTime and target.actor.getHP() - dmg.amount < (target.actor.getMaxHP()/1.5)
+			modifyDamage(0)
+		if lastWarning + 1. < currentTime and target.actor.getHP() - getDamage() < (target.actor.getMaxHP()/1.5)
 			new TextTagEntity(target.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
-			snd.playForPlayer(target.owner)
+			// snd.playForPlayer(target.owner)
 			lastWarning = currentTime
-		if lastSelect + 5. < currentTime and target.actor.getHP() - dmg.amount < (target.actor.getMaxHP()/2.)
+		if lastSelect + 5. < currentTime and target.actor.getHP() - getDamage() < (target.actor.getMaxHP()/2.)
 			PanCameraToTimedForPlayer(target.owner, pos.x, pos.y, 0.25)
 			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
 
-		if dmg.amount >= target.actor.getHP() - 1.0
-			dmg.amount = 0
-			dmg.preventDeath()
+		if getDamage() >= target.actor.getHP() - 1.0
+			modifyDamage(0)
 			if not dead
 				dead = true
 				let u = target.actor
@@ -76,7 +75,7 @@ public class WarningBuff extends NormalBuff
 			pDatas[owner.getId()].alive = false
 			pDatas[owner.getId()].deaths++
 			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
-	
+
 	override function refresh(boolean forceRefresh)
 		super.refresh(forceRefresh)
 		if dead

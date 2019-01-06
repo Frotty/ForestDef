@@ -8,7 +8,7 @@ public constant int FLAMETHROWER_ID = 'h01C'
 
 function getDamage(int level) returns real
 	return 9. + 5.75 * level
-	
+
 function getSpeed(int level) returns real
 	return 6.45 + level * 1.55
 
@@ -16,21 +16,21 @@ public class FlamethrowerTower extends Tower
 	int level = 1
 	construct(Tower t)
 		super(t)
-		
-	override function onAttack(UnitEntity ud, Damage damage)
+
+	override function onAttack(UnitEntity ud)
 		new FlameMissile(pos.toVec2().withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
-			
+
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
 		level++
-			
+
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE) and not IsUnitType(u, UNIT_TYPE_FLYING)
-		
+
 class FlameMissile extends Projectile
 	int level
 	group affected
-	
+
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
 		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.025,0.025)).asAngleRadians(), FX_PATH )
 		fx.setScale(0.2)
@@ -49,5 +49,5 @@ class FlameMissile extends Projectile
 			if IsUnitEnemy(u, owner) and isUnitTargetable(u)
 				getDummy().damageTarget(u, getDamage(level), ATTACK_TYPE_SIEGE)
 		super.update()
-		
-	
+
+

@@ -16,7 +16,7 @@ public class TroopGround extends UnitEntity
 	construct (vec3 pos, player owner)
 		super(createUnitZ(owner, TROOPG_ID, pos, angle(0)))
 		setXY(pos)
-		
+
 public class Troop extends UnitEntity
 
 	construct (vec3 pos, player owner)
@@ -24,7 +24,7 @@ public class Troop extends UnitEntity
 		deactivate()
 		actor.addAbility(LOCUST_ID)
 		actor.setPropWindow(0 .fromDeg())
-		
+
 	ondestroy
 		if not IsUnitHidden(actor)
 			SetUnitExploded(actor, true)
@@ -35,37 +35,37 @@ public class Troop extends UnitEntity
 public class TrooperTower extends Tower
 	let troops = new LinkedList<Troop>()
 	int level = 0
-	
+
 	construct (Tower t)
 		super(t)
 		addTrooper()
 		addTrooper()
 		addTrooper()
-		EventListener.add(actor, EVENT_UNIT_UPGRADE_START) ->
+		EventListener.add(actor, EVENT_PLAYER_UNIT_UPGRADE_START) ->
 			onUpgradeStart()
-		EventListener.add(actor, EVENT_UNIT_UPGRADE_CANCEL) ->
+		EventListener.add(actor, EVENT_PLAYER_UNIT_UPGRADE_CANCEL) ->
 			onUpgradeCancel()
-			
+
 	override function onUpgrade()
 		level++
 		addTrooper()
 		actor.issueImmediateOrder("stop")
-	
-	override function onAttack(UnitEntity target, Damage damage)
+
+	override function onAttack(UnitEntity target)
 		for troop in troops
 			troop.actor.issueTargetOrder("smart", target.actor)
-			
+
 	function onUpgradeStart()
 		for troop in troops
 			troop.actor.setVertexColor(COLOR_BLACK)
 			troop.actor.pause()
-			
+
 	function onUpgradeCancel()
 		for troop in troops
 			troop.actor.setVertexColor(COLOR_WHITE)
 			troop.actor.unpause()
 			troop.setXY(troop.pos)
-			
+
 	function addTrooper()
 		troops.add(new Troop(pos, owner))
 		// Make into circle
@@ -79,7 +79,7 @@ public class TrooperTower extends Tower
 			..addAbility(LOCUST_ID)
 			troop.setXY(tpos)
 			angleD += angleV
-		
+
 	override function pause()
 		super.pause()
 		for troop in this.troops
@@ -95,4 +95,3 @@ public class TrooperTower extends Tower
 			new TroopGround(trooper.pos, trooper.owner)
 			trooper.terminate()
 		destroy troops
-	

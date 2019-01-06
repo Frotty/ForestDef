@@ -8,12 +8,12 @@ public constant int THERMO_TOWER_ID = 'h01R'
 public class ThermoTower extends Tower
 	boolean isHot
 	int level
-	
+
 	construct(Tower t)
 		super(t)
 		isHot = true
-		
-	override function onAttack(UnitEntity ud, Damage damage)
+
+	override function onAttack(UnitEntity ud)
 		if isHot
 			if GetUnitAbilityLevel(ud.actor, buffcode) > 0
 				UnitDamageTarget(actor,ud.actor,getDamage(),true,false,ATTACK_TYPE_MELEE,DAMAGE_TYPE_NORMAL,WEAPON_TYPE_WHOKNOWS)
@@ -30,9 +30,9 @@ public class ThermoTower extends Tower
 		ThermoTower t = GetExpiredTimer().getData() castTo ThermoTower
 		GetExpiredTimer().release()
 		t.actor.removeAbility(ORB_ID)
-	
+
 	override function onUpgrade()
 		level ++
-	
+
 	function getDamage() returns real
 		return (50.+(40*level))

@@ -13,19 +13,19 @@ public class Builder extends UnitEntity
 	construct(vec3 pos, PlayerData owner, int id)
 		super(createUnit(owner.p, id, pos, angle(0)))
 		actor..addAbility(GHOST_VIS_ID)..addAbility('AInv')..addAbility('Ahrp')
-		
+
 		if id == FAT_ID
 			actor.setTimeScale(0.25)
-		if GetLocalPlayer() == owner.p
-			PanCameraToTimed(actor.getX(), actor.getY(), 0)
-			
+
+		owner.p.panCamToTimed(actor, 0)
+
 		actor.issueImmediateOrder("repairon")
 		owner.p.selectSingle(actor)
 		new WarningBuff().apply(this)
-	
+
 		super.update()
 		actor.setXYZReal(pos)
-		
+
 
 
 	ondestroy
@@ -44,7 +44,7 @@ public function getPathingNormal(vec2 pos) returns vec2
 		if testPoint.isTerrainWalkable()
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
-	
+
 public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	vec3 nor3 = nor2.toVec3()
 	vec3 pv3 = vel3.project(nor3)
@@ -53,11 +53,11 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	return vel3 + pv2
 
 class Ball extends FxEntity
-	
+
 	construct(vec3 pos, player owner, vec2 target)
 		super(owner, pos, 32, pos.angleTo2d(target), Abilities.fireBallMissile)
 		setVel(pos.angleTo2d(target).toVec(10).toVec3())
-		
+
 
 	override function update()
 		super.update()
@@ -71,4 +71,3 @@ class Ball extends FxEntity
 		pos += vel
 		fx.setXYZ(pos)
 		fx.setXYAngle(pos.angleTo2d(pos+vel))
-		

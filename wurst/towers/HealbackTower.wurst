@@ -21,17 +21,17 @@ public class HealbackTower extends Tower
 
 	static function getMultiplier(int level) returns real
 		return HEALBACK_MULTIPLIERS[level - 1]
-	
+
 	static function getMissileCount(int level) returns int
 		return HEALBACK_MISSILE_COUNTS[level - 1]
 
 	static function getRange(int level) returns real
 		return HEALBACK_RANGES[level - 1]
-	
+
 	static constant nearEntities = new LinkedList<EntityWithDist>()
 	static var statSource = ZERO2
 	static Comparator<EntityWithDist> comparator = (e1, e2) -> e1.distSq - e2.distSq
-	
+
 	static function getNearestBuilding(vec2 source, int count, real range) returns LinkedList<UnitEntity>
 		statSource = source
 		forUnitsInRange(source, range) u ->
@@ -39,11 +39,11 @@ public class HealbackTower extends Tower
 			// filter structureds
 			if not IsUnitType(u, UNIT_TYPE_STRUCTURE) or not u.isAlive()
 				viable = false
-			
+
 			// filter player owner
 			if viable and pDatas[u.getOwner().getId()] == null
 				viable = false
-			
+
 			// filter if wall or tower building
 			if viable
 				var e = u.getEntity()
@@ -56,13 +56,13 @@ public class HealbackTower extends Tower
 				nearEntities.add(new EntityWithDist(u.getEntity(), statSource.distanceToSq(u.getPos())))
 
 		nearEntities.sortWith(comparator)
-		
+
 		var targets = new LinkedList<UnitEntity>()
-		nearEntities.forEach() e -> 
+		nearEntities.forEach() e ->
 			if targets.size() < count
-				targets.add(e.ue) 
+				targets.add(e.ue)
 			destroy e
-		
+
 		nearEntities.clear()
 		return targets
 
@@ -77,10 +77,10 @@ public class HealbackTower extends Tower
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 		destroy targets
 
-	override function onAttack(UnitEntity target, Damage damage)
-		if damage.amount > 0 and target.owner == CREEP_OWNER
+	override function onAttack(UnitEntity target)
+		if getDamage() > 0 and target.owner == CREEP_OWNER
 			// new HealbackBuff(target, damage)
-			launchHealback(target, damage.amount * getMultiplier(level))
+			launchHealback(target, getDamage() * getMultiplier(level))
 
 class EntityWithDist
 	UnitEntity ue
@@ -117,7 +117,7 @@ public class HealbackMissile extends Projectile
 		if startPos.distanceToSq(pos) > distanceToTravelSq
 			onReachTarget()
 			terminate()
- 
+
 	function onReachTarget()
 		if this.target != null and this.target.actor.isAlive()
 			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))

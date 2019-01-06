@@ -13,11 +13,12 @@ public function initRevivalSystem()
 				if not pd.alive
 					s += " " + pd.p.getNameColored()
 					pd.builder.actor.setPos(revPos.polarOffset(GetRandomReal(0,1).asAngleRadians(), 64))
-					pd.builder.getBuffs().forEach(b -> b.refresh())
+					for bff from pd.builder.getBuffs().staticItr()
+						bff.refresh()
 					addEffect(Abilities.reviveNightElf, pd.builder.actor.getPos()).destr()
 					printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)
 					pd.alive = true
 			if s.length() > 0
 				s += "."
 				printTimed("|cffFFCC00>>|r " + GetTriggerPlayer().getNameColored() + " |cff21C55Ahas revived the following players:|r " + s, 15)
-	
+

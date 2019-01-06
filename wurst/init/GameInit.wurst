@@ -23,7 +23,7 @@ function start()
 	initRocket()
 	initTownBell()
 	GetExpiredTimer().release()
-	new SoundDefinition(Sounds.h01Uther03, false).play()
+	// new SoundDefinition(Sounds.h01Uther03, false).play()
 	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
 	if allPlayers.size() <= 2 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
@@ -34,25 +34,25 @@ function start()
 		print("|cffFFCC00>>|r Editor Test Mode activated")
 	else
 		getTimer().start( 50., function spawn )
-		
+
 real pitch = 1.01
-var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)	
+var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)
 function spawn()
-	var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
-	var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
-	snd.play()
+	// var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
+	// var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
+	// snd.play()
 	startSpawn()
 	GetExpiredTimer().release()
-	doAfter(7.75) ->
-		let instance1 = snd2.play()
-		doPeriodicallyTimed(0.3, 10) cb ->
-			pitch *= 0.99802
-			instance1.snd.setPitch(pitch)
-		doAfter(0.55) ->
-			let instance2 = snd2.play()
-			doPeriodicallyTimed(0.3, 10) cb ->
-				instance2.snd.setPitch(pitch)
-		doAfter(14.25, () -> snd3.play())
+	// doAfter(7.75) ->
+	// 	// let instance1 = snd2.play()
+	// 	doPeriodicallyTimed(0.3, 10) cb ->
+	// 		// pitch *= 0.99802
+	// 		// instance1.snd.setPitch(pitch)
+	// 	doAfter(0.55) ->
+	// 		// let instance2 = snd2.play()
+	// 		// doPeriodicallyTimed(0.3, 10) cb ->
+	// 			// instance2.snd.setPitch(pitch)
+	// 	doAfter(14.25, () -> snd3.play())
 
 
 

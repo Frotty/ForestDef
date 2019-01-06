@@ -10,29 +10,29 @@ public constant ROCKET_SPELL_ID = 'A01Z'
 constant UNDER_ATTACK_SOUND = new SoundDefinition(Sounds.genericWarningUnitAttack1, false)
 
 public class Rocket extends PhysicsProjectile
-	
+
 	construct(vec3 startPos, vec2 targetPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", 0 castTo OnExpireEvent )
 		PingMinimapForForce(GetPlayersAll(), startPos.x, startPos.y, 5)
 		setXYAngle(startPos.angleTo2d(targetPos))
 		setSpeed(GetRandomReal(5,7))
 		vel.z = GetRandomReal(15,16)
-		
+
 	override function update()
 		super.update()
 		if vel.z <= 0
 			terminate()
-			
+
 	ondestroy
 		new TextTagEntity(getPos(), vec3(0,0,17.5), "HELP!", 25, 2, colorA(255,50,50,255))
-		UNDER_ATTACK_SOUND.play()
+		// UNDER_ATTACK_SOUND.play()
 		for i = 0 to 16
 			new Shrapnell(getPos())
-			
-		
+
+
 class Shrapnell extends PhysicsProjectile
 	real initialTime
-	
+
 	construct(vec3 startPos)
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DruidoftheTalonMissile\\DruidoftheTalonMissile.mdl", 0 castTo OnExpireEvent )
 		setXYAngle(GetRandomReal(0,360).asAngleDegrees())
@@ -42,15 +42,15 @@ class Shrapnell extends PhysicsProjectile
 		vel.z = GetRandomReal(7,17)
 		initialTime = GetRandomReal(1,2.5)
 		setTimed(initialTime)
-	
-		
+
+
 	override function update()
 		var col = fx.getColor()
-		col.alpha = bezier_3(255, 200, -5, time/initialTime).toInt()
+		col.alpha = bezier3(255, 200, -5, time/initialTime).toInt()
 		fx.setColor(col)
 		super.update()
-	
+
 public function initRocket()
 	EventListener.onPointCast(ROCKET_SPELL_ID) (caster, target) ->
 		new Rocket(caster.getPos3Real() + vec3(0,0,90), target)
-	
+

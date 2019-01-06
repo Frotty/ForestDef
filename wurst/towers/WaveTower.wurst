@@ -1,7 +1,7 @@
 package WaveTower
 import Tower
 import Boss
-import Assets 
+import Assets
 import GroupUtils
 import ClosureForGroups
 
@@ -10,33 +10,33 @@ constant AREA_OF_EFFECT = 192.
 
 public class WaveTower extends Tower
 	int level = 1
-	
+
 	construct(Tower t)
 		super(t)
-		
-	override function onAttack(UnitEntity ud, Damage damage)
+
+	override function onAttack(UnitEntity ud)
 		new WaveMissile(getPos().toVec2().withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
-		
+
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
 		Log.info("Mori is weeb")
 		level++
 
-	
+
 function getBlowDamage(int level) returns real//towerlevel
 	return ((75. * level) + 125.)
-	
+
 function getDOT(int level) returns real//towerlevel
 	return ((4.5 * level))
-	
+
 function getKB(int level) returns real//towerlevel
 	return (4.85 + (level*level))
-	
+
 class WaveMissile extends Projectile
 	let affected = getGroup()
 	int level
 	unit tower
-	
+
 	construct(vec3 pos, vec2 target, real speed, player owner, int level, unit tower)
 		super(pos, AREA_OF_EFFECT, owner, pos.angleTo2d(target), Abilities.crushingWaveMissile)
 		setZAngle(angle(0))
@@ -44,15 +44,15 @@ class WaveMissile extends Projectile
 		setSpeed(speed)
 		setAcc(0.975)
 		this.level = level
-		
+
 	override function update()
 		super.update()
 
 		if(getVel().lengthSquared() < 16)
 			terminate()
 			return
-		
-		forUnitsInRange(pos.toVec2(), AREA_OF_EFFECT) u -> 
+
+		forUnitsInRange(pos.toVec2(), AREA_OF_EFFECT) u ->
 			if u.isAliveTrick() and not u.isType(UNIT_TYPE_FLYING)
 				let data = u.getEntity()
 				if affected.contains(u)

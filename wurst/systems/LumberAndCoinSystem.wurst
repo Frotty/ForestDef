@@ -2,6 +2,8 @@ package LumberAndCoinSystem
 import Creep
 import Assets
 
+constant WOOD_REDISTRIBUTE_THRESHOLD = 25
+
 var WOOD_BOUNTY = 1
 public constant COIN_ID = 'I00F'
 public constant WOOD_ID = 'I00H'
@@ -45,7 +47,7 @@ function getExtraBounty()
 					itm.remove()
 
 			for pd in allPlayers
-				if pd.p.getLumber() > 20 and allPlayers.size() > 1
+				if pd.p.getLumber() > WOOD_REDISTRIBUTE_THRESHOLD and allPlayers.size() > 1
  					let val = (pd.p.getLumber() / allPlayers.size()).toInt()
 					let remainder = pd.p.getLumber() mod allPlayers.size()
 					pd.p.setLumber(remainder)
@@ -84,8 +86,8 @@ function grantCoinsAndLumber()
 				for p2 in allPlayers
 					p2.p.addLumber(val)
 				printTimedToPlayer("Due to inactivity your lumber has been dispersed among teammates!", 10, pd.p)
-		
-			
+
+
 public function initLumberSystem()
 	if allPlayers.size() <= 2
 		WOOD_BOUNTY = 2

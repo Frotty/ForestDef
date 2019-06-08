@@ -1,3 +1,8 @@
+NEXT
+[LIST]
+[*] The lumber redistribute now activates at 25 wood, up from 20.
+[/LIST]
+
 0.20q
 [LIST]
 [*] This update features a lot of rebalancing to make late game obtainable and the 5+ arena more fun

@@ -8,7 +8,6 @@ import SoundUtils
 import ClosureTimers
 import Wave
 import Interpolation
-import Camera
 
 public constant FAT_ID = 'h022'
 public constant SLIM_ID = 'h00F'

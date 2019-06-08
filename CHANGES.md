@@ -1,4 +1,4 @@
-0.20c
+0.20q
 [LIST]
 [*] This update features a lot of rebalancing to make late game obtainable and the 5+ arena more fun
 [*] Acolyte special now spawns units in front of itself and has reduced range. Also spawning has been more randomized
@@ -8,13 +8,13 @@
 [*] All enemy units now have a timed life of 5 minutes to prevent stacking and getting stuck
 [*] Fix respawn protection for revived builders
 [*] Builder selector is now automatically selected and camera centered, to prevent confusion in case it got deselected
-[*] Slightly increased fat builder movespeed, slightly decreased the elven builder movespeed 
+[*] Slightly increased fat builder movespeed, slightly decreased the elven builder movespeed
 [*] Reinforcements now no longer have collision and thus don't block builders
 [*] Boss spawn sounds have been fixed
 [*] Coin and lumber spawns have been adjusted to spawn less overall, but more in lategame than before
 [*] Healbacktower now gains some HP on each upgrade
 [*] Magic trease healing range has been slightly increased
-[*] 
+[*] Updated to latest stdlib, replaced DamageMod with DamageEvent
 [/LIST]
 
 0.19r

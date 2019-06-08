@@ -16,7 +16,7 @@ player lastRinger
 int usages = 0
 
 public function onTownBell()
-	// snd.play()
+	snd.play()
 	lastRinger = GetManipulatingUnit().getOwner()
 	forUnitsOfPlayer(players[8]) u ->
 		if u.getTypeId() == DUMMY_ID

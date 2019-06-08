@@ -25,7 +25,7 @@ public class Rocket extends PhysicsProjectile
 
 	ondestroy
 		new TextTagEntity(getPos(), vec3(0,0,17.5), "HELP!", 25, 2, colorA(255,50,50,255))
-		// UNDER_ATTACK_SOUND.play()
+		UNDER_ATTACK_SOUND.play()
 		for i = 0 to 16
 			new Shrapnell(getPos())
 

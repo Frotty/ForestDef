@@ -4,7 +4,6 @@ import PhysicsProjectile
 import initlater Selector
 import Builder
 import initlater EndGame
-import Camera
 
 public constant allPlayers = new LinkedList<PlayerData>()
 public PlayerData array pDatas
@@ -13,7 +12,7 @@ public enum BuilderType
 	SLIM
 	FAT
 	ELVEN
-	
+
 public class PlayerData
 	player p
 	int kills = 0
@@ -22,7 +21,7 @@ public class PlayerData
 	Builder builder = null
 	Selector select = null
 	BuilderType btype
-	
+
 	construct(player p)
 		this.p = p
 		pDatas[p.getId()] = this
@@ -35,7 +34,7 @@ public class PlayerData
 			let goldSplit = ((p.getGold() / allPlayers.size()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(goldSplit)
-			
+
 			let lumberSplit = ((p.getLumber() / allPlayers.size()) * 1.15).round()
 			for pd in allPlayers
 				pd.p.addGold(lumberSplit)
@@ -51,7 +50,7 @@ public class PlayerData
 
 public function initPlayers()
 	EventListener.add(EVENT_PLAYER_LEAVE, () -> destroy pDatas[GetTriggerPlayer().getId()])
-	
+
 	for int i = 0 to 7
 		if players[i].getSlotState() == PLAYER_SLOT_STATE_PLAYING and players[i].getController() == MAP_CONTROL_USER
 			new PlayerData(players[i])
@@ -68,12 +67,12 @@ public function initPlayers()
 		gold = 490
 		gg_cam_Camera_001.applyForceDuration(true, 0.)
 		gg_cam_Camera_002.applyForceDuration(true, 1.5)
-	
+
 	let anglePerP = 360/allPlayers.size()
 	var current = GetRandomInt(0, allPlayers.size()) * anglePerP + GetRandomInt(0, 4) * 90
 	for p in allPlayers
 		p.select = new Selector(middle.polarOffset((current).asAngleDegrees(), 285.).toVec3(), p.p)
 		current += anglePerP
-		p.p.addGold((gold/allPlayers.size()).toInt())	 
-	
+		p.p.addGold((gold/allPlayers.size()).toInt())
+
 	createFText(middle.toVec3() - vec3(80,0,0), "Item Shop", 17.5)

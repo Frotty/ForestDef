@@ -83,7 +83,7 @@ public class BossWave
 		this.boss = boss
 
 	function spawn()
-		// s.play()
+		s.play()
 		print("|cffE62121## Attention:|r Boss incoming!")
 		for i = 0 to amount-1
 			for j = 0 to startPosCount

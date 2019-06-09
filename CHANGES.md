@@ -2,6 +2,7 @@ NEXT
 [LIST]
 [*] The lumber redistribute now activates at 25 wood, up from 20.
 [*] Re-worked the lumber redistribute event to occur instantly, which should improve predictability.
+[*] Minor map metadata improvements.
 [/LIST]
 
 0.20q

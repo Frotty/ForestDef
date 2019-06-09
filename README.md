@@ -1,4 +1,4 @@
-[![Build Status](http://peeeq.de/hudson/job/ForestDef/badge/icon)](http://peeeq.de/hudson/job/ForestDef/) 
+[![CircleCI](https://circleci.com/gh/Frotty/ForestDef.svg?style=svg)](https://circleci.com/gh/Frotty/ForestDef)
 
 Forest Defense
 =========

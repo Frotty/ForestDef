@@ -1,6 +1,7 @@
 package LumberAndCoinSystem
 import Creep
 import Assets
+import GameTimer
 
 constant WOOD_REDISTRIBUTE_THRESHOLD = 25
 
@@ -15,17 +16,26 @@ var coinCount = GetRandomInt(-2, 3)
 var coinCap = 16
 var coinsSpawned = 0
 
+constant WOOD_REDISTRIBUTE_MIN_WAIT = 60.
+var lastRedistribute = 0.
+
 /**
 	Add `amt` lumber to each player's pool.  If `redistribute`, players with too
-	much lumber will be forced to share.
+	much lumber will be forced to share.  This is gated on having waited at
+	east `WOOD_REDISTRIBUTE_MIN_WAIT` seconds since the last redistribute event.
 */
 public function LinkedList<PlayerData>.addLumber(int amt, bool redistribute)
 	for pd in this
 		pd.p.addLumber(amt)
 
-	if redistribute and this.size() > 1
+	if (
+		redistribute and
+		this.size() > 1 and
+		getElapsedGameTime() > (lastRedistribute + WOOD_REDISTRIBUTE_MIN_WAIT)
+	)
 		for pd in this
 			if pd.p.getLumber() > WOOD_REDISTRIBUTE_THRESHOLD
+				lastRedistribute = getElapsedGameTime()
 				let val = (pd.p.getLumber() / allPlayers.size()).toInt()
 				let remainder = pd.p.getLumber() mod allPlayers.size()
 				pd.p.setLumber(remainder)
@@ -33,8 +43,7 @@ public function LinkedList<PlayerData>.addLumber(int amt, bool redistribute)
 				printTimedToPlayer(
 					"Due to inactivity, your lumber has been dispersed amongst your teammates!",
 					10.,
-					pd.p
-				)
+					pd.p)
 
 
 public function shouldSpawnCoin() returns boolean

@@ -1,6 +1,7 @@
 package LumberAndCoinSystem
 import Creep
 import Assets
+import GameTimer
 
 constant WOOD_REDISTRIBUTE_THRESHOLD = 25
 
@@ -15,6 +16,35 @@ var coinCount = GetRandomInt(-2, 3)
 var coinCap = 16
 var coinsSpawned = 0
 
+constant WOOD_REDISTRIBUTE_MIN_WAIT = 60.
+var lastRedistribute = 0.
+
+/**
+	Add `amt` lumber to each player's pool.  If `redistribute`, players with too
+	much lumber will be forced to share.  This is gated on having waited at
+	east `WOOD_REDISTRIBUTE_MIN_WAIT` seconds since the last redistribute event.
+*/
+public function LinkedList<PlayerData>.addLumber(int amt, bool redistribute)
+	for pd in this
+		pd.p.addLumber(amt)
+
+	if (redistribute and
+		this.size() > 1 and
+		getElapsedGameTime() > (lastRedistribute + WOOD_REDISTRIBUTE_MIN_WAIT))
+
+		for pd in this
+			if pd.p.getLumber() > WOOD_REDISTRIBUTE_THRESHOLD
+				lastRedistribute = getElapsedGameTime()
+				let val = (pd.p.getLumber() / allPlayers.size()).toInt()
+				let remainder = pd.p.getLumber() mod allPlayers.size()
+				pd.p.setLumber(remainder)
+				allPlayers.addLumber(val, false)
+				printTimedToPlayer(
+					"Due to inactivity, your lumber has been dispersed amongst your teammates!",
+					10.,
+					pd.p)
+
+
 public function shouldSpawnCoin() returns boolean
 	coinCount++
 	if coinCount >= coinCap
@@ -26,6 +56,7 @@ public function shouldSpawnCoin() returns boolean
 		coinsSpawned++
 		return true
 	return false
+
 
 function getExtraBounty()
 	let victim = GetDyingUnit().getOwner()
@@ -46,14 +77,6 @@ function getExtraBounty()
 				if itm != null and itm.getLife() > .405
 					itm.remove()
 
-			for pd in allPlayers
-				if pd.p.getLumber() > WOOD_REDISTRIBUTE_THRESHOLD and allPlayers.size() > 1
- 					let val = (pd.p.getLumber() / allPlayers.size()).toInt()
-					let remainder = pd.p.getLumber() mod allPlayers.size()
-					pd.p.setLumber(remainder)
-					for p2 in allPlayers
-						p2.p.addLumber(val)
-					printTimedToPlayer("Due to inactivity your lumber has been dispersed among teammates!", 10, pd.p)
 
 function grantCoinsAndLumber()
 	let itm = GetManipulatedItem()
@@ -72,20 +95,14 @@ function grantCoinsAndLumber()
 	if itm.getTypeId() == WOOD_ID
 		flashEffect(Objects.entBirthTarget, GetManipulatingUnit().getPos())
 		printTimed("|cffFFCC00>> " + GetManipulatingUnit().getOwner().getNameColored() + " picked up a lumber bundle!", 10.)
+		allPlayers.addLumber(WOOD_BOUNTY, true)
+
 		for pd in allPlayers
-			pd.p.addLumber(WOOD_BOUNTY)
 			if pd.builder.actor != null and pd.builder.actor.isAlive()
 				createFText(pd.builder.getPos() - vec2(16,0), "+" + WOOD_BOUNTY.toString(), 0.024 / 0.0023)
 					..setDynamic(vec2(0., .03), 3.)
 					.tt..setFadepoint(2.)
 						..setColor(0, 200, 80, 255)
-			if pd.p.getLumber() > 20 and allPlayers.size() > 1
-				let val = (pd.p.getLumber() / allPlayers.size()).toInt()
-				let remainder = pd.p.getLumber() mod allPlayers.size()
-				pd.p.setLumber(remainder)
-				for p2 in allPlayers
-					p2.p.addLumber(val)
-				printTimedToPlayer("Due to inactivity your lumber has been dispersed among teammates!", 10, pd.p)
 
 
 public function initLumberSystem()

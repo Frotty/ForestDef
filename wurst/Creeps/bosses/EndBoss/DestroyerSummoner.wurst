@@ -14,15 +14,15 @@ constant updatePeriod = .05
 constant animationLoopPeriod = 45.
 
 public class FinalBossSummoning
-	real castPercent = 0
-	real animationLoop = 0.
-	int castingCount = 0
-	LinkedList<DestroyerSummoner> summoners = new LinkedList<DestroyerSummoner>()
+	var castPercent = 0.
+	var animationLoop = 0.
+	var castingCount = 0
+	var summoners = new LinkedList<DestroyerSummoner>()
 	Fx summoningEffect = null
 	CallbackPeriodic updateCb
 	FText summonText = createFText(middle.toVec3(), "0%", 12.)
 	EndBossFight endBossFightRef
-	
+
 	construct(EndBossFight endBossFightRef)
 		this.endBossFightRef = endBossFightRef
 		summonText.tt.setVisibility(false)

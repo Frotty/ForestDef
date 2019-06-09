@@ -28,11 +28,10 @@ public function LinkedList<PlayerData>.addLumber(int amt, bool redistribute)
 	for pd in this
 		pd.p.addLumber(amt)
 
-	if (
-		redistribute and
+	if (redistribute and
 		this.size() > 1 and
-		getElapsedGameTime() > (lastRedistribute + WOOD_REDISTRIBUTE_MIN_WAIT)
-	)
+		getElapsedGameTime() > (lastRedistribute + WOOD_REDISTRIBUTE_MIN_WAIT))
+
 		for pd in this
 			if pd.p.getLumber() > WOOD_REDISTRIBUTE_THRESHOLD
 				lastRedistribute = getElapsedGameTime()

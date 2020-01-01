@@ -43,11 +43,14 @@ class FlameMissile extends Projectile
 		this.level = level
 
 	override function update()
+		let dmg = new DummyDamage()..attacker(owner)..amount(getDamage(level))..attackType(ATTACK_TYPE_SIEGE)
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
 		for u from ENUM_GROUP
 			if IsUnitEnemy(u, owner) and isUnitTargetable(u)
-				new DummyDamage()..attacker(owner)..target(u)..amount(getDamage(level))..attackType(ATTACK_TYPE_SIEGE)
-				..apply(true)
+				dmg..target(u)
+				..apply()
+
+		destroy dmg
 		super.update()
 
 

@@ -37,7 +37,7 @@ public class NormalWave
 	static function spawnCallback()
 		var t = GetExpiredTimer()
 		var wave = t.getData() castTo NormalWave
-		int id = 0
+		int id
 		var destroyWave = false
 
 		switch wave.typ

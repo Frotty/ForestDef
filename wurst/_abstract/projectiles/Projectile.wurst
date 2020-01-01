@@ -1,7 +1,7 @@
 package Projectile
-import public FxEntity
+import public Fx2Entity
 
-public class Projectile extends FxEntity
+public class Projectile extends Fx2Entity
 	// Angles
 	private angle xyAngle
 	private vec3 startpos

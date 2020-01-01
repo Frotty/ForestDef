@@ -52,7 +52,7 @@ public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
 	pv2 *= (-1.9)
 	return vel3 + pv2
 
-class Ball extends FxEntity
+class Ball extends Fx2Entity
 
 	construct(vec3 pos, player owner, vec2 target)
 		super(owner, pos, 32, pos.angleTo2d(target), Abilities.fireBallMissile)

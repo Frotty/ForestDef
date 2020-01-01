@@ -53,17 +53,19 @@ class WaveMissile extends Projectile
 			terminate()
 			return
 
+		let dotDmg = new DummyDamage()..attacker(owner)..amount(getDOT(level))..attackType(ATTACK_TYPE_PIERCE)
+		let splashDmg = new DummyDamage()..attacker(owner)..amount(getBlowDamage(level))..attackType(ATTACK_TYPE_PIERCE)
 		forUnitsInRange(pos.toVec2(), AREA_OF_EFFECT) u ->
 			if u.isAliveTrick() and not u.isType(UNIT_TYPE_FLYING)
 				let data = u.getEntity()
 				if affected.contains(u)
-					new DummyDamage()..attacker(owner)..target(u)..amount(getDOT(level))..attackType(ATTACK_TYPE_PIERCE)
-					..apply(true)
+					dotDmg..target(u)
+					..apply()
 				else if data != null and data instanceof Creep and not data.done
 					let cd = data castTo Creep
 					affected.addUnit(u)
-					new DummyDamage()..attacker(owner)..target(u)..amount(getBlowDamage(level))..attackType(ATTACK_TYPE_PIERCE)
-					..apply(true)
+					splashDmg..target(u)
+					..apply()
 					let upos = data.getPos()
 					let ang = pos.angleTo2d(upos)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
@@ -74,6 +76,8 @@ class WaveMissile extends Projectile
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))
 					addEffect(Abilities.gryphonRiderMissileTarget, u.getPos() ).destr()
 
+		destroy dotDmg
+		destroy splashDmg
 
 	ondestroy
 		affected.release()

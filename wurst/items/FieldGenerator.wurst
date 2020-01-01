@@ -1,5 +1,5 @@
 package FieldGenerator
-import FxEntity
+import Fx2Entity
 import ClosureForGroups
 
 constant SPELL_ID = 'A027'
@@ -19,7 +19,7 @@ public function FieldType.toColor() returns colorA
 		case SHIELD
 			return colorA(222, 222, 75, 255)
 
-class ForceField extends FxEntity
+class ForceField extends Fx2Entity
 	FieldType ftype
 
 	construct(unit caster, vec2 position)

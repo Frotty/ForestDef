@@ -56,11 +56,14 @@ class ArtilleryMissile extends Projectile
 		super.update()
 
 	ondestroy
+		let dmg = new DummyDamage()..attacker(owner)..amount(damage)..attackType(ATTACK_TYPE_SIEGE)
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)
 		for u from ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				new DummyDamage()..attacker(owner)..target(u)..amount(damage)..attackType(ATTACK_TYPE_SIEGE)
-				..apply(true)
+				dmg..target(u)
+				..apply()
+
+		destroy dmg
 		addEffect(Abilities.fragDriller, pos).destr()
 
 function isUnitTargetable(unit u) returns boolean

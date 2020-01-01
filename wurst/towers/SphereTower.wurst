@@ -1,5 +1,6 @@
 package SphereTower
 import Projectile
+import DummyDamage
 
 constant real AREA_OF_EFFECT = 40.
 constant string FX_PATH = "sdg"
@@ -12,12 +13,12 @@ constant real HEIGHT = 50.
 // 	real spdist = 500.
 // 	boolean isDistGrowing = false
 // 	boolean isDistSrinking = false
-	
+
 // 	construct(Tower t)
 // 		super(t)
 // 		level = 0
 // 		sphere = new Sphere(vec3(pos.x+spdist,pos.y,HEIGHT), speed, owner, level)
-	
+
 // 	override function update()
 // 		super.update()
 // 		if isDistGrowing
@@ -37,34 +38,35 @@ constant real HEIGHT = 50.
 // 				isDistGrowing = true
 // 				isDistSrinking = false
 // 		sphere.setXYAngle(angle(speed/spdist))
-	
+
 // 	override function onUpgrade()
 // 		level ++
 // 		sphere.level ++
 // 		speed += 5
 // 		sphere.setSpeed(speed)
-		
-// 	ondestroy 
+
+// 	ondestroy
 // 		destroy(sphere)
-		
-	
+
+
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
-		
-	
+
+
 class Sphere extends Projectile
 	int level
-	
+
 	construct(vec3 pos, real speed, player owner, int level)
 		super( pos, AREA_OF_EFFECT, owner, angle(0.), FX_PATH )
 		setSpeed(speed)
 		this.level = level
-	
+
 	override function update()
 		super.update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AREA_OF_EFFECT, null)
 		for u in ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				UnitDamageTarget(getDummy(), u, 5. * level, false, false, ATTACK_TYPE_PIERCE, DAMAGE_TYPE_NORMAL, null)
+				new DummyDamage()..attacker(owner)..target(u)..amount(5. * level)..attackType(ATTACK_TYPE_PIERCE)
+				..damageType(DAMAGE_TYPE_NORMAL)..apply(true)
 
 		ENUM_GROUP.clear()

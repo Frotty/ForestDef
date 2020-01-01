@@ -18,18 +18,23 @@ public class Wall extends UnitEntity
 		super(wall)
 
 public class Tower extends UnitEntity
+	EventListener deathListener = null
 
 	construct (unit tower)
 		super(tower, tower.getPos3Real())
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
-			terminate()
+		deathListener = EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
+			if not done
+				terminate()
 
 	construct(Tower oldTower)
 		super(oldTower.actor)
+		destroy oldTower.deathListener
 		oldTower.transferBuffs(this)
 		oldTower.terminate()
-		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
-			terminate()
+
+		deathListener = EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
+			if not done
+				terminate()
 
 	function onAttack(UnitEntity _target)
 

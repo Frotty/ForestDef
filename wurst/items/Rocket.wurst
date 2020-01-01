@@ -37,17 +37,17 @@ class Shrapnell extends PhysicsProjectile
 		super(startPos, 16, DUMMY_PLAYER, angle(0), "Abilities\\Weapons\\DruidoftheTalonMissile\\DruidoftheTalonMissile.mdl", 0 castTo OnExpireEvent )
 		setXYAngle(GetRandomReal(0,360).asAngleDegrees())
 		setSpeed(GetRandomReal(5,11))
-		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
-		fx.setScale(GetRandomReal(0.5,2))
+		fx.eff..setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
+		..setScale(GetRandomReal(0.5,2))
 		vel.z = GetRandomReal(7,17)
 		initialTime = GetRandomReal(1,2.5)
 		setTimed(initialTime)
 
 
 	override function update()
-		var col = fx.getColor()
+		var col = fx.tint
 		col.alpha = bezier3(255, 200, -5, time/initialTime).toInt()
-		fx.setColor(col)
+		fx.tint = col
 		super.update()
 
 public function initRocket()

@@ -69,5 +69,5 @@ class Ball extends FxEntity
 				print("bounced " + vel.norm().toVec2().dot(normal).toString())
 				vel = getBounceVec(vel, normal)
 		pos += vel
-		fx.setXYZ(pos)
-		fx.setXYAngle(pos.angleTo2d(pos+vel))
+		fx.eff.setPos(pos)
+		fx.eff.setYaw(pos.angleTo2d(pos+vel))

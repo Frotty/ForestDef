@@ -29,7 +29,7 @@ class ForceField extends FxEntity
 
 	function chooseFieldType()
 		ftype = GetRandomInt(0, 2) castTo FieldType
-		fx..setPlayercolor(PLAYER_COLOR_LIGHT_GRAY)
+		fx.eff
 		..setColor(ftype.toColor())
 		..setScale(0.55)
 

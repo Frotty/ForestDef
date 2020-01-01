@@ -101,13 +101,13 @@ public class HealbackMissile extends Projectile
 
 	construct(vec3 pos, player owner, real heal, UnitEntity target)
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos()), HEALBACK_MISSILE_EFFECT)
-		fx.setColor(colorA(0, 255, 0, 255))
+		fx.setTint(colorA(0, 255, 0, 255))
 		this.heal = heal
 		this.target = target
 		startPos = pos
 		this.distanceToTravelSq = (target.getPos()).distanceToSq(startPos)
 		this.setTarget(target.actor.getPos3Real().add(0, 0, 32.), 19.25)
-		fx.setColor(colorA(215, 255, 215, 168))
+		fx.setTint(colorA(215, 255, 215, 168))
 		setRanged(2000.)
 
 	override function update()

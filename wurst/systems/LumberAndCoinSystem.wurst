@@ -3,7 +3,7 @@ import Creep
 import Assets
 import GameTimer
 
-constant WOOD_REDISTRIBUTE_THRESHOLD = 25
+public var WOOD_REDISTRIBUTE_THRESHOLD = 15
 
 var WOOD_BOUNTY = 1
 public constant COIN_ID = 'I00F'

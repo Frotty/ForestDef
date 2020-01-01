@@ -1,6 +1,7 @@
 package FlamethrowerTower
 import Tower
 import Projectile
+import DummyDamage
 
 public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl"//"Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"
 public constant real AOE_RADIUS = 48.
@@ -33,21 +34,20 @@ class FlameMissile extends Projectile
 
 	construct(vec3 pos, vec2 target, real speed, player owner, int level)
 		super( pos, AOE_RADIUS, owner, (pos.angleTo2d(target).radians + GetRandomReal(-0.025,0.025)).asAngleRadians(), FX_PATH )
-		fx.setScale(0.2)
 		setSpeed(speed + GetRandomReal(-0.5, 0.5))
 		setRanged(712 + GetRandomReal(-5, 5))
 		setAcc(1.0195 + GetRandomReal(-0.0025, 0.0075))
-		fx.setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
-		fx.setScale(0.75)
+		fx.eff..setScale(0.2)
+		..setColor(colorA(GetRandomInt(0,255),GetRandomInt(0,255),GetRandomInt(0,255),255))
+		..setScale(0.75)
 		this.level = level
-		silent = true
-
 
 	override function update()
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, AOE_RADIUS, null)
 		for u from ENUM_GROUP
 			if IsUnitEnemy(u, owner) and isUnitTargetable(u)
-				getDummy().damageTarget(u, getDamage(level), ATTACK_TYPE_SIEGE)
+				new DummyDamage()..attacker(owner)..target(u)..amount(getDamage(level))..attackType(ATTACK_TYPE_SIEGE)
+				..apply(true)
 		super.update()
 
 

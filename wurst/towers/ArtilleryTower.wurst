@@ -3,6 +3,7 @@ import Tower
 import Projectile
 import ClosureTimers
 import Assets
+import DummyDamage
 
 constant MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant ART_TOWER_ID = 'h01O'
@@ -10,7 +11,7 @@ constant SPELL_ID = 'A01T'
 
 public class ArtilleryTower extends Tower
 	int level = 1
-	
+
 	construct(Tower t)
 		super(t)
 		actor..setPropWindow(0 .fromDeg())
@@ -20,48 +21,49 @@ public class ArtilleryTower extends Tower
 
 	function registerSpell()
 		EventListener.onCast(actor, SPELL_ID) id ->
-			if pos.distanceTo2d(getSpellTargetPos()) > 2950
-				nullTimer() -> 
+			if pos.distanceTo2d(EventData.getSpellTargetPos()) > 2950
+				nullTimer() ->
 					actor..issueImmediateOrderById(OrderId("stop"))
 					..removeAbility(SPELL_ID)..addAbility(SPELL_ID)
-					
-			let a = pos.angleTo2d(getSpellTargetPos())
+
+			let a = pos.angleTo2d(EventData.getSpellTargetPos())
 			for i = 0 to 3 + level * 3
-				let startPos = getSpellTargetPos() + vec2(GetRandomReal(-200.,200.), GetRandomReal(-200.,200.))
+				let startPos = EventData.getSpellTargetPos() + vec2(GetRandomReal(-200.,200.), GetRandomReal(-200.,200.))
 				new ArtilleryMissile(startPos.polarOffset(a, -1000).withZ(1000.), 50.+ level * 50, owner, a, 250.+(level*225))
 
-		
+
 	override function onUpgrade()
 		level++
 		actor..addAbility(SPELL_ID)..setAbilityLevel(SPELL_ID, level)
 		..setPropWindow(0 .fromDeg())
 		..issueImmediateOrderById(OrderId("stop"))
-		
+
 class ArtilleryMissile extends Projectile
 	real damage
-	
+
 	construct(vec3 pos, real radius, player owner, angle targetangle, real damage)
 		super( pos, radius, owner, targetangle, Abilities.cannonTowerMissile)
 		setSpeed(MISSILE_SPEED + GetRandomReal(-10,6))
 		setZAngle((-45).asAngleDegrees())
 		vel.z = -getSpeed()
 		this.damage = damage
-	
-	
+
+
 	override function update()
 		if pos.z < pos.getTerrainZ() + 4.
 			terminate()
-			return			
+			return
 		super.update()
-		
+
 	ondestroy
 		GroupEnumUnitsInRange(ENUM_GROUP, pos.x, pos.y, radius, null)
 		for u from ENUM_GROUP
 			if isUnitTargetable(u) and IsUnitEnemy(u, owner)
-				getDummy().damageTarget(u, damage, ATTACK_TYPE_SIEGE)	
+				new DummyDamage()..attacker(owner)..target(u)..amount(damage)..attackType(ATTACK_TYPE_SIEGE)
+				..apply(true)
 		addEffect(Abilities.fragDriller, pos).destr()
-	
+
 function isUnitTargetable(unit u) returns boolean
 	return not IsUnitType(u, UNIT_TYPE_DEAD) and not IsUnitType(u, UNIT_TYPE_MAGIC_IMMUNE) and not IsUnitType(u, UNIT_TYPE_STRUCTURE)
-	
-	
+
+

@@ -4,6 +4,7 @@ import Boss
 import Assets
 import GroupUtils
 import ClosureForGroups
+import DummyDamage
 
 public constant FIRST_WAVE_ID = 'h01N'
 constant AREA_OF_EFFECT = 192.
@@ -56,11 +57,13 @@ class WaveMissile extends Projectile
 			if u.isAliveTrick() and not u.isType(UNIT_TYPE_FLYING)
 				let data = u.getEntity()
 				if affected.contains(u)
-					getDummy().damageTarget(u, getDOT(level), ATTACK_TYPE_PIERCE)
+					new DummyDamage()..attacker(owner)..target(u)..amount(getDOT(level))..attackType(ATTACK_TYPE_PIERCE)
+					..apply(true)
 				else if data != null and data instanceof Creep and not data.done
 					let cd = data castTo Creep
 					affected.addUnit(u)
-					getDummy().damageTarget(u, getBlowDamage(level))
+					new DummyDamage()..attacker(owner)..target(u)..amount(getBlowDamage(level))..attackType(ATTACK_TYPE_PIERCE)
+					..apply(true)
 					let upos = data.getPos()
 					let ang = pos.angleTo2d(upos)
 					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))

@@ -20,7 +20,7 @@ public class TowerBlockadeMissile extends Projectile
 		let speed = pos.distanceTo(target.getPos()) / (BLOCKADE_MISSILE_TIME * ANIMATION_PERIOD)
 		this.setTarget(target.getPos().add(0, 0, 64), speed)
 		this.setTimed(BLOCKADE_MISSILE_TIME)
-		fx.setColor(colorA(215, 255, 215, 168))
+		fx.eff.setColor(colorA(215, 255, 215, 168))
 
 	override function update()
 		super.update()
@@ -59,7 +59,7 @@ public class TowerBlockadeBuff extends Buff
 			destroy blockadeUnit
 		super.terminate()
 
-		
+
 	ondestroy
 		if target != null
 			(target castTo Tower).unpause()

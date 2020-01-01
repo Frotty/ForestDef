@@ -4,6 +4,7 @@ import PhysicsProjectile
 import initlater Selector
 import Builder
 import initlater EndGame
+import LumberAndCoinSystem
 
 public constant allPlayers = new LinkedList<PlayerData>()
 public PlayerData array pDatas
@@ -57,6 +58,7 @@ public function initPlayers()
 	real gold
 	if allPlayers.size() > 4
 		bigArena = true
+		WOOD_REDISTRIBUTE_THRESHOLD += 7
 		initCreepStarts(true)
 		gold = 1245
 		gg_cam_Camera_003.applyForceDuration(true, 0.)

@@ -20,7 +20,6 @@ public class WaveTower extends Tower
 
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
-		Log.info("Mori is weeb")
 		level++
 
 

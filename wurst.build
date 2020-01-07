@@ -4,6 +4,6 @@ dependencies:
 - https://github.com/wurstscript/wurstStdlib2
 - https://github.com/frotty/frentity
 buildMapData:
-  name: Forest Defense 0.20w
-  fileName: Forest Defense 0.20w
+  name: Forest Defense 0.20z
+  fileName: Forest Defense 0.20z
   author: Frotty

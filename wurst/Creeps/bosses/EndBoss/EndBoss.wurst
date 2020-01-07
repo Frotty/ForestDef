@@ -5,6 +5,7 @@ import Tower
 import Boss
 import EndGame
 import ClosureForGroups
+import UnitSpawnSystem
 
 constant ENDBOSS_ID = 'n00P'
 
@@ -18,58 +19,43 @@ public EndBossFight currentEndBossFight
 
 public class EndBoss extends Boss
 	int stage = 1
-	int castCounter = 0
-	timer castTimer
-	LinkedList<string> abilities = new LinkedList<string>()
+	var damageCount = GetRandomReal(-1500, 500)
 	EndBossFight bossFight
 
 	construct(vec3 pos, int typId, int bounty, vec2 target, EndBossFight bossFight)
 		super(pos, typId, bounty, target)
-		abilities.add("blockade")
-		abilities.add("destroyerSummoner")
-		castTimer = getTimer()
-		castTimer.setData(this castTo int)
-		castTimer.startPeriodic(castInterval, function EndBoss.onCastTimer)
 		this.bossFight = bossFight
+
+		EventListener.add(actor, EVENT_UNIT_DAMAGED) ->
+			damageCount += GetEventDamage()
+			if damageCount > 5000
+				damageCount -= 5000 + GetRandomReal(-500, 500)
+				onEnbossDamage()
 
 	override function update()
 		super.update()
-		let percentage = actor.getHP() / finalBossMaxHp
+		let percentage = actor.getHP() / actor.getMaxHP()
 		if stage == 1 and percentage < stageTwoPercentage
 			stage = 2
-	// 		abilities.remove("blockade")
-	// 		abilities.add("raiseDead")
-	// 		abilities.add("shield")
 		if stage == 2 and percentage < stageThreePercentage
 			stage = 3
-	// 		abilities.remove("shiled")
-	// 		abilities.add("batteringRam")
 
-	static function onCastTimer()
+	static function onEnbossDamage()
 		let boss = GetExpiredTimer().getData() castTo EndBoss
-		boss.castCounter++
-		switch boss.stage
-			case 1
-				if boss.castCounter mod (1 * startPosCount) == 0
-					boss.castAbility()
-			case 2
-				if boss.castCounter mod (2 * startPosCount) == 0
-					boss.castAbility()
-			case 3
-				boss.castAbility()
+		boss.castAbility()
 
 	function castAbility()
-		let abilName = abilities.get(GetRandomInt(0, abilities.size() - 1))
-		switch abilName
-			case "blockade"
-				tryCastTowerBlockade()
-			case "destroyerSummoner"
-				castDestroyerSummoner()
-			default
-				print("Ability not implemented :)))")
+		let abil = GetRandomInt(0, 1)
+		//switch abil
+			//case 0
+				//doAfter(GetRandomReal(0, 8)) ->
+					//tryCastTowerBlockade()
+//			case 1
+//				doAfter(GetRandomReal(0, 8)) ->
+//					castDestroyerSummoner()
 
 	function tryCastTowerBlockade()
-		forUnitsInRange(pos.toVec2(), 3072.) u ->
+		forUnitsInRangeCounted(pos.toVec2(), 3072., 2) u ->
 			if IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
 				let tower = u.getEntity() castTo Tower
 				var hasBuff = false
@@ -82,36 +68,27 @@ public class EndBoss extends Boss
 
 	function castTowerBlockade(Tower tower)
 		actor.setAnimation("spell")
-		// new TowerBlockadeMissile(pos, owner, tower) // causes instant crash
+		//new TowerBlockadeMissile(pos, owner, tower)
 		doAfter(BLOCKADE_MISSILE_TIME) ->
 			new TowerBlockadeBuff(tower)
 
 	function castDestroyerSummoner()
 		currentEndBossFight.createDestroyerSummoner(this)
 
-	// TODO function castShield()
-	// TODO function castRaiseDead()
-	// TODO function switchPlaces()
-
 	override function onDeath()
 		super.onDeath()
 		bossFight.onBossDeath(this)
 
-	ondestroy
-		destroy this.abilities
-		castTimer.destr()
 
 public class EndBossFight
-	LinkedList<EndBoss> bosses = new LinkedList<EndBoss>()
+	let bosses = new LinkedList<EndBoss>()
 	FinalBossSummoning destroyerSummoning
 
 	boolean summoningComplete = false
 
 	construct()
 		PlayMusic(m.path)
-		// new SoundDefinition(Sounds.airBargeDeath1, false).play()
 		print("|cffE62121 Prepare for your end!")
-		destroyerSummoning = new FinalBossSummoning(this)
 		for j = 0 to startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle, this))
 
@@ -123,8 +100,6 @@ public class EndBossFight
 	function endDestroyerSummoning()
 		if not summoningComplete
 			summoningComplete = true
-			for boss in bosses
-				boss.abilities.remove("destroyerSummoner")
 			destroy destroyerSummoning
 
 	function onBossDeath(EndBoss b)
@@ -139,6 +114,7 @@ public class EndBossFight
 
 public function startEndBoss()
 	printTimed("    |cffFFC519Beat the final boss to win!", 25)
+	stopSpawn()
 	currentEndBossFight = new EndBossFight()
 
 public function onVictory()

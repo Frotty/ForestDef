@@ -22,7 +22,7 @@ public class PudgePowerBuff extends NormalBuff
 			flashEffect(Objects.hCancelDeath, target.getPos())
 			flashEffect(Objects.demonSmallDeathExplode, target.getPos())
 			if not target.getEntity() instanceof Builder
-				modifyDamageBy(target.getMaxHP() * 0.30)
+				DamageEvent.addAmount(target.getMaxHP() * 0.30)
 				createFText(target.getPos3Zero(), vec2(0,.015), "-30% !!!", 11.5, 2, colorA(255,0,0,255), localPlayer)
 
 public class BossThree extends Boss

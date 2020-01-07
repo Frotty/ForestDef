@@ -89,8 +89,7 @@ init
 		if data != null and data instanceof Tower
 			doAfter(0.01, () -> (data castTo Tower).onUpgrade())
 
-
-	EventListener.add(EVENT_UNIT_DAMAGED) ->
+	DamageEvent.addListener() ->
 		let damager = GetEventDamageSource()
 		let damaged = GetTriggerUnit()
 		if damager != damaged and damager.getEntity() != null and damaged.isAlive()

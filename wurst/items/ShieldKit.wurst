@@ -12,7 +12,6 @@ class ShieldKitBuff extends ShieldBuff
 
 	construct(real amount)
 		super(90., buffAbil, amount)
-		Log.debug("ShieldKit created, dur: " + duration.toString() + " amount: " + amount.toString())
 
 	override function apply(UnitEntity ue)
 		super.apply(ue)

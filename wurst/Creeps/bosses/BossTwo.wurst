@@ -20,7 +20,7 @@ public class SludgeBuff extends ShieldBuff
 		target.actor.setVertexColor(currentCol)
 
 	override function defenseModifier()
-		dmgHold += getDamage()
+		dmgHold += DamageEvent.getAmount()
 		if dmgHold > 500
 			dmgHold -= 500
 			nextCol = color(GetRandomInt(25,255),GetRandomInt(25,255),GetRandomInt(25,255))

@@ -5,6 +5,7 @@ import Projectile
 import TextTagEntity
 import Creep
 import ClosureForGroups
+import DamageEvent
 
 public constant HEALBACK_TOWER_ID = 'h02A'
 constant HEALBACK_MULTIPLIERS = [1.75, 1.5, 2.0, 1.95]
@@ -78,9 +79,8 @@ public class HealbackTower extends Tower
 		destroy targets
 
 	override function onAttack(UnitEntity target)
-		if getDamage() > 0 and target.owner == CREEP_OWNER
-			// new HealbackBuff(target, damage)
-			launchHealback(target, getDamage() * getMultiplier(level))
+		if DamageEvent.getAmount() > 0 and target.owner == CREEP_OWNER
+			launchHealback(target, DamageEvent.getAmount() * getMultiplier(level))
 
 class EntityWithDist
 	UnitEntity ue

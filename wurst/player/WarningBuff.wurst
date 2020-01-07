@@ -37,18 +37,18 @@ public class WarningBuff extends NormalBuff
 		if startedTime + 15. > currentTime
 			new TextTagEntity(target.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
 			addEffect(Abilities.spellShieldCaster, target.getPos() ).destr()
-			modifyDamage(0)
-		if lastWarning + 1. < currentTime and target.actor.getHP() - getDamage() < (target.actor.getMaxHP()/1.5)
+			DamageEvent.setAmount(0)
+		if lastWarning + 1. < currentTime and target.actor.getHP() - DamageEvent.getAmount() < (target.actor.getMaxHP()/1.5)
 			new TextTagEntity(target.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
 			// snd.playForPlayer(target.owner)
 			lastWarning = currentTime
-		if lastSelect + 5. < currentTime and target.actor.getHP() - getDamage() < (target.actor.getMaxHP()/2.)
+		if lastSelect + 5. < currentTime and target.actor.getHP() - DamageEvent.getAmount() < (target.actor.getMaxHP()/2.)
 			PanCameraToTimedForPlayer(target.owner, pos.x, pos.y, 0.25)
 			target.owner.selectSingle(target.actor)
 			lastSelect = currentTime
 
-		if getDamage() >= target.actor.getHP() - 1.0
-			modifyDamage(0)
+		if DamageEvent.getAmount() >= target.actor.getHP() - 1.0
+			DamageEvent.setAmount(0)
 			if not dead
 				dead = true
 				let u = target.actor

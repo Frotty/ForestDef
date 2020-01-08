@@ -7,3 +7,5 @@ buildMapData:
   name: Forest Defense 0.20z
   fileName: Forest Defense 0.20z
   author: Frotty
+  scenarioData:
+    suggestedPlayers: 4 or 8

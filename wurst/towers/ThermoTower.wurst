@@ -1,8 +1,9 @@
 package ThermoTower
 import Tower
 
-constant int buffcode = 'Bfro'
-constant int ORB_ID = 'A01S'
+constant buffcode = 'Bfro'
+constant ORB_ID = 'A01S'
+public constant THERMO_TOWER_ID = 'h01R'
 
 public class ThermoTower extends Tower
 	boolean isHot

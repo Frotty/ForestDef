@@ -5,10 +5,6 @@ import ObjectIdGenerator
 import Assets
 
 public constant UNIT_ID_DARKONE = compiletime(UNIT_ID_GEN.next())
-public constant ABIL_ID_SLOWBUFFDUMMY = compiletime(ABIL_ID_GEN.next())
-public constant ABIL_ID_BOUNDBUFFDUMMY = compiletime(ABIL_ID_GEN.next())
-public constant BUFF_ID_SLOWBUFF = compiletime(ABIL_ID_GEN.next())
-public constant BUFF_ID_BOUNDBUFF = compiletime(ABIL_ID_GEN.next())
 
 public abstract class Special extends Creep
 	effect glow

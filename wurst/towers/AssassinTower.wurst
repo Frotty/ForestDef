@@ -1,7 +1,7 @@
 package AssassinTower
 	
 	int array hitnumberstore
-	public constant int ASSASSIN_TOWER_BASE_ID = 'h01Q'
+	public constant ASSASSIN_TOWER_BASE_ID = 'h01Q'
 	int array dummyid
 	
 // 	public class HitDummy // With a created dummy, hits the target and after timer concludes gets destroyed

@@ -6,8 +6,6 @@ import Assets
 import Projectile
 import ClosureTimers
 
-constant TOSS_ID = 'A02B'
-
 public class Builder extends UnitEntity
 
 	construct(vec3 pos, PlayerData owner, int id)

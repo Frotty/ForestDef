@@ -10,8 +10,6 @@ import UnitSpawnSystem
 constant ENDBOSS_ID = 'n00P'
 
 constant m = new Music('0000', "Sound\\Music\\mp3Music\\Doom.mp3")
-constant finalBossMaxHp = 1000
-constant castInterval = 8.
 constant stageTwoPercentage = .33
 constant stageThreePercentage = .10
 

@@ -3,7 +3,7 @@ import PlayerData
 import Buff
 import Assets
 
-public function initRevivalSystem()
+init
 	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM) ->
 		if GetManipulatedItem().getTypeId() == 'I007'
 			let reviver = pDatas[GetTriggerPlayer().getId()]

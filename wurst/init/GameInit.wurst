@@ -1,52 +1,44 @@
 package GameInit
-import Rocket
 import UnitSpawnSystem
 import SoundUtils
 import PlayerData
 import GameConditions
 import LumberAndCoinSystem
-import Destroy
-import RevivalSystem
 import AssassinTower
 import EntityManagement
-import TownBell
 import ClosureTimers
 
 function start()
 	initPlayers()
 	initLumberSystem()
-	initDestroy()
-	initRevivalSystem()
 	initAssassinTower()
 	initConds()
-	initSpawn()
-	initRocket()
-	initTownBell()
-	GetExpiredTimer().release()
-	// new SoundDefinition(Sounds.h01Uther03, false).play()
-	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	startEntityLoop()
+
+	new SoundDefinition(Sounds.h01Uther03, false).play()
+	print("|cffffcc00Leave space between walls and towers in order to repair damaged walls!")
 	if allPlayers.size() <= 2 and (allPlayers.get(0).p.getName() == "WorldEdit" or allPlayers.get(0).p.getName() == "Frotty")
 		allPlayers.forEach((PlayerData pd) -> pd.p..addGold(100000)..addLumber(10000))
-		getTimer().start( 15., function spawn )
+		doAfter(15., () -> spawn())
 		Cheat("warpten")
 		Cheat("iseedeadpeople")
 		print("|cffFFCC00>>|r Editor Test Mode activated")
 	else
-		getTimer().start( 50., function spawn )
+		doAfter(50., () -> spawn())
 
-real pitch = 1.01
-var snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)
+var pitch = 1.01
+let snd2 = new SoundDefinition("Sound\\Dialogue\\OrcCampaign\\Orc04Interlude\\O04Mannoroth38.mp3", false)
+
 function spawn()
-	var snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
-	var snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
+	let snd = new SoundDefinition("Sound\\Dialogue\\HumanCampaign\\Human03\\H03Priest21.mp3", false)
+	let snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
 	snd.play()
 	startSpawn()
 	GetExpiredTimer().release()
 	doAfter(7.75) ->
 		let instance1 = snd2.play()
 		doPeriodicallyTimed(0.3, 10) cb ->
-			pitch *= 0.99802
+			pitch *= 0.99801
 			instance1.snd.setPitch(pitch)
 		doAfter(0.55) ->
 			let instance2 = snd2.play()
@@ -54,8 +46,6 @@ function spawn()
 				instance2.snd.setPitch(pitch)
 		doAfter(14.25, () -> snd3.play())
 
-
-
 init
 	CameraSetupApplyForceDuration(gg_cam_Camera_003, true, 0.)
-	getTimer().start(0.025, function start)
+	doAfter(0.025, () -> start())

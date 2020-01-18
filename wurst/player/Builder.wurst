@@ -31,12 +31,12 @@ public class Builder extends UnitEntity
 
 
 public function getPathingNormal(vec2 pos) returns vec2
-	int numberOfTests = 9
-	real radius = 32
+	let numberOfTests = 9
+	let radius = 32.
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 0 to numberOfTests-1
-		vec2 direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
-		vec2 testPoint = pos + direction
+		let direction = vec2(0,0).polarOffset((i*2*bj_PI/numberOfTests).asAngleRadians(), radius)
+		let testPoint = pos + direction
 		let eff = addEffect(Abilities.bansheeMissile, testPoint)
 		doAfter(1, () -> eff.destr())
 		if testPoint.isTerrainWalkable()
@@ -44,8 +44,8 @@ public function getPathingNormal(vec2 pos) returns vec2
 	return addedVecs.setLength(1.) * (-1.)
 
 public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
-	vec3 nor3 = nor2.toVec3()
-	vec3 pv3 = vel3.project(nor3)
+	let nor3 = nor2.toVec3()
+	let pv3 = vel3.project(nor3)
 	vec2 pv2 = pv3.toVec2()
 	pv2 *= (-1.9)
 	return vel3 + pv2

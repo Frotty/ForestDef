@@ -67,9 +67,9 @@ class WaveMissile extends Projectile
 					..apply()
 					let upos = data.getPos()
 					let ang = pos.angleTo2d(upos)
-					var kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
+					let kb = getKB(level) * min(0.35, vel.lengthSquared()/(16.*16.))
 					if data instanceof Boss
-						var speedPerc = 0.25 + (cd.actor.getMoveSpeed() / 522) * 0.75
+						let speedPerc = 0.25 + (cd.actor.getMoveSpeed() / 522) * 0.75
 						data.setVel(vec3(ang.cos() * (kb * speedPerc),ang.sin() * (kb * speedPerc),0))
 					else
 						data.setVel(vec3(ang.cos() * kb,ang.sin() * kb,0))

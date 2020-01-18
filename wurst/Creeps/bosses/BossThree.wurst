@@ -15,7 +15,7 @@ public class PudgePowerBuff extends NormalBuff
 		super.update()
 
 	override function attackModifier()
-		var target = GetTriggerUnit()
+		let target = GetTriggerUnit()
 		if target.getOwner() != players[8]
 			flashEffect(Objects.hCancelDeath, target.getPos())
 			flashEffect(Objects.demonSmallDeathExplode, target.getPos())

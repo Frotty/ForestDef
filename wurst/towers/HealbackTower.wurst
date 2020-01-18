@@ -47,7 +47,7 @@ public class HealbackTower extends Tower
 
 			// filter if wall or tower building
 			if viable
-				var e = u.getEntity()
+				let e = u.getEntity()
 				if not (e instanceof Wall or e instanceof Tower)
 					viable = false
 				// filter out full hp
@@ -58,7 +58,7 @@ public class HealbackTower extends Tower
 
 		nearEntities.sortWith(comparator)
 
-		var targets = new LinkedList<UnitEntity>()
+		let targets = new LinkedList<UnitEntity>()
 		nearEntities.forEach() e ->
 			if targets.size() < count
 				targets.add(e.ue)
@@ -71,9 +71,9 @@ public class HealbackTower extends Tower
 		level++
 
 	function launchHealback(UnitEntity attacked, real damage)
-		var creepPos = attacked.actor.getPos3Real()
+		let creepPos = attacked.actor.getPos3Real()
 
-		var targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), getMissileCount(level), getRange(level))
+		let targets = HealbackTower.getNearestBuilding(creepPos.toVec2(), getMissileCount(level), getRange(level))
 		for target in targets
 			new HealbackMissile(creepPos.add(0, 0, 48), owner, damage, target)
 		destroy targets

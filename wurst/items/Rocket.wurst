@@ -50,7 +50,7 @@ class Shrapnell extends PhysicsProjectile
 		fx.tint = col
 		super.update()
 
-public function initRocket()
+init
 	EventListener.onPointCast(ROCKET_SPELL_ID) (caster, target) ->
 		new Rocket(caster.getPos3Real() + vec3(0,0,90), target)
 

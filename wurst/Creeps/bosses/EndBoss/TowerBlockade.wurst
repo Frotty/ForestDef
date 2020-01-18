@@ -45,7 +45,7 @@ public class TowerBlockadeBuff extends Buff
 				this.target = null
 				terminate()
 				return
-		var targetPos = target.getPos()
+		let targetPos = target.getPos()
 		blockadeUnit = new BlockadeShip(createUnit(CREEP_OWNER, BLOCKADE_UNIT, targetPos, angle(0)), this)
 		blockadeEffect = addEffect(Abilities.howlTarget, targetPos)
 		target.addBuff(this)
@@ -74,7 +74,7 @@ class BlockadeShip extends UnitEntity
 		this.blockadeBuff = blockadeBuff
 
 		EventListener.add(actor, EVENT_PLAYER_UNIT_DEATH) ->
-			var buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
+			let buffUnit = GetTriggerUnit().getEntity() castTo BlockadeShip
 			if buffUnit != null
 				buffUnit.terminateBuff()
 

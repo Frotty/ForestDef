@@ -11,25 +11,25 @@ import GameTimer
 public constant CREEP_OWNER = players[9]
 
 public int array pow2
-	
+
 init
 	for int i = 0 to 31
 		pow2[i] = R2I(Pow(2, I2R(i)))
 
 public function getPathingNormal(vec2 pos) returns vec2
 	let numberOfTests = 8
-	var radius = 64.
+	let radius = 64.
 	vec2 addedVecs = vec2(0, 0)
 	for int i = 1 to numberOfTests
-		vec2 direction = vec2(0,0).polarOffset((i * 2 * bj_PI/numberOfTests).asAngleRadians(), radius)
-		vec2 testPoint = pos + direction
+		let direction = vec2(0,0).polarOffset((i * 2 * bj_PI/numberOfTests).asAngleRadians(), radius)
+		let testPoint = pos + direction
 		if testPoint.isTerrainWalkable()
 			addedVecs += direction
 	return addedVecs.setLength(1.) * (-1.)
-	
+
 public function getBounceVec(vec3 vel3, vec2 nor2) returns vec3
-	vec3 nor3 = nor2.toVec3()
-	vec3 pv3 = vel3.project(nor3)
+	let nor3 = nor2.toVec3()
+	let pv3 = vel3.project(nor3)
 	vec2 pv2 = pv3.toVec2()
 	pv2 *= (-1.25)
 	return vel3 + pv2
@@ -61,7 +61,7 @@ public class Creep extends UnitEntity
 					itm.remove()
 
 		if killer != null and killer.getOwner() != owner
-			var size = allPlayers.size()
+			let size = allPlayers.size()
 			if pDatas[killer.getOwner().getId()] == null
 				var killBounty = (bounty div size)
 				if killBounty <= 0
@@ -77,7 +77,7 @@ public class Creep extends UnitEntity
 				var restBounty = 0
 				if size > 1 and bounty-killBounty > 0
 					restBounty = ((bounty-killBounty) / (size - 1.)).round()
-					
+
 				killer.getOwner().addGold(killBounty)
 				showBountyTextTag(killBounty, actor, killer.getOwner())
 				if restBounty > 0
@@ -93,6 +93,5 @@ public class Creep extends UnitEntity
 			let normal = getPathingNormal(pos.toVec2())
 			vel = getBounceVec(vel, normal)
 		super.update()
-		
-		
-			
+
+

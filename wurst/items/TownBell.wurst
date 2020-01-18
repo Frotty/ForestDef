@@ -37,7 +37,7 @@ public function onTownBell()
 
 	usages++
 
-public function initTownBell()
+init
 	EventListener.add(EVENT_PLAYER_UNIT_PICKUP_ITEM) ->
 		if GetManipulatedItem().getTypeId() == TOWN_BELL_ITEM_ID
 			GetManipulatedItem().remove()

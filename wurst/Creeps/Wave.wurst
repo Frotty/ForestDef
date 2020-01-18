@@ -30,12 +30,12 @@ public class NormalWave
 		this.bounty = bounty
 
 	function spawn()
-		var t = getTimer()
+		let t = getTimer()
 		t.setData(this castTo int)
 		t.start(0.1, function NormalWave.spawnCallback)
 
 	static function spawnCallback()
-		var t = GetExpiredTimer()
+		let t = GetExpiredTimer()
 		var wave = t.getData() castTo NormalWave
 		int id
 		var destroyWave = false

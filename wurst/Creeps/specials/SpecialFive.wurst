@@ -5,10 +5,10 @@ import Special
 class Spawn extends Special
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		
+
 
 public class SpecialFive extends Special
-	
+
 	static constant SPAWNTIME = 35
 	static constant SPAWNAMOUNT = 2
 	static constant SPAWNID = 'u015'
@@ -28,8 +28,8 @@ public class SpecialFive extends Special
 				..queueAnimation("Stand Work Gold")
 				doAfter(6) ->
 					this.actor.setPropWindow(actor.getDefaultPropWindow())
-				
-				var ppos = this.getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
+
+				let ppos = this.getPos().toVec2().polarOffset(this.actor.getFacingAngle(), 128)
 				for i = 1 to SPAWNAMOUNT
 					doAfter((i-1).toReal() * 1.5) ->
 						let spawn = new Spawn(ppos.toVec3(), SPAWNID, 0, middle)

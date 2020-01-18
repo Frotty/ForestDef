@@ -6,7 +6,7 @@ import UnitSpawnSystem
 import EndGame
 import ClosureTimers
 
-public timer gameTime
+public constant gameTime = getTimer()
 
 
 function endGameTimer()
@@ -14,22 +14,20 @@ function endGameTimer()
 	gameTime.pause()
 	getTimer().start(1., function loseGame)
 	stopSpawn()
-	
+
 class Treasure extends UnitEntity
 
 	construct(unit existing)
 		super(existing)
 
 public function initConds()
-	gameTime = getTimer()
-	gameTime.start(16.*60. + 20., function startEndBoss)
-	doAfter(0.5) ->
-		timerdialog td = CreateTimerDialog(gameTime)		
-		TimerDialogSetTitle( td, "Until Finale: " )
-		TimerDialogDisplay( td, true )
+	gameTime.doAfter(16.*60. + 20., () -> startEndBoss())
+	let td = CreateTimerDialog(gameTime)
+	TimerDialogSetTitle( td, "Until Finale: " )
+	TimerDialogDisplay( td, true )
 	print( "|cffFFCC00>> Visit our discord server: discord.gg/yr3ZyYQ")
 	print( "|cffFFCC00>> You have one minute to build up defenses..")
-	trigger tr = CreateTrigger()
+	let tr = CreateTrigger()
 	if bigArena
 		TriggerRegisterUnitEvent( tr, gg_unit_h00E_0007 , EVENT_UNIT_DEATH )
 		new Treasure(gg_unit_h00E_0007)

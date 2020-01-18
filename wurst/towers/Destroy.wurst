@@ -1,8 +1,8 @@
 package Destroy
 import ClosureEvents
 import Assets
-	
-public function initDestroy()
+
+init
 	EventListener.onCast('A00E') caster ->
 		caster.kill()
 		flashEffect(Abilities.charmTarget, caster.getPos())

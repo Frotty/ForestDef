@@ -8,11 +8,10 @@ import ClosureTimers
 
 public constant gameTime = getTimer()
 
-
 function endGameTimer()
 	print("|cffFFCC00>> The Magic Treasure has been destroyed.|r\nYou failed!")
 	gameTime.pause()
-	getTimer().start(1., function loseGame)
+	doAfter(1., () -> loseGame())
 	stopSpawn()
 
 class Treasure extends UnitEntity

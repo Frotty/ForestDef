@@ -30,11 +30,9 @@ public class NormalWave
 		this.bounty = bounty
 
 	function spawn()
-		let t = getTimer()
-		t.setData(this castTo int)
-		t.start(0.1, function NormalWave.spawnCallback)
+		doAfter(0.1, () -> spawnCallback())
 
-	static function spawnCallback()
+	function spawnCallback()
 		let t = GetExpiredTimer()
 		var wave = t.getData() castTo NormalWave
 		int id
@@ -44,15 +42,14 @@ public class NormalWave
 			case creeptype.MELEE
 				id = wave.meleeId
 				wave.typ = creeptype.MAGE
-				t.start(0.8, function NormalWave.spawnCallback)
+				doAfter(0.8, () -> spawnCallback())
 			case creeptype.MAGE
 				id = wave.mageId
 				wave.typ = creeptype.RANGED
-				t.start(0.8, function NormalWave.spawnCallback)
+				doAfter(0.8, () -> spawnCallback())
 			case creeptype.RANGED
 				id = wave.rangedId
 				destroyWave = true
-				t.release()
 
 		for i = 0 to wave.amount - 1
 			doAfter(i.toReal()) ->

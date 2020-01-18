@@ -1,5 +1,5 @@
 package InstanceBoard
-import TimerUtils
+import ClosureTimers
 
 int classes = 0
 hashtable ht = InitHashtable()
@@ -8,7 +8,7 @@ int array count
 string array nameOfClass
 
 init
-	getTimer().start(0.0, function createMultiboard)
+	doAfter(0.0, () -> createMultiboard())
 
 function createMultiboard()
 	mb = CreateMultiboard()

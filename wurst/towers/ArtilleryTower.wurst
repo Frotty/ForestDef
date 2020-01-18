@@ -4,6 +4,7 @@ import Projectile
 import ClosureTimers
 import Assets
 import DummyDamage
+import Orders
 
 constant MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant ART_TOWER_ID = 'h01O'
@@ -20,6 +21,11 @@ public class ArtilleryTower extends Tower
 		registerSpell()
 
 	function registerSpell()
+		EventListener.add(actor, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER) ->
+			let ord = GetIssuedOrderId()
+			if ord == OrderIds.smart or ord == OrderIds.move
+				actor.issueImmediateOrder("stop")
+
 		EventListener.onCast(actor, SPELL_ID) id ->
 			if pos.distanceTo2d(EventData.getSpellTargetPos()) > 2950
 				nullTimer() ->

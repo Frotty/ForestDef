@@ -22,7 +22,7 @@ public class NormalWave
 
 	creeptype typ = creeptype.MELEE
 
-	construct(int meleeId,int mageId,int rangedId, int amount, int bounty)
+	construct(int meleeId, int mageId, int rangedId, int amount, int bounty)
 		this.meleeId = meleeId
 		this.mageId = mageId
 		this.rangedId = rangedId
@@ -33,32 +33,30 @@ public class NormalWave
 		doAfter(0.1, () -> spawnCallback())
 
 	function spawnCallback()
-		let t = GetExpiredTimer()
-		var wave = t.getData() castTo NormalWave
 		int id
 		var destroyWave = false
 
-		switch wave.typ
+		switch typ
 			case creeptype.MELEE
-				id = wave.meleeId
-				wave.typ = creeptype.MAGE
+				id = meleeId
+				typ = creeptype.MAGE
 				doAfter(0.8, () -> spawnCallback())
 			case creeptype.MAGE
-				id = wave.mageId
-				wave.typ = creeptype.RANGED
+				id = mageId
+				typ = creeptype.RANGED
 				doAfter(0.8, () -> spawnCallback())
 			case creeptype.RANGED
-				id = wave.rangedId
+				id = rangedId
 				destroyWave = true
 
-		for i = 0 to wave.amount - 1
+		for i = 0 to amount - 1
 			doAfter(i.toReal()) ->
 				for j = 0 to startPosCount
 					let spoint = spawnRects[j].randomPoint().toVec3()
-					new Creep(spoint, id, wave.bounty, middle, spoint.angleTo2d(middle))
+					new Creep(spoint, id, bounty, middle, spoint.angleTo2d(middle))
 
 		if destroyWave
-			destroy wave
+			destroy this
 
 
 public abstract class CreateBoss

@@ -6,6 +6,7 @@ import Boss
 import EndGame
 import ClosureForGroups
 import UnitSpawnSystem
+import TextTagEntity
 
 constant ENDBOSS_ID = 'n00P'
 
@@ -26,8 +27,8 @@ public class EndBoss extends Boss
 
 		EventListener.add(actor, EVENT_UNIT_DAMAGED) ->
 			damageCount += GetEventDamage()
-			if damageCount > 5000
-				damageCount -= 5000 + GetRandomReal(-500, 500)
+			if damageCount > 2500
+				damageCount -= 2000 + GetRandomReal(-500, 500)
 				onEnbossDamage()
 
 	override function update()
@@ -38,37 +39,47 @@ public class EndBoss extends Boss
 		if stage == 2 and percentage < stageThreePercentage
 			stage = 3
 
-	static function onEnbossDamage()
-		let boss = GetExpiredTimer().getData() castTo EndBoss
-		boss.castAbility()
+	function onEnbossDamage()
+		castAbility()
 
 	function castAbility()
-		let abil = GetRandomInt(0, 1)
-		//switch abil
-			//case 0
-				//doAfter(GetRandomReal(0, 8)) ->
-					//tryCastTowerBlockade()
-//			case 1
-//				doAfter(GetRandomReal(0, 8)) ->
-//					castDestroyerSummoner()
+		new TextTagEntity(getPos(), vec3(GetRandomReal(-1, 1), 0, GetRandomReal(9, 12)), "Casting..", 12, 1., colorA(162, 9, 182, 255))
+		actor..pauseEx()
+		..setAnimation("spell")
+		..queueAnimation("spell")
+		..setTimeScale(0.25)
+		let abil = GetRandomInt(0, 2)
+		switch abil
+			case 0
+				doAfter(GetRandomReal(1, 3)) ->
+					blockadeCount = GetRandomInt(2, 3)
+					actor..unpauseEx()..setTimeScale(1.)
+					new TextTagEntity(getPos(), vec3(GetRandomReal(-1, 1),0, GetRandomReal(9, 12)), "Tower Blockade!", 12, 1., colorA(196, 163, 17, 255))
+					tryCastTowerBlockade()
+			case 1 | 2
+				doAfter(GetRandomReal(1, 3)) ->
+					actor..unpauseEx()..setTimeScale(1.)
+					new TextTagEntity(getPos(), vec3(GetRandomReal(-1, 1),0, GetRandomReal(9, 12)), "Destroy Summoner!", 12, 1., colorA(196, 163, 17, 255))
+					castDestroyerSummoner()
 
+	var blockadeCount = 0
 	function tryCastTowerBlockade()
-		forUnitsInRangeCounted(pos.toVec2(), 3072., 2) u ->
-			if IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
+		forUnitsInRange(pos.toVec2(), 1024.) u ->
+			if blockadeCount > 0 and IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
 				let tower = u.getEntity() castTo Tower
 				var hasBuff = false
 				if tower.hasBuffs()
 					for bff in tower.getBuffs()
 						if bff instanceof TowerBlockadeBuff
 							hasBuff = true
+							break
+
 				if not hasBuff
 					castTowerBlockade(tower)
+					blockadeCount--
 
 	function castTowerBlockade(Tower tower)
-		actor.setAnimation("spell")
-		//new TowerBlockadeMissile(pos, owner, tower)
-		doAfter(BLOCKADE_MISSILE_TIME) ->
-			new TowerBlockadeBuff(tower)
+		new TowerBlockadeMissile(getPos().add(0, 0, 64), owner, tower)
 
 	function castDestroyerSummoner()
 		currentEndBossFight.createDestroyerSummoner(this)
@@ -89,6 +100,8 @@ public class EndBossFight
 		print("|cffE62121 Prepare for your end!")
 		for j = 0 to startPosCount
 			bosses.add(new EndBoss(spawnRects[j].randomPoint().toVec3(), ENDBOSS_ID, 175, middle, this))
+
+		destroyerSummoning = new FinalBossSummoning(this)
 
 	function createDestroyerSummoner(EndBoss castingBoss)
 		if not summoningComplete

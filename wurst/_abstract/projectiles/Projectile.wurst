@@ -17,12 +17,17 @@ public class Projectile extends Fx2Entity
 	protected real time = 0
 	private real maxTime = 0
 
-	construct( vec3 pos, real radius, player owner, angle xyAngle, string fxpath )
+	Entity target = null
+
+	construct(vec3 pos, real radius, player owner, angle xyAngle, string fxpath)
 		super(owner, pos, radius, xyAngle, fxpath)
 		startpos = pos
 		setXYAngle(xyAngle)
 		sleeps = false
 		gravity = 0.
+
+	function setTargetted(Entity target)
+		this.target = target
 
 	function setRanged(real maxDistance)
 		this.maxDist = maxDistance*maxDistance
@@ -55,10 +60,14 @@ public class Projectile extends Fx2Entity
 	override function update()
 		vel *= acc
 		super.update()
-		if not done and timed
-			time += ANIMATION_PERIOD
-			if time >= maxTime
-				terminate()
-		if not done and ranged
-			if startpos.distanceToSq(pos) > maxDist
-				terminate()
+		if not done
+			if timed
+				time += ANIMATION_PERIOD
+				if time >= maxTime
+					terminate()
+			if ranged
+				if startpos.distanceToSq(pos) > maxDist
+					terminate()
+			if target != null
+				if pos.toVec2().distanceToSq(target.getPos().toVec2()) < radius2
+					terminate()

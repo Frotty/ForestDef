@@ -41,11 +41,11 @@ public class FinalBossSummoning
 			else
 				summoners.remove(summoner)
 		castingCount = newCastingCount
-		castPercent += getSummonSpeed(castingCount) * (updatePeriod * 100 / DESTROYER_SUMMON_TIME)
+		castPercent += getSummonSpeed(castingCount) * 2. * ANIMATION_PERIOD
 		if castPercent < 0
 			castPercent = 0
 		if castPercent >= 100
-			castPercent = 100
+			castPercent = 0
 			summonDestroyer()
 		else
 			this.updateAnimation()
@@ -59,10 +59,11 @@ public class FinalBossSummoning
 			summoningEffect..setScale(1.2 + castPercent / 75.)..setColor(colorA(63 + (percentComp * 3. / 4.).toInt(), 0, 0, percentComp))
 			summonText.tt..setVisibility(true)
 			..setText(castPercent.toInt().toString() + "%", 12)
-			..setColor(percentComp, 255 - percentComp, 0, 255)
+			..setColor(percentComp, 155 - percentComp, 0, 255)
 		else
 			if summoningEffect != null
 				destroy summoningEffect
+				summoningEffect = null
 			summonText.tt.setVisibility(false)
 		var i = 0
 		for summoner in summoners

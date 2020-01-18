@@ -95,7 +95,7 @@ constant HEALBACK_MISSILE_EFFECT = Abilities.faerieDragonMissile
 
 public class HealbackMissile extends Projectile
 	private real heal
-	private UnitEntity target
+	private UnitEntity targetEntity
 	private vec3 startPos
 	private real distanceToTravelSq
 
@@ -103,7 +103,7 @@ public class HealbackMissile extends Projectile
 		super(pos, HEALBACK_RADIUS, owner, pos.angleTo2d(target.getPos()), HEALBACK_MISSILE_EFFECT)
 		fx.setTint(colorA(0, 255, 0, 255))
 		this.heal = heal
-		this.target = target
+		this.targetEntity = target
 		startPos = pos
 		this.distanceToTravelSq = (target.getPos()).distanceToSq(startPos)
 		this.setTarget(target.actor.getPos3Real().add(0, 0, 32.), 19.25)
@@ -119,7 +119,7 @@ public class HealbackMissile extends Projectile
 			terminate()
 
 	function onReachTarget()
-		if this.target != null and this.target.actor.isAlive()
-			flashEffect(HEALBACK_EFFECT, target.pos.add(0, 0, 50))
-			this.target.actor.addHP(this.heal)
+		if this.targetEntity != null and this.targetEntity.actor.isAlive()
+			flashEffect(HEALBACK_EFFECT, targetEntity.pos.add(0, 0, 50))
+			this.targetEntity.actor.addHP(this.heal)
 			new TextTagEntity(pos, vec3(GetRandomReal(-1, 1),0, GetRandomReal(7,9)), this.heal.toInt().toString(), 8, .75, colorA(223, 255, 52, 255))

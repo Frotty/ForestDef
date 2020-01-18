@@ -5,6 +5,7 @@ import Creep
 import Assets
 import public Buff
 import TextTagEntity
+import PresetBuffs
 
 constant blockadeBuff = compiletime(createDummyBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
 constant BLOCKADE_DURATION = 120.
@@ -12,59 +13,39 @@ public constant BLOCKADE_MISSILE_TIME = 5.
 constant BLOCKADE_UNIT = 'u017'
 
 public class TowerBlockadeMissile extends Projectile
-	real heal
-	UnitEntity target
 
-	construct(vec3 pos, player owner, UnitEntity target)
-		super(pos, 0., owner, pos.angleTo2d(target.getPos().add(0, 0, 30.)), Abilities.deathCoilMissile)
-		let speed = pos.distanceTo(target.getPos()) / (BLOCKADE_MISSILE_TIME * ANIMATION_PERIOD)
-		this.setTarget(target.getPos().add(0, 0, 64), speed)
-		this.setTimed(BLOCKADE_MISSILE_TIME)
-		fx.eff.setColor(colorA(215, 255, 215, 168))
+	construct(vec3 pos, player owner, Tower target)
+		super(pos, 16., owner, pos.angleTo2d(target.getPos()), Abilities.deathCoilMissile)
+		setTarget(target.getPos().add(0, 0, 64), 14.)
+		setTargetted(target)
 
-	override function update()
-		super.update()
+	ondestroy
+		new TowerBlockadeBuff(target castTo UnitEntity)
 
-
-public class TowerBlockadeBuff extends Buff
+public class TowerBlockadeBuff extends NormalBuff
 	BlockadeShip blockadeUnit
 	effect blockadeEffect
 
-	construct(Tower target)
+	construct(UnitEntity target)
 		super(BLOCKADE_DURATION, blockadeBuff)
-		new TextTagEntity(target.getPos(), vec3(GetRandomReal(-1, 1),0, GetRandomReal(6,8)), "Blockaded!", 8, 1., colorA(145, 80, 12, 255))
+		new TextTagEntity(target.getPos(), vec3(GetRandomReal(-1, 1), 0, GetRandomReal(7,9)), "Blockaded!", 9, 1., colorA(185, 14, 14, 255))
 		this.apply(target)
 
-	override function apply(UnitEntity target)
-		this.target = target
-		if not target.hasBuffs()
-			target.newBuffs()
-		for bff in target.getBuffs()
-			if bff.typeId == this.typeId
-				bff.duration = duration
-				this.target = null
-				terminate()
-				return
+	override function onApply()
 		let targetPos = target.getPos()
 		blockadeUnit = new BlockadeShip(createUnit(CREEP_OWNER, BLOCKADE_UNIT, targetPos, angle(0)), this)
 		blockadeEffect = addEffect(Abilities.howlTarget, targetPos)
 		target.addBuff(this)
 		target.actor.issueImmediateOrder("stop")
 		(target castTo Tower).pause()
-		refresh()
 
-	override function terminate()
+	override function onEnd()
 		blockadeEffect.destr()
 		if blockadeUnit != null and blockadeUnit.actor.isAlive()
 			destroy blockadeUnit
-		super.terminate()
-
-
-	ondestroy
 		if target != null
 			(target castTo Tower).unpause()
-		if blockadeUnit != null
-			blockadeUnit.remove()
+
 
 class BlockadeShip extends UnitEntity
 	TowerBlockadeBuff blockadeBuff

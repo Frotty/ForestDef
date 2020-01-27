@@ -8,7 +8,7 @@ import TextTagEntity
 import PresetBuffs
 
 constant blockadeBuff = compiletime(createDummyBuffObject("Blockade", "This tower cannot attack until the blockading unit is killed.", Icons.bTNEnsnare))
-constant BLOCKADE_DURATION = 120.
+constant BLOCKADE_DURATION = 25.
 public constant BLOCKADE_MISSILE_TIME = 5.
 constant BLOCKADE_UNIT = 'u017'
 
@@ -16,6 +16,7 @@ public class TowerBlockadeMissile extends Projectile
 
 	construct(vec3 pos, player owner, Tower target)
 		super(pos, 16., owner, pos.angleTo2d(target.getPos()), Abilities.deathCoilMissile)
+
 		setTarget(target.getPos().add(0, 0, 64), 14.)
 		setTargetted(target)
 
@@ -38,12 +39,14 @@ public class TowerBlockadeBuff extends NormalBuff
 		target.addBuff(this)
 		target.actor.issueImmediateOrder("stop")
 		(target castTo Tower).pause()
+		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
+			this.terminate()
 
 	override function onEnd()
 		blockadeEffect.destr()
 		if blockadeUnit != null and blockadeUnit.actor.isAlive()
 			destroy blockadeUnit
-		if target != null
+		if target != null and target.actor.isAlive()
 			(target castTo Tower).unpause()
 
 

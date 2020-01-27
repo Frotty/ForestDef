@@ -34,7 +34,6 @@ function spawn()
 	let snd3 = new SoundDefinition("Units\\Orc\\Peon\\PeonYesAttack1.wav", false)
 	snd.play()
 	startSpawn()
-	GetExpiredTimer().release()
 	doAfter(7.75) ->
 		let instance1 = snd2.play()
 		doPeriodicallyTimed(0.3, 10) cb ->

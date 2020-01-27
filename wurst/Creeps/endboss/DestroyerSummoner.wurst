@@ -81,7 +81,7 @@ public class FinalBossSummoning
 
 	function getSummonSpeed(int castingCount) returns real
 		if castingCount <= 0
-			return -3
+			return -1
 		return castingCount / 4 + castingCount * castingCount / 4
 
 	function addSummoner(DestroyerSummoner summoner)

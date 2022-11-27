@@ -2,6 +2,7 @@ package FlamethrowerTower
 import Tower
 import Projectile
 import DummyDamage
+import Heightmap
 
 public constant string FX_PATH = "Abilities\\Weapons\\PhoenixMissile\\Phoenix_Missile.mdl"//"Abilities\\Weapons\\LordofFlameMissile\\LordofFlameMissile.mdl"
 public constant real AOE_RADIUS = 48.
@@ -19,7 +20,7 @@ public class FlamethrowerTower extends Tower
 		super(t)
 
 	override function onAttack(UnitEntity ud)
-		new FlameMissile(pos.toVec2().withTerrainZ(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
+		new FlameMissile(pos.toVec2().withHeightMap(58),ud.getPos().toVec2(), getSpeed(level), owner, level)
 
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))

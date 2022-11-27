@@ -19,7 +19,7 @@ public class Builder extends UnitEntity
 
 		actor.issueImmediateOrder("repairon")
 		owner.p.selectSingle(actor)
-		new WarningBuff().apply(this)
+		new WarningBuff().apply(actor)
 
 		super.update()
 		actor.setXYZReal(pos)

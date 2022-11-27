@@ -68,8 +68,8 @@ public class EndBoss extends Boss
 			if blockadeCount > 0 and IsUnitType(u, UNIT_TYPE_STRUCTURE) and u.isAlive() and u.getEntity() instanceof Tower and pDatas[u.getOwner().getId()] != null
 				let tower = u.getEntity() castTo Tower
 				var hasBuff = false
-				if tower.hasBuffs()
-					for bff in tower.getBuffs()
+				if u.hasBuffs()
+					for bff in u.getBuffs()
 						if bff instanceof TowerBlockadeBuff
 							hasBuff = true
 							break

@@ -5,6 +5,8 @@ import TextTagEntity
 import GameTimer
 import initlater PlayerData
 import Assets
+import ClosureEvents
+import Heightmap
 
 SoundDefinition snd = new SoundDefinition("Abilities\\Spells\\Other\\Silence\\Silence1.wav", false)
 
@@ -24,41 +26,41 @@ public class WarningBuff extends NormalBuff
 		lastWarning = currentTime
 		lastSelect = currentTime
 
-	override function apply(UnitEntity target)
+	override function apply(unit target)
 		super.apply(target)
 		startedTime = currentTime
-		originalOwner = target.owner
-		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
+		originalOwner = target.getOwner()
+		EventListener.add(target, EVENT_PLAYER_UNIT_DEATH) ->
 			if not done
 				onDeath()
 
 	override function defenseModifier()
 		let pos = target.getPos()
 		if startedTime + 15. > currentTime
-			new TextTagEntity(target.getPos()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
+			new TextTagEntity(target.getPos().withHeightMap()-vec3(-75,0,0), vec3(GetRandomReal(-2.5, 2.5),0, GetRandomReal(8,10)), "Spawn-Protection" , 10, 1, colorA(155, 185, 55, 255))
 			addEffect(Abilities.spellShieldCaster, target.getPos() ).destr()
 			DamageEvent.setAmount(0)
-		if lastWarning + 1. < currentTime and target.actor.getHP() - DamageEvent.getAmount() < (target.actor.getMaxHP()/1.5)
-			new TextTagEntity(target.getPos()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
+		if lastWarning + 1. < currentTime and target.getHP() - DamageEvent.getAmount() < (target.getMaxHP()/1.5)
+			new TextTagEntity(target.getPos().withHeightMap()-vec3(20,0,0), vec3(GetRandomReal(-1, 1),GetRandomReal(-1, 1), GetRandomReal(7,12)), "ATTENTION!!" , 15, 1, colorA(255, 25, 25, 255))
 			// snd.playForPlayer(target.owner)
 			lastWarning = currentTime
-		if lastSelect + 5. < currentTime and target.actor.getHP() - DamageEvent.getAmount() < (target.actor.getMaxHP()/2.)
-			PanCameraToTimedForPlayer(target.owner, pos.x, pos.y, 0.25)
-			target.owner.selectSingle(target.actor)
+		if lastSelect + 5. < currentTime and target.getHP() - DamageEvent.getAmount() < (target.getMaxHP()/2.)
+			PanCameraToTimedForPlayer(target.getOwner(), pos.x, pos.y, 0.25)
+			target.getOwner().selectSingle(target)
 			lastSelect = currentTime
 
-		if DamageEvent.getAmount() >= target.actor.getHP() - 1.0
+		if DamageEvent.getAmount() >= target.getHP() - 1.0
 			DamageEvent.setAmount(0)
 			if not dead
 				dead = true
-				let u = target.actor
+				let u = target
 				u..setHP(9999.)
 				..setOwner(DUMMY_PLAYER, false)
 				..addAbility('Avul')
 				..pause()
 				..hide()..setTimeScale(0.0001)
-				createUnit(originalOwner, target.actor.getTypeId(), u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
-				let owner = target.owner
+				createUnit(originalOwner, target.getTypeId(), u.getPos(), u.getFacingAngle())..setXY(u.getPos()).kill()
+				let owner = target.getOwner()
 				pDatas[owner.getId()].alive = false
 				pDatas[owner.getId()].deaths++
 				printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
@@ -66,12 +68,12 @@ public class WarningBuff extends NormalBuff
 	function onDeath()
 		if not dead
 			dead = true
-			let u = createUnit(originalOwner, target.actor.getTypeId(), target.actor.getPos(), target.actor.getFacingAngle())..setXY(target.actor.getPos())
+			let u = createUnit(originalOwner, target.getTypeId(), target.getPos(), target.getFacingAngle())..setXY(target.getPos())
 			u..setOwner(DUMMY_PLAYER, false)
 			..addAbility('Avul')
 			..pause()
 			..hide()..setTimeScale(0.0001)
-			let owner = target.owner
+			let owner = target.getOwner()
 			pDatas[owner.getId()].alive = false
 			pDatas[owner.getId()].deaths++
 			printTimed("|cffFFCC00>>|r " + owner.getNameColored() + "  |cffCE2119has been killed!", 20)
@@ -79,8 +81,8 @@ public class WarningBuff extends NormalBuff
 	override function refresh(boolean forceRefresh)
 		super.refresh(forceRefresh)
 		if dead
-			let bty = pDatas[target.owner.getId()].btype
-			target.actor
+			let bty = pDatas[target.getOwner().getId()].btype
+			target
 			..unpause()
 			..setTimeScale(bty == BuilderType.FAT ? 0.25 : 1.0)
 			..setHP(9999.)
@@ -89,8 +91,8 @@ public class WarningBuff extends NormalBuff
 			..queueAnimation("stand")
 			..removeAbility('Avul')
 			..setOwner(originalOwner, false)
-			target.owner..selectSingle(target.actor)
-			..panCamToTimed(target.actor, 0.)
-			flashEffect(Abilities.reviveHuman, target.actor.getPos())
+			target.getOwner()..selectSingle(target)
+			..panCamToTimed(target, 0.)
+			flashEffect(Abilities.reviveHuman, target.getPos())
 			dead = false
 			startedTime = currentTime

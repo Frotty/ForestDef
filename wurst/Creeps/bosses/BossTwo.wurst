@@ -1,6 +1,7 @@
 package BossTwo
 import Boss
 import PresetBuffs
+import Heightmap
 
 public constant buffAbil = compiletime(createDummyBuffObject("Tentacolous", "The boss spawns tentacles when it loses hitpoints", "ReplaceableTextures\\CommandButtons\\BTNTentacle.blp"))
 constant TENTACLE_ID = 'u00W'
@@ -17,14 +18,14 @@ public class SludgeBuff extends ShieldBuff
 	override function update()
 		super.update()
 		currentCol = currentCol.lerp(nextCol, 0.35)
-		target.actor.setVertexColor(currentCol)
+		target.setVertexColor(currentCol)
 
 	override function defenseModifier()
 		dmgHold += DamageEvent.getAmount()
 		if dmgHold > 500
 			dmgHold -= 500
 			nextCol = color(GetRandomInt(25,255),GetRandomInt(25,255),GetRandomInt(25,255))
-			new Tentacle(target.getPos().offset2d(target.actor.getFacingAngle() + angle(GetRandomReal(-0.75, 0.75)), GetRandomReal(64, 188))).actor.issueImmediateOrder("stop")
+			new Tentacle(target.getPos().polarOffset(target.getFacingAngle() + angle(GetRandomReal(-0.75, 0.75)), GetRandomReal(64, 188)).withHeightMap()).actor.issueImmediateOrder("stop")
 
 public class Tentacle extends Creep
 
@@ -36,5 +37,5 @@ public class BossTwo extends Boss
 
 	construct(vec3 pos, int typId, int bounty, vec2 target)
 		super(pos, typId, bounty, target)
-		new SludgeBuff(99999).apply(this)
+		new SludgeBuff(99999).apply(actor)
 

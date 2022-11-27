@@ -13,15 +13,17 @@ public constant BLOCKADE_MISSILE_TIME = 5.
 constant BLOCKADE_UNIT = 'u017'
 
 public class TowerBlockadeMissile extends Projectile
+	Tower utarget
 
 	construct(vec3 pos, player owner, Tower target)
 		super(pos, 16., owner, pos.angleTo2d(target.getPos()), Abilities.deathCoilMissile)
 
+		utarget = target
 		setTarget(target.getPos().add(0, 0, 64), 14.)
 		setTargetted(target)
 
 	ondestroy
-		new TowerBlockadeBuff(target castTo UnitEntity)
+		new TowerBlockadeBuff(utarget)
 
 public class TowerBlockadeBuff extends NormalBuff
 	BlockadeShip blockadeUnit
@@ -30,24 +32,24 @@ public class TowerBlockadeBuff extends NormalBuff
 	construct(UnitEntity target)
 		super(BLOCKADE_DURATION, blockadeBuff)
 		new TextTagEntity(target.getPos(), vec3(GetRandomReal(-1, 1), 0, GetRandomReal(7,9)), "Blockaded!", 9, 1., colorA(185, 14, 14, 255))
-		this.apply(target)
+		this.apply(target.actor)
 
 	override function onApply()
 		let targetPos = target.getPos()
 		blockadeUnit = new BlockadeShip(createUnit(CREEP_OWNER, BLOCKADE_UNIT, targetPos, angle(0)), this)
 		blockadeEffect = addEffect(Abilities.howlTarget, targetPos)
 		target.addBuff(this)
-		target.actor.issueImmediateOrder("stop")
-		(target castTo Tower).pause()
-		EventListener.add(target.actor, EVENT_PLAYER_UNIT_DEATH) ->
+		target.issueImmediateOrder("stop")
+		(target.getEntity() castTo Tower).pause()
+		EventListener.add(target, EVENT_PLAYER_UNIT_DEATH) ->
 			this.terminate()
 
 	override function onEnd()
 		blockadeEffect.destr()
 		if blockadeUnit != null and blockadeUnit.actor.isAlive()
 			destroy blockadeUnit
-		if target != null and target.actor.isAlive()
-			(target castTo Tower).unpause()
+		if target != null and target.isAlive()
+			(target.getEntity() castTo Tower).unpause()
 
 
 class BlockadeShip extends UnitEntity

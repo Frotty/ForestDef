@@ -5,6 +5,7 @@ import Assets
 import GroupUtils
 import ClosureForGroups
 import DummyDamage
+import Heightmap
 
 public constant FIRST_WAVE_ID = 'h01N'
 constant AREA_OF_EFFECT = 192.
@@ -16,7 +17,7 @@ public class WaveTower extends Tower
 		super(t)
 
 	override function onAttack(UnitEntity ud)
-		new WaveMissile(getPos().toVec2().withTerrainZ(38), ud.getPos().toVec2(), 22, owner, level, actor)
+		new WaveMissile(getPos().toVec2().withHeightMap(38), ud.getPos().toVec2(), 22, owner, level, actor)
 
 	override function onUpgrade()
 		actor.issueImmediateOrderById(OrderId("stop"))
@@ -57,12 +58,12 @@ class WaveMissile extends Projectile
 		forUnitsInRange(pos.toVec2(), AREA_OF_EFFECT) u ->
 			if u.isAliveTrick() and not u.isType(UNIT_TYPE_FLYING)
 				let data = u.getEntity()
-				if affected.contains(u)
+				if affected.has(u)
 					dotDmg..target(u)
 					..apply()
 				else if data != null and data instanceof Creep and not data.done
 					let cd = data castTo Creep
-					affected.addUnit(u)
+					affected.has(u)
 					splashDmg..target(u)
 					..apply()
 					let upos = data.getPos()

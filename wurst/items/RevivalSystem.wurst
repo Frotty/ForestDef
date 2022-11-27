@@ -2,6 +2,7 @@ package RevivalSystem
 import PlayerData
 import Buff
 import Assets
+import ClosureEvents
 
 init
 	EventListener.add(EVENT_PLAYER_UNIT_USE_ITEM) ->
@@ -13,7 +14,7 @@ init
 				if not pd.alive
 					s += " " + pd.p.getNameColored()
 					pd.builder.actor.setPos(revPos.polarOffset(GetRandomReal(0,1).asAngleRadians(), 64))
-					for bff from pd.builder.getBuffs().staticItr()
+					for bff in pd.builder.actor.getBuffs()
 						bff.refresh()
 					addEffect(Abilities.reviveNightElf, pd.builder.actor.getPos()).destr()
 					printTimedToPlayer("|cffFFCC00>>|r You have been revived!", 15, pd.p)

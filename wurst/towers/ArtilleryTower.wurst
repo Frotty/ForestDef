@@ -5,6 +5,7 @@ import ClosureTimers
 import Assets
 import DummyDamage
 import Orders
+import Heightmap
 
 constant MISSILE_SPEED = 1000 * ANIMATION_PERIOD
 public constant ART_TOWER_ID = 'h01O'
@@ -56,7 +57,7 @@ class ArtilleryMissile extends Projectile
 
 
 	override function update()
-		if pos.z < pos.getTerrainZ() + 4.
+		if pos.z < pos.getHeightMap() + 4.
 			terminate()
 			return
 		super.update()
